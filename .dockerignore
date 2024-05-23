@@ -1,0 +1,127 @@
+__pycache__
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+
+# Exclude Git related files
+.git
+.gitignore
+
+# Exclude IDE or editor specific files
+.idea
+.vscode
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+
+# Exclude package manager files
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Exclude build and dependency management tools
+bower_components
+jspm_packages
+composer.lock
+vendor
+Gemfile.lock
+
+# Exclude virtual environments
+venv
+env
+pip-wheel-metadata
+
+# Exclude log files
+*.log
+logs
+*.logs
+
+# Exclude temporary files
+*.tmp
+
+# Exclude testing and documentation files
+*.swp
+*.swo
+*.test.js
+*.test.jsx
+*.spec.js
+*.spec.jsx
+*.e2e.js
+*.e2e.jsx
+*.stories.js
+*.stories.jsx
+*.doc.js
+*.doc.jsx
+*.md
+*.markdown
+
+# Exclude compiled code and binaries
+*.pyc
+*.pyo
+*.out
+*.class
+*.exe
+*.dll
+*.so
+*.dylib
+*.elc
+*.beam
+*.jks
+*.war
+*.jar
+*.aar
+*.zip
+*.tar.gz
+*.tgz
+*.bz2
+*.xz
+*.gz
+*.rar
+*.7z
+*.bak
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+*.pdb
+*.bak
+*.old
+*.bak
+*.sublime-workspace
+*.sublime-project
+
+# Exclude image and video files
+*.bmp
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.ico
+*.webp
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.flv
+*.wmv
+
+# Exclude OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
