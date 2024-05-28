@@ -1,0 +1,24 @@
+.quote-container {
+	border-radius: 12px;
+	background-color: rgb(56, 64, 70);
+	padding: 10px 15px 10px 15px;
+}
+
+.quote-container-header {
+	margin: 0px;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 14px;
+	margin-top: -25px;
+	margin-bottom: 4px;
+}
+
+.quote {
+	margin: 0px;
+}
+
+.quote-author {
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 14px;
+	margin: 0px;
+	margin-top: 8px;
+}

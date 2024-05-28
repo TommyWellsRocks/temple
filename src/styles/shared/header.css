@@ -1,6 +1,7 @@
 .header {
+	background-color: #1e1e1e;
 	align-items: center;
-	border-bottom: 1px solid rgb(150, 150, 150); /* Temporary */
+	border-bottom: 1px solid rgb(150, 150, 150); 
 	display: flex;
 	height: 60px;
 	left: 0px;

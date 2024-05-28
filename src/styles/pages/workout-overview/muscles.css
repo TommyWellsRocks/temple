@@ -1,0 +1,13 @@
+.muscles-display-container {
+	display: flex;
+	text-align: left;
+	column-gap: 15px;
+}
+
+.muscle-img {
+	width: 80px;
+	border-radius: 12px;
+	border-style: solid;
+	border-width: 0.5px;
+	border-color: rgb(103, 57, 255);
+}
