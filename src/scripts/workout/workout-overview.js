@@ -1,14 +1,7 @@
 import { workoutOverviewURL } from "../config.js";
 import { backButtonListener } from "../utils/backButtonListener.js";
 
-function renderWorkoutOverview(
-	quote,
-	author,
-	timeMin,
-	burnKcal,
-	muscleImgName,
-	checklistItemsList
-) {
+function renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsList) {
 	function dailyQuoteHTML(quote, author) {
 		return `
             <div class="quote-container">
@@ -41,12 +34,18 @@ function renderWorkoutOverview(
         `;
 	}
 
-	function workoutMusclesHTML(muscleImgName) {
+	function workoutMusclesHTML(checklistItemsList) {
+		const workoutMuscles = [];
 		const imagesHTML = [];
-		muscleImgName.forEach((imgName) => {
-			imagesHTML.push(`
-                <img src="../content/images/muscle-groups/${imgName}" class="muscle-img" />
-            `);
+		checklistItemsList.forEach((checklistItem) => {
+			checklistItem.muscles.forEach((muscle) => {
+				if (!workoutMuscles.includes(muscle)) {
+					workoutMuscles.push(muscle);
+					imagesHTML.push(`
+                    <img src="../content/images/muscles/${muscle}.svg" class="muscle-img" />
+                    `);
+				}
+			});
 		});
 		return `
             <div class="muscles-section-container">
@@ -97,7 +96,7 @@ function renderWorkoutOverview(
 			}
 		});
 
-        // Render All
+		// Render All
 		return `
             <div class="workout-checklist">
                 <div class="checklist-title-container">
@@ -119,7 +118,7 @@ function renderWorkoutOverview(
 
         ${workoutSpecsHTML(timeMin, burnKcal)}
 
-        ${workoutMusclesHTML(muscleImgName)}
+        ${workoutMusclesHTML(checklistItemsList)}
 
         ${workoutChecklistHTML(checklistItemsList)}
     `;
@@ -132,44 +131,48 @@ const quote = "Slow Form + Big Weight = Big Muscles";
 const author = "Tommy Wells";
 const timeMin = 60;
 const burnKcal = 495;
-const muscleImgName = ["muscle1.svg", "muscle1.svg"];
 const checklistItemsList = [
 	{
 		title: "Lunges",
-		notes: "This is tips or notes about the exercise to focus on...",
 		imgName: "lunge.svg",
+		muscles: ["abs", "glutes", "lunge"],
+		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
 	},
 	{
 		title: "Squats",
-		notes: "This is tips or notes about the exercise to focus on...",
 		imgName: "lunge.svg",
+		muscles: ["abs", "glutes", "lunge"],
+		notes: "This is tips or notes about the exercise to focus on...",
 		done: 2,
 		count: 3,
 	},
 	{
 		title: "Wide Lat Pulldowns",
-		notes: "This is tips or notes about the exercise to focus on...",
 		imgName: "lunge.svg",
+		muscles: ["abs", "glutes", "lunge"],
+		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
 	},
 	{
 		title: "Hammer Curls",
-		notes: "This is tips or notes about the exercise to focus on...",
 		imgName: "lunge.svg",
+		muscles: ["abs", "glutes", "lunge"],
+		notes: "This is tips or notes about the exercise to focus on...",
 		done: 1,
 		count: 3,
 	},
 	{
 		title: "Bench Press",
-		notes: "This is tips or notes about the exercise to focus on...",
 		imgName: "lunge.svg",
+		muscles: ["abs", "glutes", "lunge"],
+		notes: "This is tips or notes about the exercise to focus on...",
 		done: 1,
 		count: 3,
 	},
 ];
 
 // Render WorkoutOverview Page
-renderWorkoutOverview(quote, author, timeMin, burnKcal, muscleImgName, checklistItemsList);
+renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsList);
