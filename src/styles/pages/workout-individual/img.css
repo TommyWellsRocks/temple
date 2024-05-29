@@ -1,0 +1,15 @@
+.nav-title {
+	position: absolute;
+	top: 0;
+	width: 90%;
+}
+
+.workout-img {
+	background: linear-gradient(to bottom, transparent 0%, #292d2f 100%),
+		url("../../../content/images/workout-pages/workout-individual/workout-img.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	margin-left: -20px;
+	margin-right: -20px;
+	min-height: 240px;
+}
