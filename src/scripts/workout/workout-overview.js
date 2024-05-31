@@ -1,7 +1,14 @@
 import { workoutOverviewURL } from "../config.js";
 import { backButtonListener } from "../utils/backButtonListener.js";
 
-function renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsList) {
+function renderWorkoutOverview(
+	quote,
+	author,
+	timeMin,
+	burnKcal,
+	checklistItemsList,
+	workoutOverviewURL
+) {
 	function dailyQuoteHTML(quote, author) {
 		return `
             <div class="quote-container">
@@ -67,7 +74,7 @@ function renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsL
 			if (item.done === item.count) {
 				listDoneCount += 1;
 				checklistItemsHTML.push(`
-                        <div class="checklist-item-container checklist-item-done">
+                        <div class="checklist-item-container checklist-item-done" data-title="">
                             <img src="../content/images/exercises/${item.imgName}" class="checklist-item-img"/>
                             <div class="checklist-item-texts">
                                 <div class="checklist-item-title">${item.title}</div>
@@ -112,7 +119,7 @@ function renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsL
         `;
 	}
 
-	// Render All
+	// * Render HTML
 	document.querySelector(".js-workout-overview").innerHTML = `
         ${dailyQuoteHTML(quote, author)}
 
@@ -122,10 +129,17 @@ function renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsL
 
         ${workoutChecklistHTML(checklistItemsList)}
     `;
-}
 
-// Listen To Back Button
-backButtonListener(workoutOverviewURL);
+	// * Add Listeners
+	// Nav Back Button
+	backButtonListener(workoutOverviewURL);
+	// Checklist
+	document.querySelectorAll(".checklist-item-container").forEach((checklistItem) => {
+        checklistItem.addEventListener("click", () => {
+            
+        });
+	});
+}
 
 const quote = "Slow Form + Big Weight = Big Muscles";
 const author = "Tommy Wells";
@@ -135,7 +149,8 @@ const checklistItemsList = [
 	{
 		title: "Lunges",
 		imgName: "lunge.svg",
-		muscles: ["abs", "glutes", "lunge"],
+        muscles: ["abs", "glutes", "lunge"],
+        id: ,
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
@@ -175,4 +190,4 @@ const checklistItemsList = [
 ];
 
 // Render WorkoutOverview Page
-renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsList);
+renderWorkoutOverview(quote, author, timeMin, burnKcal, checklistItemsList, workoutOverviewURL);

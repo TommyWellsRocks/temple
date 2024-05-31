@@ -5,23 +5,21 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/src
-    environment:
-      - DATABASE_URL=${PG_DBNAME}://${PG_USER}:${PG_PASSWORD}@db:${PG_PORT}/${PG_DBNAME}
+    ports:
+      - "3000:3000"
     depends_on:
       - db
+    restart: always
 
   db:
     image: postgres
     restart: always
-    shm_size: 128mb
     environment:
       POSTGRES_DB: ${PG_DBNAME}
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
-    ports:
-      - "${PG_PORT}"
     volumes:
       - db-data:/var/lib/postgresql/data
-    
+
 volumes:
   db-data:
