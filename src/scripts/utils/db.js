@@ -1,37 +1,93 @@
-import postgres from "postgres";
+import pkg from "pg";
+const { Client } = pkg;
 import "dotenv/config";
 
-const sql = postgres({
-	host: "db",
-	port: process.env.PG_PORT,
-	database: process.env.PG_DBNAME,
-	username: process.env.PG_USER,
-	password: process.env.PG_PASSWORD,
-});
-
-// ! Put everything.json into sql
-
-// /**
-//  * @param {string} table table name
-//  * @param {Array.<string>} columns column names
-//  * @param {Array.<string>} values row values, corresponding to columns
-//  * @returns {null}
-//  */
-// export async function pgInsert(table, columns, values) {
-// 	await sql`INSERT INTO ${sql(table)} (${columns.map((col) => sql(col))}) VALUES ${values.map(
-// 		(val) => sql(val)
-// 	)}`;
-// 	console.log("Query Committed Successfully!");
-// }
-
-// pgInsert("exercises", ["name"], ["test_name"]);
-
-async function make() {
-	const res = await sql`
-		select table_name from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE';
-	`;
-	await sql.end();
-	console.log(res);
+async function createClient() {
+	const client = new Client({
+		host: "db",
+		port: process.env.PG_PORT,
+		database: process.env.PG_DBNAME,
+		user: process.env.PG_USER,
+		password: process.env.PG_PASSWORD,
+	});
+	await client.connect();
+	return client;
 }
 
-make();
+/**
+ * MUST BE AWAITED
+ * @param {String} tableName table name
+ * @returns {Array.<string>} list of column names
+ */
+async function getColumnNames(tableName) {
+	const client = await createClient();
+	const columns = [];
+	const res = await client.query(
+		"SELECT column_name FROM information_schema.columns WHERE table_name = $1;",
+		[tableName]
+	);
+
+	res.rows.forEach((row) => {
+		columns.push(row.column_name);
+	});
+
+	client.end();
+	return columns;
+}
+
+/**
+ * MUST BE AWAITED
+ * @param {String} tableName table name
+ * @returns {Number} number of rows in table
+ */
+async function getRowCount(tableName) {
+	const client = await createClient();
+	const res = await client.query(`Select count(*) from ${tableName};`);
+	client.end();
+	return res.rows[0].count;
+}
+
+/**
+ * MUST BE AWAITED
+ * @param {string} tableName table name
+ * @param {Array.<string>} columns column names
+ * @param {Array.<string>} values row values, corresponding to columns
+ * @returns {null}
+ */
+async function insertRows(tableName, columns, values) {
+	const client = await createClient();
+	const flattenedValues = values.map((val) =>
+		Array.isArray(val) ? `ARRAY[${val.map((v) => `'${v}'`).join(", ")}]` : `'${val}'`
+	);
+
+	await client.query(
+		`INSERT INTO ${tableName} (${columns.join(", ")}) VALUES (${flattenedValues.join(", ")});`
+	);
+
+	client.end();
+}
+
+/**
+ * MUST BE AWAITED
+ * @param {string} tableName table name
+ * @param {string} condition WHERE _____
+ * @returns {Array<object>}
+ */
+async function getRows(tableName, condition) {
+	const client = await createClient();
+	const res = await client.query(`SELECT * FROM ${tableName} WHERE ${condition};`);
+	client.end();
+	return res.rows;
+}
+
+/**
+ * MUST BE AWAITED
+ * @param {string} tableName table name
+ * @param {string} condition WHERE _____
+ * @returns {null}
+ */
+async function deleteRows(tableName, condition) {
+	const client = await createClient();
+	const res = await client.query(`DELETE FROM ${tableName} WHERE ${condition};`);
+	client.end();
+}
