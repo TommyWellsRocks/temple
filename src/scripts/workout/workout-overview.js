@@ -49,7 +49,7 @@ function renderWorkoutOverview(
 				if (!workoutMuscles.includes(muscle)) {
 					workoutMuscles.push(muscle);
 					imagesHTML.push(`
-                    <img src="../content/images/muscles/${muscle}.svg" class="muscle-img" />
+                    <img src="../content/images/workout-pages/muscles/${muscle}.svg" class="muscle-img" />
                     `);
 				}
 			});
@@ -75,7 +75,7 @@ function renderWorkoutOverview(
 				listDoneCount += 1;
 				checklistItemsHTML.push(`
                         <div class="checklist-item-container checklist-item-done" data-title="">
-                            <img src="../content/images/exercises/${item.imgName}" class="checklist-item-img"/>
+                            <img src="../content/images/workout-pages/exercises/${item.imgName}" class="checklist-item-img"/>
                             <div class="checklist-item-texts">
                                 <div class="checklist-item-title">${item.title}</div>
                                 <div class="checklist-item-notes">${item.notes}</div>
@@ -89,7 +89,7 @@ function renderWorkoutOverview(
 			} else {
 				checklistItemsHTML.push(`
                         <div class="checklist-item-container">
-                            <img src="../content/images/exercises/${item.imgName}" class="checklist-item-img"/>
+                            <img src="../content/images/workout-pages/exercises/${item.imgName}" class="checklist-item-img"/>
                             <div class="checklist-item-texts">
                                 <div class="checklist-item-title">${item.title}</div>
                                 <div class="checklist-item-notes">${item.notes}</div>
@@ -150,7 +150,6 @@ const checklistItemsList = [
 		title: "Lunges",
 		imgName: "lunge.svg",
         muscles: ["abs", "glutes", "lunge"],
-        id: ,
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
