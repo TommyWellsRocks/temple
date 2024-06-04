@@ -42,6 +42,8 @@
 
 .checklist-item-img {
 	width: 50px;
+	max-height: 50px;
+	border-radius: 8px;
 }
 
 .checklist-item-title {
@@ -64,4 +66,9 @@
 
 .checklist-item-done {
 	background-color: rgba(0, 0, 0, 0.6);
+}
+
+.checklist-anchor {
+	color: inherit;
+	text-decoration: none;
 }

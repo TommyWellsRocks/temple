@@ -5,10 +5,7 @@
 
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
-	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"docker-compose.yml"
-	],
+	"dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
@@ -53,7 +50,7 @@
 				"streetsidesoftware.code-spell-checker",
 				"tal7aouy.theme",
 				"tomoki1207.selectline-statusbar",
-				"yzhang.markdown-all-in-one",
+				"yzhang.markdown-all-in-one"
 			],
 			"settings": {
 				"explorer.confirmDelete": false,
@@ -130,19 +127,19 @@
 				"better-comments.tags": [
 					{
 						"tag": "!",
-						"color": "#FF2D00",
+						"color": "black",
 						"strikethrough": false,
 						"underline": false,
-						"backgroundColor": "transparent",
+						"backgroundColor": "#ff0000",
 						"bold": false,
 						"italic": false
 					},
 					{
 						"tag": "?",
-						"color": "#3498DB",
+						"color": "white",
 						"strikethrough": false,
 						"underline": false,
-						"backgroundColor": "transparent",
+						"backgroundColor": "#0008ff",
 						"bold": false,
 						"italic": false
 					},
@@ -157,19 +154,19 @@
 					},
 					{
 						"tag": "todo",
-						"color": "#FF8C00",
+						"color": "black",
 						"strikethrough": false,
 						"underline": false,
-						"backgroundColor": "transparent",
+						"backgroundColor": "#ffff00",
 						"bold": false,
 						"italic": false
 					},
 					{
 						"tag": "*",
-						"color": "#98C379",
+						"color": "black",
 						"strikethrough": false,
 						"underline": false,
-						"backgroundColor": "transparent",
+						"backgroundColor": "#00f7ff",
 						"bold": false,
 						"italic": false
 					}
@@ -195,7 +192,8 @@
 				"gitlens.codeLens.authors.command": false,
 				"gitlens.codeLens.recentChange.command": "gitlens.showCommitsInView",
 				"gitlens.codeLens.authors.enabled": false,
-				"gitlens.hovers.enabled": false}
+				"gitlens.hovers.enabled": false
+			}
 		}
 	}
 

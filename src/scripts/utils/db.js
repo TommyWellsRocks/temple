@@ -1,6 +1,8 @@
-import pkg from "pg";
-const { Client } = pkg;
+import pg from "pg";
+const { Client } = pg;
 import "dotenv/config";
+import { writeFileSync } from "fs";
+import { toTitleCase } from "./titlecase.js";
 
 async function createClient() {
 	const client = new Client({
@@ -16,8 +18,8 @@ async function createClient() {
 
 /**
  * MUST BE AWAITED
- * @param {String} tableName table name
- * @returns {Array.<string>} list of column names
+ * @param {string} tableName table name
+ * @returns {string[]} list of column names
  */
 async function getColumnNames(tableName) {
 	const client = await createClient();
@@ -50,8 +52,8 @@ async function getRowCount(tableName) {
 /**
  * MUST BE AWAITED
  * @param {string} tableName table name
- * @param {Array.<string>} columns column names
- * @param {Array.<string>} values row values, corresponding to columns
+ * @param {string[]} columns column names
+ * @param {string[]} values row values, corresponding to columns
  * @returns {null}
  */
 async function insertRows(tableName, columns, values) {
@@ -70,14 +72,23 @@ async function insertRows(tableName, columns, values) {
 /**
  * MUST BE AWAITED
  * @param {string} tableName table name
- * @param {string} condition WHERE _____
- * @returns {Array<object>}
+ * @param {string} conditions WHERE ____ ie: title = $1
+ * @param {string[]} values $# values ie: ["Bench Press"]
+ * @param {number} returnRowCount row count to return
+ * @returns {object[] | object}
  */
-async function getRows(tableName, condition) {
+async function getRows(tableName, conditions, values, returnRowCount = null) {
 	const client = await createClient();
-	const res = await client.query(`SELECT * FROM ${tableName} WHERE ${condition};`);
+	const res = await client.query(`SELECT * FROM ${tableName} WHERE ${conditions};`, values);
 	client.end();
-	return res.rows;
+	switch (returnRowCount) {
+		case null:
+			return res.rows;
+		case 1:
+			return res.rows[0];
+		default:
+			return res.rows.slice(0, returnRowCount + 1);
+	}
 }
 
 /**
@@ -88,6 +99,20 @@ async function getRows(tableName, condition) {
  */
 async function deleteRows(tableName, condition) {
 	const client = await createClient();
-	const res = await client.query(`DELETE FROM ${tableName} WHERE ${condition};`);
+	await client.query(`DELETE FROM ${tableName} WHERE ${condition};`);
+	client.end();
+}
+
+function generateWorkoutId() {
+
+}
+
+
+// * DEV HELPER FUNCTION 
+async function prettyOutputDBJSON() {
+	const client = await createClient();
+	let result = await client.query("SELECT * FROM exercises;")
+	result = JSON.stringify(result.rows)
+	writeFileSync("exercises.json", result);
 	client.end();
 }

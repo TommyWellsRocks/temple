@@ -24,4 +24,6 @@
 
 .tab-info {
     font-size: 14px;
+    white-space: pre-wrap;
+    
 }
