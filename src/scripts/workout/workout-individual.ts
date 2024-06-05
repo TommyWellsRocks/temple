@@ -1,20 +1,20 @@
 import "../../styles/shared/globals.css";
-import "../../styles/pages/workout-individual/about.css";
 import "../../styles/shared/workout/checklist.css";
 import "../../styles/pages/workout-individual/about.css";
 import "../../styles/pages/workout-individual/img.css";
 import "../../styles/pages/workout-individual/input.css";
 
-import { workoutOverviewURL, checklistItemsList } from "../config.js";
-import { backButtonListener } from "./backButtonListener.js";
-import { workoutChecklistHTML } from "./workoutChecklist.js";
+import { checklistItem } from "../../interfaces/checklistItem.ts";
+import { workoutOverviewURL, checklistItemsList } from "../config.ts";
+import { backButtonListener } from "./backButtonListener.ts";
+import { workoutChecklistHTML } from "./workoutChecklist.ts";
 
-function renderWorkoutIndividual(checklistItemsList: object[]) {
+function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 	function getExercise() {
-		const exerciseId = new URL(window.location.href).searchParams.get("exerciseId");
-		let checklistItem;
+		const exerciseId = Number(new URL(window.location.href).searchParams.get("exerciseId"));
+		let checklistItem: checklistItem;
 		checklistItemsList.forEach((item) => {
-			if (item.id == exerciseId) {
+			if (item.id === exerciseId) {
 				checklistItem = item;
 			}
 		});
@@ -72,7 +72,7 @@ function renderWorkoutIndividual(checklistItemsList: object[]) {
         `;
 	}
 
-	function aboutWorkoutHTML() {
+	function aboutWorkoutHTML(checklistItem: checklistItem) {
 		return `
             <div class="about-workout-container">
                 <div class="about-workout-tabs">
@@ -109,7 +109,7 @@ function renderWorkoutIndividual(checklistItemsList: object[]) {
 		}
 	}
 
-	const checklistItem = getExercise();
+	const checklistItem: checklistItem = getExercise();
 
 	// * Render All HTML
 	document.querySelector(".js-workout-individual")!.innerHTML = `
@@ -117,7 +117,7 @@ function renderWorkoutIndividual(checklistItemsList: object[]) {
 
         ${workoutInputHTML()}
 
-        ${aboutWorkoutHTML()}
+        ${aboutWorkoutHTML(checklistItem)}
 
         ${workoutChecklistHTML(checklistItemsList)}
     `;

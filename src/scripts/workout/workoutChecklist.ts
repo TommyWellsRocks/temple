@@ -1,11 +1,12 @@
-import { workoutIndividualURL } from "../config.js";
+import { checklistItem } from "../../interfaces/checklistItem.ts";
+import { workoutIndividualURL } from "../config.ts";
 
 // TODO href's onlick with url values like orders.js in js-amazon 
-export function workoutChecklistHTML(checklistItemsList) {
+export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
 	let listDoneCount = 0;
 	const listTotalCount = checklistItemsList.length;
 
-	const checklistItemsHTML = [];
+	const checklistItemsHTML: string[] = [];
 	checklistItemsList.forEach((item) => {
 		if (item.done === item.count) {
 			listDoneCount += 1;

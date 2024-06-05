@@ -50,7 +50,8 @@
 				"streetsidesoftware.code-spell-checker",
 				"tal7aouy.theme",
 				"tomoki1207.selectline-statusbar",
-				"yzhang.markdown-all-in-one"
+				"yzhang.markdown-all-in-one",
+				"ms-vscode.vscode-typescript-next"
 			],
 			"settings": {
 				"explorer.confirmDelete": false,
@@ -89,7 +90,7 @@
 					"fsharp": "fsi",
 					"csharp": "scriptcs",
 					"vbscript": "cscript //Nologo",
-					"typescript": "ts-node",
+					"typescript": "npx tsx",
 					"coffeescript": "coffee",
 					"scala": "scala",
 					"swift": "swift",
