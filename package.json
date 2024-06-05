@@ -1,18 +1,15 @@
 {
   "name": "bodyproject",
-  "version": "1.0.0",
-  "main": "app.js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "build": "tsc",
-    "test": ""
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "author": "Tommy Wells",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "pg": "^8.11.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
   }
 }
