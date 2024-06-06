@@ -1,25 +1,31 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/src
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    restart: always
+    app:
+        build: ./frontend
+        depends_on:
+            - db
+        ports:
+            - "${BODYPROJECT_PORT}:${BODYPROJECT_PORT}"
+        restart: always
+        volumes:
+            - .:/frontend
 
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: ${PG_DBNAME}
-      POSTGRES_USER: ${PG_USER}
-      POSTGRES_PASSWORD: ${PG_PASSWORD}
-    volumes:
-      - db-data:/var/lib/postgresql/data
+    workout-api:
+        build: ./backend/src/apis/workout
+        ports:
+            - "${WORKOUT_API_PORT}:${WORKOUT_API_PORT}"
+        restart: always
+        volumes:
+            - .:/backend/src/apis/workout
+
+    db:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_DB: ${PG_DBNAME}
+            POSTGRES_USER: ${PG_USER}
+            POSTGRES_PASSWORD: ${PG_PASSWORD}
+        volumes:
+            - db-data:/var/lib/postgresql/data
 
 volumes:
-  db-data:
+    db-data:

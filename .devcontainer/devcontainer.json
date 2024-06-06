@@ -52,7 +52,7 @@
 				"tomoki1207.selectline-statusbar",
 				"yzhang.markdown-all-in-one",
 				"ms-vscode.vscode-typescript-next",
-				"devine-davies.make-hidden"
+				"amodio.toggle-excluded-files"
 			],
 			"settings": {
 				"files.exclude": {
