@@ -2,6 +2,8 @@ import pg from "pg";
 const { Client } = pg;
 import "dotenv/config";
 import { writeFileSync } from "fs";
+import { configDotenv } from "dotenv";
+configDotenv({ path: "../../../.env" });
 
 async function createClient() {
 	const client = new Client({
@@ -15,12 +17,39 @@ async function createClient() {
 	return client;
 }
 
+// * DB STRUCTURAL
 /**
- * MUST BE AWAITED
- * @param tableName table name
+ *
+ * @param columnNamesTypesOptions ie: user_id INT PRIMARY KEY, username varchar, email varchar
+ * QUERY: CREATE TABLE users (user_id INT PRIMARY KEY, username varchar, email varchar);
+ */
+async function createTable(newTableName: string, columnNamesTypesOptions: string) {
+	const client = await createClient();
+	await client.query(`CREATE TABLE ${newTableName} (${columnNamesTypesOptions});`);
+	client.end();
+}
+
+async function deleteTable(tableName: string) {
+	const client = await createClient();
+	await client.query(`DROP TABLE ${tableName}`);
+	client.end();
+}
+
+async function getAllTableNames() {
+	const client = await createClient();
+	const res = await client.query(
+		"SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'"
+	);
+	client.end();
+	const tables: string[] = res.rows.map((table) => table.table_name);
+	return tables;
+}
+
+// * TABLE INSIGHTS
+/**
  * @returns list of column names
  */
-async function getColumnNames(tableName: string): Promise<string[]> {
+async function getColumnNames(tableName: string) {
 	const client = await createClient();
 	const columns: string[] = [];
 	const res = await client.query(
@@ -37,8 +66,6 @@ async function getColumnNames(tableName: string): Promise<string[]> {
 }
 
 /**
- * MUST BE AWAITED
- * @param tableName table name
  * @returns number of rows in table
  */
 async function getRowCount(tableName: string): Promise<Number> {
@@ -48,9 +75,8 @@ async function getRowCount(tableName: string): Promise<Number> {
 	return res.rows[0].count;
 }
 
+// * TABLE ACTIONS
 /**
- * MUST BE AWAITED
- * @param tableName table name
  * @param columns column names
  * @param values row values, corresponding to columns
  */
@@ -68,13 +94,11 @@ async function insertRows(tableName: string, columns: string[], values: string[]
 }
 
 /**
- * MUST BE AWAITED
- * @param tableName table name
  * @param conditions WHERE ____ ie: title = $1
  * @param values $# values ie: ["Bench Press"]
  * @param returnRowCount row count to return. Returns all default.
  */
-export async function getRows(
+async function selectRows(
 	tableName: string,
 	conditions: string,
 	values: string[],
@@ -94,8 +118,6 @@ export async function getRows(
 }
 
 /**
- * MUST BE AWAITED
- * @param tableName table name
  * @param condition WHERE _____
  */
 async function deleteRows(tableName: string, condition: string): Promise<void> {
@@ -104,15 +126,11 @@ async function deleteRows(tableName: string, condition: string): Promise<void> {
 	client.end();
 }
 
-function generateWorkoutId() {}
-
 // * DEV HELPER FUNCTION
 async function prettyOutputDBJSON(): Promise<void> {
 	const client = await createClient();
 	const result = await client.query("SELECT * FROM exercises;");
+	client.end();
 	const stringResult = JSON.stringify(result.rows);
 	writeFileSync("exercises.json", stringResult);
-	client.end();
 }
-
-getRowCount("exercises").then(res => {console.log(res)});
