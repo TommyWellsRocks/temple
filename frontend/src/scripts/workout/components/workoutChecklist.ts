@@ -1,5 +1,8 @@
-import { checklistItem } from "../../interfaces/checklistItem.ts";
-import { workoutIndividualURL } from "../config.ts";
+import playButtonURL from "../../../content/images/workout-pages/action-play.svg"
+import trophyButtonURL from "../../../content/images/workout-pages/action-trophy.svg"
+
+import { checklistItem } from "../../../interfaces/checklistItem.ts";
+import { workoutIndividualURL } from "../../config.ts";
 
 // TODO href's onlick with url values like orders.js in js-amazon 
 export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
@@ -19,7 +22,7 @@ export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
 								<div class="checklist-item-notes">${item.tips}</div>
 							</div>
 							<img
-								src="../content/images/workout-pages/action-trophy.svg"
+								src=${trophyButtonURL}
 								class="checklist-item-action"
 							/>
 						</div>
@@ -35,7 +38,7 @@ export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
 								<div class="checklist-item-notes">${item.tips}</div>
 							</div>
 							<img
-								src="../content/images/workout-pages/action-play.svg"
+								src=${playButtonURL}
 								class="checklist-item-action"
 							/>
 						</div>

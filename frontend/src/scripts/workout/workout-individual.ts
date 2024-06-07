@@ -4,10 +4,14 @@ import "../../styles/pages/workout-individual/about.css";
 import "../../styles/pages/workout-individual/img.css";
 import "../../styles/pages/workout-individual/input.css";
 
+import backButtonURL from "../../content/images/back-button.svg";
+import playButtonURL from "../../content/images/workout-pages/action-play.svg";
+// import trophyButtonURL from "../../content/images/workout-pages/action-trophy.svg";
+
 import { checklistItem } from "../../interfaces/checklistItem.ts";
 import { workoutOverviewURL, checklistItemsList } from "../config.ts";
-import { backButtonListener } from "./backButtonListener.ts";
-import { workoutChecklistHTML } from "./workoutChecklist.ts";
+import { backButtonListener } from "./components/backButtonListener.ts";
+import { workoutChecklistHTML } from "./components/workoutChecklist.ts";
 
 function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 	function getExercise() {
@@ -26,7 +30,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
         <div class="workout-img"></div>
             
         <div class="nav-title">
-            <img class="back-button" alt="" src="../content/images/back-button.svg" />
+            <img class="back-button" alt="" src=${backButtonURL} />
             <h1 class="title">${title}</h1>
         </div>
         `;
@@ -37,7 +41,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
         <div class="workout-input-container">
 			<div class="sets-count">4 Sets</div>
 			<div class="set-input-row">
-				<img src="../content/images/workout-pages/action-play.svg" class="set-count-img" />
+				<img src=${playButtonURL} class="set-count-img" />
 				<div class="workout-row-input reps-input">10</div>
 				<div class="workout-input-title">Reps</div>
 				<div class="divider"></div>
@@ -45,7 +49,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 				<div class="workout-input-title">lbs</div>
 			</div>
 			<div class="set-input-row">
-				<img src="../content/images/workout-pages/action-play.svg" class="set-count-img" />
+				<img src=${playButtonURL} class="set-count-img" />
 				<div class="workout-row-input reps-input">10</div>
 				<div class="workout-input-title">Reps</div>
 				<div class="divider"></div>
@@ -53,7 +57,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 				<div class="workout-input-title">lbs</div>
 			</div>
 			<div class="set-input-row">
-				<img src="../content/images/workout-pages/action-play.svg" class="set-count-img" />
+				<img src=${playButtonURL} class="set-count-img" />
 				<div class="workout-row-input reps-input">10</div>
 				<div class="workout-input-title">Reps</div>
 				<div class="divider"></div>
@@ -61,7 +65,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 				<div class="workout-input-title">lbs</div>
 			</div>
 			<div class="set-input-row">
-				<img src="../content/images/workout-pages/action-play.svg" class="set-count-img" />
+				<img src=${playButtonURL} class="set-count-img" />
 				<div class="workout-row-input reps-input">10</div>
 				<div class="workout-input-title">Reps</div>
 				<div class="divider"></div>
@@ -109,7 +113,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		}
 	}
 
-	const checklistItem: checklistItem = getExercise();
+	const checklistItem = getExercise() satisfies checklistItem;
 
 	// * Render All HTML
 	document.querySelector(".js-workout-individual")!.innerHTML = `

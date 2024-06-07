@@ -134,3 +134,5 @@ async function prettyOutputDBJSON(): Promise<void> {
 	const stringResult = JSON.stringify(result.rows);
 	writeFileSync("exercises.json", stringResult);
 }
+
+getAllTableNames().then(res => console.log(res))

@@ -1,8 +1,9 @@
 import { checklistItem } from "../interfaces/checklistItem";
 
 // Workout Overview Page
-export const workoutOverviewURL = "http://localhost:5500/src/pages/workout-overview.html";
-export const workoutIndividualURL = "http://localhost:5500/src/pages/workout-individual.html";
+
+export const workoutOverviewURL = `http://localhost:3000/src/pages/workout-overview.html`;
+export const workoutIndividualURL = `workout-individual.html`;
 
 // Note:
 // User gets own notes, done, count for their session per exercise

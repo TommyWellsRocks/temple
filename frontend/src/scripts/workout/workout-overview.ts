@@ -1,13 +1,16 @@
-import "../../styles/shared/globals.css"
-import "../../styles/shared/workout/checklist.css"
-import "../../styles/pages/workout-overview/quote.css"
-import "../../styles/pages/workout-overview/specs.css"
-import "../../styles/pages/workout-overview/muscles.css"
+import "../../styles/shared/globals.css";
+import "../../styles/shared/workout/checklist.css";
+import "../../styles/pages/workout-overview/quote.css";
+import "../../styles/pages/workout-overview/specs.css";
+import "../../styles/pages/workout-overview/muscles.css";
+
+import timeIconURL from "../../content/images/workout-pages/workout-overview/time.svg";
+import burnIconURL from "../../content/images/workout-pages/workout-overview/burn.svg";
 
 import { checklistItem } from "../../interfaces/checklistItem.ts";
 import { workoutOverviewURL, checklistItemsList } from "../config.ts";
-import { backButtonListener } from "./backButtonListener.ts";
-import { workoutChecklistHTML } from "./workoutChecklist.ts";
+import { backButtonListener } from "./components/backButtonListener.ts";
+import { workoutChecklistHTML } from "./components/workoutChecklist.ts";
 
 function renderWorkoutOverview(
 	quote: string,
@@ -32,7 +35,7 @@ function renderWorkoutOverview(
 		return `
             <div class="workout-specs-container">
                 <div class="time-container">
-                    <img src="../content/images/workout-pages/workout-overview/time.svg" class="specs-image" />
+                    <img src=${timeIconURL} class="specs-image" />
                     <div class="time-info">
                         <p class="specs-header">Time</p>
                         <p class="specs-text">${timeMin} min</p>
@@ -40,7 +43,7 @@ function renderWorkoutOverview(
                     </div>
                     <div class="divider"></div>
                     <div class="burn-container">
-                        <img src="../content/images/workout-pages/workout-overview/burn.svg" class="specs-image" />
+                        <img src=${burnIconURL} class="specs-image" />
                         <div class="burn-info">
                             <p class="specs-header">Burn</p>
                             <p class="specs-text">${burnKcal} kcal</p>
