@@ -1,4 +1,5 @@
 import "../../styles/shared/globals.css";
+import "../../styles/shared/workout/nav.css"
 import "../../styles/shared/workout/checklist.css";
 import "../../styles/pages/workout-overview/quote.css";
 import "../../styles/pages/workout-overview/specs.css";

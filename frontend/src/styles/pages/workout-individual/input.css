@@ -1,4 +1,4 @@
-.workout-input-container {
+.exercise-input-container {
 	display: flex;
 	flex-direction: column;
 	row-gap: 20px;
@@ -11,7 +11,7 @@
 	text-decoration: underline;
 }
 
-.set-input-row {
+.exercise-input-row {
 	display: flex;
 	justify-content: center;
 	column-gap: 10px;
@@ -20,20 +20,38 @@
 	font-size: 24px;
 }
 
-.set-count-img {
-	width: 30px;
-	border-radius: 100%;
+.input-row-counter {
+	color: black;
+	font-weight: 600;
 	background-color: white;
+	width: 35px;
+	border-radius: 100%;
+	margin-right: 20px;
 }
 
-.workout-row-input {
+.input-row-input-field {
 	font-weight: 800;
 	font-size: 30px;
 }
 
 .divider {
-    border: 1px solid rgba(255, 255, 255, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.25);
 	height: 40px;
 	rotate: 20deg;
 	margin: 0 12px;
+}
+
+.input-row-confirm-button {
+	margin-left: 20px;
+	background-color: white;
+	color: black;
+	border: 1px solid blue;
+	border-radius: 20px;
+	padding: 5px 15px;
+}
+
+.input-row-confirmed-button {
+	background-color: black;
+	color: white;
+	border: 1px solid red;
 }

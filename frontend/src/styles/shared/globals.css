@@ -9,31 +9,3 @@ body {
 	min-width: 300px;
 	overflow-x: hidden;
 }
-
-.nav-title {
-	display: flex;
-	width: 100%;
-	justify-content: center;
-	align-items: center;
-	padding-bottom: 12px;
-}
-
-.back-button {
-	height: 15px;
-	cursor: pointer;
-}
-
-.title {
-	font-size: 25px;
-	font-weight: 500;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.container-title {
-	font-weight: 500;
-	font-size: 20px;
-	text-align: left;
-	margin-top: 25px;
-	margin-bottom: 10px;
-}

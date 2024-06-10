@@ -15,4 +15,5 @@ export interface checklistItem {
 	notes: string;
 	done: number;
 	count: number;
+	previousSets: number[]
 }

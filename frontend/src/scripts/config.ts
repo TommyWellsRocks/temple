@@ -2,7 +2,7 @@ import { checklistItem } from "../interfaces/checklistItem";
 
 // Workout Overview Page
 
-export const workoutOverviewURL = `http://localhost:3000/src/pages/workout-overview.html`;
+export const workoutOverviewURL = `workout-overview.html`;
 export const workoutIndividualURL = `workout-individual.html`;
 
 // Note:
@@ -38,6 +38,7 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
+		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
 	},
 	{
 		id: 846,
@@ -67,6 +68,7 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 2,
 		count: 3,
+		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
 	},
 	{
 		id: 839,
@@ -93,6 +95,7 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 1,
 		count: 3,
+		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
 	},
 	{
 		id: 845,
@@ -121,5 +124,6 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
+		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
 	},
 ];
