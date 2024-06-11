@@ -18,40 +18,55 @@
 	align-items: center;
 	font-weight: 300;
 	font-size: 24px;
+	color: #8a949991;
+}
+
+.exercise-input-row-active {
+	color: white;
 }
 
 .input-row-counter {
-	color: black;
+	color: #292d2f;
+	width: 45px;
+	height: 45px;
+	background-color: #8a949991;
+	clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+	justify-content: center;
+	align-items: center;
+	display: flex;
 	font-weight: 600;
-	background-color: white;
-	width: 35px;
-	border-radius: 100%;
 	margin-right: 20px;
+}
+
+.input-row-counter-active {
+	background-color: rgba(103, 57, 255);
 }
 
 .input-row-input-field {
 	font-weight: 800;
 	font-size: 30px;
+	cursor: pointer;
+}
+
+.workout-input-title {
+	font-size: 20px;
 }
 
 .divider {
-	border: 1px solid rgba(255, 255, 255, 0.25);
-	height: 40px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	height: 20px;
 	rotate: 20deg;
-	margin: 0 12px;
+	margin: 0 20px;
 }
 
-.input-row-confirm-button {
-	margin-left: 20px;
-	background-color: white;
-	color: black;
-	border: 1px solid blue;
-	border-radius: 20px;
-	padding: 5px 15px;
-}
-
-.input-row-confirmed-button {
-	background-color: black;
+.exercise-input-field {
+	background-color: transparent;
+	display: flex;
+	text-align: right;
+	width: 90px;
 	color: white;
-	border: 1px solid red;
+	border: none;
+	font-family: "poppins";
+	font-size: 30px;
+	font-weight: 800;
 }

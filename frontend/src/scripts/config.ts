@@ -38,7 +38,8 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
-		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
+		previousReps: [9, 9, 9, 9, 9, 8],
+		previousWeight: [100, 105, 110, 115, 120, 130],
 	},
 	{
 		id: 846,
@@ -68,7 +69,8 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 2,
 		count: 3,
-		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
+		previousReps: [9, 9, 9, 9, 9, 8],
+		previousWeight: [100, 105, 110, 115, 120, 130],
 	},
 	{
 		id: 839,
@@ -95,7 +97,8 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 1,
 		count: 3,
-		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
+		previousReps: [9, 9, 9, 9, 9, 8],
+		previousWeight: [100, 105, 110, 115, 120, 130],
 	},
 	{
 		id: 845,
@@ -124,6 +127,7 @@ export const checklistItemsList: checklistItem[] = [
 		notes: "This is tips or notes about the exercise to focus on...",
 		done: 3,
 		count: 3,
-		previousSets: [1200, 1400, 1500, 1500, 1400, 1400, 1700],
+		previousReps: [9, 9, 9, 9, 9, 8],
+		previousWeight: [100, 105, 110, 115, 120, 130],
 	},
 ];

@@ -1,5 +1,5 @@
 .chart-container {
-	width: 500px;
+	width: 100%;
 	display: flex;
 	margin: auto;
 	background-color: rgba(0, 0, 0, 0.3);
