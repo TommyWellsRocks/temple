@@ -1,7 +1,6 @@
 import "../../styles/shared/globals.css";
 import "../../styles/shared/workout/nav.css";
 import "../../styles/shared/workout/chart.css";
-import "../../styles/shared/workout/checklist.css";
 import "../../styles/pages/workout-individual/about.css";
 import "../../styles/pages/workout-individual/input.css";
 
@@ -10,10 +9,11 @@ import backButtonURL from "../../content/images/back-button.svg";
 import { checklistItem } from "../../interfaces/checklistItem.ts";
 import { workoutOverviewURL, checklistItemsList } from "../config.ts";
 import { backButtonListener } from "./components/backButtonListener.ts";
-import { workoutChecklistHTML } from "./components/workoutChecklist.ts";
 import { Chart } from "chart.js/auto";
 
 function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
+	let volumeChart: Chart | null = null;
+
 	// * Helper Functions
 	function getExercise() {
 		const exerciseId = Number(new URL(window.location.href).searchParams.get("exerciseId"));
@@ -40,7 +40,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
         `;
 	}
 
-	function renderChart(previousData: number[]) {
+	function renderChart() {
 		function getCurrentChartData() {
 			const currentData: number[] = [];
 			const exerciseInputFields = getExerciseInputFields();
@@ -55,7 +55,18 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 			});
 			return currentData;
 		}
+		function getPreviousChartData() {
+			const previousData = checklistItem.previousReps.map((set, index) => {
+				return set * checklistItem.previousWeight[index];
+			});
+			return previousData;
+		}
 
+		if (volumeChart) {
+			volumeChart.destroy();
+		}
+
+		const previousData = getPreviousChartData();
 		const currentData = getCurrentChartData();
 		const chart_location: HTMLCanvasElement = document.querySelector(".exercise-chart")!;
 		const yAxisMin = Math.min(...previousData, ...currentData) * 0.6;
@@ -68,13 +79,13 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 			}
 		};
 
-		const volumeChart = new Chart(chart_location, {
+		volumeChart = new Chart(chart_location, {
 			type: "line",
 			data: {
 				labels: xAxisLength(),
 				datasets: [
 					{
-						label: "Previous Session Volume",
+						label: "Previous Workout Volume",
 						data: previousData,
 						fill: true,
 						borderColor: "#999",
@@ -83,7 +94,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 						borderDash: [5, 5],
 					},
 					{
-						label: "Current Volume",
+						label: "Current Workout Volume",
 						data: currentData,
 						fill: true,
 						borderColor: "rgba(103, 57, 255, 1)",
@@ -98,18 +109,24 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 						grid: {
 							display: false,
 						},
+						ticks: {
+							align: "inner",
+						},
 					},
 					y: {
 						grid: {
 							display: false,
+						},
+						ticks: {
+							autoSkipPadding: 20,
 						},
 						min: yAxisMin,
 						max: yAxisMax,
 					},
 				},
 			},
+			plugins: [],
 		});
-		return volumeChart;
 	}
 
 	function renderSetCount() {
@@ -152,7 +169,8 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		return `
             <div class="about-workout-container">
                 <div class="about-workout-tabs">
-                    <div class="about-workout-tab active">Notes</div>
+					<div class="about-workout-tab active">Notes</div>
+					<div class="about-workout-tab">Tips</div>
                     <div class="about-workout-tab">Instructions</div>
                     <div class="about-workout-tab">Muscles</div>
                 </div>
@@ -187,35 +205,10 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 			const newValue = input.value;
 			input.parentNode!.textContent = newValue;
 			input.parentNode?.removeChild(input);
-			volumeChart.destroy();
-			volumeChart = renderChart(previousData);
+			renderChart();
 		});
 		field.textContent = "";
 		field.appendChild(input);
-	}
-
-	function handleTabChange(tab: Element, tabs: NodeListOf<Element>, infoSection: Element) {
-		tabs.forEach((remainingTab) => {
-			if (remainingTab != tab) {
-				remainingTab.classList.remove("active");
-			}
-		});
-		tab.classList.add("active");
-
-		switch (tab.innerHTML) {
-			case "Notes":
-				infoSection.innerHTML = checklistItem.notes;
-				break;
-			case "Instructions":
-				const instructions = checklistItem.instructions.map(
-					(string: string, index: number) => `${index + 1}. ${string}`
-				);
-				infoSection.innerHTML = instructions.join("\n");
-				break;
-			case "Muscles":
-				infoSection.innerHTML = `This is lorem ipsum text that might make sense.`;
-				break;
-		}
 	}
 
 	function handleAddSet() {
@@ -234,8 +227,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 
 		// Add Listener To It
 		exerciseInputListeners();
-		volumeChart.destroy();
-		volumeChart = renderChart(previousData);
+		renderChart();
 	}
 
 	function handleDeleteSet() {
@@ -244,24 +236,47 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		document.querySelector(".exercise-input-container")!.lastElementChild?.remove();
 
 		exerciseInputListeners();
-		volumeChart.destroy();
-		volumeChart = renderChart(previousData);
+		renderChart();
+	}
+
+	function handleTabChange(tab: Element, tabs: NodeListOf<Element>, infoSection: Element) {
+		tabs.forEach((remainingTab) => {
+			if (remainingTab != tab) {
+				remainingTab.classList.remove("active");
+			}
+		});
+		tab.classList.add("active");
+
+		switch (tab.innerHTML) {
+			case "Notes":
+				infoSection.innerHTML = checklistItem.notes;
+				break;
+			case "Tips":
+				infoSection.innerHTML = checklistItem.tips;
+				break;
+			case "Instructions":
+				const instructions = checklistItem.instructions.map(
+					(string: string, index: number) => `${index + 1}. ${string}`
+				);
+				infoSection.innerHTML = instructions.join("\n");
+				break;
+			case "Muscles":
+				infoSection.innerHTML = `<img class="muscle-img" src="${checklistItem.muscle_images[0]}">`;
+				break;
+		}
 	}
 
 	// * Listener Functions
 	function exerciseInputListeners() {
 		const exerciseInputFields = getExerciseInputFields();
-		exerciseInputFields.forEach((field, index) => {
+		exerciseInputFields.forEach((field) => {
 			field.addEventListener("click", () => handleExerciseInput(field));
 		});
 	}
 
 	// * Get Data
 	const checklistItem = getExercise() satisfies checklistItem;
-	const previousData = checklistItem.previousReps.map((set, index) => {
-		return set * checklistItem.previousWeight[index];
-	});
-	let setCount = previousData.length;
+	let setCount = checklistItem.previousReps.length;
 
 	// * Render All HTML
 	document.querySelector(".js-workout-individual")!.innerHTML = `
@@ -278,11 +293,9 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		</div>
 
         ${aboutWorkoutHTML(checklistItem)}
+		`;
 
-        ${workoutChecklistHTML(checklistItemsList)}
-    `;
-
-	let volumeChart = renderChart(previousData);
+	renderChart();
 
 	// * Add Listeners
 	// Nav Back Button
