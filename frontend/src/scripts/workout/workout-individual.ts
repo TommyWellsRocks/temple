@@ -6,7 +6,6 @@ import "../../styles/pages/workout-individual/about.css";
 import "../../styles/pages/workout-individual/input.css";
 
 import backButtonURL from "../../content/images/back-button.svg";
-import trophyButtonURL from "../../content/images/workout-pages/action-trophy.svg";
 
 import { checklistItem } from "../../interfaces/checklistItem.ts";
 import { workoutOverviewURL, checklistItemsList } from "../config.ts";
@@ -15,7 +14,7 @@ import { workoutChecklistHTML } from "./components/workoutChecklist.ts";
 import { Chart } from "chart.js/auto";
 
 function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
-	// TODO Get Previous Data
+	// * Helper Functions
 	function getExercise() {
 		const exerciseId = Number(new URL(window.location.href).searchParams.get("exerciseId"));
 		let checklistItem: checklistItem;
@@ -27,6 +26,11 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		return checklistItem!;
 	}
 
+	function getExerciseInputFields() {
+		return document.querySelectorAll(".input-row-input-field");
+	}
+
+	// * HTML Functions
 	function headerNavHTML(title: string) {
 		return `
 		<div class="nav-title">
@@ -36,56 +40,23 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
         `;
 	}
 
-	function workoutInputHTML(setCount: number) {
-		function renderSetCount() {
-			let innerText: string;
-			if (setCount == 1) {
-				innerText = `${setCount} Set`;
-			} else {
-				innerText = `${setCount} Sets`;
-			}
-			return `<div class="sets-count">${innerText}</div>`;
+	function renderChart(previousData: number[]) {
+		function getCurrentChartData() {
+			const currentData: number[] = [];
+			const exerciseInputFields = getExerciseInputFields();
+			exerciseInputFields.forEach((field, index) => {
+				if (field.classList.contains("reps-input") && Number(field.textContent) !== 0) {
+					let weightField = Number(exerciseInputFields[index + 1].textContent);
+					if (weightField === 0) {
+						weightField = 1;
+					}
+					currentData.push(Number(field.textContent) * weightField);
+				}
+			});
+			return currentData;
 		}
 
-		function renderInputRowsHTML() {
-			const rowsHTML = [];
-			for (let i = 1; i <= setCount; i++) {
-				rowsHTML.push(`
-						<div class="exercise-input-row">
-							<div class="input-row-counter">${i}</div>
-							<div class="input-row-input-field reps-input">0</div>
-							<div class="workout-input-title">Reps</div>
-							<div class="divider"></div>
-							<div class="input-row-input-field weight-input">0</div>
-							<div class="workout-input-title">Pounds</div>
-						</div>
-					`);
-			}
-			return rowsHTML.join("");
-		}
-
-		return `
-			<div class="exercise-input-container">
-				${renderSetCount()}
-				${renderInputRowsHTML()}
-			</div>
-        `;
-	}
-
-	function aboutWorkoutHTML(checklistItem: checklistItem) {
-		return `
-            <div class="about-workout-container">
-                <div class="about-workout-tabs">
-                    <div class="about-workout-tab active">Notes</div>
-                    <div class="about-workout-tab">Instructions</div>
-                    <div class="about-workout-tab">Muscles</div>
-                </div>
-                <div class="tab-info">${checklistItem.notes}</div>
-            </div>
-        `;
-	}
-
-	function renderChart(previousData: number[], currentData: number[]) {
+		const currentData = getCurrentChartData();
 		const chart_location: HTMLCanvasElement = document.querySelector(".exercise-chart")!;
 		const yAxisMin = Math.min(...previousData, ...currentData) * 0.6;
 		const yAxisMax = Math.max(...previousData, ...currentData) * 1.2;
@@ -141,12 +112,63 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		return volumeChart;
 	}
 
+	function renderSetCount() {
+		let innerText: string;
+		if (setCount == 1) {
+			innerText = `${setCount} Set`;
+		} else {
+			innerText = `${setCount} Sets`;
+		}
+		return `<div class="sets-count">${innerText}</div>`;
+	}
+
+	function workoutInputHTML() {
+		function renderInputRowsHTML() {
+			const rowsHTML = [];
+			for (let i = 1; i <= setCount; i++) {
+				rowsHTML.push(`
+						<div class="exercise-input-row">
+							<div class="input-row-counter">${i}</div>
+							<div class="input-row-input-field reps-input">0</div>
+							<div class="workout-input-title">Reps</div>
+							<div class="divider"></div>
+							<div class="input-row-input-field weight-input">0</div>
+							<div class="workout-input-title">Pounds</div>
+						</div>
+					`);
+			}
+			return rowsHTML.join("");
+		}
+
+		return `
+			<div class="exercise-input-container">
+				${renderSetCount()}
+				${renderInputRowsHTML()}
+			</div>
+        `;
+	}
+
+	function aboutWorkoutHTML(checklistItem: checklistItem) {
+		return `
+            <div class="about-workout-container">
+                <div class="about-workout-tabs">
+                    <div class="about-workout-tab active">Notes</div>
+                    <div class="about-workout-tab">Instructions</div>
+                    <div class="about-workout-tab">Muscles</div>
+                </div>
+                <div class="tab-info">${checklistItem.notes}</div>
+            </div>
+        `;
+	}
+
+	// * Handler Functions
 	function handleExerciseInput(field: Element) {
 		const inputRow = field.parentElement!;
 
 		if (field.querySelector("input")) return;
 
 		// Remove Active From All Other
+		const exerciseInputFields = getExerciseInputFields();
 		exerciseInputFields.forEach((field) => {
 			field.parentElement!.classList.remove("exercise-input-row-active");
 			field.parentNode!.firstElementChild!.classList.remove("input-row-counter-active");
@@ -166,27 +188,10 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 			input.parentNode!.textContent = newValue;
 			input.parentNode?.removeChild(input);
 			volumeChart.destroy();
-			volumeChart = renderChart(previousData, getCurrentData());
+			volumeChart = renderChart(previousData);
 		});
 		field.textContent = "";
 		field.appendChild(input);
-	}
-
-	// Get Current Data
-	function getCurrentData() {
-		const currentData: number[] = [];
-		exerciseInputFields.forEach((field, index) => {
-			if (field.classList.contains("reps-input") && Number(field.textContent) !== 0) {
-				let weightField = Number(exerciseInputFields[index + 1].textContent)
-				if (weightField === 0) {
-					weightField = 1
-				}
-				currentData.push(
-					Number(field.textContent) * weightField
-				);
-			}
-		});
-		return currentData;
 	}
 
 	function handleTabChange(tab: Element, tabs: NodeListOf<Element>, infoSection: Element) {
@@ -213,11 +218,50 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		}
 	}
 
+	function handleAddSet() {
+		setCount += 1;
+		document.querySelector(".sets-count")!.innerHTML = renderSetCount();
+		document.querySelector(".exercise-input-container")!.innerHTML += `
+			<div class="exercise-input-row">
+				<div class="input-row-counter">${setCount}</div>
+				<div class="input-row-input-field reps-input">0</div>
+				<div class="workout-input-title">Reps</div>
+				<div class="divider"></div>
+				<div class="input-row-input-field weight-input">0</div>
+				<div class="workout-input-title">Pounds</div>
+			</div>
+		`;
+
+		// Add Listener To It
+		exerciseInputListeners();
+		volumeChart.destroy();
+		volumeChart = renderChart(previousData);
+	}
+
+	function handleDeleteSet() {
+		setCount -= 1;
+		document.querySelector(".sets-count")!.innerHTML = renderSetCount();
+		document.querySelector(".exercise-input-container")!.lastElementChild?.remove();
+
+		exerciseInputListeners();
+		volumeChart.destroy();
+		volumeChart = renderChart(previousData);
+	}
+
+	// * Listener Functions
+	function exerciseInputListeners() {
+		const exerciseInputFields = getExerciseInputFields();
+		exerciseInputFields.forEach((field, index) => {
+			field.addEventListener("click", () => handleExerciseInput(field));
+		});
+	}
+
+	// * Get Data
 	const checklistItem = getExercise() satisfies checklistItem;
 	const previousData = checklistItem.previousReps.map((set, index) => {
 		return set * checklistItem.previousWeight[index];
 	});
-	const setCount = 4;
+	let setCount = previousData.length;
 
 	// * Render All HTML
 	document.querySelector(".js-workout-individual")!.innerHTML = `
@@ -227,29 +271,33 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 			<canvas class="exercise-chart"></canvas>
 		</div>
 
-        ${workoutInputHTML(setCount)}
+		${workoutInputHTML()}
+		<div class="exercise-input-row adjustment-row">
+			<div class="input-row-counter create-set">+</div>
+			<div class="input-row-counter delete-set">🗑️</div>
+		</div>
 
         ${aboutWorkoutHTML(checklistItem)}
 
         ${workoutChecklistHTML(checklistItemsList)}
     `;
 
-	let volumeChart = renderChart(previousData, []);
+	let volumeChart = renderChart(previousData);
 
 	// * Add Listeners
 	// Nav Back Button
 	backButtonListener(workoutOverviewURL);
 
-	// Exercise Input Change
-	const exerciseInputFields = document.querySelectorAll(".input-row-input-field");
-	exerciseInputFields.forEach((field, index) => {
-		// * Initialize Input Row
-		if (index === 0) {
-			field.parentElement!.classList.add("exercise-input-row-active");
-			field.parentNode!.firstElementChild!.classList.add("input-row-counter-active");
-		}
-		field.addEventListener("click", () => handleExerciseInput(field));
-	});
+	exerciseInputListeners();
+
+	// Initialize Input Row
+	const firstRow = document.querySelector(".exercise-input-row");
+	firstRow?.classList.add("exercise-input-row-active");
+	firstRow?.firstElementChild?.classList.add("input-row-counter-active");
+
+	// Exercise Set Row Adjustments
+	document.querySelector(".create-set")!.addEventListener("click", () => handleAddSet());
+	document.querySelector(".delete-set")!.addEventListener("click", () => handleDeleteSet());
 
 	// About Tabs
 	const tabs = document.querySelectorAll(".about-workout-tab");

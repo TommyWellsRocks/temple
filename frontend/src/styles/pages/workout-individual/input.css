@@ -2,7 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	row-gap: 20px;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 }
 
 .sets-count {
@@ -11,7 +11,7 @@
 	text-decoration: underline;
 }
 
-.exercise-input-row {
+.exercise-input-row, .adjustment-row {
 	display: flex;
 	justify-content: center;
 	column-gap: 10px;
@@ -69,4 +69,8 @@
 	font-family: "poppins";
 	font-size: 30px;
 	font-weight: 800;
+}
+
+.adjustment-row {
+	margin-bottom: 50px;
 }
