@@ -9,3 +9,7 @@ body {
 	min-width: 300px;
 	overflow-x: hidden;
 }
+
+.container-title {
+	text-align: left;
+}

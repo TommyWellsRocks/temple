@@ -1,7 +1,7 @@
 import "../../styles/shared/globals.css";
-import "../../styles/shared/workout/nav.css"
-import "../../styles/shared/workout/checklist.css";
-import "../../styles/pages/workout-overview/quote.css";
+import "../../styles/shared/workout/nav.css";
+import "../../styles/shared/workout/chart.css";
+import "../../styles/pages/workout-overview/checklist.css";
 import "../../styles/pages/workout-overview/specs.css";
 import "../../styles/pages/workout-overview/muscles.css";
 
@@ -9,27 +9,100 @@ import timeIconURL from "../../content/images/workout-pages/workout-overview/tim
 import burnIconURL from "../../content/images/workout-pages/workout-overview/burn.svg";
 
 import { checklistItem } from "../../interfaces/checklistItem.ts";
-import { workoutOverviewURL, checklistItemsList } from "../config.ts";
+import { workoutOverviewURL, checklistItemsList, lastWeek, thisWeek } from "../config.ts";
 import { backButtonListener } from "./components/backButtonListener.ts";
 import { workoutChecklistHTML } from "./components/workoutChecklist.ts";
+import { Chart } from "chart.js/auto";
 
 function renderWorkoutOverview(
-	quote: string,
-	author: string,
 	timeMin: number,
 	burnKcal: number,
 	checklistItemsList: checklistItem[],
 	workoutOverviewURL: string,
 	workoutChecklistHTML: Function
 ) {
-	function dailyQuoteHTML(quote: string, author: string) {
-		return `
-            <div class="quote-container">
-                <p class="quote-container-header">Daily Quote</p>
-                <p class="quote">${quote}</p>
-                <p class="quote-author">- ${author}</p>
-            </div>
-        `;
+    let analyticsChart: Chart | null = null;
+
+	// * HTML Functions
+    function renderChart() {
+        function getPreviousChartData() {
+            const previousData = lastWeek.map(day =>
+                day.reduce((dayVolume, exercise) =>
+                    dayVolume + exercise.reps.reduce((exerciseVolume, repCount, set) =>
+                        exerciseVolume + repCount * (exercise.weight[set] || 1), 0), 0));
+            return previousData;
+        }
+        
+        function getCurrentChartData() {
+            const currentData: number[] = thisWeek.map(day =>
+                day.reduce((dayVolume, exercise) =>
+                    dayVolume + exercise.reps.reduce((exerciseVolume, repCount, set) =>
+                        exerciseVolume + repCount * (exercise.weight[set] || 1), 0), 0));;
+            
+			return currentData;
+		}
+
+		if (analyticsChart) {
+			analyticsChart.destroy();
+		}
+
+		const previousData = getPreviousChartData();
+		const currentData = getCurrentChartData();
+		const chart_location: HTMLCanvasElement = document.querySelector(".analytics-chart")!;
+		const yAxisMin = Math.min(...previousData, ...currentData) * 0.8;
+		const yAxisMax = Math.max(...previousData, ...currentData) * 1.2;
+
+		analyticsChart = new Chart(chart_location, {
+			type: "line",
+			data: {
+				labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+				datasets: [
+					{
+						label: "Last Weeks's Volume",
+						data: previousData,
+						fill: true,
+						borderColor: "#999",
+						backgroundColor: "rgba(153, 153, 153, 0.5)",
+						tension: 0.3,
+						borderDash: [5, 5],
+					},
+					{
+						label: "This Week's Volume",
+						data: currentData,
+						fill: true,
+						borderColor: "rgba(103, 57, 255, 1)",
+						backgroundColor: "rgba(103, 57, 255)",
+						tension: 0.3,
+					},
+				],
+			},
+			options: {
+				scales: {
+					x: {
+						grid: {
+							display: false,
+						},
+						ticks: {
+							align: "inner",
+						},
+					},
+					y: {
+						grid: {
+							display: false,
+						},
+                        ticks: {
+                            callback: function(value) {
+								return `${value}lbs`
+							},
+							autoSkipPadding: 20,
+						},
+						min: yAxisMin,
+						max: yAxisMax,
+					},
+				},
+			},
+			plugins: [],
+		});
 	}
 
 	function workoutSpecsHTML(timeMin: number, burnKcal: number) {
@@ -78,7 +151,9 @@ function renderWorkoutOverview(
 
 	// * Render All HTML
 	document.querySelector(".js-workout-overview")!.innerHTML = `
-        ${dailyQuoteHTML(quote, author)}
+        <div class="chart-container">
+			<canvas class="analytics-chart"></canvas>
+		</div>
 
         ${workoutSpecsHTML(timeMin, burnKcal)}
 
@@ -87,21 +162,19 @@ function renderWorkoutOverview(
         ${workoutChecklistHTML(checklistItemsList)}
     `;
 
+	renderChart();
+
 	// * Add Listeners
 	// Nav Back Button
 	backButtonListener(workoutOverviewURL);
 }
 
 // * LOREM IPSUM
-const quote = "Slow Form + Big Weight = Big Muscles";
-const author = "Tommy Wells";
 const timeMin = 60;
 const burnKcal = 495;
 
 // Render WorkoutOverview Page
 renderWorkoutOverview(
-	quote,
-	author,
 	timeMin,
 	burnKcal,
 	checklistItemsList,

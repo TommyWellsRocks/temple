@@ -41,25 +41,22 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 	}
 
 	function renderChart() {
+		function getPreviousChartData() {
+			const previousData = checklistItem.previousReps.map((set, index) => {
+				return set * (checklistItem.previousWeight[index] || 1);
+			});
+			return previousData;
+		}
 		function getCurrentChartData() {
 			const currentData: number[] = [];
 			const exerciseInputFields = getExerciseInputFields();
 			exerciseInputFields.forEach((field, index) => {
 				if (field.classList.contains("reps-input") && Number(field.textContent) !== 0) {
-					let weightField = Number(exerciseInputFields[index + 1].textContent);
-					if (weightField === 0) {
-						weightField = 1;
-					}
+					let weightField = Number(exerciseInputFields[index + 1].textContent) || 1;
 					currentData.push(Number(field.textContent) * weightField);
 				}
 			});
 			return currentData;
-		}
-		function getPreviousChartData() {
-			const previousData = checklistItem.previousReps.map((set, index) => {
-				return set * checklistItem.previousWeight[index];
-			});
-			return previousData;
 		}
 
 		if (volumeChart) {
@@ -82,10 +79,10 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 		volumeChart = new Chart(chart_location, {
 			type: "line",
 			data: {
-				labels: xAxisLength(),
+				xLabels: xAxisLength(),
 				datasets: [
 					{
-						label: "Previous Workout Volume",
+						label: "Last Session's Volume",
 						data: previousData,
 						fill: true,
 						borderColor: "#999",
@@ -94,7 +91,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 						borderDash: [5, 5],
 					},
 					{
-						label: "Current Workout Volume",
+						label: "Current Session's Volume",
 						data: currentData,
 						fill: true,
 						borderColor: "rgba(103, 57, 255, 1)",
@@ -118,6 +115,9 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 							display: false,
 						},
 						ticks: {
+							callback: function (value) {
+								return `${value}lbs`;
+							},
 							autoSkipPadding: 20,
 						},
 						min: yAxisMin,
@@ -146,10 +146,10 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 				rowsHTML.push(`
 						<div class="exercise-input-row">
 							<div class="input-row-counter">${i}</div>
-							<div class="input-row-input-field reps-input">0</div>
+							<div class="input-row-input-field reps-input">${checklistItem.currentReps[i - 1] || 0}</div>
 							<div class="workout-input-title">Reps</div>
 							<div class="divider"></div>
-							<div class="input-row-input-field weight-input">0</div>
+							<div class="input-row-input-field weight-input">${checklistItem.currentWeight[i - 1] || 0}</div>
 							<div class="workout-input-title">Pounds</div>
 						</div>
 					`);
@@ -206,6 +206,16 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 			input.parentNode!.textContent = newValue;
 			input.parentNode?.removeChild(input);
 			renderChart();
+
+			// Log To Exercise Object
+			const repsFields = document.querySelectorAll(".reps-input");
+			const weightFields = document.querySelectorAll(".weight-input");
+			repsFields.forEach((field, index) => {
+				checklistItem.currentReps[index] = Number(field.textContent);
+			});
+			weightFields.forEach((field, index) => {
+				checklistItem.currentWeight[index] = Number(field.textContent);
+			});
 		});
 		field.textContent = "";
 		field.appendChild(input);
@@ -213,6 +223,8 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 
 	function handleAddSet() {
 		setCount += 1;
+		checklistItem.currentReps.push(0);
+		checklistItem.currentWeight.push(0);
 		document.querySelector(".sets-count")!.innerHTML = renderSetCount();
 		document.querySelector(".exercise-input-container")!.innerHTML += `
 			<div class="exercise-input-row">
@@ -232,6 +244,8 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 
 	function handleDeleteSet() {
 		setCount -= 1;
+		checklistItem.currentReps.pop();
+		checklistItem.currentWeight.pop();
 		document.querySelector(".sets-count")!.innerHTML = renderSetCount();
 		document.querySelector(".exercise-input-container")!.lastElementChild?.remove();
 
@@ -256,7 +270,7 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 				break;
 			case "Instructions":
 				const instructions = checklistItem.instructions.map(
-					(string: string, index: number) => `${index + 1}. ${string}`
+					(string: string, index: number) => `<div class="instruction-item">${index + 1}. ${string}</div>`
 				);
 				infoSection.innerHTML = instructions.join("\n");
 				break;
@@ -277,23 +291,27 @@ function renderWorkoutIndividual(checklistItemsList: checklistItem[]) {
 	// * Get Data
 	const checklistItem = getExercise() satisfies checklistItem;
 	let setCount = checklistItem.previousReps.length;
+	for (let i = 1; i <= setCount; i++) {
+		checklistItem.currentReps.push(0);
+		checklistItem.currentWeight.push(0);
+	}
 
 	// * Render All HTML
 	document.querySelector(".js-workout-individual")!.innerHTML = `
-        ${headerNavHTML(checklistItem.title)}
+	${headerNavHTML(checklistItem.title)}
 
-		<div class="chart-container">
-			<canvas class="exercise-chart"></canvas>
-		</div>
+	<div class="chart-container">
+		<canvas class="exercise-chart"></canvas>
+	</div>
 
-		${workoutInputHTML()}
-		<div class="exercise-input-row adjustment-row">
-			<div class="input-row-counter create-set">+</div>
-			<div class="input-row-counter delete-set">🗑️</div>
-		</div>
+	${workoutInputHTML()}
+	<div class="exercise-input-row adjustment-row">
+		<div class="input-row-counter create-set">+</div>
+		<div class="input-row-counter delete-set">🗑️</div>
+	</div>
 
-        ${aboutWorkoutHTML(checklistItem)}
-		`;
+	${aboutWorkoutHTML(checklistItem)}
+	`;
 
 	renderChart();
 

@@ -17,4 +17,6 @@ export interface checklistItem {
 	count: number;
 	previousReps: number[];
 	previousWeight: number[];
+	currentReps: number[];
+	currentWeight: number[];
 }

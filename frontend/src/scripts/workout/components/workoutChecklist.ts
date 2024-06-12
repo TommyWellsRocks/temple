@@ -11,7 +11,7 @@ export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
 
 	const checklistItemsHTML: string[] = [];
 	checklistItemsList.forEach((item) => {
-		if (item.done === item.count) {
+		if (item.previousReps.length === item.currentReps.length) {
 			listDoneCount += 1;
 			checklistItemsHTML.push(`
 					<a class="checklist-anchor" href="${workoutIndividualURL}?workoutId=${"DEFAULTVALUE"}&exerciseId=${item.id}">

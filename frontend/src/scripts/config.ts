@@ -40,6 +40,8 @@ export const checklistItemsList: checklistItem[] = [
 		count: 3,
 		previousReps: [9, 9, 9, 9, 9, 8],
 		previousWeight: [100, 105, 110, 115, 120, 130],
+		currentReps: [9, 9, 9],
+		currentWeight: [110, 115, 120],
 	},
 	{
 		id: 846,
@@ -71,6 +73,8 @@ export const checklistItemsList: checklistItem[] = [
 		count: 3,
 		previousReps: [9, 9, 9, 9, 9, 8],
 		previousWeight: [100, 105, 110, 115, 120, 130],
+		currentReps: [9, 9, 9, 9, 9, 9],
+		currentWeight: [110, 115, 120, 125, 125, 130],
 	},
 	{
 		id: 839,
@@ -99,6 +103,8 @@ export const checklistItemsList: checklistItem[] = [
 		count: 3,
 		previousReps: [9, 9, 9, 9, 9, 8],
 		previousWeight: [100, 105, 110, 115, 120, 130],
+		currentReps: [9, 9, 9, 9, 9, 9],
+		currentWeight: [110, 115, 120, 125, 125, 130],
 	},
 	{
 		id: 845,
@@ -129,5 +135,55 @@ export const checklistItemsList: checklistItem[] = [
 		count: 3,
 		previousReps: [9, 9, 9, 9, 9, 8],
 		previousWeight: [100, 105, 110, 115, 120, 130],
+		currentReps: [9, 9, 9, 9, 9, 9],
+		currentWeight: [110, 115, 120, 125, 125, 130],
 	},
 ];
+
+interface dayObject {
+	reps: number[];
+	weight: number[];
+}
+
+const week = [1, 2, 3, 4, 5, 6];
+export const lastWeek: dayObject[][] = [];
+export const thisWeek: dayObject[][] = []
+
+week.forEach((_) => {
+	lastWeek.push([
+		{
+			reps: checklistItemsList[0].previousReps,
+			weight: checklistItemsList[0].previousWeight,
+		},
+		{
+			reps: checklistItemsList[1].previousReps,
+			weight: checklistItemsList[1].previousWeight,
+		},
+		{
+			reps: checklistItemsList[2].previousReps,
+			weight: checklistItemsList[2].previousWeight,
+		},
+		{
+			reps: checklistItemsList[3].previousReps,
+			weight: checklistItemsList[3].previousWeight,
+		},
+	]);
+	thisWeek.push([
+		{
+			reps: checklistItemsList[0].currentReps,
+			weight: checklistItemsList[0].currentWeight,
+		},
+		{
+			reps: checklistItemsList[1].currentReps,
+			weight: checklistItemsList[1].currentWeight,
+		},
+		{
+			reps: checklistItemsList[2].currentReps,
+			weight: checklistItemsList[2].currentWeight,
+		},
+		{
+			reps: checklistItemsList[3].currentReps,
+			weight: checklistItemsList[3].currentWeight,
+		},
+	]);
+});
