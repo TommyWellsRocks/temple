@@ -19,7 +19,6 @@ function renderWorkoutOverview(
 	burnKcal: number,
 	checklistItemsList: checklistItem[],
 	workoutOverviewURL: string,
-	workoutChecklistHTML: Function
 ) {
     let analyticsChart: Chart | null = null;
 
@@ -179,5 +178,4 @@ renderWorkoutOverview(
 	burnKcal,
 	checklistItemsList,
 	workoutOverviewURL,
-	workoutChecklistHTML
 );
