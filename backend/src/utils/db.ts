@@ -19,17 +19,21 @@ async function createClient() {
 
 /**
  * Must "values as any[]"
- * @param conditionsObject 
+ * @param conditionsObject
  * Format: {column: value, column: {"operator": value}}
  *
  * ie: { name: 'John', age: { '>': 30, '<': 50 }, city: { 'LIKE': "%York%" }, isActive: true }
- * 
- * @returns 
+ *
+ * @returns
  * Format: [conditions: string, values: any[]]
  *
  * ie: ['name = $1 AND age > $2 AND age < $3 AND city LIKE $4 AND isActive = $5', ['John', 30, 50, '%York%', true]]
  */
-function objectToSQLString(conditionsObject: object, separator: ", " | " AND " = " AND ", placeHolderIndexStart: number = 1) {
+function objectToSQLString(
+	conditionsObject: object,
+	separator: ", " | " AND " = " AND ",
+	placeHolderIndexStart: number = 1
+) {
 	const conditions = [];
 	const values = [];
 	let index = placeHolderIndexStart !== 1 ? placeHolderIndexStart : 1;
@@ -58,21 +62,20 @@ function objectToSQLString(conditionsObject: object, separator: ", " | " AND " =
 	return [conditions.join(separator), values];
 }
 
-
 // * DB STRUCTURAL
 /**
- * @param columnAttributeObject 
+ * @param columnAttributeObject
  * Format: {columnName: attribute, columnName: ["ATTRIBUTE", "ATTRIBUTE2"]}
  *
  * ie: {favorite_color: 'VARCHAR', username: ['VARCHAR', 'PRIMARY KEY']}
  */
 async function createTable(newTableName: string, columnAttributeObject: object) {
 	const columnAttributes = Object.entries(columnAttributeObject)
-	.map(([key, attributes]) => {
-		const attrStr = Array.isArray(attributes) ? attributes.join(" ") : attributes;
-		return `${key} ${attrStr}`;
-	})
-	.join(", ");;
+		.map(([key, attributes]) => {
+			const attrStr = Array.isArray(attributes) ? attributes.join(" ") : attributes;
+			return `${key} ${attrStr}`;
+		})
+		.join(", ");
 
 	const client = await createClient();
 	await client.query(`CREATE TABLE ${newTableName} (${columnAttributes});`);
@@ -126,7 +129,7 @@ async function getRowCount(tableName: string): Promise<Number> {
 /**
  * @param columnValueObject
  * Format: { columnName: value }
- * 
+ *
  * ie: { email: "test@test.com", password: "PASSWORD123" }
  */
 export async function insertRows(tableName: string, columnValueObject: object): Promise<void> {
@@ -135,19 +138,16 @@ export async function insertRows(tableName: string, columnValueObject: object): 
 	const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
 
 	const client = await createClient();
-	await client.query(
-		`INSERT INTO ${tableName} (${columns}) VALUES (${placeholders});`,
-		values
-	);
+	await client.query(`INSERT INTO ${tableName} (${columns}) VALUES (${placeholders});`, values);
 	client.end();
 }
 
 /**
- * @param conditionsObject 
- * Format: { column: value, column: {"operator": value} } 
- * 
+ * @param conditionsObject
+ * Format: { column: value, column: {"operator": value} }
+ *
  * ie: { name: 'John', age: { '>': 30, '<': 50 }, city: { 'LIKE': "%York%" }, isActive: true }
- * 
+ *
  * @param returnRowCount row count to return. Returns all by default.
  */
 export async function selectRows(
@@ -175,9 +175,9 @@ export async function selectRows(
 }
 
 /**
- * @param conditionsObject 
- * Format: { column: value, column: {"operator": value} } 
- * 
+ * @param conditionsObject
+ * Format: { column: value, column: {"operator": value} }
+ *
  * ie: { name: 'John', age: { '>': 30, '<': 50 }, city: { 'LIKE': "%York%" }, isActive: true }
  */
 export async function deleteRows(tableName: string, conditionsObject: object): Promise<void> {
@@ -191,24 +191,35 @@ export async function deleteRows(tableName: string, conditionsObject: object): P
 /**
  * @param columnValuesObject
  * Format: { columnName: value }
- * 
+ *
  * ie: { email: "test@test.com", password: "PASSWORD123" }
- * 
+ *
  * @param conditionsObject
- * Format: { column: value, column: {"operator": value} } 
- * 
+ * Format: { column: value, column: {"operator": value} }
+ *
  * ie: { name: 'John', age: { '>': 30, '<': 50 }, city: { 'LIKE': "%York%" }, isActive: true }
  */
-export async function updateRows(tableName: string, columnValuesObject: object, conditionsObject: object) {
+export async function updateRows(
+	tableName: string,
+	columnValuesObject: object,
+	conditionsObject?: object
+) {
 	const [columnUpdates, updateValues] = objectToSQLString(columnValuesObject, ", ");
-	const [conditions, conditionValues] = objectToSQLString(
-		conditionsObject, " AND ",
-		updateValues.length + 1
-	);
-	const values = [...updateValues as any[], ...conditionValues as any[]]
 
 	const client = await createClient();
-	await client.query(`UPDATE ${tableName} SET ${columnUpdates} WHERE ${conditions};`, values);
+	if (conditionsObject) {
+		const [conditions, conditionValues] = objectToSQLString(
+			conditionsObject,
+			" AND ",
+			updateValues.length + 1
+		);
+		const values = [...(updateValues as any[]), ...(conditionValues as any[])];
+		await client.query(`UPDATE ${tableName} SET ${columnUpdates} WHERE ${conditions};`, values);
+	} else {
+		const values = [...(updateValues as any[])];
+		await client.query(`UPDATE ${tableName} SET ${columnUpdates};`, values);
+	}
+
 	client.end();
 }
 
@@ -248,4 +259,4 @@ async function goFetch(
 // 		email: "test@gmail.com",
 // 		password: "PASSWORD12",
 // 	})
-// );
+// );)

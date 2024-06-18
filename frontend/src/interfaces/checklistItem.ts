@@ -2,8 +2,8 @@ export interface checklistItem {
 	id: number;
 	title: string;
 	category: string;
-	images: string[];
-	url_reference: string;
+	exercise_images: string[];
+	exercise_creation_notes: string;
 	primary_muscles: string[];
 	secondary_muscles: string[];
 	muscle_images: string[];

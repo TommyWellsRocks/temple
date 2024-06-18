@@ -16,7 +16,7 @@ export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
 			checklistItemsHTML.push(`
 					<a class="checklist-anchor" href="${workoutIndividualURL}?workoutId=${"DEFAULTVALUE"}&exerciseId=${item.id}">
 						<div class="checklist-item-container checklist-item-done" data-title="">
-							<img src="${item.images ? item.images[0] : "MISSING IMAGE"}" class="checklist-item-img"/>
+							<img src="${item.exercise_images ? item.exercise_images[0] : "MISSING IMAGE"}" class="checklist-item-img"/>
 							<div class="checklist-item-texts">
 								<div class="checklist-item-title">${item.title}</div>
 								<div class="checklist-item-notes">${item.tips}</div>
@@ -32,7 +32,7 @@ export function workoutChecklistHTML(checklistItemsList: checklistItem[]) {
 			checklistItemsHTML.push(`
 					<a class="checklist-anchor" href="${workoutIndividualURL}?workoutId=${"DEFAULTVALUE"}&exerciseId=${item.id}">
 						<div class="checklist-item-container">
-							<img src="${item.images ? item.images[0] : "MISSING IMAGE"}" class="checklist-item-img"/>
+							<img src="${item.exercise_images ? item.exercise_images[0] : "MISSING IMAGE"}" class="checklist-item-img"/>
 							<div class="checklist-item-texts">
 								<div class="checklist-item-title">${item.title}</div>
 								<div class="checklist-item-notes">${item.tips}</div>
