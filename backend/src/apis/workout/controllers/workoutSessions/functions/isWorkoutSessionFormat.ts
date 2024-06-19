@@ -22,6 +22,13 @@ export async function isWorkoutSessionFormat(workoutSessionObject: newWorkoutSes
 	if (workoutSessionObject.workout_items) {
 		if (!(typeof workoutSessionObject.workout_items === "object")) {
 			errorMessage.push("workout_items must be an object.");
+		} else {
+			workoutSessionObject.workout_items.forEach(async workoutItem => {
+				const exercise = await selectRows("exercises", { id: workoutItem.exercise_id }, 1)
+				if (!exercise) {
+					errorMessage.push("Invalid exercise id.")
+				}
+			})
 		}
 	} else {
 		errorMessage.push("Missing workout_items.");
