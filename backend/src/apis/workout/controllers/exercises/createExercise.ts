@@ -39,9 +39,9 @@ export async function createExercise(req: Request, res: Response) {
 	const errorMessage = isExerciseFormat(newExerciseObject);
 
 	if (errorMessage) {
-		res.status(409).send({ message: `Exercise creation failed due to: [${errorMessage}].` });
+		return res.status(409).send({ message: `Exercise creation failed due to: [${errorMessage}].` });
 	} else {
 		await insertRows("exercises", newExerciseObject);
-		res.status(201).send({ message: "Exercise created successfully." });
+		return res.status(201).send({ message: "Exercise created successfully." });
 	}
 }

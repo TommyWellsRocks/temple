@@ -14,11 +14,11 @@ export async function createWorkoutSession(req: Request, res: Response) {
 	const errorMessage = isWorkoutSessionFormat(newWorkoutSessionObject);
 
 	if (errorMessage) {
-		res.status(409).send({
+		return res.status(409).send({
 			message: `Workout Session creation failed due to: [${errorMessage}].`,
 		});
 	} else {
 		await insertRows("workout_sessions", newWorkoutSessionObject);
-		res.status(201).send({ message: "Workout Session created successfully." });
+		return res.status(201).send({ message: "Workout Session created successfully." });
 	}
 }

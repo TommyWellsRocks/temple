@@ -13,7 +13,7 @@ export async function authenticateToken(req: Request, res: Response, next: NextF
 	try {
 		const decoded = jwt.verify(token, process.env.SECRET_KEY!) as { id: number };
 		req.user = decoded;
-		next();
+		return next();
 	} catch (err) {
 		return res.status(401).send({ message: "Unauthorized. Invalid token." });
 	}

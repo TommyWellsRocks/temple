@@ -16,7 +16,7 @@ export async function createUser(req: Request, res: Response) {
 	if (isValidEmail && isValidPassword) {
 		const isUserEmail = await isRegisteredEmail(email);
 		if (isUserEmail) {
-			res.status(409).send({ message: "User already exists. Please login." });
+			return res.status(409).send({ message: "User already exists. Please login." });
 		} else {
 			await insertRows("users", { email, password });
 			const isUser = (await selectRows("users", { email, password })) as users;
@@ -28,12 +28,12 @@ export async function createUser(req: Request, res: Response) {
 				expires: dayjs().add(7, "days").toDate(),
 				sameSite: "strict",
 			});
-			res.status(201).send({ message: "User created successfully." });
+			return res.status(201).send({ message: "User created successfully." });
 		}
 	} else if (!isValidEmail) {
-		res.status(400).send({ message: "Invalid email. Please try something different." });
+		return res.status(400).send({ message: "Invalid email. Please try something different." });
 	} else if (!isValidPassword) {
-		res.status(400).send({
+		return res.status(400).send({
 			message: "Invalid password length. Please try something different.",
 		});
 	}

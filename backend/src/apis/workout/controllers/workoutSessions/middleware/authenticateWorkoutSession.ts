@@ -10,6 +10,6 @@ export async function authenticateWorkoutSession(req: Request, res: Response, ne
 		req.workoutSession = workoutSession;
 		return next();
 	} else {
-		res.status(401).send({ message: "Unauthorized. Invalid user_id or session id." });
+		return res.status(401).send({ message: "Unauthorized. Invalid user_id or session id." });
 	}
 }

@@ -38,9 +38,9 @@ export async function editExercise(req: Request, res: Response) {
 	const errorMessage = isExerciseFormat(newExerciseObject);
 
 	if (errorMessage) {
-		res.status(409).send({ message: `Exercise update failed due to: [${errorMessage}].` });
+		return res.status(409).send({ message: `Exercise update failed due to: [${errorMessage}].` });
 	} else {
 		await updateRows("exercises", newExerciseObject, { id: req.exercise!.id });
-		res.send({ message: "Exercise updated successfully." });
+		return res.send({ message: "Exercise updated successfully." });
 	}
 }

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
 
 export async function fetchExercise(req: Request, res: Response) {
-	res.send({ exercise: req.exercise });
+	return res.send({ exercise: req.exercise });
 }

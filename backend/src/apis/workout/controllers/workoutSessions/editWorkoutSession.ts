@@ -14,11 +14,11 @@ export async function editWorkoutSession(req: Request, res: Response) {
 	const errorMessage = isWorkoutSessionFormat(workoutSessionObject);
 
 	if (errorMessage) {
-		res.status(409).send({ message: `Workout Session update failed due to: [${errorMessage}].` });
+		return res.status(409).send({ message: `Workout Session update failed due to: [${errorMessage}].` });
 	} else {
 		await updateRows("workout_sessions", workoutSessionObject, {
 			id: req.workoutSession!.id,
 		});
-		res.send({ message: "Workout Session updated successfully." });
+		return res.send({ message: "Workout Session updated successfully." });
 	}
 }

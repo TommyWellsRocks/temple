@@ -8,29 +8,29 @@ export async function editUser(req: Request, res: Response) {
 	const { newEmail, newPassword } = req.body;
 
 	if (newEmail && newPassword) {
-		res.status(403).send({ message: "Too many update requests. Update email OR password." });
+		return res.status(403).send({ message: "Too many update requests. Update email OR password." });
 	} else if (newEmail) {
 		const isValidEmail = isEmailFormat(newEmail);
 		if (isValidEmail) {
 			const existingUser = await isRegisteredEmail(newEmail);
 			if (existingUser) {
-				res.status(409).send({
+				return res.status(409).send({
 					message: "User email update failed. User email already exists.",
 				});
 			} else {
 				await updateRows("users", { email: newEmail }, { id: req.user!.id });
-				res.send({ message: "User email updated successfully." });
+				return res.send({ message: "User email updated successfully." });
 			}
 		} else {
-			res.status(400).send({ message: "User email update failed. Invalid email." });
+			return res.status(400).send({ message: "User email update failed. Invalid email." });
 		}
 	} else if (newPassword) {
 		const isValidPassword = isPasswordFormat(newPassword);
 		if (isValidPassword) {
 			await updateRows("users", { password: newPassword }, { id: req.user!.id });
-			res.send({ message: "User password updated successfully." });
+			return res.send({ message: "User password updated successfully." });
 		} else {
-			res.status(400).send({ message: "User password update failed. Invalid password." });
+			return res.status(400).send({ message: "User password update failed. Invalid password." });
 		}
 	}
 }
