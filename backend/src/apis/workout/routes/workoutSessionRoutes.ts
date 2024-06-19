@@ -1,6 +1,6 @@
 import express from "express";
 
-import { authenticateUser } from "../controllers/users/middleware/authenticateUser";
+import { authenticateToken } from "../controllers/users/middleware/authenticateToken";
 import { authenticateWorkoutSession } from "../controllers/workoutSessions/middleware/authenticateWorkoutSession";
 import { fetchWorkoutSession } from "../controllers/workoutSessions/fetchWorkoutSession";
 import { createWorkoutSession } from "../controllers/workoutSessions/createWorkoutSession";
@@ -13,16 +13,21 @@ export const workoutSessionRouter = express.Router();
 // Get Workout Session
 workoutSessionRouter.post(
 	"/fetch",
-	authenticateUser,
+	authenticateToken,
 	authenticateWorkoutSession,
 	fetchWorkoutSession
 );
 
 // Create Workout Session
-workoutSessionRouter.post("/", authenticateUser, createWorkoutSession);
+workoutSessionRouter.post("/", authenticateToken, createWorkoutSession);
 
 // Edit Workout Session
-workoutSessionRouter.patch("/", authenticateUser, authenticateWorkoutSession, editWorkoutSession);
+workoutSessionRouter.patch("/", authenticateToken, authenticateWorkoutSession, editWorkoutSession);
 
 // Delete Workout Session
-workoutSessionRouter.delete("/", authenticateUser, authenticateWorkoutSession, deleteWorkoutSession);
+workoutSessionRouter.delete(
+	"/",
+	authenticateToken,
+	authenticateWorkoutSession,
+	deleteWorkoutSession
+);

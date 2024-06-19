@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
 
-export function fetchWorkoutSession(_: Request, res: Response) {
-	res.send({ workout_session: res.locals.workoutSession });
+export function fetchWorkoutSession(req: Request, res: Response) {
+	res.send({ workout_session: req.workoutSession! });
 }

@@ -18,7 +18,7 @@ export async function editUser(req: Request, res: Response) {
 					message: "User email update failed. User email already exists.",
 				});
 			} else {
-				await updateRows("users", { email: newEmail }, { id: res.locals.user.id });
+				await updateRows("users", { email: newEmail }, { id: req.user!.id });
 				res.send({ message: "User email updated successfully." });
 			}
 		} else {
@@ -27,7 +27,7 @@ export async function editUser(req: Request, res: Response) {
 	} else if (newPassword) {
 		const isValidPassword = isPasswordFormat(newPassword);
 		if (isValidPassword) {
-			await updateRows("users", { password: newPassword }, { id: res.locals.user.id });
+			await updateRows("users", { password: newPassword }, { id: req.user!.id });
 			res.send({ message: "User password updated successfully." });
 		} else {
 			res.status(400).send({ message: "User password update failed. Invalid password." });

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { authenticateUser } from "../controllers/users/middleware/authenticateUser";
+import { authenticateToken } from "../controllers/users/middleware/authenticateToken";
 import { authenticateExercise } from "../controllers/exercises/middleware/authenticateExercise";
 import { fetchExercise } from "../controllers/exercises/fetchExercise";
 import { createExercise } from "../controllers/exercises/createExercise";
@@ -11,13 +11,13 @@ export const exerciseRouter = express.Router();
 
 // * Exercise APIs
 // Get Exercise
-exerciseRouter.post("/fetch", authenticateUser, authenticateExercise, fetchExercise);
+exerciseRouter.post("/fetch", authenticateToken, authenticateExercise, fetchExercise);
 
 // Create Exercise
-exerciseRouter.post("/", authenticateUser, createExercise);
+exerciseRouter.post("/", authenticateToken, createExercise);
 
 // Edit Exercise
-exerciseRouter.patch("/", authenticateUser, authenticateExercise, editExercise);
+exerciseRouter.patch("/", authenticateToken, authenticateExercise, editExercise);
 
 // Delete Exercise
-exerciseRouter.delete("/", authenticateUser, authenticateExercise, deleteExercise);
+exerciseRouter.delete("/", authenticateToken, authenticateExercise, deleteExercise);

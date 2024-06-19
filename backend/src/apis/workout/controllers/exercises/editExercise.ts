@@ -25,7 +25,7 @@ export async function editExercise(req: Request, res: Response) {
 		primary_muscles: new_primary_muscles,
 		instructions: new_instructions,
 		tips: new_tips,
-		author_id: res.locals.user.id,
+		author_id: req.user!.id,
 		is_single_arm_based: new_is_single_arm_based,
 		is_single_leg_based: new_is_single_leg_based,
 		secondary_muscles: new_secondary_muscles,
@@ -40,7 +40,7 @@ export async function editExercise(req: Request, res: Response) {
 	if (errorMessage) {
 		res.status(409).send({ message: `Exercise update failed due to: [${errorMessage}].` });
 	} else {
-		await updateRows("exercises", newExerciseObject, { id: res.locals.exercise.id });
+		await updateRows("exercises", newExerciseObject, { id: req.exercise!.id });
 		res.send({ message: "Exercise updated successfully." });
 	}
 }

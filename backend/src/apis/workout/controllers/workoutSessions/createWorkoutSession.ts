@@ -7,7 +7,7 @@ export async function createWorkoutSession(req: Request, res: Response) {
 	const { workout_items } = req.body;
 
 	const newWorkoutSessionObject: newWorkoutSession = {
-		user_id: res.locals.user.id,
+		user_id: req.user!.id,
 		workout_items,
 	};
 

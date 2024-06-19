@@ -1,9 +1,8 @@
 import pg from "pg";
 const { Client } = pg;
-import "dotenv/config";
 import { writeFileSync } from "fs";
-import { configDotenv } from "dotenv";
-configDotenv({ path: "../../../.env" });
+import { env } from "./env";
+env();
 
 async function createClient() {
 	const client = new Client({
@@ -154,7 +153,7 @@ export async function selectRows(
 	tableName: string,
 	conditionsObject: object,
 	returnRowCount: number | null = null
-): Promise<object[] | object> {
+): Promise<unknown[] | unknown> {
 	const [conditions, values] = objectToSQLString(conditionsObject);
 
 	const client = await createClient();

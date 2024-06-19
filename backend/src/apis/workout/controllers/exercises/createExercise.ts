@@ -26,7 +26,7 @@ export async function createExercise(req: Request, res: Response) {
 		primary_muscles,
 		instructions,
 		tips,
-		author_id: res.locals.user.id,
+		author_id: req.user!.id,
 		is_single_arm_based,
 		is_single_leg_based,
 		secondary_muscles,

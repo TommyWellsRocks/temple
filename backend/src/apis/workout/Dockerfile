@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Command to run the application
-CMD ["npx","tsx", "exercises.ts", "8000"]
+CMD ["npx","tsx", "exercises.ts"]
