@@ -27,7 +27,8 @@ export const users = createTable(
   "users",
   {
     id: serial("id").primaryKey(),
-    email: varchar("email", { length: 256 }).notNull(),
+    email: varchar("email", { length: 256 }).unique().notNull(),
+    password: varchar("password").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -42,7 +43,7 @@ export const exercises = createTable(
   "exercises",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }).notNull(),
+    name: varchar("name", { length: 256 }).unique().notNull(),
     category: varchar("category", { length: 256 }).notNull(),
     primaryMuscles: varchar("primary_muscles").array().notNull(),
     secondaryMuscles: varchar("secondary_muscles").array(),

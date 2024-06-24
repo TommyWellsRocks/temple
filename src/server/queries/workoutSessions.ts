@@ -39,17 +39,15 @@ export async function editWorkoutSession(
 }
 
 export async function getWorkoutSession(userId: number, sessionId: number) {
-  const session = await db.query.workout_sessions.findFirst({
+  return await db.query.workout_sessions.findFirst({
     where: (model, { eq }) =>
       and(eq(model.id, sessionId), eq(model.userId, userId)),
   });
-  return session;
 }
 
 export async function getMyWorkoutSessions(userId: number) {
-  const sessions = await db.query.workout_sessions.findMany({
+  return await db.query.workout_sessions.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.updatedAt),
   });
-  return sessions;
 }
