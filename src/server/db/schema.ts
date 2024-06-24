@@ -67,7 +67,7 @@ export const exercises = createTable(
   }),
 );
 
-interface WorkoutItem {
+export interface WorkoutItem {
   exerciseId: number;
   setCount: number;
   reps: number[];
@@ -81,7 +81,7 @@ export const workout_sessions = createTable(
     userId: integer("user_id")
       .notNull()
       .references(() => users.id),
-    workoutItems: jsonb("workout_items").$type<WorkoutItem[]>(),
+    workoutItems: jsonb("workout_items").$type<WorkoutItem[]>().notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -99,7 +99,7 @@ export const workout_plans = createTable(
     userId: integer("user_id")
       .notNull()
       .references(() => users.id),
-    workoutItems: jsonb("workout_items").$type<WorkoutItem[]>(),
+    workoutItems: jsonb("workout_items").$type<WorkoutItem[]>().notNull(),
     nextOccurrenceDate: date("next_occurrence_date"),
     activeThroughDate: date("active_through_date"),
     createdAt: timestamp("created_at", { withTimezone: true })
