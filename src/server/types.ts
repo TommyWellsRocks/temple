@@ -1,6 +1,36 @@
 import { z } from "zod";
 import { db } from "./db";
 
+export interface ExerciseObject {
+  name: string;
+  category: string;
+  primaryMuscles: string[];
+  secondaryMuscles?: string[];
+  instructions: string[];
+  tips: string;
+  isSingleArmBased?: boolean;
+  isSingleLegBased?: boolean;
+  targetMuscleImages?: string[];
+  images?: string[];
+  videos?: string[];
+  updatedAt?: Date;
+}
+
+export const exerciseObjectSchema = z.object({
+  name: z.string(),
+  category: z.string(),
+  primaryMuscles: z.string().array(),
+  secondaryMuscles: z.string().array().optional(),
+  instructions: z.string().array(),
+  tips: z.string(),
+  isSingleArmBased: z.boolean().optional(),
+  isSingleLegBased: z.boolean().optional(),
+  targetMuscleImages: z.string().array().optional(),
+  images: z.string().array().optional(),
+  videos: z.string().array().optional(),
+  updatedAt: z.date().optional(),
+});
+
 export interface WorkoutItem {
   exerciseId: number;
   reps: number[];

@@ -13,7 +13,7 @@ export async function createWorkoutSession(
 
   if (typeof validWorkoutItems === "string") return validWorkoutItems;
 
-  await db.insert(workout_sessions).values({ userId, workoutItems });
+  await db.insert(workout_sessions).values({ userId, workoutItems: validWorkoutItems });
 }
 
 export async function deleteWorkoutSession(userId: number, sessionId: number) {
