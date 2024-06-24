@@ -14,6 +14,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+import { WorkoutItem, DailyMacros } from "../types";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -68,13 +69,6 @@ export const exercises = createTable(
   }),
 );
 
-export interface WorkoutItem {
-  exerciseId: number;
-  setCount: number;
-  reps: number[];
-  weight: number[];
-}
-
 export const workout_sessions = createTable(
   "workout_sessions",
   {
@@ -112,13 +106,6 @@ export const workout_plans = createTable(
     idIndex: index("workout_plans_id_idx").on(table.id),
   }),
 );
-
-interface DailyMacros {
-  calories: number;
-  carbs: number;
-  fats: number;
-  protein: number;
-}
 
 export const weigh_ins = createTable(
   "weigh_ins",

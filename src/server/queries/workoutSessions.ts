@@ -1,13 +1,18 @@
 import "server-only";
 import { db } from "../db";
-import { WorkoutItem } from "../db/schema";
+import { WorkoutItem } from "../types";
 import { workout_sessions } from "../db/schema";
 import { and, eq } from "drizzle-orm";
+import { validateWorkoutItems } from "./utils/workoutValidation";
 
 export async function createWorkoutSession(
   userId: number,
   workoutItems: WorkoutItem[],
 ) {
+  const validWorkoutItems = await validateWorkoutItems(workoutItems);
+
+  if (typeof validWorkoutItems === "string") return validWorkoutItems;
+
   await db.insert(workout_sessions).values({ userId, workoutItems });
 }
 
@@ -27,9 +32,13 @@ export async function editWorkoutSession(
   sessionId: number,
   newWorkoutItems: WorkoutItem[],
 ) {
+  const validWorkoutItems = await validateWorkoutItems(newWorkoutItems);
+
+  if (typeof validWorkoutItems === "string") return validWorkoutItems;
+
   await db
     .update(workout_sessions)
-    .set({ workoutItems: newWorkoutItems, updatedAt: new Date() })
+    .set({ workoutItems: validWorkoutItems, updatedAt: new Date() })
     .where(
       and(
         eq(workout_sessions.id, sessionId),
