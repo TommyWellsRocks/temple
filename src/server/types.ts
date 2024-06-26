@@ -56,3 +56,11 @@ export interface DailyMacros {
   fats: number;
   protein: number;
 }
+
+export interface WorkoutSession {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: number;
+  workoutItems: WorkoutItem[];
+}
