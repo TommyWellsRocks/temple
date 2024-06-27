@@ -71,7 +71,7 @@ export async function getVolumeData(userId: number) {
     where: (model, { and, eq, between }) =>
       and(
         eq(model.userId, userId),
-        between(model.createdAt, lastSunday, lastSaturday),
+        between(model.createdAt, lastSunday!, lastSaturday!),
       ),
     orderBy: (model, { asc }) => asc(model.createdAt),
   });
@@ -79,7 +79,7 @@ export async function getVolumeData(userId: number) {
     where: (model, { and, eq, between }) =>
       and(
         eq(model.userId, userId),
-        between(model.createdAt, thisSunday, thisSaturday),
+        between(model.createdAt, thisSunday!, thisSaturday!),
       ),
     orderBy: (model, { asc }) => asc(model.createdAt),
   });

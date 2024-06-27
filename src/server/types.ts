@@ -64,3 +64,30 @@ export interface WorkoutSession {
   userId: number;
   workoutItems: WorkoutItem[];
 }
+
+export interface WorkoutPlan {
+  updatedAt: Date;
+  id: number;
+  createdAt: Date;
+  userId: number;
+  workoutItems: WorkoutItem[];
+  nextOccurrenceDate: string | null;
+  activeThroughDate: string | null;
+}
+
+export interface Exercise {
+  id: number;
+  name: string;
+  category: string;
+  primaryMuscles: string[];
+  secondaryMuscles: string[] | null;
+  instructions: string[];
+  tips: string;
+  isSingleArmBased: boolean | null;
+  isSingleLegBased: boolean | null;
+  targetMuscleImages: string[] | null;
+  images: string[] | null;
+  videos: string[] | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
