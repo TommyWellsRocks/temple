@@ -74,7 +74,6 @@ export default function LineChart({
 
   return (
     <div>
-      <h2>Workout Overview</h2>
       <Line data={chartDataSetup} options={chartAdditionalOptions} />
     </div>
   );

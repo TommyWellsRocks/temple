@@ -2,28 +2,26 @@ import { Exercise, WorkoutPlan } from "~/server/types";
 import { getVolumeData } from "~/server/queries/workoutSessions";
 import { getWorkoutPlan } from "~/server/queries/workoutPlans";
 import { getExercise } from "~/server/queries/exercises";
-import LineChart from "../_components/linechart";
 import Link from "next/link";
 import Image from "next/image";
-import playButtonURL from "../../../../public/content/images/workout/action-play.svg";
-import trophyButtonURL from "../../../../public/content/images/workout/action-trophy.svg";
+import Nav from "./_components/Nav";
+import LineChart from "./_components/Linechart";
+import playButtonURL from "../../../public/content/images/workout/action-play.svg";
+import trophyButtonURL from "../../../public/content/images/workout/action-trophy.svg";
 
-// export const metadata = {
-//   title: "Workout Overview",
-//   description: "Built to spec.",
-//   icons: [{ rel: "icon", url: "/favicon.ico" }],
-// };
+export const metadata = {
+  title: "Workout Overview",
+  description: "Built to spec.",
+  icons: [{ rel: "icon", url: "/favicon.ico" }],
+};
 
-export default async function WorkoutOverview(context: any | unknown) {
+export default async function WorkoutOverview() {
   // TODO auth goes here
+  // TODO get planId from user clicking a plan or getting it from getTodaysPlan
   const userId = 1;
-  const { planId } = context.params;
-  if (isNaN(Number(planId))) return "INVALID PLAN ERROR";
+  const planId = 1;
 
-  const workoutPlan = (await getWorkoutPlan(
-    userId,
-    Number(planId),
-  )) as WorkoutPlan;
+  const workoutPlan = (await getWorkoutPlan(userId, planId)) as WorkoutPlan;
   if (!workoutPlan) return "NO PLAN ERROR";
   const [lastWeek, thisWeek] = await getVolumeData(userId);
 
@@ -37,6 +35,8 @@ export default async function WorkoutOverview(context: any | unknown) {
 
   return (
     <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
+      <Nav exerciseName={undefined} />
+
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
           page="Overview"
@@ -81,10 +81,9 @@ export default async function WorkoutOverview(context: any | unknown) {
 
             return (
               <Link
-                className={`flex items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneBlack" : "bg-secondaryBackground"}`}
-                href={`/workout/${workoutPlan.id}/${exercise.id}`}
+                className={`flex cursor-pointer items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneBlack" : "bg-secondaryBackground"}`}
+                href={`/workout/${workoutPlan.id}-${exercise.id}`}
               >
-                {" "}
                 <div className="flex items-start gap-x-3">
                   <Image
                     className="mt-1 rounded-md"
