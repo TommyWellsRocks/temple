@@ -33,6 +33,31 @@ function chartData(
       ],
     };
   else if (page === "Individual") {
+    return {
+      labels:
+        previousData.length < currentData.length
+          ? currentData.map((_, index) => `Set ${index + 1}`)
+          : previousData.map((_, index) => `Set ${index + 1}`),
+      datasets: [
+        {
+          label: "Last Session's Volume",
+          data: previousData,
+          fill: true,
+          borderColor: "#999",
+          backgroundColor: "rgba(153, 153, 153, 0.5)",
+          tension: 0.1,
+          borderDash: [5, 5],
+        },
+        {
+          label: "Current Session's Volume",
+          data: currentData,
+          fill: true,
+          borderColor: "rgba(103, 57, 255, 1)",
+          backgroundColor: "rgba(103, 57, 255)",
+          tension: 0.1,
+        },
+      ],
+    };
   }
 }
 
@@ -63,14 +88,23 @@ function chartOptions(previousData: number[], currentData: number[]) {
 }
 
 export default function LineChart({
-  page, previousData, currentData
+  page,
+  previousData,
+  currentData,
 }: {
-    page: "Overview" | "Individual";
-    previousData: number[] ;
-    currentData: number[];
+  page: "Overview" | "Individual";
+  previousData: number[];
+  currentData: number[];
 }) {
-  const chartDataSetup = chartData(previousData, currentData, page) as ChartData<"line", number[], string>;
-  const chartAdditionalOptions = chartOptions(previousData, currentData) as _DeepPartialObject<CoreChartOptions<"line">>;
+  const chartDataSetup = chartData(
+    previousData,
+    currentData,
+    page,
+  ) as ChartData<"line", number[], string>;
+  const chartAdditionalOptions = chartOptions(
+    previousData,
+    currentData,
+  ) as _DeepPartialObject<CoreChartOptions<"line">>;
 
   return (
     <div>
