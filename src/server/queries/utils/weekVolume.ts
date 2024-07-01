@@ -1,4 +1,4 @@
-import { WorkoutSession } from "~/server/types";
+import { Exercise, SessionExercise, WorkoutSession } from "~/server/types";
 export function getBetweenDays() {
   const today = new Date();
   const currentDay = today.getDay();
@@ -14,7 +14,7 @@ export function getBetweenDays() {
   const thisEnd = new Date(today);
   thisEnd.setDate(currentDate - currentDay + 6);
 
-  return [lastStart, lastEnd, thisStart, thisEnd]
+  return [lastStart, lastEnd, thisStart, thisEnd];
 }
 
 function getDayOfWeek(timestamp: Date) {
@@ -34,9 +34,14 @@ export function weekVolume(week: WorkoutSession[]) {
         );
       })
       .reduce((total, num) => total + num, 0);
-    
+
     const dayOfWeek = getDayOfWeek(session.createdAt);
     weekVolume[dayOfWeek]! += sessionVolume;
   });
   return weekVolume;
 }
+
+// export function calculateSessionVolume(sessionExercises: SessionExercise[]) {
+//   return sessionExercises.reduce((exercise) => {}),
+// }
+// repCount * (exercise.weight[index] || 1);

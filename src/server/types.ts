@@ -65,6 +65,17 @@ export interface WorkoutSession {
   workoutItems: WorkoutItem[];
 }
 
+export interface SessionExercise {
+  updatedAt: Date;
+  exerciseId: number;
+  id: number;
+  createdAt: Date;
+  userId: number;
+  sessionId: number;
+  reps: number[];
+  weight: number[];
+}
+
 export interface WorkoutPlan {
   updatedAt: Date;
   id: number;

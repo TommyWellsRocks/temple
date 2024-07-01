@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -14,7 +14,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { WorkoutItem, DailyMacros } from "../types";
+import { DailyMacros } from "../types";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -24,6 +24,7 @@ import { WorkoutItem, DailyMacros } from "../types";
  */
 export const createTable = pgTableCreator((name) => `specbody_${name}`);
 
+// * General
 export const users = createTable(
   "users",
   {
@@ -42,6 +43,7 @@ export const users = createTable(
   }),
 );
 
+// * Workout Related
 export const exercises = createTable(
   "exercises",
   {
@@ -69,14 +71,17 @@ export const exercises = createTable(
   }),
 );
 
-export const workout_sessions = createTable(
-  "workout_sessions",
+export const exercise_notes = createTable(
+  "exercise_notes",
   {
     id: serial("id").primaryKey(),
     userId: integer("user_id")
       .notNull()
       .references(() => users.id),
-    workoutItems: jsonb("workout_items").$type<WorkoutItem[]>().notNull(),
+    exerciseId: integer("exercise_id")
+      .notNull()
+      .references(() => exercises.id),
+    notes: varchar("notes").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -85,18 +90,18 @@ export const workout_sessions = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("workout_sessions_id_idx").on(table.id),
+    idIndex: index("exercise_notes_id_idx").on(table.id),
   }),
 );
 
-export const workout_plans = createTable(
-  "workout_plans",
+export const workouts = createTable(
+  "workouts",
   {
     id: serial("id").primaryKey(),
     userId: integer("user_id")
       .notNull()
       .references(() => users.id),
-    workoutItems: jsonb("workout_items").$type<WorkoutItem[]>().notNull(),
+    name: varchar("name").default("New Plan").notNull(),
     nextOccurrenceDate: date("next_occurrence_date"),
     activeThroughDate: date("active_through_date"),
     createdAt: timestamp("created_at", { withTimezone: true })
@@ -107,10 +112,38 @@ export const workout_plans = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("workout_plans_id_idx").on(table.id),
+    idIndex: index("workouts_id_idx").on(table.id),
   }),
 );
 
+export const workout_session_exercises = createTable(
+  "workout_session_exercises",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id),
+    workoutId: integer("workout_id")
+      .notNull()
+      .references(() => workouts.id),
+    exerciseId: integer("exercise_id")
+      .notNull()
+      .references(() => exercises.id),
+    reps: integer("reps").array().notNull(),
+    weight: integer("weight").array().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    idIndex: index("workout_session_exercises_id_idx").on(table.id),
+  }),
+);
+
+// * Weigh In Related
 export const weigh_ins = createTable(
   "weigh_ins",
   {
@@ -134,5 +167,35 @@ export const weigh_ins = createTable(
   },
   (table) => ({
     idIndex: index("weigh_ins_id_idx").on(table.id),
+  }),
+);
+
+export const userRelations = relations(users, ({ many }) => ({
+  workouts: many(workouts),
+}));
+
+export const workoutRelations = relations(workouts, ({ one, many }) => ({
+  user: one(users, {
+    fields: [workouts.userId],
+    references: [users.id],
+  }),
+  sessionExercises: many(workout_session_exercises),
+}));
+
+export const sessionExerciseRelations = relations(
+  workout_session_exercises,
+  ({ one }) => ({
+    workout: one(workouts, {
+      fields: [workout_session_exercises.workoutId],
+      references: [workouts.id],
+    }),
+    info: one(exercises, {
+      fields: [workout_session_exercises.exerciseId],
+      references: [exercises.id],
+    }),
+    notes: one(exercise_notes, {
+      fields: [workout_session_exercises.exerciseId],
+      references: [exercise_notes.exerciseId],
+    }),
   }),
 );

@@ -1,42 +1,46 @@
-import { WorkoutPlan } from "~/server/types";
-import Nav from "../_components/Nav";
-import { getWorkoutPlan } from "~/server/queries/workoutPlans";
-import { getExercise } from "~/server/queries/exercises";
-import LineChart from "../_components/Linechart";
+import Nav from "../../_components/Nav";
+import LineChart from "../../_components/Linechart";
+// import { getExerciseVolumeData } from "~/server/queries/workoutSessions";
+import { getWorkout } from "~/server/queries/workouts";
 
-export default async function WorkoutIndividual(context: any | unknown) {
+export default async function Individual(context: any | unknown) {
   // TODO auth goes here
   // TODO change nav size
   // TODO make interactive
-  // TODO create exercise notes table
+  // TODO rebuild weekVolume/workoutSession/workoutItem related
+  // TODO ON DELETE CASCADE
 
   const userId = 1;
-  const { itemId } = context.params as { itemId: string };
-  const [planId, exerciseId] = itemId.split("-");
-  if (!planId || !exerciseId) return "INVALID ID ERROR";
+  const { planId, exerciseId } = context.params as {
+    planId: string;
+    exerciseId: string;
+  };
+  const workoutPlan = await getWorkout(userId, Number(planId));
+  if (!workoutPlan) return "INVALID PLAN";
 
-  const workoutPlan = (await getWorkoutPlan(
-    userId,
-    Number(planId),
-  )) as WorkoutPlan;
-  if (!workoutPlan) return "NO PLAN ERROR";
-  const exercise = await getExercise(Number(exerciseId));
-  if (!exercise) return "NO EXERCISE ERROR";
-  const planExerciseIndex = workoutPlan.workoutItems.findIndex(
-    (item) => item.exerciseId === exercise.id,
+  // const [lastSessionVolume, currentSessionVolume] = await getExerciseVolumeData(
+  //   userId,
+  //   exerciseId,
+  // );
+
+  const exerciseIndex = workoutPlan.sessionExercises.findIndex(
+    (exercise) => exercise.info.id === Number(exerciseId),
   );
-  const planExercise = workoutPlan.workoutItems[planExerciseIndex]!;
-  const setCount = planExercise.reps.length;
+  if (exerciseIndex === -1) return "INVALID EXERCISE";
+  const sessionExercise = workoutPlan.sessionExercises[exerciseIndex]!;
+  const exerciseInfo = sessionExercise.info;
+  const setCount = sessionExercise.reps.length;
 
   return (
     <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <div>Item ID: {itemId}</div>
-      <div>Plan ID: {planId}</div>
-      <div>Exercise ID: {exerciseId}</div>
-      <Nav exerciseName={exercise.name} />
+      <Nav exerciseName={exerciseInfo.name} planId={planId} />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
-        <LineChart page="Individual" previousData={[]} currentData={[]} />
+        {/* <LineChart
+          page="Individual"
+          previousData={lastSessionVolume!}
+          currentData={currentSessionVolume!}
+        /> */}
       </section>
 
       <section className="flex flex-col items-center justify-center gap-y-5">
@@ -45,7 +49,7 @@ export default async function WorkoutIndividual(context: any | unknown) {
           {setCount === 1 ? " Set" : " Sets"}
         </div>
         <div className="flex flex-col gap-y-5">
-          {planExercise.reps.map((repCount, index) => {
+          {sessionExercise.reps.map((repCount, index) => {
             return (
               <div
                 className="flex items-center gap-x-3 text-2xl font-light text-gray-600"
@@ -64,7 +68,7 @@ export default async function WorkoutIndividual(context: any | unknown) {
                 <div className="text-xl">Reps</div>
                 <div className="h-9 rotate-12 border border-gray-600"></div>
                 <div className="cursor-pointer">
-                  {planExercise.weight[index]}
+                  {sessionExercise.weight[index]}
                 </div>
                 <div className="text-xl">Pounds</div>
               </div>

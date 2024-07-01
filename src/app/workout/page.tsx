@@ -1,118 +1,32 @@
-import { Exercise, WorkoutPlan } from "~/server/types";
-import { getVolumeData } from "~/server/queries/workoutSessions";
-import { getWorkoutPlan } from "~/server/queries/workoutPlans";
-import { getExercise } from "~/server/queries/exercises";
-import Link from "next/link";
 import Image from "next/image";
-import Nav from "./_components/Nav";
-import LineChart from "./_components/Linechart";
-import playButtonURL from "../../../public/content/images/workout/action-play.svg";
-import trophyButtonURL from "../../../public/content/images/workout/action-trophy.svg";
+import Link from "next/link";
+import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
+import { redirect } from "next/navigation";
+import { getMyWorkouts } from "~/server/queries/workouts";
 
-export const metadata = {
-  title: "Workout Overview",
-  description: "Built to spec.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
-
-export default async function WorkoutOverview() {
-  // TODO auth goes here
-  // TODO get planId from user clicking a plan or getting it from getTodaysPlan
+export default async function MyWorkouts() {
   const userId = 1;
-  const planId = 1;
-
-  const workoutPlan = (await getWorkoutPlan(userId, planId)) as WorkoutPlan;
-  if (!workoutPlan) return "NO PLAN ERROR";
-  const [lastWeek, thisWeek] = await getVolumeData(userId);
-
-  let doneCount = 0;
-  const exercises = await Promise.all(
-    workoutPlan.workoutItems.map(async (item) => {
-      if (!item.reps.includes(0)) doneCount += 1;
-      return (await getExercise(item.exerciseId)) as Exercise;
-    }),
-  );
-
+  const workouts = await getMyWorkouts(userId);
   return (
-    <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav exerciseName={undefined} />
-
-      <section className="rounded-lg bg-black bg-opacity-30 p-2">
-        <LineChart
-          page="Overview"
-          previousData={lastWeek!}
-          currentData={thisWeek!}
-        />
-      </section>
-
-      <section>
-        <h3 className="pb-2">Today's Muscles</h3>
-        <div className="flex gap-x-3.5">
-          {exercises.map(async (exercise) => {
-            return (
-              <Image
-                className="border-thePurple w-15 rounded-lg border bg-white p-0.5"
-                src={
-                  exercise.targetMuscleImages
-                    ? (exercise.targetMuscleImages[0] as string)
-                    : "https://placehold.co/600x400"
-                }
-                alt="Target muscle image."
-                width={80}
-                height={80}
-              />
-            );
-          })}
-        </div>
-      </section>
-
-      <section>
-        <div className="flex justify-between">
-          <h3 className="pb-2">The Checklist 😎</h3>
-          <h3 className="text-sm font-light">
-            <strong className="text-xl">{doneCount}</strong> /
-            {workoutPlan!.workoutItems.length}
-          </h3>
-        </div>
-
-        <div className="flex flex-col gap-y-3">
-          {exercises.map(async (exercise, index) => {
-            const isDone = !workoutPlan.workoutItems[index]!.reps.includes(0);
-
-            return (
-              <Link
-                className={`flex cursor-pointer items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneBlack" : "bg-secondaryBackground"}`}
-                href={`/workout/${workoutPlan.id}-${exercise.id}`}
-              >
-                <div className="flex items-start gap-x-3">
-                  <Image
-                    className="mt-1 rounded-md"
-                    src={
-                      exercise.images
-                        ? (exercise.images[0] as string)
-                        : "https://placehold.co/200x200"
-                    }
-                    alt="Exercise Image."
-                    width={50}
-                    height={50}
-                  />
-                  <div>
-                    <div className="text-base">{exercise.name}</div>
-                    <div className="text-sm font-light">
-                      {exercise.tips.slice(0, 40)}...
-                    </div>
-                  </div>
-                </div>
-                <Image
-                  className="border-thePurple rounded-full border"
-                  src={isDone ? trophyButtonURL : playButtonURL}
-                  alt="Action."
-                />
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+    <div className="flex flex-col items-start">
+      <h1>WORKOUTS GO HERE:</h1>
+      {workouts.map((workout) => {
+        return (
+          <Link
+            href={`/workout/${workout.id}`}
+            className="flex flex-col items-center"
+          >
+            <Image
+              src={PlanIconURL}
+              priority={true}
+              width={50}
+              height={50}
+              alt="Workout Plan Icon."
+            />
+            <div>{workout.name}</div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
