@@ -129,8 +129,8 @@ export const workout_session_exercises = createTable(
     exerciseId: integer("exercise_id")
       .notNull()
       .references(() => exercises.id),
-    reps: integer("reps").array().notNull(),
-    weight: integer("weight").array().notNull(),
+    reps: integer("reps").array().default([0, 0, 0, 0]).notNull(),
+    weight: integer("weight").array().default([0, 0, 0, 0]).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

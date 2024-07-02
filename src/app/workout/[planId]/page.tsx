@@ -1,15 +1,15 @@
-// import { getOverviewVolumeData } from "~/server/queries/workoutSessions";
 import Link from "next/link";
 import Image from "next/image";
 import Nav from "../_components/Nav";
 import LineChart from "../_components/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import { getWorkout } from "~/server/queries/workouts";
+import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
 
 export default async function Overview(context: any | unknown) {
   // TODO auth goes here
-  // TODO get planId from user clicking a plan or getting it from getTodaysPlan
+  // TODO getTodaysPlan
+
   const userId = 1;
 
   const { planId } = context.params as { planId: string };
@@ -17,7 +17,7 @@ export default async function Overview(context: any | unknown) {
   if (!workoutPlan) return "INVALID PLAN";
   const exercises = workoutPlan.sessionExercises;
 
-  // const [lastWeek, thisWeek] = await getOverviewVolumeData(userId);
+  const [lastWeek, thisWeek] = await getWeekAnalytics(userId);
   let doneCount = 0;
 
   return (
@@ -25,11 +25,11 @@ export default async function Overview(context: any | unknown) {
       <Nav exerciseName={undefined} planId={undefined} />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
-        {/* <LineChart
+        <LineChart
           page="Overview"
-          previousData={lastWeek!}
-          currentData={thisWeek!}
-        /> */}
+          previousData={await lastWeek!}
+          currentData={await thisWeek!}
+        />
       </section>
 
       <section>

@@ -1,13 +1,12 @@
 import Nav from "../../_components/Nav";
 import LineChart from "../../_components/Linechart";
-// import { getExerciseVolumeData } from "~/server/queries/workoutSessions";
-import { getWorkout } from "~/server/queries/workouts";
+import { getExerciseAnalytics, getWorkout } from "~/server/queries/workouts";
 
 export default async function Individual(context: any | unknown) {
   // TODO auth goes here
   // TODO change nav size
+  // TODO mess with lastCompleted part on overview
   // TODO make interactive
-  // TODO rebuild weekVolume/workoutSession/workoutItem related
   // TODO ON DELETE CASCADE
 
   const userId = 1;
@@ -18,11 +17,6 @@ export default async function Individual(context: any | unknown) {
   const workoutPlan = await getWorkout(userId, Number(planId));
   if (!workoutPlan) return "INVALID PLAN";
 
-  // const [lastSessionVolume, currentSessionVolume] = await getExerciseVolumeData(
-  //   userId,
-  //   exerciseId,
-  // );
-
   const exerciseIndex = workoutPlan.sessionExercises.findIndex(
     (exercise) => exercise.info.id === Number(exerciseId),
   );
@@ -31,16 +25,22 @@ export default async function Individual(context: any | unknown) {
   const exerciseInfo = sessionExercise.info;
   const setCount = sessionExercise.reps.length;
 
+  const [lastSessionVolume, currentSessionVolume] = (await getExerciseAnalytics(
+    userId,
+    Number(exerciseId),
+    sessionExercise,
+  )) as number[][];
+
   return (
     <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
       <Nav exerciseName={exerciseInfo.name} planId={planId} />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
-        {/* <LineChart
+        <LineChart
           page="Individual"
           previousData={lastSessionVolume!}
           currentData={currentSessionVolume!}
-        /> */}
+        />
       </section>
 
       <section className="flex flex-col items-center justify-center gap-y-5">

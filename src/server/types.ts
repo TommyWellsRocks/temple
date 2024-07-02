@@ -57,23 +57,15 @@ export interface DailyMacros {
   protein: number;
 }
 
-export interface WorkoutSession {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: number;
-  workoutItems: WorkoutItem[];
-}
-
 export interface SessionExercise {
-  updatedAt: Date;
-  exerciseId: number;
   id: number;
-  createdAt: Date;
   userId: number;
-  sessionId: number;
+  workoutId: number;
+  exerciseId: number;
   reps: number[];
   weight: number[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface WorkoutPlan {
