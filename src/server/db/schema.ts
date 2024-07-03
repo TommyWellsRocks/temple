@@ -9,12 +9,15 @@ import {
   integer,
   jsonb,
   pgTableCreator,
+  primaryKey,
   real,
   serial,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 import { DailyMacros } from "../types";
+import { AdapterAccountType } from "next-auth/adapters";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -22,24 +25,99 @@ import { DailyMacros } from "../types";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `specbody_${name}`);
+export const createTable = pgTableCreator((name) => `temple_${name}`);
 
 // * General
-export const users = createTable(
-  "users",
+export const users = createTable("user", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("emailVerified", {
+    mode: "date",
+    withTimezone: true,
+  }).default(sql`CURRENT_TIMESTAMP`),
+  image: varchar("image", { length: 255 }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}));
+
+export const accounts = createTable(
+  "account",
   {
-    id: serial("id").primaryKey(),
-    email: varchar("email", { length: 256 }).unique().notNull(),
-    password: varchar("password").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    type: varchar("type", { length: 255 })
+      .$type<AdapterAccountType>()
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
+    provider: varchar("provider", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: varchar("token_type", { length: 255 }),
+    scope: varchar("scope", { length: 255 }),
+    id_token: text("id_token"),
+    session_state: varchar("session_state", { length: 255 }),
   },
-  (table) => ({
-    idIndex: index("users_id_idx").on(table.id),
+  (account) => ({
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
+    userIdIdx: index("account_userId_idx").on(account.userId),
+  }),
+);
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
+
+export const sessions = createTable(
+  "session",
+  {
+    sessionToken: varchar("sessionToken", { length: 255 })
+      .notNull()
+      .primaryKey(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    expires: timestamp("expires", {
+      mode: "date",
+      withTimezone: true,
+    }).notNull(),
+  },
+  (session) => ({
+    userIdIdx: index("session_userId_idx").on(session.userId),
+  }),
+);
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
+}));
+
+export const verificationTokens = createTable(
+  "verificationToken",
+  {
+    identifier: varchar("identifier", { length: 255 }).notNull(),
+    token: varchar("token", { length: 255 }).notNull(),
+    expires: timestamp("expires", {
+      mode: "date",
+      withTimezone: true,
+    }).notNull(),
+  },
+  (vt) => ({
+    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
 
@@ -62,12 +140,12 @@ export const exercises = createTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true })
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => ({
-    idIndex: index("exercises_id_idx").on(table.id),
+    idIndex: index("ex_id_idx").on(table.id),
   }),
 );
 
@@ -75,7 +153,7 @@ export const exercise_notes = createTable(
   "exercise_notes",
   {
     id: serial("id").primaryKey(),
-    userId: integer("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
     exerciseId: integer("exercise_id")
@@ -85,12 +163,12 @@ export const exercise_notes = createTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true })
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => ({
-    idIndex: index("exercise_notes_id_idx").on(table.id),
+    idIndex: index("ex_notes_id_idx").on(table.id),
   }),
 );
 
@@ -98,7 +176,7 @@ export const workouts = createTable(
   "workouts",
   {
     id: serial("id").primaryKey(),
-    userId: integer("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
     name: varchar("name").default("New Plan").notNull(),
@@ -107,7 +185,7 @@ export const workouts = createTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true })
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -120,7 +198,7 @@ export const workout_session_exercises = createTable(
   "workout_session_exercises",
   {
     id: serial("id").primaryKey(),
-    userId: integer("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
     workoutId: integer("workout_id")
@@ -129,17 +207,23 @@ export const workout_session_exercises = createTable(
     exerciseId: integer("exercise_id")
       .notNull()
       .references(() => exercises.id),
-    reps: integer("reps").array().default([0, 0, 0, 0]).notNull(),
-    weight: integer("weight").array().default([0, 0, 0, 0]).notNull(),
+    reps: integer("reps")
+      .array()
+      .default(sql`ARRAY[0,0,0,0]::integer[]`)
+      .notNull(),
+    weight: integer("weight")
+      .array()
+      .default(sql`ARRAY[0,0,0,0]::integer[]`)
+      .notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true })
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => ({
-    idIndex: index("workout_session_exercises_id_idx").on(table.id),
+    idIndex: index("sess_ex_id_idx").on(table.id),
   }),
 );
 
@@ -148,7 +232,7 @@ export const weigh_ins = createTable(
   "weigh_ins",
   {
     id: serial("id").primaryKey(),
-    userId: integer("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
     picture: varchar("picture"),
@@ -161,12 +245,12 @@ export const weigh_ins = createTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true })
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
   (table) => ({
-    idIndex: index("weigh_ins_id_idx").on(table.id),
+    idIndex: index("weigh_id_idx").on(table.id),
   }),
 );
 

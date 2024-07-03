@@ -59,7 +59,7 @@ export interface DailyMacros {
 
 export interface SessionExercise {
   id: number;
-  userId: number;
+  userId: string;
   workoutId: number;
   exerciseId: number;
   reps: number[];
@@ -72,7 +72,7 @@ export interface WorkoutPlan {
   updatedAt: Date;
   id: number;
   createdAt: Date;
-  userId: number;
+  userId: string;
   workoutItems: WorkoutItem[];
   nextOccurrenceDate: string | null;
   activeThroughDate: string | null;

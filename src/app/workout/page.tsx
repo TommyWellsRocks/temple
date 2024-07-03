@@ -3,10 +3,13 @@ import Link from "next/link";
 import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
 import { redirect } from "next/navigation";
 import { getMyWorkouts } from "~/server/queries/workouts";
+import { auth } from "~/server/auth";
 
 export default async function MyWorkouts() {
-  const userId = 1;
-  const workouts = await getMyWorkouts(userId);
+  const session = await auth();
+  if (!session?.user) return redirect("/signin");
+
+  const workouts = await getMyWorkouts(session.user.id!);
   return (
     <div className="flex flex-col items-start">
       <h1>WORKOUTS GO HERE:</h1>

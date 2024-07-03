@@ -8,7 +8,7 @@ import {
 } from "./utils/workoutVolume";
 import { SessionExercise } from "../types";
 
-export async function getMyWorkouts(userId: number) {
+export async function getMyWorkouts(userId: string) {
   return await db.query.workouts.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.updatedAt),
@@ -23,7 +23,7 @@ export async function getMyWorkouts(userId: number) {
   });
 }
 
-export async function getTodaysWorkout(userId: number) {
+export async function getTodaysWorkout(userId: string) {
   return await db.query.workouts.findFirst({
     where: (model, { eq, and }) =>
       and(
@@ -41,7 +41,7 @@ export async function getTodaysWorkout(userId: number) {
   });
 }
 
-export async function getWorkout(userId: number, planId: number) {
+export async function getWorkout(userId: string, planId: number) {
   return await db.query.workouts.findFirst({
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.id, planId)),
@@ -57,7 +57,7 @@ export async function getWorkout(userId: number, planId: number) {
 }
 
 export async function getExerciseAnalytics(
-  userId: number,
+  userId: string,
   exerciseId: number,
   sessionExercise: SessionExercise,
 ) {
@@ -87,7 +87,7 @@ export async function getExerciseAnalytics(
   return [lastSession, currentSession];
 }
 
-export async function getWeekAnalytics(userId: number) {
+export async function getWeekAnalytics(userId: string) {
   const [lastSun, lastSat, thisSun, thisSat] = getBetweenDays();
   const weekVolume = async (firstDay: Date, lastDay: Date) => {
     const weekSessions = await db.query.workouts.findMany({

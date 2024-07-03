@@ -1,20 +1,23 @@
 import Nav from "../../_components/Nav";
 import LineChart from "../../_components/Linechart";
 import { getExerciseAnalytics, getWorkout } from "~/server/queries/workouts";
+import { auth } from "~/server/auth";
+import { redirect } from "next/navigation";
 
 export default async function Individual(context: any | unknown) {
   // TODO auth goes here
   // TODO change nav size
-  // TODO mess with lastCompleted part on overview
   // TODO make interactive
   // TODO ON DELETE CASCADE
 
-  const userId = 1;
+  const session = await auth();
+  if (!session?.user) return redirect("/signin");
+
   const { planId, exerciseId } = context.params as {
     planId: string;
     exerciseId: string;
   };
-  const workoutPlan = await getWorkout(userId, Number(planId));
+  const workoutPlan = await getWorkout(session.user.id!, Number(planId));
   if (!workoutPlan) return "INVALID PLAN";
 
   const exerciseIndex = workoutPlan.sessionExercises.findIndex(
@@ -26,7 +29,7 @@ export default async function Individual(context: any | unknown) {
   const setCount = sessionExercise.reps.length;
 
   const [lastSessionVolume, currentSessionVolume] = (await getExerciseAnalytics(
-    userId,
+    session.user.id!,
     Number(exerciseId),
     sessionExercise,
   )) as number[][];
@@ -99,7 +102,7 @@ export default async function Individual(context: any | unknown) {
 
       <section>
         <div className="mb-2 flex justify-between rounded-xl bg-black bg-opacity-40 p-0.5 text-base font-normal">
-          <div className="bg-thePurple cursor-pointer rounded-xl px-5 py-1 font-medium">
+          <div className="cursor-pointer rounded-xl bg-thePurple px-5 py-1 font-medium">
             Notes
           </div>
           <div className="cursor-pointer px-3 py-1">Tips</div>

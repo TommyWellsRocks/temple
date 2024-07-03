@@ -5,19 +5,22 @@ import LineChart from "../_components/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
+import { auth } from "~/server/auth";
+import { redirect } from "next/navigation";
 
 export default async function Overview(context: any | unknown) {
   // TODO auth goes here
   // TODO getTodaysPlan
 
-  const userId = 1;
+  const session = await auth();
+  if (!session?.user) return redirect("/signin");
 
   const { planId } = context.params as { planId: string };
-  const workoutPlan = await getWorkout(userId, Number(planId));
+  const workoutPlan = await getWorkout(session.user.id!, Number(planId));
   if (!workoutPlan) return "INVALID PLAN";
   const exercises = workoutPlan.sessionExercises;
 
-  const [lastWeek, thisWeek] = await getWeekAnalytics(userId);
+  const [lastWeek, thisWeek] = await getWeekAnalytics(session.user.id!);
   let doneCount = 0;
 
   return (
@@ -38,7 +41,7 @@ export default async function Overview(context: any | unknown) {
           {exercises.map(async (exercise) => {
             return (
               <Image
-                className="border-thePurple w-15 rounded-lg border bg-white p-0.5"
+                className="w-15 rounded-lg border border-thePurple bg-white p-0.5"
                 src={
                   exercise.info.targetMuscleImages
                     ? (exercise.info.targetMuscleImages[0] as string)
@@ -90,7 +93,7 @@ export default async function Overview(context: any | unknown) {
                   </div>
                 </div>
                 <Image
-                  className="border-thePurple rounded-full border"
+                  className="rounded-full border border-thePurple"
                   src={isDone ? trophyButtonURL : playButtonURL}
                   alt="Action."
                 />
