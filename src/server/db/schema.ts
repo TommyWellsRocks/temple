@@ -176,12 +176,13 @@ export const workouts = createTable(
   "workouts",
   {
     id: serial("id").primaryKey(),
-    userId: text("user_id")
+    userId: varchar("user_id")
       .notNull()
       .references(() => users.id),
     name: varchar("name").default("New Plan").notNull(),
-    nextOccurrenceDate: date("next_occurrence_date"),
-    activeThroughDate: date("active_through_date"),
+    repeatStart: date("repeat_start_date"),
+    repeatEnd: date("repeat_end_date"),
+    repeatOn: integer("repeat").array(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

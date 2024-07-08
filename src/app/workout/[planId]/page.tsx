@@ -5,14 +5,11 @@ import LineChart from "../_components/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
-import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
+import { auth } from "~/server/auth";
 
 export default async function Overview(context: any | unknown) {
-  // TODO auth goes here
-  // TODO getTodaysPlan
-
-  const session = await auth();
+  const session = auth();
   if (!session?.user) return redirect("/signin");
 
   const { planId } = context.params as { planId: string };

@@ -7,6 +7,7 @@ import {
   getDayOfWeek,
 } from "./utils/workoutVolume";
 import { SessionExercise } from "../types";
+import { workouts } from "../db/schema";
 
 export async function getMyWorkouts(userId: string) {
   return await db.query.workouts.findMany({
@@ -24,11 +25,15 @@ export async function getMyWorkouts(userId: string) {
 }
 
 export async function getTodaysWorkout(userId: string) {
+  const today = new Date();
+  const todayString = String(today);
   return await db.query.workouts.findFirst({
-    where: (model, { eq, and }) =>
+    where: (model, { and, eq, gte, lte, sql }) =>
       and(
         eq(model.userId, userId),
-        eq(model.nextOccurrenceDate, String(new Date())),
+        lte(model.repeatStart, todayString),
+        gte(model.repeatEnd, todayString),
+        sql`${model.repeatOn} @> {${today.getDay()}}`,
       ),
     with: {
       sessionExercises: {
@@ -39,6 +44,18 @@ export async function getTodaysWorkout(userId: string) {
       },
     },
   });
+}
+
+export async function createWorkout(
+  userId: string,
+  name: string,
+  repeatStart?: string,
+  repeatEnd?: string,
+  repeatOn?: number[],
+) {
+  await db
+    .insert(workouts)
+    .values({ userId, name, repeatStart, repeatEnd, repeatOn });
 }
 
 export async function getWorkout(userId: string, planId: number) {

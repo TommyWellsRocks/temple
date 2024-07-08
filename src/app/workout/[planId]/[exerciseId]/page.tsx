@@ -1,16 +1,12 @@
+// "use client"
 import Nav from "../../_components/Nav";
 import LineChart from "../../_components/Linechart";
 import { getExerciseAnalytics, getWorkout } from "~/server/queries/workouts";
-import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
+import { auth } from "~/server/auth";
 
 export default async function Individual(context: any | unknown) {
-  // TODO auth goes here
-  // TODO change nav size
-  // TODO make interactive
-  // TODO ON DELETE CASCADE
-
-  const session = await auth();
+  const session = auth();
   if (!session?.user) return redirect("/signin");
 
   const { planId, exerciseId } = context.params as {
