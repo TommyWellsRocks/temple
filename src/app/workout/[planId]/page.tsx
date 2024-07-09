@@ -8,6 +8,8 @@ import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { AddExercises } from "./_components/AddExercises";
+import { DeleteExercise } from "./_components/DeleteExercise";
+import { Exercises } from "~/server/types";
 
 export default async function Overview(context: any | unknown) {
   const session = await auth();
@@ -99,8 +101,13 @@ export default async function Overview(context: any | unknown) {
             );
           })}
         </div>
-        <div>
+        <div className="flex justify-center gap-3 pt-5">
           <AddExercises userId={session.user!.id!} workoutId={Number(planId)} />
+          <DeleteExercise
+            userId={session.user!.id!}
+            workoutId={Number(planId)}
+            workoutExercises={exercises.map((exercise) => exercise.info)}
+          />
         </div>
       </section>
     </div>

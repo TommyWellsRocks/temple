@@ -159,3 +159,19 @@ export async function addWorkoutExercise(
     .insert(workout_session_exercises)
     .values({ userId, workoutId, exerciseId });
 }
+
+export async function deleteWorkoutExercise(
+  userId: string,
+  workoutId: number,
+  exerciseId: number,
+) {
+  await db
+    .delete(workout_session_exercises)
+    .where(
+      and(
+        eq(workout_session_exercises.userId, userId),
+        eq(workout_session_exercises.workoutId, workoutId),
+        eq(workout_session_exercises.exerciseId, exerciseId),
+      ),
+    );
+}

@@ -29,7 +29,7 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { Exercises } from "~/server/types";
-import { handleAddExercise } from "./ServerComponents";
+import { handleAddExercise, handleDeleteExercise } from "./ServerComponents";
 
 const FormSchema = z.object({
   exercise: z.string({
@@ -41,17 +41,21 @@ export function ExerciseForm({
   userId,
   workoutId,
   exercises,
+  method,
 }: {
   userId: string;
   workoutId: number;
   exercises: Exercises;
+  method: "Add" | "Delete";
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    handleAddExercise(userId, workoutId, Number(data.exercise));
+    method === "Add"
+      ? handleAddExercise(userId, workoutId, Number(data.exercise))
+      : handleDeleteExercise(userId, workoutId, Number(data.exercise));
   }
 
   return (
@@ -62,7 +66,6 @@ export function ExerciseForm({
           name="exercise"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>New Exercise</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -118,7 +121,7 @@ export function ExerciseForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Add</Button>
+        <Button type="submit">{method}</Button>
       </form>
     </Form>
   );
