@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getMyWorkouts } from "~/server/queries/workouts";
 import { CreateWorkout } from "./_components/CreateWorkout";
+import { EditWorkout } from "./_components/EditWorkout";
 
 export default async function MyWorkouts() {
   const session = await auth();
@@ -24,19 +25,31 @@ export default async function MyWorkouts() {
           <div className="flex items-start gap-5">
             {workouts.map((workout) => {
               return (
-                <Link
-                  href={`/workout/${workout.id}`}
-                  className="flex flex-col items-center"
-                >
-                  <Image
-                    src={PlanIconURL}
-                    priority={true}
-                    width={50}
-                    height={50}
-                    alt="Workout Plan Icon."
-                  />
-                  <div>{workout.name.slice(0, 12)}</div>
-                </Link>
+                <div>
+                  <Link
+                    href={`/workout/${workout.id}`}
+                    className="flex flex-col items-center"
+                  >
+                    <Image
+                      src={PlanIconURL}
+                      priority={true}
+                      width={50}
+                      height={50}
+                      alt="Workout Plan Icon."
+                    />
+                  </Link>
+                  <div className="flex justify-center gap-1.5 align-middle">
+                    {workout.name.slice(0, 12)}
+                    <EditWorkout
+                      userId={session.user!.id!}
+                      workoutId={workout.id}
+                      name={workout.name}
+                      repeatStart={workout.repeatStart}
+                      repeatEnd={workout.repeatEnd}
+                      repeatOn={workout.repeatOn}
+                    />
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -8,6 +8,7 @@ import {
 } from "./utils/workoutVolume";
 import { SessionExercise } from "../types";
 import { workouts } from "../db/schema";
+import { and, eq } from "drizzle-orm";
 
 export async function getMyWorkouts(userId: string) {
   return await db.query.workouts.findMany({
@@ -49,9 +50,9 @@ export async function getTodaysWorkout(userId: string) {
 export async function createWorkout(
   userId: string,
   name: string,
-  repeatStart?: string,
-  repeatEnd?: string,
-  repeatOn?: number[],
+  repeatStart: string | null,
+  repeatEnd: string | null,
+  repeatOn: number[] | null,
 ) {
   await db
     .insert(workouts)
@@ -133,4 +134,18 @@ export async function getWeekAnalytics(userId: string) {
   const thisWeekVolume = weekVolume(thisSun!, thisSat!);
 
   return [lastWeekVolume, thisWeekVolume];
+}
+
+export async function editWorkout(
+  userId: string,
+  workoutId: number,
+  name: string,
+  repeatStart: string | null,
+  repeatEnd: string | null,
+  repeatOn: number[] | null,
+) {
+  await db
+    .update(workouts)
+    .set({ name, repeatStart, repeatEnd, repeatOn })
+    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)));
 }
