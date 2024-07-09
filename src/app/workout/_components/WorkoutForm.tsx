@@ -15,7 +15,7 @@ import { DialogFooter } from "~/components/ui/dialog";
 import { Checkbox } from "~/components/ui/checkbox";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { handleCreateWorkout } from "./ServerComponents";
+import { Workout } from "~/server/types";
 
 export const formSchema = z.object({
   name: z
@@ -41,11 +41,11 @@ export const formSchema = z.object({
 });
 
 export function WorkoutForm({
-  userId,
   onSubmitFunction,
+  currentInfo,
 }: {
-  userId: string;
-  onSubmitFunction: Function;
+  onSubmitFunction: SubmitHandler<{ name: string; repeat?: number[] | undefined; start?: Date | undefined; end?: Date | undefined; }>;
+  currentInfo?: Workout;
 }) {
   const today = new Date();
 
@@ -62,9 +62,19 @@ export function WorkoutForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      repeat: [1],
-      start: today,
-      end: addDays(today, 45),
+      name: currentInfo ? currentInfo.name : undefined,
+      repeat:
+        currentInfo && currentInfo.repeatOn != null
+          ? currentInfo.repeatOn
+          : [1],
+      start:
+        currentInfo && currentInfo.repeatStart != null
+          ? new Date(currentInfo.repeatStart)
+          : today,
+      end:
+        currentInfo && currentInfo.repeatEnd != null
+          ? new Date(currentInfo.repeatEnd)
+          : addDays(today, 45),
     },
   });
 
@@ -218,7 +228,7 @@ export function WorkoutForm({
         />
 
         <DialogFooter>
-          <Button type="submit">Create</Button>
+          <Button type="submit">{currentInfo ? "Edit" : "Create"}</Button>
         </DialogFooter>
       </form>
     </Form>

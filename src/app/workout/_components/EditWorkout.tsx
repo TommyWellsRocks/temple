@@ -6,33 +6,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { formSchema, WorkoutForm } from "./workoutform";
+import { formSchema, WorkoutForm } from "./WorkoutForm";
 import { z } from "zod";
 import { handleEditWorkout } from "./ServerComponents";
+import { Workout } from "~/server/types";
 
 export function EditWorkout({
   userId,
-  workoutId,
-  name,
-  repeatStart,
-  repeatEnd,
-  repeatOn,
+  currentInfo,
 }: {
   userId: string;
-  workoutId: number;
-  name: string;
-  repeatStart: string | null;
-  repeatEnd: string | null;
-  repeatOn: number[] | null;
+  currentInfo: Workout;
 }) {
   function handleEdit(values: z.infer<typeof formSchema>) {
     handleEditWorkout(
       userId,
-      workoutId,
-      values.name || name,
-      values.start ? values.start.toISOString() : repeatStart,
-      values.end ? values.end.toISOString() : repeatEnd,
-      values.repeat ? values.repeat : repeatOn,
+      currentInfo!.id,
+      values.name,
+      values.start,
+      values.end,
+      values.repeat,
     );
   }
 
@@ -52,7 +45,10 @@ export function EditWorkout({
               Remember to save when your done.
             </p>
           </div>
-          <WorkoutForm userId={userId} onSubmitFunction={handleEdit} />
+          <WorkoutForm
+            onSubmitFunction={handleEdit}
+            currentInfo={currentInfo}
+          />
         </div>
       </PopoverContent>
     </Popover>

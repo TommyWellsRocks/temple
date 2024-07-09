@@ -146,6 +146,6 @@ export async function editWorkout(
 ) {
   await db
     .update(workouts)
-    .set({ name, repeatStart, repeatEnd, repeatOn })
+    .set({ name, repeatStart, repeatEnd, repeatOn, updatedAt: new Date() })
     .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)));
 }

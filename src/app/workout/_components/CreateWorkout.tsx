@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { WorkoutForm, formSchema } from "./workoutform";
+import { WorkoutForm, formSchema } from "./WorkoutForm";
 import { z } from "zod";
 import { handleCreateWorkout } from "./ServerComponents";
 
@@ -19,9 +19,9 @@ export function CreateWorkout({ userId }: { userId: string }) {
     handleCreateWorkout(
       userId,
       values.name,
-      values.start ? values.start.toISOString() : null,
-      values.end ? values.end.toISOString() : null,
-      values.repeat ? values.repeat : null,
+      values.start,
+      values.end,
+      values.repeat,
     );
   }
 
@@ -41,7 +41,7 @@ export function CreateWorkout({ userId }: { userId: string }) {
           </DialogDescription>
         </DialogHeader>
 
-        <WorkoutForm userId={userId} onSubmitFunction={handleCreate} />
+        <WorkoutForm onSubmitFunction={handleCreate} />
       </DialogContent>
     </Dialog>
   );

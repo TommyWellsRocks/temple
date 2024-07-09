@@ -42,11 +42,7 @@ export default async function MyWorkouts() {
                     {workout.name.slice(0, 12)}
                     <EditWorkout
                       userId={session.user!.id!}
-                      workoutId={workout.id}
-                      name={workout.name}
-                      repeatStart={workout.repeatStart}
-                      repeatEnd={workout.repeatEnd}
-                      repeatOn={workout.repeatOn}
+                      currentInfo={ workout }
                     />
                   </div>
                 </div>
