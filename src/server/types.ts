@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { db } from "./db";
 import { getWorkout } from "./queries/workouts";
+import { getExercises } from "./queries/exercises";
 
 export interface ExerciseObject {
   name: string;
@@ -97,3 +98,4 @@ export interface Exercise {
 }
 
 export type Workout = Awaited<ReturnType<typeof getWorkout>>;
+export type Exercises = Awaited<ReturnType<typeof getExercises>>

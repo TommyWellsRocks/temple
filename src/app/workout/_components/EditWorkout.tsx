@@ -54,5 +54,3 @@ export function EditWorkout({
     </Popover>
   );
 }
-
-// TODO Current info & edit button if workoutId prop

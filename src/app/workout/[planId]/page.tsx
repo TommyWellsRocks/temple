@@ -7,9 +7,10 @@ import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
+import { AddExercises } from "./_components/AddExercises";
 
 export default async function Overview(context: any | unknown) {
-  const session = auth();
+  const session = await auth();
   if (!session?.user) return redirect("/signin");
 
   const { planId } = context.params as { planId: string };
@@ -38,7 +39,7 @@ export default async function Overview(context: any | unknown) {
           {exercises.map(async (exercise) => {
             return (
               <Image
-                className="w-15 rounded-lg border border-thePurple bg-white p-0.5"
+                className="w-15 border-thePurple rounded-lg border bg-white p-0.5"
                 src={
                   exercise.info.targetMuscleImages
                     ? (exercise.info.targetMuscleImages[0] as string)
@@ -90,13 +91,16 @@ export default async function Overview(context: any | unknown) {
                   </div>
                 </div>
                 <Image
-                  className="rounded-full border border-thePurple"
+                  className="border-thePurple rounded-full border"
                   src={isDone ? trophyButtonURL : playButtonURL}
                   alt="Action."
                 />
               </Link>
             );
           })}
+        </div>
+        <div>
+          <AddExercises/>
         </div>
       </section>
     </div>
