@@ -7,7 +7,7 @@ import {
   getDayOfWeek,
 } from "./utils/workoutVolume";
 import { SessionExercise } from "../types";
-import { workouts } from "../db/schema";
+import { workout_session_exercises, workouts } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getMyWorkouts(userId: string) {
@@ -148,4 +148,14 @@ export async function editWorkout(
     .update(workouts)
     .set({ name, repeatStart, repeatEnd, repeatOn, updatedAt: new Date() })
     .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)));
+}
+
+export async function addWorkoutExercise(
+  userId: string,
+  workoutId: number,
+  exerciseId: number,
+) {
+  await db
+    .insert(workout_session_exercises)
+    .values({ userId, workoutId, exerciseId });
 }

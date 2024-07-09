@@ -10,9 +10,15 @@ import {
 } from "~/components/ui/dialog";
 import { getExercises } from "~/server/queries/exercises";
 
-import { ComboboxForm } from "./Exercises";
+import { ExerciseForm } from "./ExerciseForm";
 
-export async function AddExercises() {
+export async function AddExercises({
+  userId,
+  workoutId,
+}: {
+  userId: string;
+  workoutId: number;
+}) {
   const exercises = await getExercises();
 
   return (
@@ -27,13 +33,11 @@ export async function AddExercises() {
         <DialogHeader>
           <DialogTitle>Add Exercises</DialogTitle>
           <DialogDescription>
-            Add and remove exercises to your workout. Click save when you're
-            done.
+            Add an exercise to your workout. Click add when you're done.
           </DialogDescription>
         </DialogHeader>
 
-        <ComboboxForm exercises={exercises}/>
-
+        <ExerciseForm userId={userId} workoutId={workoutId} exercises={exercises} />
       </DialogContent>
     </Dialog>
   );

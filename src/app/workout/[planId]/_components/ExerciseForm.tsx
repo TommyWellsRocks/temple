@@ -18,7 +18,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,20 +29,7 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { Exercises } from "~/server/types";
-import { Separator } from "~/components/ui/separator";
-import { ScrollArea } from "~/components/ui/scroll-area";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
+import { handleAddExercise } from "./ServerComponents";
 
 const FormSchema = z.object({
   exercise: z.string({
@@ -51,13 +37,21 @@ const FormSchema = z.object({
   }),
 });
 
-export function ComboboxForm({ exercises }: { exercises: Exercises }) {
+export function ExerciseForm({
+  userId,
+  workoutId,
+  exercises,
+}: {
+  userId: string;
+  workoutId: number;
+  exercises: Exercises;
+}) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    handleAddExercise(userId, workoutId, Number(data.exercise));
   }
 
   return (

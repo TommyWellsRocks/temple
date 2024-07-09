@@ -100,7 +100,7 @@ export default async function Overview(context: any | unknown) {
           })}
         </div>
         <div>
-          <AddExercises/>
+          <AddExercises userId={session.user!.id!} workoutId={Number(planId)} />
         </div>
       </section>
     </div>
