@@ -92,9 +92,9 @@ export async function getExerciseAnalytics(
           eq(model.userId, userId),
           eq(model.exerciseId, exerciseId),
           ne(model.workoutId, currentSessionExercise.workoutId),
-          lt(model.createdAt, currentSessionExercise.updatedAt)
+          lt(model.createdAt, currentSessionExercise.updatedAt),
         ),
-      orderBy: (model, { desc }) => desc(model.updatedAt)
+      orderBy: (model, { desc }) => desc(model.updatedAt),
     });
 
   const lastSession = lastSessionExercise
@@ -172,6 +172,23 @@ export async function deleteWorkoutExercise(
         eq(workout_session_exercises.userId, userId),
         eq(workout_session_exercises.workoutId, workoutId),
         eq(workout_session_exercises.exerciseId, exerciseId),
+      ),
+    );
+}
+
+export async function updateExerciseInput(
+  userId: string,
+  sessionExerciseId: number,
+  updateType: "Reps" | "Weight",
+  newValues: number[],
+) {
+  await db
+    .update(workout_session_exercises)
+    .set(updateType === "Reps" ? { reps: newValues } : { weight: newValues })
+    .where(
+      and(
+        eq(workout_session_exercises.userId, userId),
+        eq(workout_session_exercises.id, sessionExerciseId),
       ),
     );
 }
