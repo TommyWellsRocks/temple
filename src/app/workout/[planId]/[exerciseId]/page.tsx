@@ -4,16 +4,17 @@ import { getExerciseAnalytics, getWorkout } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { InputRows } from "./_components/InputRows";
+import { EditSets } from "./_components/EditSets";
 
 export default async function Individual(context: any | unknown) {
   const session = await auth();
-  if (!session || !session.user) return redirect("/signin");
+  if (!session || !session.user || !session.user.id) return redirect("/signin");
 
   const { planId, exerciseId } = context.params as {
     planId: string;
     exerciseId: string;
   };
-  const workoutPlan = await getWorkout(session.user.id!, Number(planId));
+  const workoutPlan = await getWorkout(session.user.id, Number(planId));
   if (!workoutPlan) return "INVALID PLAN";
 
   const exerciseIndex = workoutPlan.sessionExercises.findIndex(
@@ -25,7 +26,7 @@ export default async function Individual(context: any | unknown) {
   const setCount = sessionExercise.reps.length;
 
   const [lastSessionVolume, currentSessionVolume] = (await getExerciseAnalytics(
-    session.user.id!,
+    session.user.id,
     Number(exerciseId),
     sessionExercise,
   )) as number[][];
@@ -51,30 +52,22 @@ export default async function Individual(context: any | unknown) {
           <InputRows sessionExercise={sessionExercise} />
         </div>
         <div className="flex gap-x-5">
-          <div
-            className="flex h-11 w-11 cursor-pointer items-center justify-center bg-gray-600 "
-            style={{
-              clipPath:
-                "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
-            }}
-          >
-            +
-          </div>
-          <div
-            className="flex h-11 w-11 cursor-pointer items-center justify-center bg-gray-600"
-            style={{
-              clipPath:
-                "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
-            }}
-          >
-            {"🗑️"}
-          </div>
+          <EditSets
+            method="Add"
+            userId={session.user.id}
+            sessionExercise={sessionExercise}
+          />
+          <EditSets
+            method="Delete"
+            userId={session.user.id}
+            sessionExercise={sessionExercise}
+          />
         </div>
       </section>
 
       <section>
         <div className="mb-2 flex justify-between rounded-xl bg-black bg-opacity-40 p-0.5 text-base font-normal">
-          <div className="bg-primary cursor-pointer rounded-xl px-5 py-1 font-medium">
+          <div className="cursor-pointer rounded-xl bg-primary px-5 py-1 font-medium">
             Notes
           </div>
           <div className="cursor-pointer px-3 py-1">Tips</div>

@@ -192,3 +192,20 @@ export async function updateExerciseInput(
       ),
     );
 }
+
+export async function editSets(
+  userId: string,
+  sessionExerciseId: number,
+  repValues: number[],
+  weightValues: number[],
+) {
+  await db
+    .update(workout_session_exercises)
+    .set({ reps: repValues, weight: weightValues })
+    .where(
+      and(
+        eq(workout_session_exercises.userId, userId),
+        eq(workout_session_exercises.id, sessionExerciseId),
+      ),
+    );
+}

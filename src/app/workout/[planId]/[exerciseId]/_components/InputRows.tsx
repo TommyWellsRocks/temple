@@ -15,7 +15,7 @@ export function InputRows({
     "flex h-11 w-11 items-center justify-center bg-primary font-semibold text-black";
 
   return sessionExercise.reps.map((repCount, index) => {
-    const setCountBox = useRef<HTMLInputElement>(null);
+    // const setCountBox = useRef<HTMLInputElement>(null);
 
     return (
       <div
@@ -24,7 +24,7 @@ export function InputRows({
       >
         <div
           className={setCountBoxClassDefault}
-          ref={setCountBox}
+          // ref={setCountBox}
           style={{
             clipPath:
               "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
@@ -37,10 +37,10 @@ export function InputRows({
           type="number"
           defaultValue={repCount}
           onFocus={() => {
-            setCountBox.current!.className = setCountBoxClassFocus;
+            // setCountBox.current!.className = setCountBoxClassFocus;
           }}
           onBlur={(e) => {
-            setCountBox.current!.className = setCountBoxClassDefault;
+            // setCountBox.current!.className = setCountBoxClassDefault;
 
             let newValue = e.target.valueAsNumber;
             if (newValue < 0) {
@@ -70,10 +70,10 @@ export function InputRows({
           type="number"
           defaultValue={sessionExercise.weight[index]}
           onFocus={() => {
-            setCountBox.current!.className = setCountBoxClassFocus;
+            // setCountBox.current!.className = setCountBoxClassFocus;
           }}
           onBlur={(e) => {
-            setCountBox.current!.className = setCountBoxClassDefault;
+            // setCountBox.current!.className = setCountBoxClassDefault;
 
             let newValue = e.target.valueAsNumber;
             if (newValue < 0) {

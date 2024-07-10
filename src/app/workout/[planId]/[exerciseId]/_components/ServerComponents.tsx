@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { updateExerciseInput } from "~/server/queries/workouts";
+import { editSets, updateExerciseInput } from "~/server/queries/workouts";
 
 export async function handleInput(
   userId: string,
@@ -12,5 +12,17 @@ export async function handleInput(
   newValues: number[],
 ) {
   await updateExerciseInput(userId, sessionExerciseId, method, newValues);
+  revalidatePath(`/workout/${workoutId}/${exerciseId}`);
+}
+
+export async function handleEditSets(
+  userId: string,
+  workoutId: number,
+  exerciseId: number,
+  sessionExerciseId: number,
+  repValues: number[],
+  weightValues: number[],
+) {
+  await editSets(userId, sessionExerciseId, repValues, weightValues);
   revalidatePath(`/workout/${workoutId}/${exerciseId}`);
 }
