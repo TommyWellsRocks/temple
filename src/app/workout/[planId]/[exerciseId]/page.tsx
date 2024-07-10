@@ -23,7 +23,7 @@ export default async function Individual(context: any | unknown) {
   const exerciseInfo = sessionExercise.info;
   const setCount = sessionExercise.reps.length;
 
-  const [lastSessionVolume, currentSessionVolume, things] = (await getExerciseAnalytics(
+  const [lastSessionVolume, currentSessionVolume] = (await getExerciseAnalytics(
     session.user.id!,
     Number(exerciseId),
     sessionExercise,
@@ -32,10 +32,6 @@ export default async function Individual(context: any | unknown) {
   return (
     <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
       <Nav exerciseName={exerciseInfo.name} planId={planId} />
-
-      Things: {things}
-      ExerciseId: {exerciseId}
-      WorkoutId: {planId}
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
