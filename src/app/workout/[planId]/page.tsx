@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { AddExercises } from "./_components/AddExercises";
 import { DeleteExercise } from "./_components/DeleteExercise";
-import { Exercises } from "~/server/types";
 
 export default async function Overview(context: any | unknown) {
   const session = await auth();
@@ -21,7 +20,9 @@ export default async function Overview(context: any | unknown) {
   const exercises = workoutPlan.sessionExercises;
 
   const [lastWeek, thisWeek] = await getWeekAnalytics(session.user.id!);
-  let doneCount = 0;
+  const doneCount = exercises.filter(
+    (exercise) => !exercise.reps.includes(0),
+  ).length;
 
   return (
     <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
@@ -41,7 +42,7 @@ export default async function Overview(context: any | unknown) {
           {exercises.map(async (exercise) => {
             return (
               <Image
-                className="w-15 border-thePurple rounded-lg border bg-white p-0.5"
+                className="w-15 border-primary rounded-lg border bg-white p-0.5"
                 src={
                   exercise.info.targetMuscleImages
                     ? (exercise.info.targetMuscleImages[0] as string)
@@ -66,11 +67,11 @@ export default async function Overview(context: any | unknown) {
 
         <div className="flex flex-col gap-y-3">
           {exercises.map(async (exercise) => {
-            const isDone = exercise.reps.includes(0);
+            const isDone = !exercise.reps.includes(0);
 
             return (
               <Link
-                className={`flex cursor-pointer items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneBlack" : "bg-secondaryBackground"}`}
+                className={`flex cursor-pointer items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneDark" : "bg-undoneDark"}`}
                 href={`/workout/${workoutPlan.id}/${exercise.info.id}`}
               >
                 <div className="flex items-start gap-x-3">
@@ -93,7 +94,7 @@ export default async function Overview(context: any | unknown) {
                   </div>
                 </div>
                 <Image
-                  className="border-thePurple rounded-full border"
+                  className="border-primary rounded-full border"
                   src={isDone ? trophyButtonURL : playButtonURL}
                   alt="Action."
                 />

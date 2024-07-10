@@ -42,7 +42,11 @@ export function InputRows({
           onBlur={(e) => {
             setCountBox.current!.className = setCountBoxClassDefault;
 
-            const newValue = e.target.valueAsNumber;
+            let newValue = e.target.valueAsNumber;
+            if (newValue < 0) {
+              newValue = 0;
+              e.target.value = "0";
+            }
             const values = sessionExercise.reps;
             const currentTargetValue = values[index];
 
@@ -71,7 +75,11 @@ export function InputRows({
           onBlur={(e) => {
             setCountBox.current!.className = setCountBoxClassDefault;
 
-            const newValue = e.target.valueAsNumber;
+            let newValue = e.target.valueAsNumber;
+            if (newValue < 0) {
+              newValue = 0;
+              e.target.value = "0";
+            }
             const values = sessionExercise.weight;
             const currentTargetValue = values[index];
 

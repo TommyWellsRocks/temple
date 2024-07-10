@@ -20,6 +20,8 @@ const config = {
     },
     extend: {
       colors: {
+        doneDark: "rgba(0, 0, 0, 0.6)",
+        undoneDark: "rgb(64, 64, 64)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

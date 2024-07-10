@@ -74,7 +74,7 @@ export default async function Individual(context: any | unknown) {
 
       <section>
         <div className="mb-2 flex justify-between rounded-xl bg-black bg-opacity-40 p-0.5 text-base font-normal">
-          <div className="bg-thePurple cursor-pointer rounded-xl px-5 py-1 font-medium">
+          <div className="bg-primary cursor-pointer rounded-xl px-5 py-1 font-medium">
             Notes
           </div>
           <div className="cursor-pointer px-3 py-1">Tips</div>
