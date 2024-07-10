@@ -1,4 +1,3 @@
-// "use client"
 import Nav from "../../_components/Nav";
 import LineChart from "../../_components/Linechart";
 import { getExerciseAnalytics, getWorkout } from "~/server/queries/workouts";
@@ -6,7 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 
 export default async function Individual(context: any | unknown) {
-  const session = auth();
+  const session = await auth();
   if (!session?.user) return redirect("/signin");
 
   const { planId, exerciseId } = context.params as {
@@ -24,7 +23,7 @@ export default async function Individual(context: any | unknown) {
   const exerciseInfo = sessionExercise.info;
   const setCount = sessionExercise.reps.length;
 
-  const [lastSessionVolume, currentSessionVolume] = (await getExerciseAnalytics(
+  const [lastSessionVolume, currentSessionVolume, things] = (await getExerciseAnalytics(
     session.user.id!,
     Number(exerciseId),
     sessionExercise,
@@ -33,6 +32,10 @@ export default async function Individual(context: any | unknown) {
   return (
     <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
       <Nav exerciseName={exerciseInfo.name} planId={planId} />
+
+      Things: {things}
+      ExerciseId: {exerciseId}
+      WorkoutId: {planId}
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -98,7 +101,7 @@ export default async function Individual(context: any | unknown) {
 
       <section>
         <div className="mb-2 flex justify-between rounded-xl bg-black bg-opacity-40 p-0.5 text-base font-normal">
-          <div className="cursor-pointer rounded-xl bg-thePurple px-5 py-1 font-medium">
+          <div className="bg-thePurple cursor-pointer rounded-xl px-5 py-1 font-medium">
             Notes
           </div>
           <div className="cursor-pointer px-3 py-1">Tips</div>

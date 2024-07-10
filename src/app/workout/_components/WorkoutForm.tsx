@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Workout } from "~/server/types";
+import { handleDeleteWorkout } from "./ServerComponents";
 
 export const formSchema = z.object({
   name: z
@@ -44,7 +45,12 @@ export function WorkoutForm({
   onSubmitFunction,
   currentInfo,
 }: {
-  onSubmitFunction: SubmitHandler<{ name: string; repeat?: number[] | undefined; start?: Date | undefined; end?: Date | undefined; }>;
+  onSubmitFunction: SubmitHandler<{
+    name: string;
+    repeat?: number[] | undefined;
+    start?: Date | undefined;
+    end?: Date | undefined;
+  }>;
   currentInfo?: Workout;
 }) {
   const today = new Date();
@@ -103,7 +109,13 @@ export function WorkoutForm({
           render={() => (
             <FormItem>
               <FormLabel>Repeat</FormLabel>
-              <div className="grid grid-cols-3 gap-y-4">
+              <div
+                className={
+                  currentInfo
+                    ? "grid grid-cols-2 gap-y-2"
+                    : "grid grid-cols-3 gap-y-4"
+                }
+              >
                 {days.map((day) => (
                   <FormField
                     key={day.id}
@@ -228,6 +240,18 @@ export function WorkoutForm({
         />
 
         <DialogFooter>
+          {!currentInfo ? null : (
+            <Button
+              className="mr-auto"
+              variant={"destructive"}
+              type="button"
+              onClick={() =>
+                handleDeleteWorkout(currentInfo.userId, currentInfo.id)
+              }
+            >
+              Delete
+            </Button>
+          )}
           <Button type="submit">{currentInfo ? "Edit" : "Create"}</Button>
         </DialogFooter>
       </form>

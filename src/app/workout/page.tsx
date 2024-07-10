@@ -42,7 +42,7 @@ export default async function MyWorkouts() {
                     {workout.name.slice(0, 12)}
                     <EditWorkout
                       userId={session.user!.id!}
-                      currentInfo={ workout }
+                      currentInfo={workout}
                     />
                   </div>
                 </div>

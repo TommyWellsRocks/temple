@@ -59,6 +59,12 @@ export async function createWorkout(
     .values({ userId, name, repeatStart, repeatEnd, repeatOn });
 }
 
+export async function deleteWorkout(userId: string, workoutId: number) {
+  await db
+    .delete(workouts)
+    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)));
+}
+
 export async function getWorkout(userId: string, planId: number) {
   return await db.query.workouts.findFirst({
     where: (model, { and, eq }) =>
@@ -77,7 +83,7 @@ export async function getWorkout(userId: string, planId: number) {
 export async function getExerciseAnalytics(
   userId: string,
   exerciseId: number,
-  sessionExercise: SessionExercise,
+  currentSessionExercise: SessionExercise,
 ) {
   const today = new Date();
   const lastWorkout = await db.query.workouts.findFirst({
@@ -91,18 +97,23 @@ export async function getExerciseAnalytics(
     },
   });
 
-  let lastSession: number[];
-  if (lastWorkout) {
-    const index = lastWorkout.sessionExercises.findIndex(
-      (item) => item.exerciseId === exerciseId,
-    );
-    lastSession = calculateExerciseVolume(lastWorkout.sessionExercises[index]!);
-  } else {
-    lastSession = [0];
-  }
-  const currentSession = calculateExerciseVolume(sessionExercise);
+  // let lastSession: number[];
+  const lastSession = [0];
+  // lastWorkout !== undefined
+  // ?
+  // calculateExerciseVolume(
+  //   lastWorkout.sessionExercises.find(
+  //     (thing) => thing.exerciseId === exerciseId,
+  //   ),
+  // )
+  // : [0];
 
-  return [lastSession, currentSession];
+  const things = lastWorkout.id;
+  // lastWorkout?.sessionExercises.find((thing) => thing.exerciseId === exerciseId)
+
+  const currentSession = calculateExerciseVolume(currentSessionExercise);
+
+  return [lastSession, currentSession, things];
 }
 
 export async function getWeekAnalytics(userId: string) {

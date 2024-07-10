@@ -1,7 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createWorkout, editWorkout } from "~/server/queries/workouts";
+import {
+  createWorkout,
+  deleteWorkout,
+  editWorkout,
+} from "~/server/queries/workouts";
 
 export async function handleCreateWorkout(
   userId: string,
@@ -10,7 +14,13 @@ export async function handleCreateWorkout(
   repeatEnd: Date | undefined,
   repeatOn: number[] | undefined,
 ) {
-  await createWorkout(userId, name, repeatStart ? repeatStart.toISOString() : null, repeatEnd ? repeatEnd.toISOString() : null, repeatOn ? repeatOn : null);
+  await createWorkout(
+    userId,
+    name,
+    repeatStart ? repeatStart.toISOString() : null,
+    repeatEnd ? repeatEnd.toISOString() : null,
+    repeatOn ? repeatOn : null,
+  );
   revalidatePath("/workout");
 }
 
@@ -22,6 +32,18 @@ export async function handleEditWorkout(
   repeatEnd: Date | undefined,
   repeatOn: number[] | undefined,
 ) {
-  await editWorkout(userId, workoutId, name, repeatStart ? repeatStart.toISOString() : null, repeatEnd ? repeatEnd.toISOString() : null, repeatOn ? repeatOn : null);
+  await editWorkout(
+    userId,
+    workoutId,
+    name,
+    repeatStart ? repeatStart.toISOString() : null,
+    repeatEnd ? repeatEnd.toISOString() : null,
+    repeatOn ? repeatOn : null,
+  );
+  revalidatePath("/workout");
+}
+
+export async function handleDeleteWorkout(userId: string, workoutId: number) {
+  await deleteWorkout(userId, workoutId);
   revalidatePath("/workout");
 }

@@ -155,10 +155,10 @@ export const exercise_notes = createTable(
     id: serial("id").primaryKey(),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     exerciseId: integer("exercise_id")
       .notNull()
-      .references(() => exercises.id),
+      .references(() => exercises.id, {onDelete: 'cascade'}),
     notes: varchar("notes").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -178,7 +178,7 @@ export const workouts = createTable(
     id: serial("id").primaryKey(),
     userId: varchar("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     name: varchar("name").default("New Plan").notNull(),
     repeatStart: date("repeat_start_date"),
     repeatEnd: date("repeat_end_date"),
@@ -201,13 +201,13 @@ export const workout_session_exercises = createTable(
     id: serial("id").primaryKey(),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     workoutId: integer("workout_id")
       .notNull()
-      .references(() => workouts.id),
+      .references(() => workouts.id, { onDelete: "cascade" }),
     exerciseId: integer("exercise_id")
       .notNull()
-      .references(() => exercises.id),
+      .references(() => exercises.id, { onDelete: "cascade" }),
     reps: integer("reps")
       .array()
       .default(sql`ARRAY[0,0,0,0]::integer[]`)
@@ -235,7 +235,7 @@ export const weigh_ins = createTable(
     id: serial("id").primaryKey(),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     picture: varchar("picture"),
     video: varchar("video"),
     dailyMacros: jsonb("daily_macros").$type<DailyMacros>(),
