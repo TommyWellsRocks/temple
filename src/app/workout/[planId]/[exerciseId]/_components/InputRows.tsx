@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import { handleInput } from "./ServerComponents";
 import { SessionExercise } from "~/server/types";
 
@@ -9,22 +8,19 @@ export function InputRows({
 }: {
   sessionExercise: SessionExercise;
 }) {
-  const setCountBoxClassDefault =
+  const countBoxClassDefault =
     "flex h-11 w-11 items-center justify-center bg-gray-600 font-semibold text-gray-900";
-  const setCountBoxClassFocus =
+  const countBoxClassFocus =
     "flex h-11 w-11 items-center justify-center bg-primary font-semibold text-black";
 
   return sessionExercise.reps.map((repCount, index) => {
-    // const setCountBox = useRef<HTMLInputElement>(null);
-
     return (
       <div
         className="flex items-center gap-x-3 text-2xl font-light text-gray-600"
         key={index}
       >
         <div
-          className={setCountBoxClassDefault}
-          // ref={setCountBox}
+          className={countBoxClassDefault}
           style={{
             clipPath:
               "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
@@ -36,11 +32,13 @@ export function InputRows({
           className="w-12 cursor-pointer text-center"
           type="number"
           defaultValue={repCount}
-          onFocus={() => {
-            // setCountBox.current!.className = setCountBoxClassFocus;
+          onFocus={(e) => {
+            const countBox = e.currentTarget.parentNode!.firstElementChild!;
+            countBox.className = countBoxClassFocus;
           }}
           onBlur={(e) => {
-            // setCountBox.current!.className = setCountBoxClassDefault;
+            const countBox = e.currentTarget.parentNode!.firstElementChild!;
+            countBox.className = countBoxClassDefault;
 
             let newValue = e.target.valueAsNumber;
             if (newValue < 0) {
@@ -69,11 +67,13 @@ export function InputRows({
           className="w-16 cursor-pointer text-center"
           type="number"
           defaultValue={sessionExercise.weight[index]}
-          onFocus={() => {
-            // setCountBox.current!.className = setCountBoxClassFocus;
+          onFocus={(e) => {
+            const countBox = e.currentTarget.parentNode!.firstElementChild!;
+            countBox.className = countBoxClassFocus;
           }}
           onBlur={(e) => {
-            // setCountBox.current!.className = setCountBoxClassDefault;
+            const countBox = e.currentTarget.parentNode!.firstElementChild!;
+            countBox.className = countBoxClassDefault;
 
             let newValue = e.target.valueAsNumber;
             if (newValue < 0) {
