@@ -97,5 +97,17 @@ export interface Exercise {
   updatedAt: Date;
 }
 
+export interface WorkoutExercise extends SessionExercise {
+  notes: {
+    updatedAt: Date;
+    exerciseId: number;
+    id: number;
+    createdAt: Date;
+    userId: string;
+    notes: string;
+  };
+  info: Exercise;
+}
+
 export type Workout = Awaited<ReturnType<typeof getWorkout>>;
-export type Exercises = Awaited<ReturnType<typeof getExercises>>
+export type Exercises = Awaited<ReturnType<typeof getExercises>>;

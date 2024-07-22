@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { InputRows } from "./_components/InputRows";
 import { EditSets } from "./_components/EditSets";
+import { ExerciseTabs } from "./_components/ExerciseTab";
 
 export default async function Individual(context: any | unknown) {
   const session = await auth();
@@ -65,19 +66,7 @@ export default async function Individual(context: any | unknown) {
         </div>
       </section>
 
-      <section>
-        <div className="mb-2 flex justify-between rounded-xl bg-black bg-opacity-40 p-0.5 text-base font-normal">
-          <div className="cursor-pointer rounded-xl bg-primary px-5 py-1 font-medium">
-            Notes
-          </div>
-          <div className="cursor-pointer px-3 py-1">Tips</div>
-          <div className="cursor-pointer px-3 py-1">Instructions</div>
-          <div className="cursor-pointer px-3 py-1">Muscles</div>
-        </div>
-        <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
-          {"Notes here"}
-        </div>
-      </section>
+      <ExerciseTabs exercise={sessionExercise} />
     </div>
   );
 }

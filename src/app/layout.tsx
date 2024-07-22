@@ -2,7 +2,6 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 
-import { TRPCReactProvider } from "~/trpc/react";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/server/auth";
 import { ThemeProvider } from "~/components/theme-provider";
@@ -29,7 +28,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            {children}
           </ThemeProvider>
         </SessionProvider>
       </body>
