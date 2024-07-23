@@ -30,9 +30,6 @@ import { handleDeleteWorkout } from "./ServerComponents";
 export const formSchema = z.object({
   name: z
     .string()
-    .min(2, {
-      message: "Program name must be at least 2 characters.",
-    })
     .max(20, {
       message: "Program name must be less than 20 characters.",
     }),
