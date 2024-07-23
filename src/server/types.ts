@@ -62,7 +62,7 @@ export interface DailyMacros {
 export interface SessionExercise {
   id: number;
   userId: string;
-  workoutId: number;
+  dayId: number;
   exerciseId: number;
   reps: number[];
   weight: number[];

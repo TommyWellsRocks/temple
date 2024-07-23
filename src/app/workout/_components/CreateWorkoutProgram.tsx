@@ -10,18 +10,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { WorkoutForm, formSchema } from "./WorkoutForm";
-import { z } from "zod";
-import { handleCreateWorkout } from "./ServerComponents";
 
-export function CreateWorkout({ userId }: { userId: string }) {
+import { z } from "zod";
+import { handleCreateWorkoutProgram } from "./ServerComponents";
+import { ProgramForm, formSchema } from "./ProgramForm";
+
+export function CreateWorkoutProgram({ userId }: { userId: string }) {
   function handleCreate(values: z.infer<typeof formSchema>) {
-    handleCreateWorkout(
+    handleCreateWorkoutProgram(
       userId,
       values.name,
       values.start,
       values.end,
-      values.repeat,
     );
   }
 
@@ -35,13 +35,13 @@ export function CreateWorkout({ userId }: { userId: string }) {
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Workout</DialogTitle>
+          <DialogTitle>Create Workout Program</DialogTitle>
           <DialogDescription>
-            Build and plan your new workout. Click create when you're done.
+            Build and plan your new workout program. Click create when you're done.
           </DialogDescription>
         </DialogHeader>
 
-        <WorkoutForm onSubmitFunction={handleCreate} />
+        <ProgramForm onSubmitFunction={handleCreate} />
       </DialogContent>
     </Dialog>
   );

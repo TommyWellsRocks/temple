@@ -3,31 +3,33 @@ import Link from "next/link";
 import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { getMyWorkouts } from "~/server/queries/workouts";
-import { CreateWorkout } from "./_components/CreateWorkout";
-import { EditWorkout } from "./_components/EditWorkout";
+import { getMyWorkoutPrograms } from "~/server/queries/workouts";
+import { CreateWorkoutProgram } from "./_components/CreateWorkoutProgram";
+import { EditWorkoutProgram } from "./_components/EditWorkoutProgram";
 
 export default async function MyWorkouts() {
   const session = await auth();
-  if (!session) return redirect("/signin");
+  if (!session || !session.user || !session.user.id) return redirect("/signin");
 
-  const workouts = await getMyWorkouts(session.user!.id!);
+  const workoutPrograms = await getMyWorkoutPrograms(session.user.id);
 
   return (
     <main>
       <section className="flex items-center justify-between">
-        <h1>WORKOUTS GO HERE:</h1>
-        <CreateWorkout userId={session.user!.id!} />
+        <h1>MY WORKOUT PROGRAMS GO HERE:</h1>
+        <CreateWorkoutProgram userId={session.user.id} />
       </section>
 
       <section>
-        {workouts.length ? (
+        {!workoutPrograms.length ? (
+          <div>No workout programs to show 😫</div>
+        ) : (
           <div className="flex items-start gap-5">
-            {workouts.map((workout) => {
+            {workoutPrograms.map((program) => {
               return (
                 <div>
                   <Link
-                    href={`/workout/${workout.id}`}
+                    href={`/workout/${program.id}`}
                     className="flex flex-col items-center"
                   >
                     <Image
@@ -39,18 +41,16 @@ export default async function MyWorkouts() {
                     />
                   </Link>
                   <div className="flex justify-center gap-1.5 align-middle">
-                    {workout.name.slice(0, 12)}
-                    <EditWorkout
+                    {program.name.slice(0, 12)}
+                    <EditWorkoutProgram
                       userId={session.user!.id!}
-                      currentInfo={workout}
+                      currentInfo={program}
                     />
                   </div>
                 </div>
               );
             })}
           </div>
-        ) : (
-          <div>No workouts to show 😫</div>
         )}
       </section>
     </main>

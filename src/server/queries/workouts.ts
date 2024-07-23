@@ -7,95 +7,153 @@ import {
   getDayOfWeek,
 } from "./utils/workoutVolume";
 import { SessionExercise } from "../types";
-import { workout_session_exercises, workouts } from "../db/schema";
+import {
+  workoutDayExercises,
+  workoutProgramDays,
+  workoutPrograms,
+} from "../db/schema";
 import { and, eq } from "drizzle-orm";
 
-export async function getMyWorkouts(userId: string) {
-  return await db.query.workouts.findMany({
+export async function getMyWorkoutPrograms(userId: string) {
+  return await db.query.workoutPrograms.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.updatedAt),
-    with: {
-      sessionExercises: {
-        with: {
-          info: true,
-          notes: true,
-        },
-      },
-    },
   });
 }
 
-export async function getTodaysWorkout(userId: string) {
-  const today = new Date();
-  const todayString = String(today);
-  return await db.query.workouts.findFirst({
-    where: (model, { and, eq, gte, lte, sql }) =>
-      and(
-        eq(model.userId, userId),
-        lte(model.repeatStart, todayString),
-        gte(model.repeatEnd, todayString),
-        sql`${model.repeatOn} @> {${today.getDay()}}`,
-      ),
-    with: {
-      sessionExercises: {
-        with: {
-          info: true,
-          notes: true,
-        },
-      },
-    },
-  });
-}
-
-export async function createWorkout(
+export async function createWorkoutProgram(
   userId: string,
   name: string,
-  repeatStart: string | null,
-  repeatEnd: string | null,
-  repeatOn: number[] | null,
+  repeatStart: string,
+  repeatEnd: string,
 ) {
-  await db
-    .insert(workouts)
-    .values({ userId, name, repeatStart, repeatEnd, repeatOn });
-}
-
-export async function deleteWorkout(userId: string, workoutId: number) {
-  await db
-    .delete(workouts)
-    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)));
-}
-
-export async function getWorkout(userId: string, planId: number) {
-  return await db.query.workouts.findFirst({
-    where: (model, { and, eq }) =>
-      and(eq(model.userId, userId), eq(model.id, planId)),
-    with: {
-      sessionExercises: {
-        with: {
-          info: true,
-          notes: true,
-        },
-      },
-    },
+  await db.insert(workoutPrograms).values({
+    userId,
+    name,
+    repeatStart,
+    repeatEnd,
   });
 }
+
+export async function editWorkoutProgram(
+  userId: string,
+  programId: number,
+  name: string,
+  repeatStart: string,
+  repeatEnd: string,
+) {
+  await db
+    .update(workoutPrograms)
+    .set({ name, repeatStart, repeatEnd, updatedAt: new Date() })
+    .where(
+      and(
+        eq(workoutPrograms.userId, userId),
+        eq(workoutPrograms.id, programId),
+      ),
+    );
+}
+
+export async function deleteWorkoutProgram(userId: string, programId: number) {
+  await db
+    .delete(workoutPrograms)
+    .where(
+      and(
+        eq(workoutPrograms.userId, userId),
+        eq(workoutPrograms.id, programId),
+      ),
+    );
+}
+
+// export async function getMyWorkouts(userId: string) {
+//   return await db.query.workoutProgramDays.findMany({
+//     where: (model, { eq }) => eq(model.userId, userId),
+//     orderBy: (model, { desc }) => desc(model.updatedAt),
+//     with: {
+//       sessionExercises: {
+//         with: {
+//           info: true,
+//           notes: true,
+//         },
+//       },
+//     },
+//   });
+// }
+
+// export async function getTodaysWorkout(userId: string) {
+//   const today = new Date();
+//   const todayString = String(today);
+//   return await db.query.workoutProgramDays.findFirst({
+//     where: (model, { and, eq, gte, lte, sql }) =>
+//       and(
+//         eq(model.userId, userId),
+//         lte(model.repeatStart, todayString),
+//         gte(model.repeatEnd, todayString),
+//         sql`${model.repeatOn} @> {${today.getDay()}}`,
+//       ),
+//     with: {
+//       sessionExercises: {
+//         with: {
+//           info: true,
+//           notes: true,
+//         },
+//       },
+//     },
+//   });
+// }
+
+// export async function createWorkout(
+//   userId: string,
+//   name: string,
+//   repeatStart: string | null,
+//   repeatEnd: string | null,
+//   repeatOn: number[] | null,
+// ) {
+//   await db
+//     .insert(workoutProgramDays)
+//     .values({ userId, name, repeatStart, repeatEnd, repeatOn });
+// }
+
+// export async function deleteWorkout(userId: string, workoutId: number) {
+//   await db
+//     .delete(workoutProgramDays)
+//     .where(
+//       and(
+//         eq(workoutProgramDays.userId, userId),
+//         eq(workoutProgramDays.id, workoutId),
+//       ),
+//     );
+// }
+
+// export async function getWorkout(userId: string, planId: number) {
+//   return await db.query.workoutProgramDays.findFirst({
+//     where: (model, { and, eq }) =>
+//       and(eq(model.userId, userId), eq(model.id, planId)),
+//     with: {
+//       sessionExercises: {
+//         with: {
+//           info: true,
+//           notes: true,
+//         },
+//       },
+//     },
+//   });
+// }
 
 export async function getExerciseAnalytics(
   userId: string,
   exerciseId: number,
   currentSessionExercise: SessionExercise,
 ) {
-  const lastSessionExercise =
-    await db.query.workout_session_exercises.findFirst({
-      where: (model, { and, eq, ne, lt }) =>
-        and(
-          eq(model.userId, userId),
-          eq(model.exerciseId, exerciseId),
-          ne(model.workoutId, currentSessionExercise.workoutId),
-          lt(model.createdAt, currentSessionExercise.updatedAt),
-        ),
-      orderBy: (model, { desc }) => desc(model.updatedAt),
-    });
+  const lastSessionExercise = await db.query.workoutDayExercises.findFirst({
+    where: (model, { and, eq, ne, lt }) =>
+      and(
+        eq(model.userId, userId),
+        eq(model.exerciseId, exerciseId),
+        ne(model.dayId, currentSessionExercise.dayId),
+        lt(model.createdAt, currentSessionExercise.updatedAt),
+      ),
+    orderBy: (model, { desc }) => desc(model.updatedAt),
+  });
 
   const lastSession = lastSessionExercise
     ? calculateExerciseVolume(lastSessionExercise)
@@ -108,14 +166,14 @@ export async function getExerciseAnalytics(
 export async function getWeekAnalytics(userId: string) {
   const [lastSun, lastSat, thisSun, thisSat] = getBetweenDays();
   const weekVolume = async (firstDay: Date, lastDay: Date) => {
-    const weekSessions = await db.query.workouts.findMany({
+    const weekSessions = await db.query.workoutProgramDays.findMany({
       where: (model, { and, eq, between }) =>
         and(
           eq(model.userId, userId),
           between(model.createdAt, firstDay, lastDay),
         ),
       with: {
-        sessionExercises: {
+        dayExercises: {
           where: (model, { ne }) => ne(model.reps, [0, 0, 0, 0]),
           with: { info: true, notes: true },
         },
@@ -124,7 +182,7 @@ export async function getWeekAnalytics(userId: string) {
 
     const weekVolume = [0, 0, 0, 0, 0, 0, 0];
     weekSessions.forEach((session) => {
-      const sessionVolume = calculateSessionVolume(session.sessionExercises);
+      const sessionVolume = calculateSessionVolume(session.dayExercises);
       const dayOfWeek = getDayOfWeek(session.createdAt);
       weekVolume[dayOfWeek]! += sessionVolume;
     });
@@ -136,76 +194,79 @@ export async function getWeekAnalytics(userId: string) {
   return [lastWeekVolume, thisWeekVolume];
 }
 
-export async function editWorkout(
-  userId: string,
-  workoutId: number,
-  name: string,
-  repeatStart: string | null,
-  repeatEnd: string | null,
-  repeatOn: number[] | null,
-) {
-  await db
-    .update(workouts)
-    .set({ name, repeatStart, repeatEnd, repeatOn, updatedAt: new Date() })
-    .where(and(eq(workouts.userId, userId), eq(workouts.id, workoutId)));
-}
+// export async function editWorkout(
+//   userId: string,
+//   workoutId: number,
+//   name: string,
+//   repeatStart: string | null,
+//   repeatEnd: string | null,
+//   repeatOn: number[] | null,
+// ) {
+//   await db
+//     .update(workoutProgramDays)
+//     .set({ name, repeatStart, repeatEnd, repeatOn, updatedAt: new Date() })
+//     .where(
+//       and(
+//         eq(workoutProgramDays.userId, userId),
+//         eq(workoutProgramDays.id, workoutId),
+//       ),
+//     );
+// }
 
-export async function addWorkoutExercise(
+export async function addDayExercise(
   userId: string,
-  workoutId: number,
+  dayId: number,
   exerciseId: number,
 ) {
-  await db
-    .insert(workout_session_exercises)
-    .values({ userId, workoutId, exerciseId });
+  await db.insert(workoutDayExercises).values({ userId, dayId, exerciseId });
 }
 
-export async function deleteWorkoutExercise(
+export async function deleteDayExercise(
   userId: string,
-  workoutId: number,
-  exerciseId: number,
+  dayId: number,
+  dayExerciseId: number,
 ) {
   await db
-    .delete(workout_session_exercises)
+    .delete(workoutDayExercises)
     .where(
       and(
-        eq(workout_session_exercises.userId, userId),
-        eq(workout_session_exercises.workoutId, workoutId),
-        eq(workout_session_exercises.exerciseId, exerciseId),
+        eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.dayId, dayId),
+        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }
 
-export async function updateExerciseInput(
+export async function updateDayExerciseInput(
   userId: string,
-  sessionExerciseId: number,
+  dayExerciseId: number,
   updateType: "Reps" | "Weight",
   newValues: number[],
 ) {
   await db
-    .update(workout_session_exercises)
+    .update(workoutDayExercises)
     .set(updateType === "Reps" ? { reps: newValues } : { weight: newValues })
     .where(
       and(
-        eq(workout_session_exercises.userId, userId),
-        eq(workout_session_exercises.id, sessionExerciseId),
+        eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }
 
-export async function editSets(
+export async function updateDayExerciseSets(
   userId: string,
-  sessionExerciseId: number,
+  dayExerciseId: number,
   repValues: number[],
   weightValues: number[],
 ) {
   await db
-    .update(workout_session_exercises)
+    .update(workoutDayExercises)
     .set({ reps: repValues, weight: weightValues })
     .where(
       and(
-        eq(workout_session_exercises.userId, userId),
-        eq(workout_session_exercises.id, sessionExerciseId),
+        eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }

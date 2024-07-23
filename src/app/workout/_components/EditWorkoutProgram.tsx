@@ -6,12 +6,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { formSchema, WorkoutForm } from "./WorkoutForm";
 import { z } from "zod";
-import { handleEditWorkout } from "./ServerComponents";
+import { handleEditWorkoutProgram } from "./ServerComponents";
 import { Workout } from "~/server/types";
+import { ProgramForm, formSchema } from "./ProgramForm";
 
-export function EditWorkout({
+export function EditWorkoutProgram({
   userId,
   currentInfo,
 }: {
@@ -19,13 +19,12 @@ export function EditWorkout({
   currentInfo: Workout;
 }) {
   function handleEdit(values: z.infer<typeof formSchema>) {
-    handleEditWorkout(
+    handleEditWorkoutProgram(
       userId,
-      currentInfo!.id,
+      currentInfo.id,
       values.name,
       values.start,
       values.end,
-      values.repeat,
     );
   }
 
@@ -40,12 +39,12 @@ export function EditWorkout({
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Edit Workout</h4>
+            <h4 className="font-medium leading-none">Edit Workout Program</h4>
             <p className="text-sm text-muted-foreground">
-              Remember to save when your done.
+              Remember to click edit when your done.
             </p>
           </div>
-          <WorkoutForm
+          <ProgramForm
             onSubmitFunction={handleEdit}
             currentInfo={currentInfo}
           />

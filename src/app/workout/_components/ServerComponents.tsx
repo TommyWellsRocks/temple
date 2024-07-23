@@ -2,48 +2,44 @@
 
 import { revalidatePath } from "next/cache";
 import {
-  createWorkout,
-  deleteWorkout,
-  editWorkout,
+  createWorkoutProgram,
+  editWorkoutProgram,
+  deleteWorkoutProgram,
 } from "~/server/queries/workouts";
 
-export async function handleCreateWorkout(
+export async function handleCreateWorkoutProgram(
   userId: string,
   name: string,
-  repeatStart: Date | undefined,
-  repeatEnd: Date | undefined,
-  repeatOn: number[] | undefined,
+  repeatStart: Date,
+  repeatEnd: Date,
 ) {
-  await createWorkout(
+  await createWorkoutProgram(
     userId,
     name,
-    repeatStart ? repeatStart.toISOString() : null,
-    repeatEnd ? repeatEnd.toISOString() : null,
-    repeatOn ? repeatOn : null,
+    repeatStart.toISOString(),
+    repeatEnd.toISOString(),
   );
   revalidatePath("/workout");
 }
 
-export async function handleEditWorkout(
+export async function handleEditWorkoutProgram(
   userId: string,
-  workoutId: number,
+  programId: number,
   name: string,
-  repeatStart: Date | undefined,
-  repeatEnd: Date | undefined,
-  repeatOn: number[] | undefined,
+  repeatStart: Date,
+  repeatEnd: Date,
 ) {
-  await editWorkout(
+  await editWorkoutProgram(
     userId,
-    workoutId,
+    programId,
     name,
-    repeatStart ? repeatStart.toISOString() : null,
-    repeatEnd ? repeatEnd.toISOString() : null,
-    repeatOn ? repeatOn : null,
+    repeatStart.toISOString(),
+    repeatEnd.toISOString(),
   );
   revalidatePath("/workout");
 }
 
 export async function handleDeleteWorkout(userId: string, workoutId: number) {
-  await deleteWorkout(userId, workoutId);
+  await deleteWorkoutProgram(userId, workoutId);
   revalidatePath("/workout");
 }
