@@ -12,19 +12,16 @@ import {
 } from "~/components/ui/dialog";
 
 import { z } from "zod";
-import { handleCreateWorkoutProgram } from "./ServerComponents";
-import { ProgramForm, formSchema } from "./ProgramForm";
+import { DayForm, formSchema } from "./DayForm";
+import { handleCreateDay } from "./ServerComponents";
 
-export function CreateWorkoutProgram({ userId }: { userId: string }) {
-  function handleCreate(values: z.infer<typeof formSchema>) {
-    handleCreateWorkoutProgram(
-      userId,
-      values.name,
-      values.start,
-      values.end,
-    );
-  }
-
+export function CreateDay({
+  userId,
+  programId,
+}: {
+  userId: string;
+  programId: number;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -35,13 +32,18 @@ export function CreateWorkoutProgram({ userId }: { userId: string }) {
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Workout Program</DialogTitle>
+          <DialogTitle>Create Day</DialogTitle>
           <DialogDescription>
-            Build and plan your new workout program. Click create when you're done.
+            Build and plan your new workout program. Click create when you're
+            done.
           </DialogDescription>
         </DialogHeader>
 
-        <ProgramForm onSubmitFunction={handleCreate} />
+        <DayForm
+          onSubmitFunction={(values: z.infer<typeof formSchema>) => {
+            handleCreateDay(userId, programId, values.name, values.repeatOn);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

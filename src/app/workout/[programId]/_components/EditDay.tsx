@@ -7,27 +7,17 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { z } from "zod";
-import { handleEditWorkoutProgram } from "./ServerComponents";
-import { Workout } from "~/server/types";
-import { ProgramForm, formSchema } from "./ProgramForm";
+import { handleEditProgramDay } from "./ServerComponents";
+import { ProgramDays } from "~/server/types";
+import { DayForm, formSchema } from "./DayForm";
 
-export function EditWorkoutProgram({
+export function EditDay({
   userId,
   currentInfo,
 }: {
   userId: string;
-  currentInfo: Workout;
+  currentInfo: ProgramDays[0];
 }) {
-  function handleEdit(values: z.infer<typeof formSchema>) {
-    handleEditWorkoutProgram(
-      userId,
-      currentInfo.id,
-      values.name,
-      values.start,
-      values.end,
-    );
-  }
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -39,13 +29,21 @@ export function EditWorkoutProgram({
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Edit Workout Program</h4>
+            <h4 className="font-medium leading-none">Edit Program Day</h4>
             <p className="text-sm text-muted-foreground">
               Remember to click edit when your done.
             </p>
           </div>
-          <ProgramForm
-            onSubmitFunction={handleEdit}
+          <DayForm
+            onSubmitFunction={(values: z.infer<typeof formSchema>) => {
+              handleEditProgramDay(
+                userId,
+                currentInfo.programId,
+                currentInfo.id,
+                values.name,
+                values.repeatOn,
+              );
+            }}
             currentInfo={currentInfo}
           />
         </div>

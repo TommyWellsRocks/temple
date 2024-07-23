@@ -1,16 +1,7 @@
 "use client";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { format, addDays } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "~/lib/utils";
-import { Calendar } from "~/components/ui/calendar";
 import { DialogFooter } from "~/components/ui/dialog";
 import { Checkbox } from "~/components/ui/checkbox";
 import { z } from "zod";
@@ -25,36 +16,27 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Workout } from "~/server/types";
-import { handleDeleteWorkout } from "./ServerComponents";
+import { handleDeleteWorkout } from "../../_components/ServerComponents";
 
 export const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(20, {
-      message: "Username must be less than 20 characters.",
-    }),
-  repeat: z.array(z.number()).optional(),
-  start: z.date().optional(),
-  end: z.date().optional(),
+  name: z.string().max(20, {
+    message: "Username must be less than 20 characters.",
+  }),
+  repeatOn: z.array(z.number()).optional(),
 });
 
-export function WorkoutForm({
+export function DayForm({
   onSubmitFunction,
   currentInfo,
 }: {
   onSubmitFunction: SubmitHandler<{
     name: string;
-    repeat?: number[] | undefined;
+    repeatOn?: number[] | undefined;
     start?: Date | undefined;
     end?: Date | undefined;
   }>;
   currentInfo?: Workout;
 }) {
-  const today = new Date();
-
   const days = [
     { day: "Sunday", id: 0 },
     { day: "Monday", id: 1 },
@@ -69,18 +51,10 @@ export function WorkoutForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: currentInfo ? currentInfo.name : undefined,
-      repeat:
+      repeatOn:
         currentInfo && currentInfo.repeatOn != null
           ? currentInfo.repeatOn
           : [1],
-      start:
-        currentInfo && currentInfo.repeatStart != null
-          ? new Date(currentInfo.repeatStart)
-          : today,
-      end:
-        currentInfo && currentInfo.repeatEnd != null
-          ? new Date(currentInfo.repeatEnd)
-          : addDays(today, 45),
     },
   });
 
@@ -105,7 +79,7 @@ export function WorkoutForm({
         />
         <FormField
           control={form.control}
-          name="repeat"
+          name="repeatOn"
           render={() => (
             <FormItem>
               <FormLabel>Repeat</FormLabel>
@@ -120,7 +94,7 @@ export function WorkoutForm({
                   <FormField
                     key={day.id}
                     control={form.control}
-                    name="repeat"
+                    name="repeatOn"
                     render={({ field }) => {
                       return (
                         <FormItem
@@ -153,87 +127,6 @@ export function WorkoutForm({
                   />
                 ))}
               </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="start"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Repeat Start</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-2/3 justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(field.value, "yyyy-MM-dd")
-                      ) : (
-                        <span>Start Date</span>
-                      )}
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    fromDate={today}
-                    toDate={form.getValues().end || undefined}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="end"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Repeat End</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-2/3 justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(field.value, "yyyy-MM-dd")
-                      ) : (
-                        <span>End Date</span>
-                      )}
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    fromDate={form.getValues().start || today}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
               <FormMessage />
             </FormItem>
           )}

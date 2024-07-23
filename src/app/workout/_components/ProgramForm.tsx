@@ -24,15 +24,13 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { Workout } from "~/server/types";
-import { handleDeleteWorkout } from "./ServerComponents";
+import { WorkoutPrograms } from "~/server/types";
+import { handleDeleteProgram } from "./ServerComponents";
 
 export const formSchema = z.object({
-  name: z
-    .string()
-    .max(20, {
-      message: "Program name must be less than 20 characters.",
-    }),
+  name: z.string().max(20, {
+    message: "Program name must be less than 20 characters.",
+  }),
   start: z.date(),
   end: z.date(),
 });
@@ -46,7 +44,7 @@ export function ProgramForm({
     start: Date;
     end: Date;
   }>;
-  currentInfo?: Workout;
+  currentInfo?: WorkoutPrograms[0];
 }) {
   const today = new Date();
 
@@ -69,7 +67,7 @@ export function ProgramForm({
     const differenceDays =
       (form.getValues().end?.getTime() - form.getValues().start?.getTime()) /
       (1000 * 3600 * 24);
-    const differenceWeeks = (differenceDays / 7);
+    const differenceWeeks = differenceDays / 7;
     return (
       <div>
         {differenceDays.toFixed()} Days | ~ {differenceWeeks.toFixed()} Weeks
@@ -191,7 +189,7 @@ export function ProgramForm({
                 variant={"destructive"}
                 type="button"
                 onClick={() =>
-                  handleDeleteWorkout(currentInfo.userId, currentInfo.id)
+                  handleDeleteProgram(currentInfo.userId, currentInfo.id)
                 }
               >
                 Delete

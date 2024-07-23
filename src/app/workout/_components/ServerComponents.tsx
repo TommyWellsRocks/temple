@@ -7,7 +7,7 @@ import {
   deleteWorkoutProgram,
 } from "~/server/queries/workouts";
 
-export async function handleCreateWorkoutProgram(
+export async function handleCreateProgram(
   userId: string,
   name: string,
   repeatStart: Date,
@@ -22,7 +22,7 @@ export async function handleCreateWorkoutProgram(
   revalidatePath("/workout");
 }
 
-export async function handleEditWorkoutProgram(
+export async function handleEditProgram(
   userId: string,
   programId: number,
   name: string,
@@ -39,7 +39,7 @@ export async function handleEditWorkoutProgram(
   revalidatePath("/workout");
 }
 
-export async function handleDeleteWorkout(userId: string, workoutId: number) {
-  await deleteWorkoutProgram(userId, workoutId);
+export async function handleDeleteProgram(userId: string, programId: number) {
+  await deleteWorkoutProgram(userId, programId);
   revalidatePath("/workout");
 }

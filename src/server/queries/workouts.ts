@@ -14,6 +14,7 @@ import {
 } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 
+// * Program
 export async function getMyWorkoutPrograms(userId: string) {
   return await db.query.workoutPrograms.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
@@ -64,20 +65,60 @@ export async function deleteWorkoutProgram(userId: string, programId: number) {
     );
 }
 
-// export async function getMyWorkouts(userId: string) {
-//   return await db.query.workoutProgramDays.findMany({
-//     where: (model, { eq }) => eq(model.userId, userId),
-//     orderBy: (model, { desc }) => desc(model.updatedAt),
-//     with: {
-//       sessionExercises: {
-//         with: {
-//           info: true,
-//           notes: true,
-//         },
-//       },
-//     },
-//   });
-// }
+// * Program Days
+export async function getProgramDays(userId: string, programId: number) {
+  return await db.query.workoutProgramDays.findMany({
+    where: (model, { and, eq }) =>
+      and(eq(model.userId, userId), eq(model.programId, programId)),
+    with: { dayExercises: true },
+  });
+}
+
+export async function createProgramDay(
+  userId: string,
+  programId: number,
+  name: string,
+  repeatOn: number[] | null,
+) {
+  await db
+    .insert(workoutProgramDays)
+    .values({ userId, programId, name, repeatOn });
+}
+
+export async function editProgramDay(
+  userId: string,
+  programId: number,
+  dayId: number,
+  name: string,
+  repeatOn: number[] | null,
+) {
+  await db
+    .update(workoutProgramDays)
+    .set({ name, repeatOn, updatedAt: new Date() })
+    .where(
+      and(
+        eq(workoutProgramDays.userId, userId),
+        eq(workoutProgramDays.programId, programId),
+        eq(workoutProgramDays.id, dayId),
+      ),
+    );
+}
+
+export async function deleteProgramDay(
+  userId: string,
+  programId: number,
+  dayId: number,
+) {
+  await db
+    .delete(workoutProgramDays)
+    .where(
+      and(
+        eq(workoutProgramDays.userId, userId),
+        eq(workoutProgramDays.programId, programId),
+        eq(workoutProgramDays.id, dayId),
+      ),
+    );
+}
 
 // export async function getTodaysWorkout(userId: string) {
 //   const today = new Date();
@@ -194,25 +235,7 @@ export async function getWeekAnalytics(userId: string) {
   return [lastWeekVolume, thisWeekVolume];
 }
 
-// export async function editWorkout(
-//   userId: string,
-//   workoutId: number,
-//   name: string,
-//   repeatStart: string | null,
-//   repeatEnd: string | null,
-//   repeatOn: number[] | null,
-// ) {
-//   await db
-//     .update(workoutProgramDays)
-//     .set({ name, repeatStart, repeatEnd, repeatOn, updatedAt: new Date() })
-//     .where(
-//       and(
-//         eq(workoutProgramDays.userId, userId),
-//         eq(workoutProgramDays.id, workoutId),
-//       ),
-//     );
-// }
-
+// * Day Exercise
 export async function addDayExercise(
   userId: string,
   dayId: number,

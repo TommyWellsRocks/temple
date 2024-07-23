@@ -33,7 +33,7 @@ export default async function Individual(context: any | unknown) {
   )) as number[][];
 
   return (
-    <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
+    <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
       <Nav exerciseName={exerciseInfo.name} planId={planId} />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
@@ -67,6 +67,6 @@ export default async function Individual(context: any | unknown) {
       </section>
 
       <ExerciseTabs exercise={sessionExercise} />
-    </div>
+    </main>
   );
 }

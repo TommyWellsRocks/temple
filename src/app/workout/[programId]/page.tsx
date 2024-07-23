@@ -1,38 +1,39 @@
+import { auth } from "~/server/auth";
+import { redirect } from "next/navigation";
+import { getProgramDays } from "~/server/queries/workouts";
+import { CreateDay } from "./_components/CreateDay";
 import Image from "next/image";
 import Link from "next/link";
-import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
-import { redirect } from "next/navigation";
-import { auth } from "~/server/auth";
-import { getMyWorkoutPrograms } from "~/server/queries/workouts";
-import { CreateProgram } from "./_components/CreateProgram";
-import { EditProgram } from "./_components/EditProgram";
-import Nav from "./_components/Nav";
+import PlanIconURL from "public/content/images/workout/plan-icon.svg";
+import { EditDay } from "./_components/EditDay";
+import Nav from "../_components/Nav";
 
-export default async function MyPrograms() {
+export default async function ProgramOverview(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
-  const workoutPrograms = await getMyWorkoutPrograms(session.user.id);
+  const { programId } = context.params as { programId: string };
+  const programDays = await getProgramDays(session.user.id, Number(programId));
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav backURL="/" heading="Your Programs" />
+      <Nav backURL="/workout" heading="Program Days" />
 
       <section className="flex items-center justify-between">
-        <h1>MY WORKOUT PROGRAMS GO HERE:</h1>
-        <CreateProgram userId={session.user.id} />
+        <h1>PROGRAM DAYS HERE:</h1>
+        <CreateDay userId={session.user.id} programId={Number(programId)} />
       </section>
 
       <section>
-        {!workoutPrograms.length ? (
+        {!programDays.length ? (
           <div>No workout programs to show 😫</div>
         ) : (
           <div className="flex items-start gap-5">
-            {workoutPrograms.map((program) => {
+            {programDays.map((day) => {
               return (
                 <div>
                   <Link
-                    href={`/workout/${program.id}`}
+                    href={`/workout/${programId}/${day.id}`}
                     className="flex flex-col items-center"
                   >
                     <Image
@@ -44,11 +45,8 @@ export default async function MyPrograms() {
                     />
                   </Link>
                   <div className="flex justify-center gap-1.5 align-middle">
-                    {program.name.slice(0, 12)}
-                    <EditProgram
-                      userId={session.user!.id!}
-                      currentInfo={program}
-                    />
+                    {day.name.slice(0, 12)}
+                    <EditDay userId={session.user!.id!} currentInfo={day} />
                   </div>
                 </div>
               );

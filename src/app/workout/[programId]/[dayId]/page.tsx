@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import Nav from "../_components/Nav";
-import LineChart from "../_components/Linechart";
+import Nav from "../../_components/Nav"
+import LineChart from "../../_components/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
@@ -25,8 +25,8 @@ export default async function Overview(context: any | unknown) {
   ).length;
 
   return (
-    <div className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav exerciseName={undefined} planId={undefined} />
+    <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
+      <Nav backURL="/workout/" heading="The Overview" />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -111,6 +111,6 @@ export default async function Overview(context: any | unknown) {
           />
         </div>
       </section>
-    </div>
+    </main>
   );
 }
