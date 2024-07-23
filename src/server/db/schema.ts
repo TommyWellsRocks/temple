@@ -145,7 +145,7 @@ export const exercises = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("ex_id_idx").on(table.id),
+    idIndex: index().on(table.id),
   }),
 );
 
@@ -158,7 +158,7 @@ export const exercise_notes = createTable(
       .references(() => users.id, { onDelete: "cascade" }),
     exerciseId: integer("exercise_id")
       .notNull()
-      .references(() => exercises.id, {onDelete: 'cascade'}),
+      .references(() => exercises.id, { onDelete: "cascade" }),
     notes: varchar("notes").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -168,18 +168,43 @@ export const exercise_notes = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("ex_notes_id_idx").on(table.id),
+    idIndex: index().on(table.id),
   }),
 );
 
-export const workouts = createTable(
-  "workouts",
+export const workoutPrograms = createTable(
+  "workout_programs",
   {
     id: serial("id").primaryKey(),
     userId: varchar("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    name: varchar("name").default("New Plan").notNull(),
+    name: varchar("name").default("New Program").notNull(),
+    repeatStart: date("repeat_start_date"),
+    repeatEnd: date("repeat_end_date"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    idIndex: index().on(table.id),
+  }),
+);
+
+export const workoutProgramDays = createTable(
+  "workout_program_days",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    programId: integer("program_id")
+      .notNull()
+      .references(() => workoutPrograms.id, { onDelete: "cascade" }),
+    name: varchar("name").default("New Day").notNull(),
     repeatStart: date("repeat_start_date"),
     repeatEnd: date("repeat_end_date"),
     repeatOn: integer("repeat").array(),
@@ -191,20 +216,20 @@ export const workouts = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("workouts_id_idx").on(table.id),
+    idIndex: index().on(table.id),
   }),
 );
 
-export const workout_session_exercises = createTable(
-  "workout_session_exercises",
+export const workoutDayExercises = createTable(
+  "workout_day_exercises",
   {
     id: serial("id").primaryKey(),
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    workoutId: integer("workout_id")
+    dayId: integer("day_id")
       .notNull()
-      .references(() => workouts.id, { onDelete: "cascade" }),
+      .references(() => workoutProgramDays.id, { onDelete: "cascade" }),
     exerciseId: integer("exercise_id")
       .notNull()
       .references(() => exercises.id, { onDelete: "cascade" }),
@@ -224,12 +249,12 @@ export const workout_session_exercises = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("sess_ex_id_idx").on(table.id),
+    idIndex: index().on(table.id),
   }),
 );
 
 // * Weigh In Related
-export const weigh_ins = createTable(
+export const weighIns = createTable(
   "weigh_ins",
   {
     id: serial("id").primaryKey(),
@@ -251,35 +276,53 @@ export const weigh_ins = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index("weigh_id_idx").on(table.id),
+    idIndex: index().on(table.id),
   }),
 );
 
 export const userRelations = relations(users, ({ many }) => ({
-  workouts: many(workouts),
+  workoutPrograms: many(workoutPrograms),
 }));
 
-export const workoutRelations = relations(workouts, ({ one, many }) => ({
-  user: one(users, {
-    fields: [workouts.userId],
-    references: [users.id],
+export const workoutProgramRelations = relations(
+  workoutPrograms,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [workoutPrograms.userId],
+      references: [users.id],
+    }),
+    programDays: many(workoutProgramDays),
   }),
-  sessionExercises: many(workout_session_exercises),
-}));
+);
 
-export const sessionExerciseRelations = relations(
-  workout_session_exercises,
+export const workoutProgramDayRelations = relations(
+  workoutProgramDays,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [workoutProgramDays.userId],
+      references: [users.id],
+    }),
+    program: one(workoutPrograms, {
+      fields: [workoutProgramDays.programId],
+      references: [workoutPrograms.id],
+    }),
+    dayExercises: many(workoutDayExercises),
+  }),
+);
+
+export const workoutDayExerciseRelations = relations(
+  workoutDayExercises,
   ({ one }) => ({
-    workout: one(workouts, {
-      fields: [workout_session_exercises.workoutId],
-      references: [workouts.id],
+    day: one(workoutProgramDays, {
+      fields: [workoutDayExercises.dayId],
+      references: [workoutProgramDays.id],
     }),
     info: one(exercises, {
-      fields: [workout_session_exercises.exerciseId],
+      fields: [workoutDayExercises.exerciseId],
       references: [exercises.id],
     }),
     notes: one(exercise_notes, {
-      fields: [workout_session_exercises.exerciseId],
+      fields: [workoutDayExercises.exerciseId],
       references: [exercise_notes.exerciseId],
     }),
   }),
