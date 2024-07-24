@@ -8,15 +8,15 @@ import {
 } from "~/components/ui/popover";
 import { z } from "zod";
 import { handleEditProgram } from "./ServerComponents";
-import { ProgramForm, formSchema } from "./ProgramForm";
-import { ProgramDays } from "~/server/types";
+import { ProgramForm, formSchema } from "~/components/forms/ProgramForm";
+import { WorkoutPrograms } from "~/server/types";
 
 export function EditProgram({
   userId,
-  currentInfo,
+  programInfo,
 }: {
   userId: string;
-  currentInfo: ProgramDays[0];
+  programInfo: WorkoutPrograms[0];
 }) {
   return (
     <Popover>
@@ -38,13 +38,13 @@ export function EditProgram({
             onSubmitFunction={(values: z.infer<typeof formSchema>) => {
               handleEditProgram(
                 userId,
-                currentInfo.id,
+                programInfo.id,
                 values.name,
                 values.start,
                 values.end,
               );
             }}
-            currentInfo={currentInfo}
+            programInfo={programInfo}
           />
         </div>
       </PopoverContent>

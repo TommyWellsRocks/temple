@@ -1,14 +1,14 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { getProgramDays } from "~/server/queries/workouts";
-import { CreateDay } from "./_components/CreateDay";
 import Image from "next/image";
 import Link from "next/link";
 import PlanIconURL from "public/content/images/workout/plan-icon.svg";
 import { EditDay } from "./_components/EditDay";
-import Nav from "../_components/Nav";
+import { Navigation } from "~/components/Navigation";
+import { OverlayButton } from "~/components/OverlayButton";
 
-export default async function ProgramOverview(context: any | unknown) {
+export default async function MyProgramDays(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
@@ -17,11 +17,17 @@ export default async function ProgramOverview(context: any | unknown) {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav backURL="/workout" heading="Program Days" />
+      <Navigation backURL="/workout" heading="Program Days" />
 
       <section className="flex items-center justify-between">
         <h1>PROGRAM DAYS HERE:</h1>
-        <CreateDay userId={session.user.id} programId={Number(programId)} />
+        <OverlayButton
+          title="Create Day"
+          description="Build and plan your new workout program. Click create when you're
+            done."
+          formType="ProgramDay"
+          formProps={{ userId: session.user.id, programId: Number(programId) }}
+        />
       </section>
 
       <section>
@@ -46,7 +52,7 @@ export default async function ProgramOverview(context: any | unknown) {
                   </Link>
                   <div className="flex justify-center gap-1.5 align-middle">
                     {day.name.slice(0, 12)}
-                    <EditDay userId={session.user!.id!} currentInfo={day} />
+                    <EditDay userId={session.user!.id!} dayInfo={day} />
                   </div>
                 </div>
               );

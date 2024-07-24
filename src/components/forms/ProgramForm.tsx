@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { WorkoutPrograms } from "~/server/types";
-import { handleDeleteProgram } from "./ServerComponents";
+import { handleDeleteProgram } from "~/app/workout/_components/ServerComponents";
 
 export const formSchema = z.object({
   name: z.string().max(20, {
@@ -37,28 +37,28 @@ export const formSchema = z.object({
 
 export function ProgramForm({
   onSubmitFunction,
-  currentInfo,
+  programInfo,
 }: {
   onSubmitFunction: SubmitHandler<{
     name: string;
     start: Date;
     end: Date;
   }>;
-  currentInfo?: WorkoutPrograms[0];
+  programInfo?: WorkoutPrograms[0];
 }) {
   const today = new Date();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: currentInfo ? currentInfo.name : undefined,
+      name: programInfo ? programInfo.name : undefined,
       start:
-        currentInfo && currentInfo.repeatStart != null
-          ? new Date(currentInfo.repeatStart)
+        programInfo && programInfo.repeatStart != null
+          ? new Date(programInfo.repeatStart)
           : today,
       end:
-        currentInfo && currentInfo.repeatEnd != null
-          ? new Date(currentInfo.repeatEnd)
+        programInfo && programInfo.repeatEnd != null
+          ? new Date(programInfo.repeatEnd)
           : addDays(today, 45),
     },
   });
@@ -180,7 +180,7 @@ export function ProgramForm({
         />
 
         <DialogFooter>
-          {!currentInfo ? (
+          {!programInfo ? (
             <Button type="submit">Create</Button>
           ) : (
             <>
@@ -189,7 +189,7 @@ export function ProgramForm({
                 variant={"destructive"}
                 type="button"
                 onClick={() =>
-                  handleDeleteProgram(currentInfo.userId, currentInfo.id)
+                  handleDeleteProgram(programInfo.userId, programInfo.id)
                 }
               >
                 Delete

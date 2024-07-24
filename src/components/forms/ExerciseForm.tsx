@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { cn } from "~/lib/utils";
@@ -28,43 +28,36 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { Exercises, ProgramDay } from "~/server/types";
-import { handleAddExercise, handleDeleteExercise } from "./ServerComponents";
 
-const FormSchema = z.object({
+export const formSchema = z.object({
   exercise: z.string({
     required_error: "Please select an exercise.",
   }),
 });
 
 export function ExerciseForm({
-  userId,
-  programId,
-  dayId,
+  onSubmitFunction,
   programDay,
   exercises,
   method,
 }: {
-  userId: string;
-  programId: number;
-  dayId: number;
+  onSubmitFunction: SubmitHandler<{ exercise: string }>;
   programDay: ProgramDay;
   exercises: Exercises;
   method: "Add" | "Delete";
 }) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    method === "Add"
-      ? handleAddExercise(userId, programId, dayId, Number(data.exercise))
-      : handleDeleteExercise(userId, programId, dayId, Number(data.exercise));
-  }
   const exerciseOptions = programDay!.dayExercises;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmitFunction)}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="exercise"

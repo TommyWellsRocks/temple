@@ -1,5 +1,5 @@
-import Nav from "../../../_components/Nav";
-import LineChart from "../../../_components/Linechart";
+import { Navigation } from "~/components/Navigation";
+import { LineChart } from "~/components/Linechart";
 import {
   getDayExercise,
   getExerciseAnalytics,
@@ -36,7 +36,7 @@ export default async function DayExercise(context: any | unknown) {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav
+      <Navigation
         backURL={`/workout/${programId}/${dayId}`}
         heading={`${exercise.info.name}`}
       />

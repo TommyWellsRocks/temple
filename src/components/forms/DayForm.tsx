@@ -15,8 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { Workout } from "~/server/types";
-import { handleDeleteWorkout } from "../../_components/ServerComponents";
+import { ProgramDay } from "~/server/types";
+import { handleDeleteProgramDay } from "~/app/workout/[programId]/_components/ServerComponents";
 
 export const formSchema = z.object({
   name: z.string().max(20, {
@@ -27,7 +27,7 @@ export const formSchema = z.object({
 
 export function DayForm({
   onSubmitFunction,
-  currentInfo,
+  dayInfo,
 }: {
   onSubmitFunction: SubmitHandler<{
     name: string;
@@ -35,7 +35,7 @@ export function DayForm({
     start?: Date | undefined;
     end?: Date | undefined;
   }>;
-  currentInfo?: Workout;
+  dayInfo?: ProgramDay;
 }) {
   const days = [
     { day: "Sunday", id: 0 },
@@ -50,11 +50,8 @@ export function DayForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: currentInfo ? currentInfo.name : undefined,
-      repeatOn:
-        currentInfo && currentInfo.repeatOn != null
-          ? currentInfo.repeatOn
-          : [1],
+      name: dayInfo ? dayInfo.name : undefined,
+      repeatOn: dayInfo && dayInfo.repeatOn != null ? dayInfo.repeatOn : [1],
     },
   });
 
@@ -85,7 +82,7 @@ export function DayForm({
               <FormLabel>Repeat</FormLabel>
               <div
                 className={
-                  currentInfo
+                  dayInfo
                     ? "grid grid-cols-2 gap-y-2"
                     : "grid grid-cols-3 gap-y-4"
                 }
@@ -133,19 +130,23 @@ export function DayForm({
         />
 
         <DialogFooter>
-          {!currentInfo ? null : (
+          {!dayInfo ? null : (
             <Button
               className="mr-auto"
               variant={"destructive"}
               type="button"
               onClick={() =>
-                handleDeleteWorkout(currentInfo.userId, currentInfo.id)
+                handleDeleteProgramDay(
+                  dayInfo.userId,
+                  dayInfo.programId,
+                  dayInfo.id,
+                )
               }
             >
               Delete
             </Button>
           )}
-          <Button type="submit">{currentInfo ? "Edit" : "Create"}</Button>
+          <Button type="submit">{dayInfo ? "Edit" : "Create"}</Button>
         </DialogFooter>
       </form>
     </Form>

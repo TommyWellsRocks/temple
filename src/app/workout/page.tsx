@@ -4,9 +4,9 @@ import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getMyWorkoutPrograms } from "~/server/queries/workouts";
-import { CreateProgram } from "./_components/CreateProgram";
 import { EditProgram } from "./_components/EditProgram";
-import Nav from "./_components/Nav";
+import { Navigation } from "~/components/Navigation";
+import { OverlayButton } from "~/components/OverlayButton";
 
 export default async function MyPrograms() {
   const session = await auth();
@@ -16,11 +16,16 @@ export default async function MyPrograms() {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav backURL="/" heading="Your Programs" />
+      <Navigation backURL="/" heading="Your Programs" />
 
       <section className="flex items-center justify-between">
         <h1>MY WORKOUT PROGRAMS GO HERE:</h1>
-        <CreateProgram userId={session.user.id} />
+        <OverlayButton
+          title="Create Workout Program"
+          description="Build and plan your new workout program. Click create when you're done."
+          formType="Program"
+          formProps={{ userId: session.user.id }}
+        />
       </section>
 
       <section>
@@ -47,7 +52,7 @@ export default async function MyPrograms() {
                     {program.name.slice(0, 12)}
                     <EditProgram
                       userId={session.user!.id!}
-                      currentInfo={program}
+                      programInfo={program}
                     />
                   </div>
                 </div>

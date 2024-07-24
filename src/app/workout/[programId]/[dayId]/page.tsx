@@ -1,15 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import Nav from "../../_components/Nav";
-import LineChart from "../../_components/Linechart";
+import { Navigation } from "~/components/Navigation";
+import { LineChart } from "~/components/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { getWeekAnalytics, getProgramDay } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { AddExercises } from "./_components/AddExercises";
-import { DeleteExercises } from "./_components/DeleteExercises";
 import { getExercises } from "~/server/queries/exercises";
+import { OverlayButton } from "~/components/OverlayButton";
 
 export default async function DayOverview(context: any | unknown) {
   const session = await auth();
@@ -35,7 +34,7 @@ export default async function DayOverview(context: any | unknown) {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav backURL={`/workout/${programId}`} heading="The Overview" />
+      <Navigation backURL={`/workout/${programId}`} heading="The Overview" />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -112,19 +111,31 @@ export default async function DayOverview(context: any | unknown) {
           })}
         </div>
         <div className="flex justify-center gap-3 pt-5">
-          <AddExercises
-            userId={session.user.id}
-            programId={Number(programId)}
-            dayId={Number(dayId)}
-            programDay={workoutPlan}
-            exercises={allExercises}
+          <OverlayButton
+            title="Add Exercise"
+            description="Add an exercise to your workout. Click add when you're done."
+            formType="DayExercise"
+            formProps={{
+              userId: session.user.id,
+              programId: Number(programId),
+              dayId: Number(dayId),
+              method: "Add",
+              programDay: workoutPlan,
+              exercises: allExercises,
+            }}
           />
-          <DeleteExercises
-            userId={session.user.id}
-            programId={Number(programId)}
-            dayId={Number(dayId)}
-            programDay={workoutPlan}
-            exercises={allExercises}
+          <OverlayButton
+            title="Delete Exercise"
+            description="Delete an exercise from your workout. Click delete when you're done."
+            formType="DayExercise"
+            formProps={{
+              userId: session.user.id,
+              programId: Number(programId),
+              dayId: Number(dayId),
+              method: "Delete",
+              programDay: workoutPlan,
+              exercises: allExercises,
+            }}
           />
         </div>
       </section>

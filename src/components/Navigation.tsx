@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import BackButtonURL from "../../../../public/content/images/back-button.svg";
+import BackButtonURL from "/public/content/images/back-button.svg";
 
-export default function Nav({
+export function Navigation({
   backURL,
   heading,
 }: {

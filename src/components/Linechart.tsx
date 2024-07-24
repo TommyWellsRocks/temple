@@ -1,4 +1,5 @@
 "use client";
+
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { ChartData, CoreChartOptions } from "chart.js/auto";
@@ -87,7 +88,7 @@ function chartOptions(previousData: number[], currentData: number[]) {
   };
 }
 
-export default function LineChart({
+export function LineChart({
   page,
   previousData,
   currentData,
