@@ -1,6 +1,6 @@
 "use client";
 
-import { handleInput } from "~/components/workout/ServerComponents/DayExercise";
+import { handleExerciseVolumeInput } from "~/components/workout/ServerComponents/DayExercise";
 import { DayExercise } from "~/server/types";
 
 export function InputRows({
@@ -52,7 +52,7 @@ export function InputRows({
 
             if (currentTargetValue !== newValue) {
               values[index] = newValue;
-              handleInput(userId, dayExercise, "Reps", values);
+              handleExerciseVolumeInput(userId, dayExercise, "Reps", values);
             }
           }}
         />
@@ -80,7 +80,7 @@ export function InputRows({
 
             if (currentTargetValue !== newValue) {
               values[index] = newValue;
-              handleInput(userId, dayExercise, "Weight", values);
+              handleExerciseVolumeInput(userId, dayExercise, "Weight", values);
             }
           }}
         />

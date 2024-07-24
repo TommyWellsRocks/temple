@@ -1,7 +1,8 @@
 import "server-only";
+
 import { db } from "../db";
-import { exercises } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { exercise_notes, exercises } from "../db/schema";
+import { and, eq } from "drizzle-orm";
 import { ExerciseObject, exerciseObjectSchema } from "../types";
 
 export async function createExercise(exercise: ExerciseObject) {
@@ -39,6 +40,28 @@ export async function getExercise(exerciseId: number) {
 
 export async function getExercises() {
   return await db.query.exercises.findMany();
+}
+
+export async function editExerciseNote(
+  userId: string,
+  exerciseId: number,
+  noteValue: string,
+  noteId?: number,
+) {
+  noteId
+    ? await db
+        .update(exercise_notes)
+        .set({ notes: noteValue })
+        .where(
+          and(
+            eq(exercise_notes.userId, userId),
+            eq(exercise_notes.exerciseId, exerciseId),
+            eq(exercise_notes.id, noteId),
+          ),
+        )
+    : await db
+        .insert(exercise_notes)
+        .values({ userId, exerciseId, notes: noteValue });
 }
 
 // todo make edits only be things you want to change? Take from existing in db?

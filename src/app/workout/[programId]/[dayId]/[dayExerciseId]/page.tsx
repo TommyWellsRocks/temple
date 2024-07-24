@@ -7,8 +7,8 @@ import { auth } from "~/server/auth";
 import { Navigation } from "~/components/workout/Navigation";
 import { LineChart } from "~/components/workout/Linechart";
 import { InputRows } from "~/components/workout/Exercise/InputRows";
-import { EditSets } from "~/components/workout/Exercise/EditSets";
-import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTab";
+import { EditSetCount } from "~/components/workout/Exercise/EditSetCount";
+import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 
 export default async function DayExercise(context: any | unknown) {
   const session = await auth();
@@ -58,12 +58,12 @@ export default async function DayExercise(context: any | unknown) {
           <InputRows userId={session.user.id} dayExercise={exercise} />
         </div>
         <div className="flex gap-x-5">
-          <EditSets
+          <EditSetCount
             method="Add"
             userId={session.user.id}
             dayExercise={exercise}
           />
-          <EditSets
+          <EditSetCount
             method="Delete"
             userId={session.user.id}
             dayExercise={exercise}
@@ -71,7 +71,7 @@ export default async function DayExercise(context: any | unknown) {
         </div>
       </section>
 
-      <ExerciseTabs exercise={exercise} />
+      <ExerciseTabs dayExercise={exercise} />
     </main>
   );
 }
