@@ -55,18 +55,18 @@ export default async function DayExercise(context: any | unknown) {
           {setCount === 1 ? " Set" : " Sets"}
         </div>
         <div className="flex flex-col gap-y-5">
-          <InputRows sessionExercise={exercise} />
+          <InputRows userId={session.user.id} dayExercise={exercise} />
         </div>
         <div className="flex gap-x-5">
           <EditSets
             method="Add"
             userId={session.user.id}
-            sessionExercise={exercise}
+            dayExercise={exercise}
           />
           <EditSets
             method="Delete"
             userId={session.user.id}
-            sessionExercise={exercise}
+            dayExercise={exercise}
           />
         </div>
       </section>

@@ -4,9 +4,9 @@ import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getMyWorkoutPrograms } from "~/server/queries/workouts";
-import { EditProgram } from "./_components/EditProgram";
 import { Navigation } from "~/components/Navigation";
 import { OverlayButton } from "~/components/OverlayButton";
+import { PopoverButton } from "~/components/PopoverButton";
 
 export default async function MyPrograms() {
   const session = await auth();
@@ -50,9 +50,14 @@ export default async function MyPrograms() {
                   </Link>
                   <div className="flex justify-center gap-1.5 align-middle">
                     {program.name.slice(0, 12)}
-                    <EditProgram
-                      userId={session.user!.id!}
-                      programInfo={program}
+                    <PopoverButton
+                      title="Edit Workout Program"
+                      description="Remember to click edit when your done."
+                      formType="Program"
+                      formProps={{
+                        userId: session.user!.id!,
+                        programInfo: program,
+                      }}
                     />
                   </div>
                 </div>

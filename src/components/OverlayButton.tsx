@@ -2,24 +2,24 @@
 
 import { Minus, Plus } from "lucide-react";
 import { z } from "zod";
+import { handleCreateProgram } from "~/components/ServerComponents/Program";
+import { handleCreateDay } from "~/components/ServerComponents/ProgramDay";
 import {
   ExerciseForm,
   formSchema as exerciseFormSchema,
 } from "~/components/forms/ExerciseForm";
 import {
-  handleAddExercise,
-  handleDeleteExercise,
-} from "~/app/workout/[programId]/[dayId]/_components/ServerComponents";
+  formSchema as programFormSchema,
+  ProgramForm,
+} from "~/components/forms/ProgramForm";
 import {
   DayForm,
   formSchema as dayFormSchema,
 } from "~/components/forms/DayForm";
-import { handleCreateDay } from "~/app/workout/[programId]/_components/ServerComponents";
 import {
-  formSchema as programFormSchema,
-  ProgramForm,
-} from "~/components/forms/ProgramForm";
-import { handleCreateProgram } from "~/app/workout/_components/ServerComponents";
+  handleAddExercise,
+  handleDeleteExercise,
+} from "~/components/ServerComponents/DayExercises";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,

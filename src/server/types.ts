@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { db } from "./db";
-import { getMyWorkoutPrograms, getProgramDay } from "./queries/workouts";
+import { getDayExercise, getMyWorkoutPrograms, getProgramDay, getProgramDays } from "./queries/workouts";
 import { getExercises } from "./queries/exercises";
 
 export interface ExerciseObject {
@@ -109,6 +109,8 @@ export interface WorkoutExercise extends SessionExercise {
   info: Exercise;
 }
 
+export type ProgramDays = Awaited<ReturnType<typeof getProgramDays>>;
 export type WorkoutPrograms = Awaited<ReturnType<typeof getMyWorkoutPrograms>>;
 export type ProgramDay = Awaited<ReturnType<typeof getProgramDay>>;
+export type DayExercise = Awaited<ReturnType<typeof getDayExercise>>;
 export type Exercises = Awaited<ReturnType<typeof getExercises>>;

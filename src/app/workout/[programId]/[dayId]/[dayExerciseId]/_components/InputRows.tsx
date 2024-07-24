@@ -1,19 +1,21 @@
 "use client";
 
-import { handleInput } from "./ServerComponents";
-import { SessionExercise } from "~/server/types";
+import { handleInput } from "~/components/ServerComponents/DayExercise";
+import { DayExercise } from "~/server/types";
 
 export function InputRows({
-  sessionExercise,
+  userId,
+  dayExercise,
 }: {
-  sessionExercise: SessionExercise;
+  userId: string;
+  dayExercise: DayExercise;
 }) {
   const countBoxClassDefault =
     "flex h-11 w-11 items-center justify-center bg-gray-600 font-semibold text-gray-900";
   const countBoxClassFocus =
     "flex h-11 w-11 items-center justify-center bg-primary font-semibold text-black";
 
-  return sessionExercise.reps.map((repCount, index) => {
+  return dayExercise!.reps.map((repCount, index) => {
     return (
       <div
         className="flex items-center gap-x-3 text-2xl font-light text-gray-600"
@@ -45,19 +47,12 @@ export function InputRows({
               newValue = 0;
               e.target.value = "0";
             }
-            const values = sessionExercise.reps;
+            const values = dayExercise!.reps;
             const currentTargetValue = values[index];
 
             if (currentTargetValue !== newValue) {
               values[index] = newValue;
-              handleInput(
-                sessionExercise.userId,
-                sessionExercise.workoutId,
-                sessionExercise.exerciseId,
-                sessionExercise.id,
-                "Reps",
-                values,
-              );
+              handleInput(userId, dayExercise, "Reps", values);
             }
           }}
         />
@@ -66,7 +61,7 @@ export function InputRows({
         <input
           className="w-16 cursor-pointer text-center"
           type="number"
-          defaultValue={sessionExercise.weight[index]}
+          defaultValue={dayExercise!.weight[index]}
           onFocus={(e) => {
             const countBox = e.currentTarget.parentNode!.firstElementChild!;
             countBox.className = countBoxClassFocus;
@@ -80,19 +75,12 @@ export function InputRows({
               newValue = 0;
               e.target.value = "0";
             }
-            const values = sessionExercise.weight;
+            const values = dayExercise!.weight;
             const currentTargetValue = values[index];
 
             if (currentTargetValue !== newValue) {
               values[index] = newValue;
-              handleInput(
-                sessionExercise.userId,
-                sessionExercise.workoutId,
-                sessionExercise.exerciseId,
-                sessionExercise.id,
-                "Weight",
-                values,
-              );
+              handleInput(userId, dayExercise, "Weight", values);
             }
           }}
         />

@@ -15,8 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { ProgramDay } from "~/server/types";
-import { handleDeleteProgramDay } from "~/app/workout/[programId]/_components/ServerComponents";
+import { ProgramDays } from "~/server/types";
+import { handleDeleteProgramDay } from "~/components/ServerComponents/ProgramDay";
 
 export const formSchema = z.object({
   name: z.string().max(20, {
@@ -35,7 +35,7 @@ export function DayForm({
     start?: Date | undefined;
     end?: Date | undefined;
   }>;
-  dayInfo?: ProgramDay;
+  dayInfo?: ProgramDays[0];
 }) {
   const days = [
     { day: "Sunday", id: 0 },
@@ -130,23 +130,29 @@ export function DayForm({
         />
 
         <DialogFooter>
-          {!dayInfo ? null : (
-            <Button
-              className="mr-auto"
-              variant={"destructive"}
-              type="button"
-              onClick={() =>
-                handleDeleteProgramDay(
-                  dayInfo.userId,
-                  dayInfo.programId,
-                  dayInfo.id,
-                )
-              }
-            >
-              Delete
-            </Button>
+          {!dayInfo ? (
+            <Button type="submit">Create</Button>
+          ) : (
+            <>
+              <Button
+                className="mr-auto"
+                variant={"destructive"}
+                type="button"
+                onClick={() =>
+                  handleDeleteProgramDay(
+                    dayInfo.userId,
+                    dayInfo.programId,
+                    dayInfo.id,
+                  )
+                }
+              >
+                Delete
+              </Button>
+              <Button variant={"secondary"} type="submit">
+                Edit
+              </Button>
+            </>
           )}
-          <Button type="submit">{dayInfo ? "Edit" : "Create"}</Button>
         </DialogFooter>
       </form>
     </Form>
