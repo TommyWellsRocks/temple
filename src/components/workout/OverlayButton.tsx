@@ -1,25 +1,9 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { z } from "zod";
-import { handleCreateProgram } from "~/components/workout/ServerComponents/Program";
-import { handleCreateDay } from "~/components/workout/ServerComponents/ProgramDay";
-import {
-  ExerciseForm,
-  formSchema as exerciseFormSchema,
-} from "~/components/workout/forms/ExerciseForm";
-import {
-  formSchema as programFormSchema,
-  ProgramForm,
-} from "~/components/workout/forms/ProgramForm";
-import {
-  DayForm,
-  formSchema as dayFormSchema,
-} from "~/components/workout/forms/DayForm";
-import {
-  handleAddExercise,
-  handleDeleteExercise,
-} from "~/components/workout/ServerComponents/DayExercises";
+import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm";
+import { DayForm } from "~/components/workout/forms/DayForm";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -39,67 +23,43 @@ export function OverlayButton({
 }: {
   title: string;
   description: string;
-  formType: "Program" | "ProgramDay" | "DayExercise";
-  formProps: {
-    userId: string;
-    programId?: number;
-    dayId?: number;
-    method?: "Add" | "Delete";
-    programDay?: ProgramDay;
-    exercises?: Exercises;
-  };
-}) {
+} & (
+  | {
+      formType: "Program";
+      formProps: {
+        userId: string;
+      };
+    }
+  | {
+      formType: "ProgramDays";
+      formProps: {
+        userId: string;
+        programId: number;
+      };
+    }
+  | {
+      formType: "DayExercise";
+      formProps: {
+        programDay: ProgramDay;
+        exercises: Exercises;
+        method: "Add" | "Delete";
+      };
+    }
+)) {
   let FormComponent;
 
   if (formType === "Program") {
+    FormComponent = <ProgramForm userId={formProps.userId} />;
+  } else if (formType === "ProgramDays") {
     FormComponent = (
-      <ProgramForm
-        onSubmitFunction={(values: z.infer<typeof programFormSchema>) =>
-          handleCreateProgram(
-            formProps.userId,
-            values.name,
-            values.start,
-            values.end,
-          )
-        }
-      />
-    );
-  } else if (formType === "ProgramDay") {
-    FormComponent = (
-      <DayForm
-        onSubmitFunction={(values: z.infer<typeof dayFormSchema>) =>
-          handleCreateDay(
-            formProps.userId,
-            formProps.programId!,
-            values.name,
-            values.repeatOn,
-          )
-        }
-      />
+      <DayForm userId={formProps.userId} programId={formProps.programId} />
     );
   } else if (formType === "DayExercise") {
     FormComponent = (
       <ExerciseForm
-        onSubmitFunction={(values: z.infer<typeof exerciseFormSchema>) => {
-          if (formProps.method === "Add") {
-            handleAddExercise(
-              formProps.userId,
-              formProps.programId!,
-              formProps.dayId!,
-              Number(values.exercise),
-            );
-          } else {
-            handleDeleteExercise(
-              formProps.userId,
-              formProps.programId!,
-              formProps.dayId!,
-              Number(values.exercise),
-            );
-          }
-        }}
-        programDay={formProps.programDay!}
-        exercises={formProps.exercises!}
-        method={formProps.method!}
+        programDay={formProps.programDay}
+        exercises={formProps.exercises}
+        method={formProps.method}
       />
     );
   }
@@ -108,7 +68,11 @@ export function OverlayButton({
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">
-          {formProps.method === "Delete" ? <Minus /> : <Plus />}
+          {formType === "DayExercise" && formProps.method === "Delete" ? (
+            <Minus />
+          ) : (
+            <Plus />
+          )}
         </Button>
       </DialogTrigger>
 

@@ -25,8 +25,11 @@ export default async function MyProgramDays(context: any | unknown) {
           title="Create Day"
           description="Build and plan your new workout program. Click create when you're
             done."
-          formType="ProgramDay"
-          formProps={{ userId: session.user.id, programId: Number(programId) }}
+          formType="ProgramDays"
+          formProps={{
+            userId: session.user.id,
+            programId: Number(programId),
+          }}
         />
       </section>
 
@@ -55,8 +58,10 @@ export default async function MyProgramDays(context: any | unknown) {
                     <PopoverButton
                       title="Edit Program Day"
                       description="Remember to click edit when your done."
-                      formType="ProgramDay"
-                      formProps={{ userId: session.user!.id!, dayInfo: day }}
+                      formType="ProgramDays"
+                      formProps={{
+                        dayInfo: day,
+                      }}
                     />
                   </div>
                 </div>

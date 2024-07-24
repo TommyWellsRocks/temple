@@ -14,7 +14,7 @@ import { Calendar } from "~/components/ui/calendar";
 import { DialogFooter } from "~/components/ui/dialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -25,7 +25,11 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { WorkoutPrograms } from "~/server/types";
-import { handleDeleteProgram } from "~/components/workout/ServerComponents/Program";
+import {
+  handleEditProgram,
+  handleCreateProgram,
+  handleDeleteProgram,
+} from "~/components/workout/ServerComponents/Program";
 
 export const formSchema = z.object({
   name: z.string().max(20, {
@@ -36,14 +40,10 @@ export const formSchema = z.object({
 });
 
 export function ProgramForm({
-  onSubmitFunction,
+  userId,
   programInfo,
 }: {
-  onSubmitFunction: SubmitHandler<{
-    name: string;
-    start: Date;
-    end: Date;
-  }>;
+  userId: string;
   programInfo?: WorkoutPrograms[0];
 }) {
   const today = new Date();
@@ -78,7 +78,22 @@ export function ProgramForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmitFunction)}
+        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
+          programInfo
+            ? handleEditProgram(
+                userId,
+                programInfo.id,
+                values.name,
+                values.start,
+                values.end,
+              )
+            : handleCreateProgram(
+                userId,
+                values.name,
+                values.start,
+                values.end,
+              );
+        })}
         className="flex flex-col gap-4"
       >
         <FormField

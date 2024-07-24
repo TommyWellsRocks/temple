@@ -55,7 +55,6 @@ export default async function MyPrograms() {
                       description="Remember to click edit when your done."
                       formType="Program"
                       formProps={{
-                        userId: session.user!.id!,
                         programInfo: program,
                       }}
                     />

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { cn } from "~/lib/utils";
@@ -28,6 +28,10 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { Exercises, ProgramDay } from "~/server/types";
+import {
+  handleAddExercise,
+  handleDeleteExercise,
+} from "../ServerComponents/DayExercises";
 
 export const formSchema = z.object({
   exercise: z.string({
@@ -36,12 +40,10 @@ export const formSchema = z.object({
 });
 
 export function ExerciseForm({
-  onSubmitFunction,
   programDay,
   exercises,
   method,
 }: {
-  onSubmitFunction: SubmitHandler<{ exercise: string }>;
   programDay: ProgramDay;
   exercises: Exercises;
   method: "Add" | "Delete";
@@ -55,7 +57,21 @@ export function ExerciseForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmitFunction)}
+        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
+          method === "Add"
+            ? handleAddExercise(
+                programDay!.userId,
+                programDay!.programId,
+                programDay!.id,
+                Number(values.exercise),
+              )
+            : handleDeleteExercise(
+                programDay!.userId,
+                programDay!.programId,
+                programDay!.id,
+                Number(values.exercise),
+              );
+        })}
         className="space-y-6"
       >
         <FormField

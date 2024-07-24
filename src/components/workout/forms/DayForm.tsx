@@ -6,7 +6,7 @@ import { DialogFooter } from "~/components/ui/dialog";
 import { Checkbox } from "~/components/ui/checkbox";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -16,7 +16,11 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { ProgramDays } from "~/server/types";
-import { handleDeleteProgramDay } from "~/components/workout/ServerComponents/ProgramDay";
+import {
+  handleCreateDay,
+  handleDeleteProgramDay,
+  handleEditProgramDay,
+} from "~/components/workout/ServerComponents/ProgramDay";
 
 export const formSchema = z.object({
   name: z.string().max(20, {
@@ -26,15 +30,12 @@ export const formSchema = z.object({
 });
 
 export function DayForm({
-  onSubmitFunction,
+  userId,
+  programId,
   dayInfo,
 }: {
-  onSubmitFunction: SubmitHandler<{
-    name: string;
-    repeatOn?: number[] | undefined;
-    start?: Date | undefined;
-    end?: Date | undefined;
-  }>;
+  userId: string;
+  programId: number;
   dayInfo?: ProgramDays[0];
 }) {
   const days = [
@@ -58,7 +59,17 @@ export function DayForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmitFunction)}
+        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
+          dayInfo
+            ? handleEditProgramDay(
+                userId,
+                programId,
+                dayInfo.id,
+                values.name,
+                values.repeatOn,
+              )
+            : handleCreateDay(userId, programId, values.name, values.repeatOn);
+        })}
         className="flex flex-col gap-4"
       >
         <FormField

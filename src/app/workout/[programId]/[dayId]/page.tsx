@@ -18,13 +18,13 @@ export default async function DayOverview(context: any | unknown) {
     programId: string;
     dayId: string;
   };
-  const workoutPlan = await getProgramDay(
+  const programDay = await getProgramDay(
     session.user.id,
     Number(programId),
     Number(dayId),
   );
-  if (!workoutPlan) return "INVALID PLAN";
-  const exercises = workoutPlan.dayExercises;
+  if (!programDay) return "INVALID PLAN";
+  const exercises = programDay.dayExercises;
   const allExercises = await getExercises();
 
   const [lastWeek, thisWeek] = await getWeekAnalytics(session.user.id!);
@@ -116,11 +116,8 @@ export default async function DayOverview(context: any | unknown) {
             description="Add an exercise to your workout. Click add when you're done."
             formType="DayExercise"
             formProps={{
-              userId: session.user.id,
-              programId: Number(programId),
-              dayId: Number(dayId),
               method: "Add",
-              programDay: workoutPlan,
+              programDay,
               exercises: allExercises,
             }}
           />
@@ -129,11 +126,8 @@ export default async function DayOverview(context: any | unknown) {
             description="Delete an exercise from your workout. Click delete when you're done."
             formType="DayExercise"
             formProps={{
-              userId: session.user.id,
-              programId: Number(programId),
-              dayId: Number(dayId),
               method: "Delete",
-              programDay: workoutPlan,
+              programDay,
               exercises: allExercises,
             }}
           />

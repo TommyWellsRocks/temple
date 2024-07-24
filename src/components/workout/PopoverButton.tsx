@@ -1,17 +1,8 @@
 "use client";
 
 import { Pencil } from "lucide-react";
-import { z } from "zod";
-import { handleEditProgram } from "~/components/workout/ServerComponents/Program";
-import { handleEditProgramDay } from "~/components/workout/ServerComponents/ProgramDay";
-import {
-  ProgramForm,
-  formSchema as programFormSchema,
-} from "./forms/ProgramForm";
-import {
-  DayForm,
-  formSchema as dayFormSchema,
-} from "~/components/workout/forms/DayForm";
+import { ProgramForm } from "./forms/ProgramForm";
+import { DayForm } from "~/components/workout/forms/DayForm";
 import {
   Popover,
   PopoverContent,
@@ -27,42 +18,29 @@ export function PopoverButton({
 }: {
   title: string;
   description: string;
-  formType: "Program" | "ProgramDay";
-  formProps: {
-    userId: string;
-    programInfo?: WorkoutPrograms[0];
-    dayInfo?: ProgramDays[0];
-  };
-}) {
+} & (
+  | { formType: "Program"; formProps: { programInfo: WorkoutPrograms[0] } }
+  | {
+      formType: "ProgramDays";
+      formProps: {
+        dayInfo: ProgramDays[0];
+      };
+    }
+)) {
   let FormComponent;
 
   if (formType === "Program") {
     FormComponent = (
       <ProgramForm
-        onSubmitFunction={(values: z.infer<typeof programFormSchema>) => {
-          handleEditProgram(
-            formProps.userId,
-            formProps.programInfo!.id,
-            values.name,
-            values.start,
-            values.end,
-          );
-        }}
+        userId={formProps.programInfo.userId}
         programInfo={formProps.programInfo}
       />
     );
-  } else if (formType === "ProgramDay") {
+  } else if (formType === "ProgramDays") {
     FormComponent = (
       <DayForm
-        onSubmitFunction={(values: z.infer<typeof dayFormSchema>) => {
-          handleEditProgramDay(
-            formProps.userId,
-            formProps.dayInfo!.programId,
-            formProps.dayInfo!.id,
-            values.name,
-            values.repeatOn,
-          );
-        }}
+        userId={formProps.dayInfo.userId}
+        programId={formProps.dayInfo.programId}
         dayInfo={formProps.dayInfo}
       />
     );
