@@ -1,14 +1,14 @@
-import { Navigation } from "~/components/Navigation";
-import { LineChart } from "~/components/Linechart";
 import {
   getDayExercise,
   getExerciseAnalytics,
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { InputRows } from "./_components/InputRows";
-import { EditSets } from "./_components/EditSets";
-import { ExerciseTabs } from "./_components/ExerciseTab";
+import { Navigation } from "~/components/Navigation";
+import { LineChart } from "~/components/Linechart";
+import { InputRows } from "~/components/DayExercise/InputRows";
+import { EditSets } from "~/components/DayExercise/EditSets";
+import { ExerciseTabs } from "~/components/DayExercise/ExerciseTab";
 
 export default async function DayExercise(context: any | unknown) {
   const session = await auth();
