@@ -227,6 +227,9 @@ export const workoutDayExercises = createTable(
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    programId: integer("program_id")
+      .notNull()
+      .references(() => workoutPrograms.id, { onDelete: "cascade" }),
     dayId: integer("day_id")
       .notNull()
       .references(() => workoutProgramDays.id, { onDelete: "cascade" }),

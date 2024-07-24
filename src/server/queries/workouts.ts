@@ -120,65 +120,22 @@ export async function deleteProgramDay(
     );
 }
 
-// export async function getTodaysWorkout(userId: string) {
-//   const today = new Date();
-//   const todayString = String(today);
-//   return await db.query.workoutProgramDays.findFirst({
-//     where: (model, { and, eq, gte, lte, sql }) =>
-//       and(
-//         eq(model.userId, userId),
-//         lte(model.repeatStart, todayString),
-//         gte(model.repeatEnd, todayString),
-//         sql`${model.repeatOn} @> {${today.getDay()}}`,
-//       ),
-//     with: {
-//       sessionExercises: {
-//         with: {
-//           info: true,
-//           notes: true,
-//         },
-//       },
-//     },
-//   });
-// }
-
-// export async function createWorkout(
-//   userId: string,
-//   name: string,
-//   repeatStart: string | null,
-//   repeatEnd: string | null,
-//   repeatOn: number[] | null,
-// ) {
-//   await db
-//     .insert(workoutProgramDays)
-//     .values({ userId, name, repeatStart, repeatEnd, repeatOn });
-// }
-
-// export async function deleteWorkout(userId: string, workoutId: number) {
-//   await db
-//     .delete(workoutProgramDays)
-//     .where(
-//       and(
-//         eq(workoutProgramDays.userId, userId),
-//         eq(workoutProgramDays.id, workoutId),
-//       ),
-//     );
-// }
-
-// export async function getWorkout(userId: string, planId: number) {
-//   return await db.query.workoutProgramDays.findFirst({
-//     where: (model, { and, eq }) =>
-//       and(eq(model.userId, userId), eq(model.id, planId)),
-//     with: {
-//       sessionExercises: {
-//         with: {
-//           info: true,
-//           notes: true,
-//         },
-//       },
-//     },
-//   });
-// }
+// * Program Day
+export async function getProgramDay(
+  userId: string,
+  programId: number,
+  dayId: number,
+) {
+  return await db.query.workoutProgramDays.findFirst({
+    where: (model, { and, eq }) =>
+      and(
+        eq(model.userId, userId),
+        eq(model.programId, programId),
+        eq(model.id, dayId),
+      ),
+    with: { dayExercises: { with: { info: true, notes: true } } },
+  });
+}
 
 export async function getExerciseAnalytics(
   userId: string,
@@ -238,14 +195,16 @@ export async function getWeekAnalytics(userId: string) {
 // * Day Exercise
 export async function addDayExercise(
   userId: string,
+  programId: number,
   dayId: number,
   exerciseId: number,
 ) {
-  await db.insert(workoutDayExercises).values({ userId, dayId, exerciseId });
+  await db.insert(workoutDayExercises).values({ userId, programId, dayId, exerciseId });
 }
 
 export async function deleteDayExercise(
   userId: string,
+  programId: number,
   dayId: number,
   dayExerciseId: number,
 ) {
@@ -254,6 +213,7 @@ export async function deleteDayExercise(
     .where(
       and(
         eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.programId, programId),
         eq(workoutDayExercises.dayId, dayId),
         eq(workoutDayExercises.id, dayExerciseId),
       ),
@@ -293,3 +253,25 @@ export async function updateDayExerciseSets(
       ),
     );
 }
+
+// export async function getTodaysWorkout(userId: string) {
+//   const today = new Date();
+//   const todayString = String(today);
+//   return await db.query.workoutProgramDays.findFirst({
+//     where: (model, { and, eq, gte, lte, sql }) =>
+//       and(
+//         eq(model.userId, userId),
+//         lte(model.repeatStart, todayString),
+//         gte(model.repeatEnd, todayString),
+//         sql`${model.repeatOn} @> {${today.getDay()}}`,
+//       ),
+//     with: {
+//       sessionExercises: {
+//         with: {
+//           info: true,
+//           notes: true,
+//         },
+//       },
+//     },
+//   });
+// }

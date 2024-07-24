@@ -20,7 +20,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "~/components/ui/form";
 import {
@@ -28,7 +27,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { Exercises } from "~/server/types";
+import { Exercises, ProgramDay } from "~/server/types";
 import { handleAddExercise, handleDeleteExercise } from "./ServerComponents";
 
 const FormSchema = z.object({
@@ -39,12 +38,16 @@ const FormSchema = z.object({
 
 export function ExerciseForm({
   userId,
-  workoutId,
+  programId,
+  dayId,
+  programDay,
   exercises,
   method,
 }: {
   userId: string;
-  workoutId: number;
+  programId: number;
+  dayId: number;
+  programDay: ProgramDay;
   exercises: Exercises;
   method: "Add" | "Delete";
 }) {
@@ -54,9 +57,10 @@ export function ExerciseForm({
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     method === "Add"
-      ? handleAddExercise(userId, workoutId, Number(data.exercise))
-      : handleDeleteExercise(userId, workoutId, Number(data.exercise));
+      ? handleAddExercise(userId, programId, dayId, Number(data.exercise))
+      : handleDeleteExercise(userId, programId, dayId, Number(data.exercise));
   }
+  const exerciseOptions = programDay!.dayExercises;
 
   return (
     <Form {...form}>
@@ -73,14 +77,18 @@ export function ExerciseForm({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        " justify-between",
+                        "justify-between",
                         !field.value && "text-muted-foreground",
                       )}
                     >
                       {field.value
-                        ? exercises.find(
-                            (exercise) => String(exercise.id) === field.value,
-                          )?.name
+                        ? method === "Add"
+                          ? exercises.find(
+                              (exercise) => String(exercise.id) === field.value,
+                            )?.name
+                          : exerciseOptions.find(
+                              (exercise) => String(exercise.id) === field.value,
+                            )?.info.name
                         : "Select exercise"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -92,26 +100,51 @@ export function ExerciseForm({
                     <CommandEmpty>No exercise found.</CommandEmpty>
                     <CommandGroup>
                       <CommandList>
-                        {exercises.map((exercise) => (
-                          <CommandItem
-                            className=""
-                            value={exercise.name}
-                            key={exercise.id}
-                            onSelect={() => {
-                              form.setValue("exercise", String(exercise.id));
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                String(exercise.id) === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {exercise.name}
-                          </CommandItem>
-                        ))}
+                        {method === "Add"
+                          ? exercises.map((exercise) => (
+                              <CommandItem
+                                value={exercise.name}
+                                key={exercise.id}
+                                onSelect={() => {
+                                  form.setValue(
+                                    "exercise",
+                                    String(exercise.id),
+                                  );
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    String(exercise.id) === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                                {exercise.name}
+                              </CommandItem>
+                            ))
+                          : exerciseOptions.map((exercise) => (
+                              <CommandItem
+                                value={exercise.info.name}
+                                key={exercise.id}
+                                onSelect={() => {
+                                  form.setValue(
+                                    "exercise",
+                                    String(exercise.id),
+                                  );
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    String(exercise.id) === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                                {exercise.info.name}
+                              </CommandItem>
+                            ))}
                       </CommandList>
                     </CommandGroup>
                   </Command>

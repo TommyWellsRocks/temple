@@ -1,23 +1,32 @@
 import Link from "next/link";
 import Image from "next/image";
-import Nav from "../../_components/Nav"
+import Nav from "../../_components/Nav";
 import LineChart from "../../_components/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import { getWeekAnalytics, getWorkout } from "~/server/queries/workouts";
+import { getWeekAnalytics, getProgramDay } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { AddExercises } from "./_components/AddExercises";
-import { DeleteExercise } from "./_components/DeleteExercise";
+import { DeleteExercises } from "./_components/DeleteExercises";
+import { getExercises } from "~/server/queries/exercises";
 
-export default async function Overview(context: any | unknown) {
+export default async function DayOverview(context: any | unknown) {
   const session = await auth();
-  if (!session?.user) return redirect("/signin");
+  if (!session || !session.user || !session.user.id) return redirect("/signin");
 
-  const { planId } = context.params as { planId: string };
-  const workoutPlan = await getWorkout(session.user.id!, Number(planId));
+  const { programId, dayId } = context.params as {
+    programId: string;
+    dayId: string;
+  };
+  const workoutPlan = await getProgramDay(
+    session.user.id,
+    Number(programId),
+    Number(dayId),
+  );
   if (!workoutPlan) return "INVALID PLAN";
-  const exercises = workoutPlan.sessionExercises;
+  const exercises = workoutPlan.dayExercises;
+  const allExercises = await getExercises();
 
   const [lastWeek, thisWeek] = await getWeekAnalytics(session.user.id!);
   const doneCount = exercises.filter(
@@ -26,7 +35,7 @@ export default async function Overview(context: any | unknown) {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Nav backURL="/workout/" heading="The Overview" />
+      <Nav backURL={`/workout/${programId}`} heading="The Overview" />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -42,7 +51,7 @@ export default async function Overview(context: any | unknown) {
           {exercises.map(async (exercise) => {
             return (
               <Image
-                className="w-15 border-primary rounded-lg border bg-white p-0.5"
+                className="w-15 rounded-lg border border-primary bg-white p-0.5"
                 src={
                   exercise.info.targetMuscleImages
                     ? (exercise.info.targetMuscleImages[0] as string)
@@ -94,7 +103,7 @@ export default async function Overview(context: any | unknown) {
                   </div>
                 </div>
                 <Image
-                  className="border-primary rounded-full border"
+                  className="rounded-full border border-primary"
                   src={isDone ? trophyButtonURL : playButtonURL}
                   alt="Action."
                 />
@@ -103,11 +112,19 @@ export default async function Overview(context: any | unknown) {
           })}
         </div>
         <div className="flex justify-center gap-3 pt-5">
-          <AddExercises userId={session.user!.id!} workoutId={Number(planId)} />
-          <DeleteExercise
-            userId={session.user!.id!}
-            workoutId={Number(planId)}
-            workoutExercises={exercises.map((exercise) => exercise.info)}
+          <AddExercises
+            userId={session.user.id}
+            programId={Number(programId)}
+            dayId={Number(dayId)}
+            programDay={workoutPlan}
+            exercises={allExercises}
+          />
+          <DeleteExercises
+            userId={session.user.id}
+            programId={Number(programId)}
+            dayId={Number(dayId)}
+            programDay={workoutPlan}
+            exercises={allExercises}
           />
         </div>
       </section>

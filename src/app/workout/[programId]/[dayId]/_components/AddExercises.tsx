@@ -8,19 +8,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { getExercises } from "~/server/queries/exercises";
 
 import { ExerciseForm } from "./ExerciseForm";
+import { Exercises, ProgramDay } from "~/server/types";
 
 export async function AddExercises({
   userId,
-  workoutId,
+  programId,
+  dayId,
+  programDay,
+  exercises,
 }: {
   userId: string;
-  workoutId: number;
+  programId: number;
+  dayId: number;
+  programDay: ProgramDay;
+  exercises: Exercises;
 }) {
-  const exercises = await getExercises();
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -39,7 +43,9 @@ export async function AddExercises({
 
         <ExerciseForm
           userId={userId}
-          workoutId={workoutId}
+          programId={programId}
+          dayId={dayId}
+          programDay={programDay}
           exercises={exercises}
           method="Add"
         />

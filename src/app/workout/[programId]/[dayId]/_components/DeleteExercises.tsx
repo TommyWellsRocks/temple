@@ -10,16 +10,20 @@ import {
 } from "~/components/ui/dialog";
 
 import { ExerciseForm } from "./ExerciseForm";
-import { Exercises } from "~/server/types";
+import { Exercises, ProgramDay } from "~/server/types";
 
-export async function DeleteExercise({
+export async function DeleteExercises({
   userId,
-  workoutId,
-  workoutExercises,
+  programId,
+  dayId,
+  programDay,
+  exercises,
 }: {
   userId: string;
-  workoutId: number;
-  workoutExercises: Exercises;
+  programId: number;
+  dayId: number;
+  programDay: ProgramDay;
+  exercises: Exercises;
 }) {
   return (
     <Dialog>
@@ -39,8 +43,10 @@ export async function DeleteExercise({
 
         <ExerciseForm
           userId={userId}
-          workoutId={workoutId}
-          exercises={workoutExercises}
+          programId={programId}
+          dayId={dayId}
+          programDay={programDay}
+          exercises={exercises}
           method="Delete"
         />
       </DialogContent>
