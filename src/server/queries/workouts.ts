@@ -193,13 +193,33 @@ export async function getWeekAnalytics(userId: string) {
 }
 
 // * Day Exercise
+export async function getDayExercise(
+  userId: string,
+  programId: number,
+  dayId: number,
+  dayExerciseId: number,
+) {
+  return await db.query.workoutDayExercises.findFirst({
+    where: (model, { and, eq }) =>
+      and(
+        eq(model.userId, userId),
+        eq(model.programId, programId),
+        eq(model.dayId, dayId),
+        eq(model.id, dayExerciseId),
+      ),
+    with: { info: true, notes: true },
+  });
+}
+
 export async function addDayExercise(
   userId: string,
   programId: number,
   dayId: number,
   exerciseId: number,
 ) {
-  await db.insert(workoutDayExercises).values({ userId, programId, dayId, exerciseId });
+  await db
+    .insert(workoutDayExercises)
+    .values({ userId, programId, dayId, exerciseId });
 }
 
 export async function deleteDayExercise(

@@ -81,7 +81,7 @@ export default async function DayOverview(context: any | unknown) {
             return (
               <Link
                 className={`flex cursor-pointer items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneDark" : "bg-undoneDark"}`}
-                href={`/workout/${workoutPlan.id}/${exercise.info.id}`}
+                href={`/workout/${programId}/${dayId}/${exercise.id}`}
               >
                 <div className="flex items-start gap-x-3">
                   <Image
