@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { ProgramDays } from "~/server/types";
-import { handleDeleteProgramDay } from "~/components/ServerComponents/ProgramDay";
+import { handleDeleteProgramDay } from "~/components/workout/ServerComponents/ProgramDay";
 
 export const formSchema = z.object({
   name: z.string().max(20, {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { handleEditSets } from "~/components/ServerComponents/DayExercise";
+import { handleEditSets } from "~/components/workout/ServerComponents/DayExercise";
 import { DayExercise } from "~/server/types";
 
 export function EditSets({
@@ -32,12 +32,7 @@ export function EditSets({
           weightValues.pop();
         }
 
-        handleEditSets(
-          userId,
-          dayExercise,
-          repValues,
-          weightValues,
-        );
+        handleEditSets(userId, dayExercise, repValues, weightValues);
       }}
     >
       {method === "Add" ? <Plus /> : <Minus />}

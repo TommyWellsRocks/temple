@@ -4,9 +4,9 @@ import { getProgramDays } from "~/server/queries/workouts";
 import Image from "next/image";
 import Link from "next/link";
 import PlanIconURL from "public/content/images/workout/plan-icon.svg";
-import { Navigation } from "~/components/Navigation";
-import { OverlayButton } from "~/components/OverlayButton";
-import { PopoverButton } from "~/components/PopoverButton";
+import { Navigation } from "~/components/workout/Navigation";
+import { OverlayButton } from "~/components/workout/OverlayButton";
+import { PopoverButton } from "~/components/workout/PopoverButton";
 
 export default async function MyProgramDays(context: any | unknown) {
   const session = await auth();
@@ -56,7 +56,7 @@ export default async function MyProgramDays(context: any | unknown) {
                       title="Edit Program Day"
                       description="Remember to click edit when your done."
                       formType="ProgramDay"
-                      formProps={{userId: session.user!.id!, dayInfo: day}}
+                      formProps={{ userId: session.user!.id!, dayInfo: day }}
                     />
                   </div>
                 </div>

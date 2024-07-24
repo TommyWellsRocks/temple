@@ -1,14 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Navigation } from "~/components/Navigation";
-import { LineChart } from "~/components/Linechart";
+import { Navigation } from "~/components/workout/Navigation";
+import { LineChart } from "~/components/workout/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { getWeekAnalytics, getProgramDay } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getExercises } from "~/server/queries/exercises";
-import { OverlayButton } from "~/components/OverlayButton";
+import { OverlayButton } from "~/components/workout/OverlayButton";
 
 export default async function DayOverview(context: any | unknown) {
   const session = await auth();

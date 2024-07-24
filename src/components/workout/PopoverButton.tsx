@@ -2,8 +2,8 @@
 
 import { Pencil } from "lucide-react";
 import { z } from "zod";
-import { handleEditProgram } from "~/components/ServerComponents/Program";
-import { handleEditProgramDay } from "~/components/ServerComponents/ProgramDay";
+import { handleEditProgram } from "~/components/workout/ServerComponents/Program";
+import { handleEditProgramDay } from "~/components/workout/ServerComponents/ProgramDay";
 import {
   ProgramForm,
   formSchema as programFormSchema,
@@ -11,7 +11,7 @@ import {
 import {
   DayForm,
   formSchema as dayFormSchema,
-} from "~/components/forms/DayForm";
+} from "~/components/workout/forms/DayForm";
 import {
   Popover,
   PopoverContent,

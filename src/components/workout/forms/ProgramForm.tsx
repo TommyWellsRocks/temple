@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { WorkoutPrograms } from "~/server/types";
-import { handleDeleteProgram } from "~/components/ServerComponents/Program";
+import { handleDeleteProgram } from "~/components/workout/ServerComponents/Program";
 
 export const formSchema = z.object({
   name: z.string().max(20, {

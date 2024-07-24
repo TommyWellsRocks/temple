@@ -1,6 +1,6 @@
 "use client";
 
-import { handleInput } from "~/components/ServerComponents/DayExercise";
+import { handleInput } from "~/components/workout/ServerComponents/DayExercise";
 import { DayExercise } from "~/server/types";
 
 export function InputRows({

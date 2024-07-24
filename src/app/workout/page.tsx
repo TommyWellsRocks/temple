@@ -4,9 +4,9 @@ import PlanIconURL from "../../../public/content/images/workout/plan-icon.svg";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getMyWorkoutPrograms } from "~/server/queries/workouts";
-import { Navigation } from "~/components/Navigation";
-import { OverlayButton } from "~/components/OverlayButton";
-import { PopoverButton } from "~/components/PopoverButton";
+import { Navigation } from "~/components/workout/Navigation";
+import { OverlayButton } from "~/components/workout/OverlayButton";
+import { PopoverButton } from "~/components/workout/PopoverButton";
 
 export default async function MyPrograms() {
   const session = await auth();

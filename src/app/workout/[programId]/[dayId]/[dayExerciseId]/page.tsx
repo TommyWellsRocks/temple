@@ -4,11 +4,11 @@ import {
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { Navigation } from "~/components/Navigation";
-import { LineChart } from "~/components/Linechart";
-import { InputRows } from "~/components/DayExercise/InputRows";
-import { EditSets } from "~/components/DayExercise/EditSets";
-import { ExerciseTabs } from "~/components/DayExercise/ExerciseTab";
+import { Navigation } from "~/components/workout/Navigation";
+import { LineChart } from "~/components/workout/Linechart";
+import { InputRows } from "~/components/workout/Exercise/InputRows";
+import { EditSets } from "~/components/workout/Exercise/EditSets";
+import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTab";
 
 export default async function DayExercise(context: any | unknown) {
   const session = await auth();
