@@ -10,7 +10,6 @@ import {
   getMyYearDaysActiveAnalytics,
 } from "~/server/queries/workouts";
 import { Navigation } from "~/components/workout/Navigation";
-import { OverlayButton } from "~/components/workout/OverlayButton";
 import { PopoverButton } from "~/components/workout/PopoverButton";
 import { LineChart } from "~/components/workout/Linechart";
 
@@ -30,7 +29,17 @@ export default async function MyPrograms() {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Navigation backURL="/workout" heading="Workout Programs" />
+      <Navigation
+        backURL="/workout"
+        heading="Workout Programs"
+        addButtonInfo={{
+          title: "Create Workout Program",
+          description:
+            "Build and plan your new workout program. Click create when you're done.",
+          formType: "Program",
+          formProps: { userId: session.user.id },
+        }}
+      />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -54,16 +63,6 @@ export default async function MyPrograms() {
           previousData={lastYear as number[]}
           currentLabel="This Year"
           currentData={thisYear as number[]}
-        />
-      </section>
-
-      <section className="flex items-center justify-between">
-        <h1>My Workout Programs:</h1>
-        <OverlayButton
-          title="Create Workout Program"
-          description="Build and plan your new workout program. Click create when you're done."
-          formType="Program"
-          formProps={{ userId: session.user.id }}
         />
       </section>
 

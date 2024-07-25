@@ -35,7 +35,16 @@ export function Navigation({
     }) {
   let addButton;
 
-  if (addButtonInfo && addButtonInfo.formType === "ProgramDays") {
+  if (addButtonInfo && addButtonInfo.formType === "Program") {
+    addButton = (
+      <OverlayButton
+        title={addButtonInfo.title}
+        description={addButtonInfo.description}
+        formType={addButtonInfo.formType}
+        formProps={addButtonInfo.formProps}
+      />
+    );
+  } else if (addButtonInfo && addButtonInfo.formType === "ProgramDays") {
     addButton = (
       <OverlayButton
         title={addButtonInfo.title}

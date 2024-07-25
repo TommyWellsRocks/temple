@@ -7,7 +7,6 @@ import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { Navigation } from "~/components/workout/Navigation";
-import { OverlayButton } from "~/components/workout/OverlayButton";
 import { PopoverButton } from "~/components/workout/PopoverButton";
 import { LineChart } from "~/components/workout/Linechart";
 
