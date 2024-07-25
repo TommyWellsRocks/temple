@@ -73,6 +73,13 @@ export async function getProgram(userId: string, programId: number) {
   return await db.query.workoutPrograms.findFirst({
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.id, programId)),
+    with: {
+      programDays: {
+        with: {
+          dayExercises: { with: { info: true, notes: true } },
+        },
+      },
+    },
   });
 }
 

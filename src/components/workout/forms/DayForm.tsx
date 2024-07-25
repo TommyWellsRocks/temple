@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { ProgramDays } from "~/server/types";
+import { ProgramDay } from "~/server/types";
 import {
   handleCreateDay,
   handleDeleteProgramDay,
@@ -29,7 +29,7 @@ export function DayForm({
 }: {
   userId: string;
   programId: number;
-  dayInfo?: ProgramDays[0];
+  dayInfo?: ProgramDay;
 }) {
   const days = [
     { day: "Sunday", id: 0 },
@@ -43,7 +43,7 @@ export function DayForm({
 
   const formSchema = z.object({
     name: z.string().max(20, {
-      message: "Username must be less than 20 characters.",
+      message: "Day name must be less than 20 characters.",
     }),
     repeatOn: z.array(z.number()).optional(),
   });

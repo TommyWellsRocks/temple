@@ -1,6 +1,6 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getProgram, getProgramDays } from "~/server/queries/workouts";
+import { getProgram } from "~/server/queries/workouts";
 import Image from "next/image";
 import Link from "next/link";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
@@ -19,7 +19,6 @@ export default async function MyProgramDays(context: any | unknown) {
 
   const { programId } = context.params as { programId: string };
   const program = await getProgram(session.user.id, Number(programId));
-  const programDays = await getProgramDays(session.user.id, Number(programId));
   const todaysDay = new Date().getDay();
 
   return !program ? (
@@ -46,7 +45,7 @@ export default async function MyProgramDays(context: any | unknown) {
           title="Create Day"
           description="Build and plan your new workout program. Click create when you're
             done."
-          formType="Day"
+          formType="ProgramDays"
           formProps={{
             userId: session.user.id,
             programId: Number(programId),
@@ -55,11 +54,11 @@ export default async function MyProgramDays(context: any | unknown) {
       </section>
 
       <section>
-        {!programDays.length ? (
+        {!program.programDays.length ? (
           <div>No program days to show 😫</div>
         ) : (
           <div className="flex flex-col gap-5">
-            {programDays.map((day) => {
+            {program.programDays.map((day) => {
               // Has Exercises and none have undone reps
               const isDone =
                 day.dayExercises.length >= 1 &&
@@ -78,7 +77,7 @@ export default async function MyProgramDays(context: any | unknown) {
                     <PopoverButton
                       title="Edit Workout Program"
                       description="Remember to click edit when your done."
-                      formType="Day"
+                      formType="ProgramDays"
                       formProps={{ dayInfo: day }}
                     />
                   </div>

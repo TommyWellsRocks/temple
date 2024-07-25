@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { ProgramDays, WorkoutPrograms } from "~/server/types";
+import { ProgramDay, WorkoutPrograms } from "~/server/types";
 
 export function PopoverButton({
   title,
@@ -21,9 +21,9 @@ export function PopoverButton({
 } & (
   | { formType: "Program"; formProps: { programInfo: WorkoutPrograms[0] } }
   | {
-      formType: "Day";
+      formType: "ProgramDays";
       formProps: {
-        dayInfo: ProgramDays[0];
+        dayInfo: ProgramDay;
       };
     }
 )) {
@@ -36,11 +36,11 @@ export function PopoverButton({
         programInfo={formProps.programInfo}
       />
     );
-  } else if (formType === "Day") {
+  } else if (formType === "ProgramDays") {
     FormComponent = (
       <DayForm
-        userId={formProps.dayInfo.userId}
-        programId={formProps.dayInfo.programId}
+        userId={formProps.dayInfo!.userId}
+        programId={formProps.dayInfo!.programId}
         dayInfo={formProps.dayInfo}
       />
     );
