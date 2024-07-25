@@ -8,58 +8,32 @@ import { _DeepPartialObject } from "node_modules/chart.js/dist/types/utils";
 function chartData(
   previousData: number[],
   currentData: number[],
-  page: "Overview" | "Individual",
+  xLabels: string[] | number[],
+  prevLabel: string,
+  currentLabel: string,
 ) {
-  if (page === "Overview")
-    return {
-      labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      datasets: [
-        {
-          label: "Last Weeks's Volume",
-          data: previousData,
-          fill: true,
-          borderColor: "#999",
-          backgroundColor: "rgba(153, 153, 153, 0.5)",
-          tension: 0.1,
-          borderDash: [5, 5],
-        },
-        {
-          label: "This Week's Volume",
-          data: currentData,
-          fill: true,
-          borderColor: "rgba(102, 56, 254, 1)",
-          backgroundColor: "rgba(102, 56, 254)",
-          tension: 0.1,
-        },
-      ],
-    };
-  else if (page === "Individual") {
-    return {
-      labels:
-        previousData.length < currentData.length
-          ? currentData.map((_, index) => `Set ${index + 1}`)
-          : previousData.map((_, index) => `Set ${index + 1}`),
-      datasets: [
-        {
-          label: "Last Session's Volume",
-          data: previousData,
-          fill: true,
-          borderColor: "#999",
-          backgroundColor: "rgba(153, 153, 153, 0.5)",
-          tension: 0.1,
-          borderDash: [5, 5],
-        },
-        {
-          label: "Current Session's Volume",
-          data: currentData,
-          fill: true,
-          borderColor: "rgba(102, 56, 254, 1)",
-          backgroundColor: "rgba(102, 56, 254)",
-          tension: 0.1,
-        },
-      ],
-    };
-  }
+  return {
+    labels: xLabels,
+    datasets: [
+      {
+        label: prevLabel,
+        data: previousData,
+        fill: true,
+        borderColor: "#999",
+        backgroundColor: "rgba(153, 153, 153, 0.5)",
+        tension: 0.1,
+        borderDash: [5, 5],
+      },
+      {
+        label: currentLabel,
+        data: currentData,
+        fill: true,
+        borderColor: "rgba(102, 56, 254, 1)",
+        backgroundColor: "rgba(102, 56, 254)",
+        tension: 0.1,
+      },
+    ],
+  };
 }
 
 function chartOptions(previousData: number[], currentData: number[]) {
@@ -89,18 +63,24 @@ function chartOptions(previousData: number[], currentData: number[]) {
 }
 
 export function LineChart({
-  page,
   previousData,
   currentData,
+  xLabels,
+  prevLabel,
+  currentLabel,
 }: {
-  page: "Overview" | "Individual";
   previousData: number[];
   currentData: number[];
+  xLabels: string[] | number[];
+  prevLabel: string;
+  currentLabel: string;
 }) {
   const chartDataSetup = chartData(
     previousData,
     currentData,
-    page,
+    xLabels,
+    prevLabel,
+    currentLabel,
   ) as ChartData<"line", number[], string>;
   const chartAdditionalOptions = chartOptions(
     previousData,

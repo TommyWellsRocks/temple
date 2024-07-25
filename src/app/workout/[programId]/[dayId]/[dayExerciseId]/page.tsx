@@ -43,8 +43,14 @@ export default async function MyDayExercise(context: any | unknown) {
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
-          page="Individual"
+          xLabels={
+            lastSessionVolume!.length < currentSessionVolume!.length
+              ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
+              : lastSessionVolume!.map((_, index) => `Set ${index + 1}`)
+          }
+          prevLabel="Last Session's Volume"
           previousData={lastSessionVolume!}
+          currentLabel="Current Session's Volume"
           currentData={currentSessionVolume!}
         />
       </section>
