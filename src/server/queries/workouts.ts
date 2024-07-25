@@ -69,11 +69,21 @@ export async function deleteWorkoutProgram(userId: string, programId: number) {
 }
 
 // * Program Days
+export async function getProgram(userId: string, programId: number) {
+  return await db.query.workoutPrograms.findFirst({
+    where: (model, { and, eq }) =>
+      and(eq(model.userId, userId), eq(model.id, programId)),
+  });
+}
+
 export async function getProgramDays(userId: string, programId: number) {
   return await db.query.workoutProgramDays.findMany({
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.programId, programId)),
-    with: { dayExercises: true },
+    with: {
+      dayExercises: { with: { info: true, notes: true } },
+      program: true,
+    },
   });
 }
 
