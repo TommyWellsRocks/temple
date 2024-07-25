@@ -180,8 +180,8 @@ export const workoutPrograms = createTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     name: varchar("name").default("New Program").notNull(),
-    repeatStart: date("repeat_start_date"),
-    repeatEnd: date("repeat_end_date"),
+    startDate: date("start_date").notNull(),
+    endDate: date("end_date").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -205,8 +205,6 @@ export const workoutProgramDays = createTable(
       .notNull()
       .references(() => workoutPrograms.id, { onDelete: "cascade" }),
     name: varchar("name").default("New Day").notNull(),
-    repeatStart: date("repeat_start_date"),
-    repeatEnd: date("repeat_end_date"),
     repeatOn: integer("repeat").array(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)

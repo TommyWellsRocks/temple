@@ -31,14 +31,14 @@ export function OverlayButton({
       };
     }
   | {
-      formType: "ProgramDays";
+      formType: "Day";
       formProps: {
         userId: string;
         programId: number;
       };
     }
   | {
-      formType: "DayExercise";
+      formType: "Exercise";
       formProps: {
         programDay: ProgramDay;
         exercises: Exercises;
@@ -50,11 +50,11 @@ export function OverlayButton({
 
   if (formType === "Program") {
     FormComponent = <ProgramForm userId={formProps.userId} />;
-  } else if (formType === "ProgramDays") {
+  } else if (formType === "Day") {
     FormComponent = (
       <DayForm userId={formProps.userId} programId={formProps.programId} />
     );
-  } else if (formType === "DayExercise") {
+  } else if (formType === "Exercise") {
     FormComponent = (
       <ExerciseForm
         programDay={formProps.programDay}
@@ -68,7 +68,7 @@ export function OverlayButton({
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">
-          {formType === "DayExercise" && formProps.method === "Delete" ? (
+          {formType === "Exercise" && formProps.method === "Delete" ? (
             <Minus />
           ) : (
             <Plus />

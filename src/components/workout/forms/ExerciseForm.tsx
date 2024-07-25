@@ -33,12 +33,6 @@ import {
   handleDeleteExercise,
 } from "../ServerComponents/DayExercises";
 
-export const formSchema = z.object({
-  exercise: z.string({
-    required_error: "Please select an exercise.",
-  }),
-});
-
 export function ExerciseForm({
   programDay,
   exercises,
@@ -48,6 +42,12 @@ export function ExerciseForm({
   exercises: Exercises;
   method: "Add" | "Delete";
 }) {
+  const formSchema = z.object({
+    exercise: z.string({
+      required_error: "Please select an exercise.",
+    }),
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });

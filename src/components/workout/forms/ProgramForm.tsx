@@ -31,13 +31,7 @@ import {
   handleDeleteProgram,
 } from "~/components/workout/ServerComponents/Program";
 
-export const formSchema = z.object({
-  name: z.string().max(20, {
-    message: "Program name must be less than 20 characters.",
-  }),
-  start: z.date(),
-  end: z.date(),
-});
+const PROGRAM_ACTIVE_DAYS = 45;
 
 export function ProgramForm({
   userId,
@@ -48,22 +42,26 @@ export function ProgramForm({
 }) {
   const today = new Date();
 
+  const formSchema = z.object({
+    name: z.string().max(20, {
+      message: "Program name must be less than 20 characters.",
+    }),
+    start: z.date(),
+    end: z.date(),
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: programInfo ? programInfo.name : undefined,
-      start:
-        programInfo && programInfo.repeatStart != null
-          ? new Date(programInfo.repeatStart)
-          : today,
-      end:
-        programInfo && programInfo.repeatEnd != null
-          ? new Date(programInfo.repeatEnd)
-          : addDays(today, 45),
+      start: programInfo ? addDays(new Date(programInfo.startDate), 1) : today,
+      end: programInfo
+        ? addDays(new Date(programInfo.endDate), 1)
+        : addDays(today, PROGRAM_ACTIVE_DAYS),
     },
   });
 
-  function DaysAndWeeks() {
+  function DatesDifference() {
     const differenceDays =
       (form.getValues().end?.getTime() - form.getValues().start?.getTime()) /
       (1000 * 3600 * 24);
@@ -187,7 +185,7 @@ export function ProgramForm({
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                <DaysAndWeeks />
+                <DatesDifference />
               </FormDescription>
               <FormMessage />
             </FormItem>

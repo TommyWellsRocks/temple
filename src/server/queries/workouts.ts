@@ -19,20 +19,21 @@ export async function getMyWorkoutPrograms(userId: string) {
   return await db.query.workoutPrograms.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.updatedAt),
+    with: { programDays: true },
   });
 }
 
 export async function createWorkoutProgram(
   userId: string,
   name: string,
-  repeatStart: string,
-  repeatEnd: string,
+  startDate: string,
+  endDate: string,
 ) {
   await db.insert(workoutPrograms).values({
     userId,
     name,
-    repeatStart,
-    repeatEnd,
+    startDate,
+    endDate,
   });
 }
 
@@ -40,12 +41,12 @@ export async function editWorkoutProgram(
   userId: string,
   programId: number,
   name: string,
-  repeatStart: string,
-  repeatEnd: string,
+  startDate: string,
+  endDate: string,
 ) {
   await db
     .update(workoutPrograms)
-    .set({ name, repeatStart, repeatEnd, updatedAt: new Date() })
+    .set({ name, startDate, endDate, updatedAt: new Date() })
     .where(
       and(
         eq(workoutPrograms.userId, userId),

@@ -22,13 +22,6 @@ import {
   handleEditProgramDay,
 } from "~/components/workout/ServerComponents/ProgramDay";
 
-export const formSchema = z.object({
-  name: z.string().max(20, {
-    message: "Username must be less than 20 characters.",
-  }),
-  repeatOn: z.array(z.number()).optional(),
-});
-
 export function DayForm({
   userId,
   programId,
@@ -47,6 +40,13 @@ export function DayForm({
     { day: "Friday", id: 5 },
     { day: "Saturday", id: 6 },
   ] as const;
+
+  const formSchema = z.object({
+    name: z.string().max(20, {
+      message: "Username must be less than 20 characters.",
+    }),
+    repeatOn: z.array(z.number()).optional(),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -10,14 +10,14 @@ import {
 export async function handleCreateProgram(
   userId: string,
   name: string,
-  repeatStart: Date,
-  repeatEnd: Date,
+  startDate: Date,
+  endDate: Date,
 ) {
   await createWorkoutProgram(
     userId,
     name,
-    repeatStart.toISOString(),
-    repeatEnd.toISOString(),
+    startDate.toISOString(),
+    endDate.toISOString(),
   );
   revalidatePath("/workout");
 }
@@ -26,15 +26,15 @@ export async function handleEditProgram(
   userId: string,
   programId: number,
   name: string,
-  repeatStart: Date,
-  repeatEnd: Date,
+  startDate: Date,
+  endDate: Date,
 ) {
   await editWorkoutProgram(
     userId,
     programId,
     name,
-    repeatStart.toISOString(),
-    repeatEnd.toISOString(),
+    startDate.toISOString(),
+    endDate.toISOString(),
   );
   revalidatePath("/workout");
 }

@@ -10,7 +10,7 @@ import { auth } from "~/server/auth";
 import { getExercises } from "~/server/queries/exercises";
 import { OverlayButton } from "~/components/workout/OverlayButton";
 
-export default async function DayOverview(context: any | unknown) {
+export default async function MyDayOverview(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
@@ -114,7 +114,7 @@ export default async function DayOverview(context: any | unknown) {
           <OverlayButton
             title="Add Exercise"
             description="Add an exercise to your workout. Click add when you're done."
-            formType="DayExercise"
+            formType="Exercise"
             formProps={{
               method: "Add",
               programDay,
@@ -124,7 +124,7 @@ export default async function DayOverview(context: any | unknown) {
           <OverlayButton
             title="Delete Exercise"
             description="Delete an exercise from your workout. Click delete when you're done."
-            formType="DayExercise"
+            formType="Exercise"
             formProps={{
               method: "Delete",
               programDay,

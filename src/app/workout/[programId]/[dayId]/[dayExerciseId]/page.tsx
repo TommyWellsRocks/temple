@@ -10,7 +10,7 @@ import { InputRows } from "~/components/workout/Exercise/InputRows";
 import { EditSetCount } from "~/components/workout/Exercise/EditSetCount";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 
-export default async function DayExercise(context: any | unknown) {
+export default async function MyDayExercise(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 

@@ -21,7 +21,7 @@ export function PopoverButton({
 } & (
   | { formType: "Program"; formProps: { programInfo: WorkoutPrograms[0] } }
   | {
-      formType: "ProgramDays";
+      formType: "Day";
       formProps: {
         dayInfo: ProgramDays[0];
       };
@@ -36,7 +36,7 @@ export function PopoverButton({
         programInfo={formProps.programInfo}
       />
     );
-  } else if (formType === "ProgramDays") {
+  } else if (formType === "Day") {
     FormComponent = (
       <DayForm
         userId={formProps.dayInfo.userId}
