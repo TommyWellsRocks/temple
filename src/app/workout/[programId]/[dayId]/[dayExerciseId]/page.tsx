@@ -1,6 +1,6 @@
 import {
   getDayExercise,
-  getExerciseAnalytics,
+  getMyExerciseAnalytics,
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
@@ -28,11 +28,12 @@ export default async function MyDayExercise(context: any | unknown) {
   if (!exercise) return "INVALID URL";
 
   const setCount = exercise.reps.length;
-  const [lastSessionVolume, currentSessionVolume] = (await getExerciseAnalytics(
-    session.user.id,
-    Number(exercise.info.id),
-    exercise,
-  )) as number[][];
+  const [lastSessionVolume, currentSessionVolume] =
+    (await getMyExerciseAnalytics(
+      session.user.id,
+      Number(exercise.info.id),
+      exercise,
+    )) as number[][];
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">

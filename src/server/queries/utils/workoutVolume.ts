@@ -1,6 +1,19 @@
 import { SessionExercise } from "~/server/types";
 
-export function getBetweenDays() {
+export function getYearsEndDates() {
+  const today = new Date();
+  const lastYear = today.getFullYear() - 1;
+  const thisYear = today.getFullYear();
+
+  const lastYearStart = new Date(lastYear, 0, 1);
+  const lastYearEnd = new Date(lastYear, 11, 31);
+  const thisYearStart = new Date(thisYear, 0, 1);
+  const thisYearEnd = new Date(thisYear, 11, 31);
+
+  return [lastYearStart, lastYearEnd, thisYearStart, thisYearEnd];
+}
+
+export function getWeeksEndDates() {
   const today = new Date();
   const currentDay = today.getDay();
   const currentDate = today.getDate();
@@ -21,6 +34,18 @@ export function getBetweenDays() {
 export function getDayOfWeek(timestamp: Date) {
   const date = new Date(timestamp);
   return date.getDay();
+}
+
+export function calculateMonthActiveDays(sessionExercises: SessionExercise[]) {
+  const year: number[] = Array(12).fill(0);
+  const dayIds = new Set<number>();
+  sessionExercises.forEach((session) => {
+    if (!dayIds.has(session.dayId)) {
+      dayIds.add(session.dayId);
+      year[session.updatedAt.getMonth()]!++;
+    }
+  });
+  return year;
 }
 
 export function calculateSessionVolume(sessionExercises: SessionExercise[]) {

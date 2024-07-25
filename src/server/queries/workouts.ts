@@ -3,8 +3,10 @@ import { db } from "../db";
 import {
   calculateExerciseVolume,
   calculateSessionVolume,
-  getBetweenDays,
+  getWeeksEndDates,
   getDayOfWeek,
+  getYearsEndDates,
+  calculateMonthActiveDays,
 } from "./utils/workoutVolume";
 import { SessionExercise } from "../types";
 import {
@@ -138,7 +140,36 @@ export async function getProgramDay(
   });
 }
 
-export async function getExerciseAnalytics(
+export async function getMyYearDaysActiveAnalytics(userId: string) {
+  const [lastYearStart, lastYearEnd, thisYearStart, thisYearEnd] =
+    getYearsEndDates();
+  const yearSessionItems = async (firstDay: Date, lastDay: Date) => {
+    return await db.query.workoutDayExercises.findMany({
+      where: (model, { and, eq, lt, between }) =>
+        and(
+          eq(model.userId, userId),
+          lt(model.createdAt, model.updatedAt),
+          between(model.updatedAt, firstDay, lastDay),
+        ),
+      orderBy: (model, { asc }) => asc(model.updatedAt),
+    });
+  };
+
+  const lastYearSessionItems = await yearSessionItems(
+    lastYearStart!,
+    lastYearEnd!,
+  );
+  const thisYearSessionItems = await yearSessionItems(
+    thisYearStart!,
+    thisYearEnd!,
+  );
+  const lastYearActivity = calculateMonthActiveDays(lastYearSessionItems);
+  const thisYearActivity = calculateMonthActiveDays(thisYearSessionItems);
+
+  return [lastYearActivity, thisYearActivity];
+}
+
+export async function getMyExerciseAnalytics(
   userId: string,
   exerciseId: number,
   currentSessionExercise: SessionExercise,
@@ -162,8 +193,8 @@ export async function getExerciseAnalytics(
   return [lastSession, currentSession];
 }
 
-export async function getWeekAnalytics(userId: string) {
-  const [lastSun, lastSat, thisSun, thisSat] = getBetweenDays();
+export async function getMyWeekAnalytics(userId: string) {
+  const [lastSun, lastSat, thisSun, thisSat] = getWeeksEndDates();
   const weekVolume = async (firstDay: Date, lastDay: Date) => {
     const weekSessions = await db.query.workoutProgramDays.findMany({
       where: (model, { and, eq, between }) =>

@@ -5,11 +5,14 @@ import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { getMyWorkoutPrograms } from "~/server/queries/workouts";
+import {
+  getMyWorkoutPrograms,
+  getMyYearDaysActiveAnalytics,
+} from "~/server/queries/workouts";
 import { Navigation } from "~/components/workout/Navigation";
 import { OverlayButton } from "~/components/workout/OverlayButton";
 import { PopoverButton } from "~/components/workout/PopoverButton";
-// import { LineChart } from "~/components/workout/Linechart";
+import { LineChart } from "~/components/workout/Linechart";
 
 const PROGRAM_DAYS_MAX_LENGTH = 7;
 const PROGRAM_NAME_MAX_LENGTH = 12;
@@ -19,6 +22,10 @@ export default async function MyPrograms() {
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
   const workoutPrograms = await getMyWorkoutPrograms(session.user.id);
+  let lastYear: number[] | undefined = [0];
+  let thisYear: number[] | undefined = [0];
+  if (workoutPrograms)
+    [lastYear, thisYear] = await getMyYearDaysActiveAnalytics(session.user.id);
   const today = new Date();
 
   return (
@@ -26,9 +33,28 @@ export default async function MyPrograms() {
       <Navigation backURL="/workout" heading="Workout Programs" />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
-        {/* <LineChart
-          page="Individual"
-        /> */}
+        <LineChart
+          title="Year Analytics"
+          measureOf="Active-Days"
+          xLabels={[
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ]}
+          prevLabel="Last Year"
+          previousData={lastYear as number[]}
+          currentLabel="This Year"
+          currentData={thisYear as number[]}
+        />
       </section>
 
       <section className="flex items-center justify-between">

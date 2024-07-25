@@ -4,7 +4,7 @@ import { Navigation } from "~/components/workout/Navigation";
 import { LineChart } from "~/components/workout/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import { getWeekAnalytics, getProgramDay } from "~/server/queries/workouts";
+import { getMyWeekAnalytics, getProgramDay } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getExercises } from "~/server/queries/exercises";
@@ -27,7 +27,7 @@ export default async function MyDayOverview(context: any | unknown) {
   const exercises = programDay.dayExercises;
   const allExercises = await getExercises();
 
-  const [lastWeek, thisWeek] = await getWeekAnalytics(session.user.id!);
+  const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id!);
   const doneCount = exercises.filter(
     (exercise) => !exercise.reps.includes(0),
   ).length;
