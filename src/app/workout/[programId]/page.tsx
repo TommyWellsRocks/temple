@@ -25,7 +25,20 @@ export default async function MyProgramDays(context: any | unknown) {
     <main>No workout to show</main>
   ) : (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Navigation backURL="/workout" heading="My Program Days" />
+      <Navigation
+        backURL="/workout"
+        heading={`${program.name} Days`}
+        addButtonInfo={{
+          title: "Create Day",
+          description:
+            "Build and plan your new workout program. Click create when you're done.",
+          formType: "ProgramDays",
+          formProps: {
+            userId: session.user.id,
+            programId: Number(programId),
+          },
+        }}
+      />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -36,20 +49,6 @@ export default async function MyProgramDays(context: any | unknown) {
           previousData={[0]}
           currentLabel="This Year"
           currentData={[0]}
-        />
-      </section>
-
-      <section className="flex items-center justify-between">
-        <h1>{program.name} Days:</h1>
-        <OverlayButton
-          title="Create Day"
-          description="Build and plan your new workout program. Click create when you're
-            done."
-          formType="ProgramDays"
-          formProps={{
-            userId: session.user.id,
-            programId: Number(programId),
-          }}
         />
       </section>
 
