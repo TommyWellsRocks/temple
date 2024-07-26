@@ -9,6 +9,7 @@ import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { Navigation } from "~/components/workout/Navigation";
 import { PopoverButton } from "~/components/workout/PopoverButton";
 import { LineChart } from "~/components/workout/Linechart";
+import { calculateProgramVolumeAnalytics } from "~/server/queries/utils/workoutVolume";
 
 const DAY_NAME_MAX_LENGTH = 12;
 
@@ -18,11 +19,14 @@ export default async function MyProgramDays(context: any | unknown) {
 
   const { programId } = context.params as { programId: string };
   const program = await getProgram(session.user.id, Number(programId));
+  if (!program) return <main>No program to show</main>;
+
+  // LineChart
+  const currentProgramVolume = calculateProgramVolumeAnalytics(program);
+
   const todaysDay = new Date().getDay();
 
-  return !program ? (
-    <main>No workout to show</main>
-  ) : (
+  return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
       <Navigation
         backURL="/workout"
@@ -30,7 +34,7 @@ export default async function MyProgramDays(context: any | unknown) {
         addButtonInfo={{
           title: "Create Day",
           description:
-            "Build and plan your new workout program. Click create when you're done.",
+            "Design and schedule your program days. Click create when you're done.",
           formType: "ProgramDays",
           formProps: {
             userId: session.user.id,
@@ -43,11 +47,9 @@ export default async function MyProgramDays(context: any | unknown) {
         <LineChart
           title="Program Analytics"
           measureOf="Volume"
-          xLabels={["Week 1", "Week 2", "Week 3", "Week 4"]}
-          prevLabel="Last Year"
-          previousData={[0]}
+          xLabels={currentProgramVolume.map((_, index) => `Week ${index + 1}`)}
           currentLabel="This Year"
-          currentData={[0]}
+          currentData={currentProgramVolume as number[]}
         />
       </section>
 

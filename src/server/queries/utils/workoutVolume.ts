@@ -1,4 +1,4 @@
-import { SessionExercise } from "~/server/types";
+import { Program, SessionExercise } from "~/server/types";
 
 export function getYearsEndDates() {
   const today = new Date();
@@ -31,6 +31,12 @@ export function getWeeksEndDates() {
   return [lastSun, lastSat, thisSun, thisSat];
 }
 
+function getWeekNumber(date: Date): number {
+  const firstJan = new Date(date.getFullYear(), 0, 1);
+  const pastDaysOfYear = (date.getTime() - firstJan.getTime()) / 86400000;
+  return Math.ceil((pastDaysOfYear + firstJan.getDay() + 1) / 7);
+}
+
 export function getDayOfWeek(timestamp: Date) {
   const date = new Date(timestamp);
   return date.getDay();
@@ -46,6 +52,33 @@ export function calculateMonthActiveDays(sessionExercises: SessionExercise[]) {
     }
   });
   return year;
+}
+
+export function calculateProgramVolumeAnalytics(program: Program) {
+  const weekVolumes: { [weekNumber: number]: number } = {};
+  let minWeekNumber = Infinity;
+  let maxWeekNumber = -Infinity;
+
+  program!.programDays.forEach((day) => {
+    const sessionVolume = calculateSessionVolume(day.dayExercises);
+    const weekNumber = getWeekNumber(day.updatedAt);
+    weekVolumes[weekNumber] = (weekVolumes[weekNumber] || 0) + sessionVolume;
+    minWeekNumber = Math.min(minWeekNumber, weekNumber);
+    maxWeekNumber = Math.max(maxWeekNumber, weekNumber);
+  });
+
+  // Fill missing weeks with zero
+  for (let i = minWeekNumber; i <= maxWeekNumber; i++) {
+    if (!(i in weekVolumes)) {
+      weekVolumes[i] = 0;
+    }
+  }
+  const programVolume = [];
+  for (let i = minWeekNumber; i <= maxWeekNumber; i++) {
+    programVolume.push(weekVolumes[i]);
+  }
+
+  return programVolume;
 }
 
 export function calculateSessionVolume(sessionExercises: SessionExercise[]) {

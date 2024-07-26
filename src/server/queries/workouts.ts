@@ -7,8 +7,9 @@ import {
   getDayOfWeek,
   getYearsEndDates,
   calculateMonthActiveDays,
+  calculateProgramVolumeAnalytics,
 } from "./utils/workoutVolume";
-import { SessionExercise } from "../types";
+import { Program, SessionExercise } from "../types";
 import {
   workoutDayExercises,
   workoutProgramDays,
@@ -157,6 +158,7 @@ export async function getProgramDay(
   });
 }
 
+// * Chart Information
 export async function getMyYearDaysActiveAnalytics(userId: string) {
   const [lastYearStart, lastYearEnd, thisYearStart, thisYearEnd] =
     getYearsEndDates();

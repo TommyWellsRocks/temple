@@ -26,14 +26,17 @@ export default async function MyDayExercise(context: any | unknown) {
     Number(dayExerciseId),
   );
   if (!exercise) return "INVALID URL";
-
-  const setCount = exercise.reps.length;
+  
+  // LineChart
   const [lastSessionVolume, currentSessionVolume] =
     (await getMyExerciseAnalytics(
       session.user.id,
       Number(exercise.info.id),
       exercise,
     )) as number[][];
+  
+  const setCount = exercise.reps.length;
+  
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">

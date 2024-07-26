@@ -21,10 +21,13 @@ export default async function MyPrograms() {
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
   const workoutPrograms = await getMyWorkoutPrograms(session.user.id);
+
+  // LineChart
   let lastYear: number[] | undefined = [0];
   let thisYear: number[] | undefined = [0];
   if (workoutPrograms)
     [lastYear, thisYear] = await getMyYearDaysActiveAnalytics(session.user.id);
+
   const today = new Date();
 
   return (
@@ -35,7 +38,7 @@ export default async function MyPrograms() {
         addButtonInfo={{
           title: "Create Workout Program",
           description:
-            "Build and plan your new workout program. Click create when you're done.",
+            "Build and plan out your program. Click create when you're done.",
           formType: "Program",
           formProps: { userId: session.user.id },
         }}
