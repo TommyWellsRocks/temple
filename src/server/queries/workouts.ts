@@ -76,10 +76,10 @@ export async function getMyProgram(userId: string, programId: number) {
       and(eq(model.userId, userId), eq(model.id, programId)),
     with: {
       programDays: {
-        columns: { updatedAt: false, createdAt: false },
+        columns: { createdAt: false },
         with: {
           dayExercises: {
-            columns: { reps: true },
+            columns: { reps: true, weight: true },
             with: { info: { columns: { name: true } } },
           },
         },
@@ -199,14 +199,13 @@ export async function getMyYearDaysActiveAnalytics(userId: string) {
 }
 
 export async function getMyWeekAnalytics(userId: string) {
-  // Go through all completed exercises between dates, and calculate the day's total session volume.
+  // Go through all exercises between dates, and calculate the day's total session volume.
   const weekVolume = async (firstDay: Date, lastDay: Date) => {
     const weekExercises = await db.query.workoutDayExercises.findMany({
-      where: (model, { and, eq, between, ne }) =>
+      where: (model, { and, eq, between }) =>
         and(
           eq(model.userId, userId),
           between(model.updatedAt, firstDay, lastDay),
-          ne(model.reps, [0, 0, 0, 0]),
         ),
       columns: { dayId: true, updatedAt: true },
       with: {
@@ -283,7 +282,7 @@ export async function getMyDayExercise(
       weight: true,
       updatedAt: true,
       userId: true,
-      exerciseId: true
+      exerciseId: true,
     },
     with: {
       info: {
