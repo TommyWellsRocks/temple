@@ -24,17 +24,19 @@ export default async function MyDayOverview(context: any | unknown) {
     Number(dayId),
   );
   if (!programDay) return "INVALID PLAN";
-  const exercises = programDay.dayExercises;
   const allExercises = await getExercises();
 
   const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id!);
-  const doneCount = exercises.filter(
+  const doneCount = programDay.dayExercises.filter(
     (exercise) => !exercise.reps.includes(0),
   ).length;
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Navigation backURL={`/workout/${programId}`} heading={`${programDay.name} Overview`} />
+      <Navigation
+        backURL={`/workout/${programId}`}
+        heading={`${programDay.name} Overview`}
+      />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
@@ -51,7 +53,7 @@ export default async function MyDayOverview(context: any | unknown) {
       <section>
         <h3 className="pb-2">Today's Muscles</h3>
         <div className="flex gap-x-3.5">
-          {exercises.map(async (exercise) => {
+          {programDay.dayExercises.map(async (exercise) => {
             return (
               <Image
                 className="w-15 rounded-lg border border-primary bg-white p-0.5"
@@ -73,12 +75,13 @@ export default async function MyDayOverview(context: any | unknown) {
         <div className="flex justify-between">
           <h3 className="pb-2">The Checklist 😎</h3>
           <h3 className="text-sm font-light">
-            <strong className="text-xl">{doneCount}</strong> /{exercises.length}
+            <strong className="text-xl">{doneCount}</strong> /
+            {programDay.dayExercises.length}
           </h3>
         </div>
 
         <div className="flex flex-col gap-y-3">
-          {exercises.map(async (exercise) => {
+          {programDay.dayExercises.map(async (exercise) => {
             const isDone = !exercise.reps.includes(0);
 
             return (

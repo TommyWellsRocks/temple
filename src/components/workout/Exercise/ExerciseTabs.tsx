@@ -39,7 +39,7 @@ export function ExerciseTabs({ dayExercise }: { dayExercise: DayExercise }) {
             if (newValue !== existingValue) {
               existingValue = newValue;
               handleExerciseNoteInput(
-                dayExercise,
+                dayExercise!,
                 newValue,
                 existingNote ? dayExercise!.notes.id : undefined,
               );

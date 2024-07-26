@@ -22,7 +22,7 @@ export async function getMyPrograms(userId: string) {
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.updatedAt),
     columns: { createdAt: false, updatedAt: false },
-    with: { programDays: true },
+    with: { programDays: { columns: { name: true } } },
   });
 }
 
@@ -76,8 +76,12 @@ export async function getMyProgram(userId: string, programId: number) {
       and(eq(model.userId, userId), eq(model.id, programId)),
     with: {
       programDays: {
+        columns: { updatedAt: false, createdAt: false },
         with: {
-          dayExercises: { with: { info: true, notes: true } },
+          dayExercises: {
+            columns: { reps: true },
+            with: { info: { columns: { name: true } } },
+          },
         },
       },
     },
@@ -144,8 +148,22 @@ export async function getMyProgramDay(
         eq(model.programId, programId),
         eq(model.id, dayId),
       ),
-    with: { dayExercises: { with: { info: true, notes: true } } },
     columns: { createdAt: false, updatedAt: false },
+    with: {
+      dayExercises: {
+        columns: { reps: true, id: true },
+        with: {
+          info: {
+            columns: {
+              targetMuscleImages: true,
+              images: true,
+              tips: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 }
 
@@ -190,8 +208,12 @@ export async function getMyWeekAnalytics(userId: string) {
           between(model.updatedAt, firstDay, lastDay),
           ne(model.reps, [0, 0, 0, 0]),
         ),
-      with: { day: { with: { dayExercises: true } } },
       columns: { dayId: true, updatedAt: true },
+      with: {
+        day: {
+          with: { dayExercises: { columns: { reps: true, weight: true } } },
+        },
+      },
     });
 
     const dayIds = new Set<number>();
@@ -239,7 +261,6 @@ export async function getMyExerciseAnalytics(
   return [lastSession, currentSession];
 }
 
-
 // * Day Exercise
 export async function getMyDayExercise(
   userId: string,
@@ -255,7 +276,27 @@ export async function getMyDayExercise(
         eq(model.dayId, dayId),
         eq(model.id, dayExerciseId),
       ),
-    with: { info: true, notes: true },
+    columns: {
+      reps: true,
+      dayId: true,
+      id: true,
+      weight: true,
+      updatedAt: true,
+      userId: true,
+      exerciseId: true
+    },
+    with: {
+      info: {
+        columns: {
+          id: true,
+          name: true,
+          tips: true,
+          instructions: true,
+          targetMuscleImages: true,
+        },
+      },
+      notes: { columns: { notes: true, id: true } },
+    },
   });
 }
 

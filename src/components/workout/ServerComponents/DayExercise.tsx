@@ -6,11 +6,14 @@ import {
   updateDayExerciseInput,
   updateDayExerciseSets,
 } from "~/server/queries/workouts";
-import { DayExercise } from "~/server/types";
 
 export async function handleExerciseVolumeInput(
   userId: string,
-  dayExercise: DayExercise,
+  dayExercise: {
+    id: number;
+    dayId: number;
+    userId: string;
+  },
   updateType: "Reps" | "Weight",
   newValues: number[],
 ) {
@@ -20,7 +23,11 @@ export async function handleExerciseVolumeInput(
 
 export async function handleEditSetCount(
   userId: string,
-  dayExercise: DayExercise,
+  dayExercise: {
+    id: number;
+    dayId: number;
+    userId: string;
+  },
   repValues: number[],
   weightValues: number[],
 ) {
@@ -29,10 +36,20 @@ export async function handleEditSetCount(
 }
 
 export async function handleExerciseNoteInput(
-  dayExercise: DayExercise,
+  dayExercise: {
+    id: number;
+    dayId: number;
+    userId: string;
+    exerciseId: number;
+  },
   noteValue: string,
   noteId?: number,
 ) {
-  await editExerciseNote(dayExercise!.userId, dayExercise!.exerciseId, noteValue, noteId);
+  await editExerciseNote(
+    dayExercise!.userId,
+    dayExercise!.exerciseId,
+    noteValue,
+    noteId,
+  );
   revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
 }

@@ -23,7 +23,13 @@ export function PopoverButton({
   | {
       formType: "ProgramDays";
       formProps: {
-        dayInfo: ProgramDay;
+        dayInfo: {
+          repeatOn: number[] | null;
+          name: string;
+          id: number;
+          userId: string;
+          programId: number;
+        };
       };
     }
 )) {

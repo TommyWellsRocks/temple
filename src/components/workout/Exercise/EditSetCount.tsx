@@ -32,7 +32,7 @@ export function EditSetCount({
           weightValues.pop();
         }
 
-        handleEditSetCount(userId, dayExercise, repValues, weightValues);
+        handleEditSetCount(userId, dayExercise!, repValues, weightValues);
       }}
     >
       {method === "Add" ? <Plus /> : <Minus />}

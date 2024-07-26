@@ -19,29 +19,29 @@ export default async function MyDayExercise(context: any | unknown) {
     dayId: string;
     dayExerciseId: string;
   };
-  const exercise = await getMyDayExercise(
+  const dayExercise = await getMyDayExercise(
     session.user.id,
     Number(programId),
     Number(dayId),
     Number(dayExerciseId),
   );
-  if (!exercise) return "INVALID URL";
+  if (!dayExercise) return "INVALID URL";
 
   // LineChart
   const [lastSessionVolume, currentSessionVolume] =
     await getMyExerciseAnalytics(
       session.user.id,
-      Number(exercise.info.id),
-      exercise,
+      Number(dayExercise.info.id),
+      dayExercise,
     );
 
-  const setCount = exercise.reps.length;
+  const setCount = dayExercise.reps.length;
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
       <Navigation
         backURL={`/workout/${programId}/${dayId}`}
-        heading={`${exercise.info.name}`}
+        heading={`${dayExercise.info.name}`}
       />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
@@ -66,23 +66,23 @@ export default async function MyDayExercise(context: any | unknown) {
           {setCount === 1 ? " Set" : " Sets"}
         </div>
         <div className="flex flex-col gap-y-5">
-          <InputRows userId={session.user.id} dayExercise={exercise} />
+          <InputRows userId={session.user.id} dayExercise={dayExercise} />
         </div>
         <div className="flex gap-x-5">
           <EditSetCount
             method="Add"
             userId={session.user.id}
-            dayExercise={exercise}
+            dayExercise={dayExercise}
           />
           <EditSetCount
             method="Delete"
             userId={session.user.id}
-            dayExercise={exercise}
+            dayExercise={dayExercise}
           />
         </div>
       </section>
 
-      <ExerciseTabs dayExercise={exercise} />
+      <ExerciseTabs dayExercise={dayExercise} />
     </main>
   );
 }

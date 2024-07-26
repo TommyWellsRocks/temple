@@ -1,14 +1,19 @@
 "use client";
 
 import { handleExerciseVolumeInput } from "~/components/workout/ServerComponents/DayExercise";
-import { DayExercise } from "~/server/types";
 
 export function InputRows({
   userId,
   dayExercise,
 }: {
   userId: string;
-  dayExercise: DayExercise;
+  dayExercise: {
+    id: number;
+    dayId: number;
+    userId: string;
+    reps: number[];
+    weight: number[];
+  };
 }) {
   const countBoxClassDefault =
     "flex h-11 w-11 items-center justify-center bg-gray-600 font-semibold text-gray-900";
@@ -31,7 +36,7 @@ export function InputRows({
           {index + 1}
         </div>
         <input
-          className="w-12 cursor-pointer text-center bg-transparent"
+          className="w-12 cursor-pointer bg-transparent text-center"
           type="number"
           defaultValue={repCount}
           onFocus={(e) => {
@@ -59,7 +64,7 @@ export function InputRows({
         <div className="text-xl">Reps</div>
         <div className="h-9 rotate-12 border border-gray-600"></div>
         <input
-          className="w-16 cursor-pointer text-center bg-transparent"
+          className="w-16 cursor-pointer bg-transparent text-center"
           type="number"
           defaultValue={dayExercise!.weight[index]}
           onFocus={(e) => {

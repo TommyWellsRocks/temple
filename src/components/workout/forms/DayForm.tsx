@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { ProgramDay } from "~/server/types";
 import {
   handleCreateDay,
   handleDeleteProgramDay,
@@ -29,7 +28,13 @@ export function DayForm({
 }: {
   userId: string;
   programId: number;
-  dayInfo?: ProgramDay;
+  dayInfo?: {
+    repeatOn: number[] | null;
+    name: string;
+    id: number;
+    userId: string;
+    programId: number;
+  };
 }) {
   const days = [
     { day: "Sunday", id: 0 },
