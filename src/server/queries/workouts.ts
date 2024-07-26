@@ -180,31 +180,6 @@ export async function getMyYearDaysActiveAnalytics(userId: string) {
   return [lastYearActivity, thisYearActivity];
 }
 
-export async function getMyExerciseAnalytics(
-  userId: string,
-  exerciseId: number,
-  currentSessionExercise: DayExercise,
-) {
-  const lastSessionExercise = await db.query.workoutDayExercises.findFirst({
-    where: (model, { and, eq, ne, lt }) =>
-      and(
-        eq(model.userId, userId),
-        eq(model.exerciseId, exerciseId),
-        ne(model.dayId, currentSessionExercise!.dayId),
-        lt(model.createdAt, currentSessionExercise!.updatedAt),
-      ),
-    orderBy: (model, { desc }) => desc(model.updatedAt),
-    columns: { reps: true, weight: true },
-  });
-
-  const lastSession = lastSessionExercise
-    ? calculateExerciseVolume(lastSessionExercise)
-    : [0];
-  const currentSession = calculateExerciseVolume(currentSessionExercise);
-
-  return [lastSession, currentSession];
-}
-
 export async function getMyWeekAnalytics(userId: string) {
   // Go through all completed exercises between dates, and calculate the day's total session volume.
   const weekVolume = async (firstDay: Date, lastDay: Date) => {
@@ -238,6 +213,32 @@ export async function getMyWeekAnalytics(userId: string) {
 
   return [lastWeekVolume, thisWeekVolume];
 }
+
+export async function getMyExerciseAnalytics(
+  userId: string,
+  exerciseId: number,
+  currentSessionExercise: DayExercise,
+) {
+  const lastSessionExercise = await db.query.workoutDayExercises.findFirst({
+    where: (model, { and, eq, ne, lt }) =>
+      and(
+        eq(model.userId, userId),
+        eq(model.exerciseId, exerciseId),
+        ne(model.dayId, currentSessionExercise!.dayId),
+        lt(model.updatedAt, currentSessionExercise!.updatedAt),
+      ),
+    orderBy: (model, { desc }) => desc(model.updatedAt),
+    columns: { reps: true, weight: true },
+  });
+
+  const lastSession = lastSessionExercise
+    ? calculateExerciseVolume(lastSessionExercise)
+    : [0];
+  const currentSession = calculateExerciseVolume(currentSessionExercise);
+
+  return [lastSession, currentSession];
+}
+
 
 // * Day Exercise
 export async function getMyDayExercise(

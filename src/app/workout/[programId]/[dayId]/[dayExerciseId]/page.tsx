@@ -29,11 +29,11 @@ export default async function MyDayExercise(context: any | unknown) {
 
   // LineChart
   const [lastSessionVolume, currentSessionVolume] =
-    (await getMyExerciseAnalytics(
+    await getMyExerciseAnalytics(
       session.user.id,
       Number(exercise.info.id),
       exercise,
-    )) as number[][];
+    );
 
   const setCount = exercise.reps.length;
 
