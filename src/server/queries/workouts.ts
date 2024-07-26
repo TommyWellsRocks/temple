@@ -7,9 +7,8 @@ import {
   getDayOfWeek,
   getYearsEndDates,
   calculateMonthActiveDays,
-  calculateProgramVolumeAnalytics,
 } from "./utils/workoutVolume";
-import { Program, SessionExercise } from "../types";
+import { SessionExercise } from "../types";
 import {
   workoutDayExercises,
   workoutProgramDays,
@@ -164,10 +163,10 @@ export async function getMyYearDaysActiveAnalytics(userId: string) {
     getYearsEndDates();
   const yearSessionItems = async (firstDay: Date, lastDay: Date) => {
     return await db.query.workoutDayExercises.findMany({
-      where: (model, { and, eq, lt, between }) =>
+      where: (model, { and, eq, ne, between }) =>
         and(
           eq(model.userId, userId),
-          lt(model.createdAt, model.updatedAt),
+          ne(model.reps, [0, 0, 0, 0]),
           between(model.updatedAt, firstDay, lastDay),
         ),
       orderBy: (model, { asc }) => asc(model.updatedAt),
@@ -213,32 +212,35 @@ export async function getMyExerciseAnalytics(
 }
 
 export async function getMyWeekAnalytics(userId: string) {
-  const [lastSun, lastSat, thisSun, thisSat] = getWeeksEndDates();
+  // Go through all completed exercises between dates, and calculate the day's total session volume.
   const weekVolume = async (firstDay: Date, lastDay: Date) => {
-    const weekSessions = await db.query.workoutProgramDays.findMany({
-      where: (model, { and, eq, between }) =>
+    const weekExercises = await db.query.workoutDayExercises.findMany({
+      where: (model, { and, eq, between, ne }) =>
         and(
           eq(model.userId, userId),
-          between(model.createdAt, firstDay, lastDay),
+          between(model.updatedAt, firstDay, lastDay),
+          ne(model.reps, [0, 0, 0, 0]),
         ),
-      with: {
-        dayExercises: {
-          where: (model, { ne }) => ne(model.reps, [0, 0, 0, 0]),
-          with: { info: true, notes: true },
-        },
-      },
+      with: { day: { with: { dayExercises: true } } },
+      columns: { dayId: true, updatedAt: true },
     });
 
+    const dayIds = new Set<number>();
     const weekVolume = [0, 0, 0, 0, 0, 0, 0];
-    weekSessions.forEach((session) => {
-      const sessionVolume = calculateSessionVolume(session.dayExercises);
-      const dayOfWeek = getDayOfWeek(session.createdAt);
-      weekVolume[dayOfWeek]! += sessionVolume;
+    weekExercises.forEach((exercise) => {
+      if (!dayIds.has(exercise.dayId)) {
+        dayIds.add(exercise.dayId);
+        const sessionVolume = calculateSessionVolume(exercise.day.dayExercises);
+        const dayOfWeek = getDayOfWeek(exercise.updatedAt);
+        weekVolume[dayOfWeek]! += sessionVolume;
+      }
     });
     return weekVolume;
   };
-  const lastWeekVolume = weekVolume(lastSun!, lastSat!);
-  const thisWeekVolume = weekVolume(thisSun!, thisSat!);
+
+  const [lastSun, lastSat, thisSun, thisSat] = getWeeksEndDates();
+  const lastWeekVolume = await weekVolume(lastSun!, lastSat!);
+  const thisWeekVolume = await weekVolume(thisSun!, thisSat!);
 
   return [lastWeekVolume, thisWeekVolume];
 }
@@ -299,7 +301,11 @@ export async function updateDayExerciseInput(
 ) {
   await db
     .update(workoutDayExercises)
-    .set(updateType === "Reps" ? { reps: newValues } : { weight: newValues })
+    .set(
+      updateType === "Reps"
+        ? { reps: newValues, updatedAt: new Date() }
+        : { weight: newValues, updatedAt: new Date() },
+    )
     .where(
       and(
         eq(workoutDayExercises.userId, userId),
@@ -316,7 +322,7 @@ export async function updateDayExerciseSets(
 ) {
   await db
     .update(workoutDayExercises)
-    .set({ reps: repValues, weight: weightValues })
+    .set({ reps: repValues, weight: weightValues, updatedAt: new Date() })
     .where(
       and(
         eq(workoutDayExercises.userId, userId),

@@ -31,7 +31,7 @@ export function InputRows({
           {index + 1}
         </div>
         <input
-          className="w-12 cursor-pointer text-center"
+          className="w-12 cursor-pointer text-center bg-transparent"
           type="number"
           defaultValue={repCount}
           onFocus={(e) => {
@@ -59,7 +59,7 @@ export function InputRows({
         <div className="text-xl">Reps</div>
         <div className="h-9 rotate-12 border border-gray-600"></div>
         <input
-          className="w-16 cursor-pointer text-center"
+          className="w-16 cursor-pointer text-center bg-transparent"
           type="number"
           defaultValue={dayExercise!.weight[index]}
           onFocus={(e) => {

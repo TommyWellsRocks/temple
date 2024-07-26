@@ -15,6 +15,7 @@ export async function handleExerciseVolumeInput(
   newValues: number[],
 ) {
   await updateDayExerciseInput(userId, dayExercise!.id, updateType, newValues);
+  revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
 }
 
 export async function handleEditSetCount(

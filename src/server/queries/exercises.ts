@@ -61,7 +61,12 @@ export async function editExerciseNote(
         )
     : await db
         .insert(exercise_notes)
-        .values({ userId, exerciseId, notes: noteValue });
+        .values({
+          userId,
+          exerciseId,
+          notes: noteValue,
+          updatedAt: new Date(),
+        });
 }
 
 // todo make edits only be things you want to change? Take from existing in db?
