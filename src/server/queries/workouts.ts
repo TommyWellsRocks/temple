@@ -8,7 +8,7 @@ import {
   getYearsEndDates,
   calculateMonthActiveDays,
 } from "./utils/workoutVolume";
-import { SessionExercise } from "../types";
+import { DayExercise } from "../types";
 import {
   workoutDayExercises,
   workoutProgramDays,
@@ -17,10 +17,11 @@ import {
 import { and, eq } from "drizzle-orm";
 
 // * Program
-export async function getMyWorkoutPrograms(userId: string) {
+export async function getMyPrograms(userId: string) {
   return await db.query.workoutPrograms.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.updatedAt),
+    columns: { createdAt: false, updatedAt: false },
     with: { programDays: true },
   });
 }
@@ -69,7 +70,7 @@ export async function deleteWorkoutProgram(userId: string, programId: number) {
 }
 
 // * Program Days
-export async function getProgram(userId: string, programId: number) {
+export async function getMyProgram(userId: string, programId: number) {
   return await db.query.workoutPrograms.findFirst({
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.id, programId)),
@@ -80,6 +81,7 @@ export async function getProgram(userId: string, programId: number) {
         },
       },
     },
+    columns: { name: true },
   });
 }
 
@@ -130,7 +132,7 @@ export async function deleteProgramDay(
 }
 
 // * Program Day
-export async function getProgramDay(
+export async function getMyProgramDay(
   userId: string,
   programId: number,
   dayId: number,
@@ -143,6 +145,7 @@ export async function getProgramDay(
         eq(model.id, dayId),
       ),
     with: { dayExercises: { with: { info: true, notes: true } } },
+    columns: { createdAt: false, updatedAt: false },
   });
 }
 
@@ -159,6 +162,7 @@ export async function getMyYearDaysActiveAnalytics(userId: string) {
           between(model.updatedAt, firstDay, lastDay),
         ),
       orderBy: (model, { asc }) => asc(model.updatedAt),
+      columns: { dayId: true, updatedAt: true },
     });
   };
 
@@ -179,17 +183,18 @@ export async function getMyYearDaysActiveAnalytics(userId: string) {
 export async function getMyExerciseAnalytics(
   userId: string,
   exerciseId: number,
-  currentSessionExercise: SessionExercise,
+  currentSessionExercise: DayExercise,
 ) {
   const lastSessionExercise = await db.query.workoutDayExercises.findFirst({
     where: (model, { and, eq, ne, lt }) =>
       and(
         eq(model.userId, userId),
         eq(model.exerciseId, exerciseId),
-        ne(model.dayId, currentSessionExercise.dayId),
-        lt(model.createdAt, currentSessionExercise.updatedAt),
+        ne(model.dayId, currentSessionExercise!.dayId),
+        lt(model.createdAt, currentSessionExercise!.updatedAt),
       ),
     orderBy: (model, { desc }) => desc(model.updatedAt),
+    columns: { reps: true, weight: true },
   });
 
   const lastSession = lastSessionExercise
@@ -235,7 +240,7 @@ export async function getMyWeekAnalytics(userId: string) {
 }
 
 // * Day Exercise
-export async function getDayExercise(
+export async function getMyDayExercise(
   userId: string,
   programId: number,
   dayId: number,

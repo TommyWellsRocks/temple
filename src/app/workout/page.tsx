@@ -6,7 +6,7 @@ import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import {
-  getMyWorkoutPrograms,
+  getMyPrograms,
   getMyYearDaysActiveAnalytics,
 } from "~/server/queries/workouts";
 import { Navigation } from "~/components/workout/Navigation";
@@ -20,7 +20,7 @@ export default async function MyPrograms() {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
-  const workoutPrograms = await getMyWorkoutPrograms(session.user.id);
+  const workoutPrograms = await getMyPrograms(session.user.id);
 
   // LineChart
   let lastYear: number[] | undefined = [0];

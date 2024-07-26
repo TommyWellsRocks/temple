@@ -4,7 +4,7 @@ import { Navigation } from "~/components/workout/Navigation";
 import { LineChart } from "~/components/workout/Linechart";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import { getMyWeekAnalytics, getProgramDay } from "~/server/queries/workouts";
+import { getMyWeekAnalytics, getMyProgramDay } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getExercises } from "~/server/queries/exercises";
@@ -18,7 +18,7 @@ export default async function MyDayOverview(context: any | unknown) {
     programId: string;
     dayId: string;
   };
-  const programDay = await getProgramDay(
+  const programDay = await getMyProgramDay(
     session.user.id,
     Number(programId),
     Number(dayId),
@@ -34,7 +34,7 @@ export default async function MyDayOverview(context: any | unknown) {
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Navigation backURL={`/workout/${programId}`} heading="The Overview" />
+      <Navigation backURL={`/workout/${programId}`} heading={`${programDay.name} Overview`} />
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart

@@ -1,6 +1,6 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getProgram } from "~/server/queries/workouts";
+import { getMyProgram } from "~/server/queries/workouts";
 import Image from "next/image";
 import Link from "next/link";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
@@ -18,7 +18,7 @@ export default async function MyProgramDays(context: any | unknown) {
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
   const { programId } = context.params as { programId: string };
-  const program = await getProgram(session.user.id, Number(programId));
+  const program = await getMyProgram(session.user.id, Number(programId));
   if (!program) return <main>No program to show</main>;
 
   // LineChart

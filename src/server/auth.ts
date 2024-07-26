@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import { useSession } from "next-auth/react";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "~/server/db";
 import Google from "next-auth/providers/google";

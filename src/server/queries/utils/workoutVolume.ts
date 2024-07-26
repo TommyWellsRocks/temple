@@ -1,4 +1,4 @@
-import { Program, SessionExercise } from "~/server/types";
+import { DayExercise, Program } from "~/server/types";
 
 export function getYearsEndDates() {
   const today = new Date();
@@ -42,7 +42,9 @@ export function getDayOfWeek(timestamp: Date) {
   return date.getDay();
 }
 
-export function calculateMonthActiveDays(sessionExercises: SessionExercise[]) {
+export function calculateMonthActiveDays(
+  sessionExercises: { dayId: number; updatedAt: Date }[],
+) {
   const year: number[] = Array(12).fill(0);
   const dayIds = new Set<number>();
   sessionExercises.forEach((session) => {
@@ -81,7 +83,9 @@ export function calculateProgramVolumeAnalytics(program: Program) {
   return programVolume;
 }
 
-export function calculateSessionVolume(sessionExercises: SessionExercise[]) {
+export function calculateSessionVolume(
+  sessionExercises: { reps: number[]; weight: number[] }[],
+) {
   return sessionExercises.reduce((totalVolume, exercise) => {
     const exerciseVolume = exercise.reps.reduce(
       (total, repCount, index) =>
@@ -92,9 +96,11 @@ export function calculateSessionVolume(sessionExercises: SessionExercise[]) {
   }, 0);
 }
 
-export function calculateExerciseVolume(sessionExercise: SessionExercise) {
-  const volume = sessionExercise.reps.map(
-    (repCount, index) => repCount * (sessionExercise.weight[index] || 1),
+export function calculateExerciseVolume(
+  dayExercise: DayExercise | { reps: number[]; weight: number[] },
+) {
+  const volume = dayExercise!.reps.map(
+    (repCount, index) => repCount * (dayExercise!.weight[index] || 1),
   );
   if (!volume) return [0];
   return volume;

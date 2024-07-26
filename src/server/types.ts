@@ -1,24 +1,13 @@
 import {
-  getDayExercise,
-  getMyWorkoutPrograms,
-  getProgram,
-  getProgramDay,
+  getMyDayExercise,
+  getMyPrograms,
+  getMyProgram,
+  getMyProgramDay,
 } from "./queries/workouts";
 import { getExercises } from "./queries/exercises";
 
-export interface SessionExercise {
-  id: number;
-  userId: string;
-  dayId: number;
-  exerciseId: number;
-  reps: number[];
-  weight: number[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export type WorkoutPrograms = Awaited<ReturnType<typeof getMyWorkoutPrograms>>;
-export type Program = Awaited<ReturnType<typeof getProgram>>;
-export type ProgramDay = Awaited<ReturnType<typeof getProgramDay>>;
-export type DayExercise = Awaited<ReturnType<typeof getDayExercise>>;
+export type WorkoutPrograms = Awaited<ReturnType<typeof getMyPrograms>>;
+export type Program = Awaited<ReturnType<typeof getMyProgram>>;
+export type ProgramDay = Awaited<ReturnType<typeof getMyProgramDay>>;
+export type DayExercise = Awaited<ReturnType<typeof getMyDayExercise>>;
 export type Exercises = Awaited<ReturnType<typeof getExercises>>;

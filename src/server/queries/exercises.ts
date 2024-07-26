@@ -5,7 +5,9 @@ import { exercise_notes } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getExercises() {
-  return await db.query.exercises.findMany();
+  return await db.query.exercises.findMany({
+    columns: { name: true, id: true },
+  });
 }
 
 export async function editExerciseNote(

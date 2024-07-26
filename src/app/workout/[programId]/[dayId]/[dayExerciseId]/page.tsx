@@ -1,5 +1,5 @@
 import {
-  getDayExercise,
+  getMyDayExercise,
   getMyExerciseAnalytics,
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
@@ -19,14 +19,14 @@ export default async function MyDayExercise(context: any | unknown) {
     dayId: string;
     dayExerciseId: string;
   };
-  const exercise = await getDayExercise(
+  const exercise = await getMyDayExercise(
     session.user.id,
     Number(programId),
     Number(dayId),
     Number(dayExerciseId),
   );
   if (!exercise) return "INVALID URL";
-  
+
   // LineChart
   const [lastSessionVolume, currentSessionVolume] =
     (await getMyExerciseAnalytics(
@@ -34,9 +34,8 @@ export default async function MyDayExercise(context: any | unknown) {
       Number(exercise.info.id),
       exercise,
     )) as number[][];
-  
+
   const setCount = exercise.reps.length;
-  
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
@@ -47,6 +46,8 @@ export default async function MyDayExercise(context: any | unknown) {
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
+          title="Exercise Analytics"
+          measureOf="Volume"
           xLabels={
             lastSessionVolume!.length < currentSessionVolume!.length
               ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
