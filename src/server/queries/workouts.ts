@@ -83,17 +83,6 @@ export async function getProgram(userId: string, programId: number) {
   });
 }
 
-export async function getProgramDays(userId: string, programId: number) {
-  return await db.query.workoutProgramDays.findMany({
-    where: (model, { and, eq }) =>
-      and(eq(model.userId, userId), eq(model.programId, programId)),
-    with: {
-      dayExercises: { with: { info: true, notes: true } },
-      program: true,
-    },
-  });
-}
-
 export async function createProgramDay(
   userId: string,
   programId: number,

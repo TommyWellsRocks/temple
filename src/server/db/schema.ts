@@ -7,7 +7,6 @@ import {
   date,
   index,
   integer,
-  jsonb,
   pgTableCreator,
   primaryKey,
   real,
@@ -16,7 +15,6 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { DailyMacros } from "../types";
 import { AdapterAccountType } from "next-auth/adapters";
 
 /**
@@ -264,7 +262,7 @@ export const weighIns = createTable(
       .references(() => users.id, { onDelete: "cascade" }),
     picture: varchar("picture"),
     video: varchar("video"),
-    dailyMacros: jsonb("daily_macros").$type<DailyMacros>(),
+    dailyMacros: varchar("daily_macros"),
     variablesChanged: varchar("variables_changed"),
     weight: real("weight").notNull(),
     bodyFatPercentage: real("body_fat_percentage"),
