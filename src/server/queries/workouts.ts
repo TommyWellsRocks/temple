@@ -236,26 +236,13 @@ export async function getMyWeekAnalytics(userId: string) {
 }
 
 export async function getMyExerciseAnalytics(
-  userId: string,
-  exerciseId: number,
-  currentSessionExercise: DayExercise,
+  currentDayExercise: DayExercise,
+  lastDayExercise: DayExercise,
 ) {
-  const lastSessionExercise = await db.query.workoutDayExercises.findFirst({
-    where: (model, { and, eq, ne, lt }) =>
-      and(
-        eq(model.userId, userId),
-        eq(model.exerciseId, exerciseId),
-        ne(model.dayId, currentSessionExercise!.dayId),
-        lt(model.updatedAt, currentSessionExercise!.updatedAt),
-      ),
-    orderBy: (model, { desc }) => desc(model.updatedAt),
-    columns: { reps: true, weight: true },
-  });
-
-  const lastSession = lastSessionExercise
-    ? calculateExerciseVolume(lastSessionExercise)
+  const lastSession = lastDayExercise
+    ? calculateExerciseVolume(lastDayExercise)
     : [0];
-  const currentSession = calculateExerciseVolume(currentSessionExercise);
+  const currentSession = calculateExerciseVolume(currentDayExercise);
 
   return [lastSession, currentSession];
 }
@@ -296,6 +283,22 @@ export async function getMyDayExercise(
       },
       notes: { columns: { notes: true, id: true } },
     },
+  });
+}
+
+export async function getLastSessionExercise(dayExercise: DayExercise) {
+  return await db.query.workoutDayExercises.findFirst({
+    where: (model, { and, eq, ne, lt }) =>
+      and(
+        eq(model.userId, dayExercise!.userId),
+        eq(model.exerciseId, dayExercise!.exerciseId),
+        ne(model.dayId, dayExercise!.dayId),
+        lt(model.updatedAt, dayExercise!.updatedAt),
+        ne(model.reps, [0, 0, 0, 0]), // Last Not-Default
+        // not(sql`0 = ANY(${model.reps})`), // Last Fully completed
+      ),
+    orderBy: (model, { desc }) => desc(model.updatedAt),
+    with: { info: true, notes: true },
   });
 }
 

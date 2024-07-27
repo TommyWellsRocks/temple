@@ -3,10 +3,16 @@
 import { handleExerciseVolumeInput } from "~/components/workout/ServerComponents/DayExercise";
 
 export function InputRows({
-  userId,
+  lastDayExercise,
   dayExercise,
 }: {
-  userId: string;
+  lastDayExercise?: {
+    id: number;
+    dayId: number;
+    userId: string;
+    reps: number[];
+    weight: number[];
+  };
   dayExercise: {
     id: number;
     dayId: number;
@@ -21,6 +27,7 @@ export function InputRows({
     "flex h-11 w-11 items-center justify-center bg-primary font-semibold text-black";
 
   return dayExercise!.reps.map((repCount, index) => {
+    const weightValue = dayExercise.weight[index];
     return (
       <div
         className="flex items-center gap-x-3 text-2xl font-light text-gray-600"
@@ -57,7 +64,7 @@ export function InputRows({
 
             if (currentTargetValue !== newValue) {
               values[index] = newValue;
-              handleExerciseVolumeInput(userId, dayExercise, "Reps", values);
+              handleExerciseVolumeInput(dayExercise, "Reps", values);
             }
           }}
         />
@@ -66,7 +73,7 @@ export function InputRows({
         <input
           className="w-16 cursor-pointer bg-transparent text-center"
           type="number"
-          defaultValue={dayExercise!.weight[index]}
+          defaultValue={weightValue}
           onFocus={(e) => {
             const countBox = e.currentTarget.parentNode!.firstElementChild!;
             countBox.className = countBoxClassFocus;
@@ -85,7 +92,7 @@ export function InputRows({
 
             if (currentTargetValue !== newValue) {
               values[index] = newValue;
-              handleExerciseVolumeInput(userId, dayExercise, "Weight", values);
+              handleExerciseVolumeInput(dayExercise, "Weight", values);
             }
           }}
         />

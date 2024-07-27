@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { ProgramDay, WorkoutPrograms } from "~/server/types";
+import { WorkoutPrograms } from "~/server/types";
 
 export function PopoverButton({
   title,

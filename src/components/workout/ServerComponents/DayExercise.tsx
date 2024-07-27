@@ -8,7 +8,6 @@ import {
 } from "~/server/queries/workouts";
 
 export async function handleExerciseVolumeInput(
-  userId: string,
   dayExercise: {
     id: number;
     dayId: number;
@@ -17,12 +16,16 @@ export async function handleExerciseVolumeInput(
   updateType: "Reps" | "Weight",
   newValues: number[],
 ) {
-  await updateDayExerciseInput(userId, dayExercise!.id, updateType, newValues);
+  await updateDayExerciseInput(
+    dayExercise!.userId,
+    dayExercise!.id,
+    updateType,
+    newValues,
+  );
   revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
 }
 
 export async function handleEditSetCount(
-  userId: string,
   dayExercise: {
     id: number;
     dayId: number;
@@ -31,7 +34,12 @@ export async function handleEditSetCount(
   repValues: number[],
   weightValues: number[],
 ) {
-  await updateDayExerciseSets(userId, dayExercise!.id, repValues, weightValues);
+  await updateDayExerciseSets(
+    dayExercise!.userId,
+    dayExercise!.id,
+    repValues,
+    weightValues,
+  );
   revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
 }
 

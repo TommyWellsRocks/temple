@@ -87,8 +87,8 @@ function chartOptions(currentData: number[], previousData?: number[]) {
         ? Math.min(...previousData, ...currentData) * 0.8
         : Math.min(...currentData) * 0.8,
       max: previousData
-        ? Math.max(...previousData, ...currentData) * 1.2
-        : Math.max(...currentData) * 1.2,
+        ? Math.max(...previousData, ...currentData) * 2.1
+        : Math.max(...currentData) * 2.1,
     },
   };
 }

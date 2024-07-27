@@ -1,4 +1,5 @@
 import {
+  getLastSessionExercise,
   getMyDayExercise,
   getMyExerciseAnalytics,
 } from "~/server/queries/workouts";
@@ -9,6 +10,7 @@ import { LineChart } from "~/components/workout/Linechart";
 import { InputRows } from "~/components/workout/Exercise/InputRows";
 import { EditSetCount } from "~/components/workout/Exercise/EditSetCount";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
+import { PreviousSessionButton } from "~/components/workout/Exercise/PreviousSessionButton";
 
 export default async function MyDayExercise(context: any | unknown) {
   const session = await auth();
@@ -26,14 +28,11 @@ export default async function MyDayExercise(context: any | unknown) {
     Number(dayExerciseId),
   );
   if (!dayExercise) return "INVALID URL";
+  const lastDayExercise = await getLastSessionExercise(dayExercise);
 
   // LineChart
   const [lastSessionVolume, currentSessionVolume] =
-    await getMyExerciseAnalytics(
-      session.user.id,
-      Number(dayExercise.info.id),
-      dayExercise,
-    );
+    await getMyExerciseAnalytics(dayExercise, lastDayExercise);
 
   const setCount = dayExercise.reps.length;
 
@@ -61,12 +60,18 @@ export default async function MyDayExercise(context: any | unknown) {
       </section>
 
       <section className="flex flex-col items-center justify-center gap-y-5">
+        {lastDayExercise ? (
+          <PreviousSessionButton previousExercise={lastDayExercise} />
+        ) : null}
         <div className="text-sm font-light underline underline-offset-4">
           {setCount}
           {setCount === 1 ? " Set" : " Sets"}
         </div>
         <div className="flex flex-col gap-y-5">
-          <InputRows userId={session.user.id} dayExercise={dayExercise} />
+          <InputRows
+            lastDayExercise={lastDayExercise}
+            dayExercise={dayExercise}
+          />
         </div>
         <div className="flex gap-x-5">
           <EditSetCount
