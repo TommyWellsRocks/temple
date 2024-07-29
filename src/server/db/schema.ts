@@ -130,8 +130,6 @@ export const exercises = createTable(
     secondaryMuscles: varchar("secondary_muscles").array(),
     instructions: varchar("instructions").array().notNull(),
     tips: varchar("tips").notNull(),
-    isSingleArmBased: boolean("is_single_arm_based").default(false),
-    isSingleLegBased: boolean("is_single_leg_based").default(false),
     targetMuscleImages: varchar("target_muscle_images").array(),
     images: varchar("images").array(),
     videos: varchar("videos").array(),
