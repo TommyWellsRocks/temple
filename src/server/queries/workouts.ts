@@ -20,9 +20,16 @@ import { and, eq } from "drizzle-orm";
 export async function getMyPrograms(userId: string) {
   return await db.query.workoutPrograms.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
-    orderBy: (model, { desc }) => desc(model.updatedAt),
+    orderBy: (model, { desc }) => desc(model.createdAt),
     columns: { createdAt: false, updatedAt: false },
-    with: { programDays: { columns: { name: true } } },
+    with: {
+      programDays: {
+        columns: { name: true },
+        with: {
+          dayExercises: { columns: { reps: true } },
+        },
+      },
+    },
   });
 }
 
