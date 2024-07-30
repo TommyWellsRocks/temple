@@ -14,7 +14,7 @@ export default async function Days(context: any | unknown) {
 
   const { programId } = context.params as { programId: string };
   const program = await getMyProgram(session.user.id, Number(programId));
-  if (!program) return <main>No program to show</main>;
+  if (!program) return redirect("/workout");
 
   // LineChart
   const currentProgramVolume = calculateProgramVolumeAnalytics(program);
@@ -29,7 +29,9 @@ export default async function Days(context: any | unknown) {
         <LineChart
           title="Program Analytics"
           measureOf="Volume"
-          xLabels={currentProgramVolume.map((_, index) => `Sprint ${index + 1}`)}
+          xLabels={currentProgramVolume.map(
+            (_, index) => `Sprint ${index + 1}`,
+          )}
           currentLabel="Your Volume"
           currentData={currentProgramVolume as number[]}
         />

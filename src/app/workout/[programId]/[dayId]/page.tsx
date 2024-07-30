@@ -21,8 +21,9 @@ export default async function DayOverview(context: any | unknown) {
     Number(programId),
     Number(dayId),
   );
-  if (!programDay) return "INVALID PLAN";
+  if (!programDay) return redirect("/workout");
 
+  // LineChart
   const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id!);
 
   return (

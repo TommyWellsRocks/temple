@@ -27,7 +27,8 @@ export default async function Exercise(context: any | unknown) {
     Number(dayId),
     Number(dayExerciseId),
   );
-  if (!dayExercise) return "INVALID URL";
+  if (!dayExercise) return redirect("/workout");
+
   const lastDayExercise = await getLastSessionExercise(dayExercise);
 
   // LineChart

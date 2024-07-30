@@ -16,9 +16,8 @@ export async function CheckList({
   programDay: ProgramDay;
 }) {
   const allExercises = await getExercises();
-  if (!programDay) return;
 
-  const doneCount = programDay.dayExercises.filter(
+  const doneCount = programDay!.dayExercises.filter(
     (exercise) => !exercise.reps.includes(0),
   ).length;
 
@@ -28,12 +27,12 @@ export async function CheckList({
         <h3 className="pb-2">The Checklist 😎</h3>
         <h3 className="text-sm font-light">
           <strong className="text-xl">{doneCount}</strong> /
-          {programDay.dayExercises.length}
+          {programDay!.dayExercises.length}
         </h3>
       </div>
 
       <div className="flex flex-col gap-y-3">
-        {programDay.dayExercises.map(async (exercise) => {
+        {programDay!.dayExercises.map(async (exercise) => {
           const isDone = !exercise.reps.includes(0);
 
           return (
