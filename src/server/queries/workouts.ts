@@ -135,8 +135,6 @@ export async function addPrevDaysToNewGroup(
     const latestGroupDays =
       program.groups[program.groups.length - 2]!.groupDays;
 
-    if (!latestGroupDays.length) throw new Error(JSON.stringify(program));
-
     // Map Day Info And Exercises
     const duplicateDaysInfo = latestGroupDays.map((day) => ({
       userId,
@@ -151,8 +149,10 @@ export async function addPrevDaysToNewGroup(
         userId,
         programId,
         groupId: newGroupId,
-        exerciseId: ex.info.id,
         dayId: 0,
+        exerciseId: ex.info.id,
+        reps: Array(ex.reps.length).fill(0),
+        weight: Array(ex.weight.length).fill(0),
       })),
     );
 
