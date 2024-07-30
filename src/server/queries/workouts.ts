@@ -24,10 +24,13 @@ export async function getMyPrograms(userId: string) {
     orderBy: (model, { desc }) => desc(model.createdAt),
     columns: { createdAt: false, updatedAt: false },
     with: {
-      programDays: {
-        columns: { name: true },
+      groups: {
+        columns: { id: true },
         with: {
-          dayExercises: { columns: { reps: true } },
+          groupDays: {
+            columns: { name: true },
+            with: { dayExercises: { columns: { reps: true } } },
+          },
         },
       },
     },

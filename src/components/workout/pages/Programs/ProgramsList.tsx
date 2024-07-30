@@ -20,8 +20,9 @@ export async function ProgramsList({ userId }: { userId: string }) {
         const endDate = new Date(program.endDate);
         const isActiveProgram = startDate <= today && endDate >= today;
         const isFutureProgram = !isActiveProgram && startDate > today;
+        const latestGroup = program.groups[program.groups.length - 1];
         const excessProgramDays =
-          program.programDays.length > PROGRAM_DAYS_MAX_LENGTH;
+          latestGroup!.groupDays.length > PROGRAM_DAYS_MAX_LENGTH;
 
         return (
           <div className="relative flex">
@@ -43,10 +44,10 @@ export async function ProgramsList({ userId }: { userId: string }) {
               <div className="mt-8 flex flex-col gap-2">
                 <div className="ml-4 flex flex-col text-base">
                   {excessProgramDays
-                    ? program.programDays
+                    ? latestGroup!.groupDays
                         .map((day) => <div>&bull; {day.name}</div>)
                         .slice(0, PROGRAM_DAYS_MAX_LENGTH)
-                    : program.programDays.map((day) => (
+                    : latestGroup!.groupDays.map((day) => (
                         <div>&bull; {day.name}</div>
                       ))}
                   {excessProgramDays ? "..." : null}
