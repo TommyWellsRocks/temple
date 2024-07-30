@@ -29,7 +29,7 @@ export default async function Days(context: any | unknown) {
         <LineChart
           title="Program Analytics"
           measureOf="Volume"
-          xLabels={currentProgramVolume.map((_, index) => `Week ${index + 1}`)}
+          xLabels={currentProgramVolume.map((_, index) => `Sprint ${index + 1}`)}
           currentLabel="Your Volume"
           currentData={currentProgramVolume as number[]}
         />

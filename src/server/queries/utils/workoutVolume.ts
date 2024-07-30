@@ -57,30 +57,12 @@ export function calculateMonthActiveDays(
 }
 
 export function calculateProgramVolumeAnalytics(program: Program) {
-  const weekVolumes: { [weekNumber: number]: number } = {};
-  let minWeekNumber = Infinity;
-  let maxWeekNumber = -Infinity;
-
-  program!.programDays.forEach((day) => {
-    const sessionVolume = calculateSessionVolume(day.dayExercises);
-    const weekNumber = getWeekNumber(day.updatedAt);
-    weekVolumes[weekNumber] = (weekVolumes[weekNumber] || 0) + sessionVolume;
-    minWeekNumber = Math.min(minWeekNumber, weekNumber);
-    maxWeekNumber = Math.max(maxWeekNumber, weekNumber);
-  });
-
-  // Fill missing weeks with zero
-  for (let i = minWeekNumber; i <= maxWeekNumber; i++) {
-    if (!(i in weekVolumes)) {
-      weekVolumes[i] = 0;
-    }
-  }
-  const programVolume = [];
-  for (let i = minWeekNumber; i <= maxWeekNumber; i++) {
-    programVolume.push(weekVolumes[i]);
-  }
-
-  return programVolume;
+  return program!.groups.map((group) =>
+    group.groupDays.reduce(
+      (total, day) => total + calculateSessionVolume(day.dayExercises),
+      0,
+    ),
+  );
 }
 
 export function calculateSessionVolume(
