@@ -10,7 +10,9 @@ import { LineChart } from "~/components/workout/Linechart";
 import { ExerciseTabs } from "~/components/workout/pages/Exercise/ExerciseTabs";
 import { ExerciseInputs } from "~/components/workout/pages/Exercise/ExerciseInputs";
 
-export default async function MyDayExercise(context: any | unknown) {
+// * EXERCISE PAGE
+
+export default async function Exercise(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 

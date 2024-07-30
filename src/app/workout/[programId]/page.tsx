@@ -6,7 +6,9 @@ import { LineChart } from "~/components/workout/Linechart";
 import { calculateProgramVolumeAnalytics } from "~/server/queries/utils/workoutVolume";
 import { DayList } from "~/components/workout/pages/ProgramDays/DayList";
 
-export default async function MyProgramDays(context: any | unknown) {
+// * DAYS PAGE
+
+export default async function Days(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 

@@ -6,7 +6,9 @@ import { auth } from "~/server/auth";
 import { TodaysMuscles } from "~/components/workout/pages/ProgramDay/TodaysMuscles";
 import { CheckList } from "~/components/workout/pages/ProgramDay/CheckList";
 
-export default async function MyDayOverview(context: any | unknown) {
+// * DAY OVERVIEW PAGE
+
+export default async function DayOverview(context: any | unknown) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) return redirect("/signin");
 
