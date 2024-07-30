@@ -2,16 +2,19 @@
 
 import { Minus, Plus } from "lucide-react";
 import { handleEditSetCount } from "~/components/workout/ServerComponents/DayExercise";
-import { DayExercise } from "~/server/types";
 
 export function EditSetCount({
   method,
-  userId,
   dayExercise,
 }: {
   method: "Add" | "Delete";
-  userId: string;
-  dayExercise: DayExercise;
+  dayExercise: {
+    id: number;
+    dayId: number;
+    userId: string;
+    reps: number[];
+    weight: number[];
+  };
 }) {
   return (
     <button

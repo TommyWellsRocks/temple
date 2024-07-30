@@ -4,7 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import {
   handleCreateDayGroup,
   handleDeleteDayGroup,
-} from "../ServerComponents/ProgramDay";
+} from "~/components/workout/ServerComponents/ProgramDay";
 
 export function EditGroupsButton({
   userId,
@@ -20,7 +20,9 @@ export function EditGroupsButton({
       className="mx-1"
       onClick={() => {
         if (groupId) {
-          const shouldDelete = confirm("Are you sure you want to remove latest sprint? ");
+          const shouldDelete = confirm(
+            "Are you sure you want to remove latest sprint? ",
+          );
           if (shouldDelete) handleDeleteDayGroup(userId, programId, groupId);
         } else {
           handleCreateDayGroup(userId, programId);

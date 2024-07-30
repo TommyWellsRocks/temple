@@ -7,10 +7,8 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { Navigation } from "~/components/workout/Navigation";
 import { LineChart } from "~/components/workout/Linechart";
-import { InputRows } from "~/components/workout/Exercise/InputRows";
-import { EditSetCount } from "~/components/workout/Exercise/EditSetCount";
-import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
-import { PreviousSessionButton } from "~/components/workout/Exercise/PreviousSessionButton";
+import { ExerciseTabs } from "~/components/workout/pages/Exercise/ExerciseTabs";
+import { ExerciseInputs } from "~/components/workout/pages/Exercise/ExerciseInputs";
 
 export default async function MyDayExercise(context: any | unknown) {
   const session = await auth();
@@ -33,8 +31,6 @@ export default async function MyDayExercise(context: any | unknown) {
   // LineChart
   const [lastSessionVolume, currentSessionVolume] =
     await getMyExerciseAnalytics(dayExercise, lastDayExercise);
-
-  const setCount = dayExercise.reps.length;
 
   return (
     <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
@@ -60,34 +56,15 @@ export default async function MyDayExercise(context: any | unknown) {
       </section>
 
       <section className="flex flex-col items-center justify-center gap-y-5">
-        {lastDayExercise ? (
-          <PreviousSessionButton previousExercise={lastDayExercise} />
-        ) : null}
-        <div className="text-sm font-light underline underline-offset-4">
-          {setCount}
-          {setCount === 1 ? " Set" : " Sets"}
-        </div>
-        <div className="flex flex-col gap-y-5">
-          <InputRows
-            lastDayExercise={lastDayExercise}
-            dayExercise={dayExercise}
-          />
-        </div>
-        <div className="flex gap-x-5">
-          <EditSetCount
-            method="Add"
-            userId={session.user.id}
-            dayExercise={dayExercise}
-          />
-          <EditSetCount
-            method="Delete"
-            userId={session.user.id}
-            dayExercise={dayExercise}
-          />
-        </div>
+        <ExerciseInputs
+          lastDayExercise={lastDayExercise}
+          dayExercise={dayExercise}
+        />
       </section>
 
-      <ExerciseTabs dayExercise={dayExercise} />
+      <section>
+        <ExerciseTabs dayExercise={dayExercise} />
+      </section>
     </main>
   );
 }
