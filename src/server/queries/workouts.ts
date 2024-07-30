@@ -11,6 +11,7 @@ import {
 import { DayExercise } from "../types";
 import {
   workoutDayExercises,
+  workoutProgramDayGroups,
   workoutProgramDays,
   workoutPrograms,
 } from "../db/schema";
@@ -39,12 +40,16 @@ export async function createWorkoutProgram(
   startDate: string,
   endDate: string,
 ) {
-  await db.insert(workoutPrograms).values({
-    userId,
-    name,
-    startDate,
-    endDate,
-  });
+  const newProgramId = await db
+    .insert(workoutPrograms)
+    .values({
+      userId,
+      name,
+      startDate,
+      endDate,
+    })
+    .returning({ id: workoutPrograms.id });
+  await createDayGroup(userId, newProgramId[0]!.id);
 }
 
 export async function editWorkoutProgram(
@@ -82,9 +87,25 @@ export async function getMyProgram(userId: string, programId: number) {
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.id, programId)),
     with: {
+      groups: {
+        columns: { id: true },
+        with: {
+          groupDays: {
+            columns: { createdAt: false },
+            with: {
+              group: { columns: { id: true } },
+              dayExercises: {
+                columns: { reps: true, weight: true },
+                with: { info: { columns: { name: true, id: true } } },
+              },
+            },
+          },
+        },
+      },
       programDays: {
         columns: { createdAt: false },
         with: {
+          group: { columns: { id: true } },
           dayExercises: {
             columns: { reps: true, weight: true },
             with: { info: { columns: { name: true } } },
@@ -96,15 +117,88 @@ export async function getMyProgram(userId: string, programId: number) {
   });
 }
 
+export async function createDayGroup(userId: string, programId: number) {
+  return await db
+    .insert(workoutProgramDayGroups)
+    .values({ userId, programId })
+    .returning({ newGroupId: workoutProgramDayGroups.id });
+}
+
+export async function addPrevDaysToNewGroup(
+  userId: string,
+  programId: number,
+  newGroupId: number,
+) {
+  const program = await getMyProgram(userId, programId);
+
+  if (program && program.programDays.length) {
+    const latestGroupDays =
+      program.groups[program.groups.length - 2]!.groupDays;
+
+    if (!latestGroupDays.length) throw new Error(JSON.stringify(program));
+
+    // Map Day Info And Exercises
+    const duplicateDaysInfo = latestGroupDays.map((day) => ({
+      userId,
+      programId,
+      groupId: newGroupId,
+      name: day.name,
+      repeatOn: day.repeatOn,
+    }));
+
+    const duplicateExercisesInfo = latestGroupDays.map((day) =>
+      day.dayExercises.map((ex) => ({
+        userId,
+        programId,
+        groupId: newGroupId,
+        exerciseId: ex.info.id,
+        dayId: 0,
+      })),
+    );
+
+    // Create Days
+    const newDays = await db
+      .insert(workoutProgramDays)
+      .values(duplicateDaysInfo)
+      .returning({ dayId: workoutProgramDays.id });
+
+    // Map Duplicate Days To New DayId Then Insert Exercises To Day
+    duplicateExercisesInfo.forEach(async (day, index) => {
+      const newDayId = newDays[index]!.dayId;
+      day.forEach((ex) => (ex.dayId = newDayId));
+
+      // Add Exercises To Each Day
+      await db.insert(workoutDayExercises).values(day);
+    });
+  }
+}
+
+export async function deleteDayGroup(
+  userId: string,
+  programId: number,
+  groupId: number,
+) {
+  await db
+    .delete(workoutProgramDayGroups)
+    .where(
+      and(
+        eq(workoutProgramDayGroups.userId, userId),
+        eq(workoutProgramDayGroups.programId, programId),
+        eq(workoutProgramDayGroups.id, groupId),
+      ),
+    );
+}
+
 export async function createProgramDay(
   userId: string,
   programId: number,
+  groupId: number,
   name: string,
   repeatOn: number[] | null,
 ) {
   await db
     .insert(workoutProgramDays)
-    .values({ userId, programId, name, repeatOn });
+    .values({ userId, programId, groupId, name, repeatOn });
 }
 
 export async function editProgramDay(
@@ -312,12 +406,13 @@ export async function getLastSessionExercise(dayExercise: DayExercise) {
 export async function addDayExercise(
   userId: string,
   programId: number,
+  groupId: number,
   dayId: number,
   exerciseId: number,
 ) {
   await db
     .insert(workoutDayExercises)
-    .values({ userId, programId, dayId, exerciseId });
+    .values({ userId, programId, groupId, dayId, exerciseId });
 }
 
 export async function deleteDayExercise(

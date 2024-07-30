@@ -24,10 +24,12 @@ import {
 export function DayForm({
   userId,
   programId,
+  groupId,
   dayInfo,
 }: {
   userId: string;
   programId: number;
+  groupId: number;
   dayInfo?: {
     repeatOn: number[] | null;
     name: string;
@@ -73,7 +75,7 @@ export function DayForm({
                 values.name,
                 values.repeatOn,
               )
-            : handleCreateDay(userId, programId, values.name, values.repeatOn);
+            : handleCreateDay(userId, programId, groupId, values.name, values.repeatOn);
         })}
         className="flex flex-col gap-4"
       >

@@ -62,6 +62,7 @@ export function ExerciseForm({
             ? handleAddExercise(
                 programDay!.userId,
                 programDay!.programId,
+                programDay!.groupId,
                 programDay!.id,
                 Number(values.exercise),
               )

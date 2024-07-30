@@ -3,13 +3,11 @@
 
 import { relations, sql } from "drizzle-orm";
 import {
-  boolean,
   date,
   index,
   integer,
   pgTableCreator,
   primaryKey,
-  real,
   serial,
   text,
   timestamp,
@@ -190,6 +188,22 @@ export const workoutPrograms = createTable(
   }),
 );
 
+export const workoutProgramDayGroups = createTable(
+  "workout_program_day_groups",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    programId: integer("program_id")
+      .notNull()
+      .references(() => workoutPrograms.id, { onDelete: "cascade" }),
+  },
+  (table) => ({
+    idIndex: index().on(table.id),
+  }),
+);
+
 export const workoutProgramDays = createTable(
   "workout_program_days",
   {
@@ -200,6 +214,9 @@ export const workoutProgramDays = createTable(
     programId: integer("program_id")
       .notNull()
       .references(() => workoutPrograms.id, { onDelete: "cascade" }),
+    groupId: integer("group_id")
+      .notNull()
+      .references(() => workoutProgramDayGroups.id, { onDelete: "cascade" }),
     name: varchar("name").default("New Day").notNull(),
     repeatOn: integer("repeat").array(),
     createdAt: timestamp("created_at", { withTimezone: true })
@@ -224,6 +241,9 @@ export const workoutDayExercises = createTable(
     programId: integer("program_id")
       .notNull()
       .references(() => workoutPrograms.id, { onDelete: "cascade" }),
+    groupId: integer("group_id")
+      .notNull()
+      .references(() => workoutProgramDayGroups.id, { onDelete: "cascade" }),
     dayId: integer("day_id")
       .notNull()
       .references(() => workoutProgramDays.id, { onDelete: "cascade" }),
@@ -250,37 +270,6 @@ export const workoutDayExercises = createTable(
   }),
 );
 
-// * Weigh In Related
-export const weighIns = createTable(
-  "weigh_ins",
-  {
-    id: serial("id").primaryKey(),
-    userId: text("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    picture: varchar("picture"),
-    video: varchar("video"),
-    dailyMacros: varchar("daily_macros"),
-    variablesChanged: varchar("variables_changed"),
-    weight: real("weight").notNull(),
-    bodyFatPercentage: real("body_fat_percentage"),
-    notes: varchar("notes"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-  (table) => ({
-    idIndex: index().on(table.id),
-  }),
-);
-
-export const userRelations = relations(users, ({ many }) => ({
-  workoutPrograms: many(workoutPrograms),
-}));
-
 export const workoutProgramRelations = relations(
   workoutPrograms,
   ({ one, many }) => ({
@@ -288,7 +277,23 @@ export const workoutProgramRelations = relations(
       fields: [workoutPrograms.userId],
       references: [users.id],
     }),
+    groups: many(workoutProgramDayGroups),
     programDays: many(workoutProgramDays),
+  }),
+);
+
+export const workoutGroupRelations = relations(
+  workoutProgramDayGroups,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [workoutProgramDayGroups.userId],
+      references: [users.id],
+    }),
+    program: one(workoutPrograms, {
+      fields: [workoutProgramDayGroups.programId],
+      references: [workoutPrograms.id],
+    }),
+    groupDays: many(workoutProgramDays),
   }),
 );
 
@@ -302,6 +307,10 @@ export const workoutProgramDayRelations = relations(
     program: one(workoutPrograms, {
       fields: [workoutProgramDays.programId],
       references: [workoutPrograms.id],
+    }),
+    group: one(workoutProgramDayGroups, {
+      fields: [workoutProgramDays.groupId],
+      references: [workoutProgramDayGroups.id],
     }),
     dayExercises: many(workoutDayExercises),
   }),
