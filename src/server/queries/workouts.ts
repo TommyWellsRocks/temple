@@ -277,7 +277,7 @@ export async function getMyYearDaysActiveAnalytics(userId: string) {
       where: (model, { and, eq, ne, between }) =>
         and(
           eq(model.userId, userId),
-          ne(model.reps, [0, 0, 0, 0]),
+          ne(model.updatedAt, model.createdAt),
           between(model.updatedAt, firstDay, lastDay),
         ),
       orderBy: (model, { asc }) => asc(model.updatedAt),
@@ -317,7 +317,7 @@ export async function getMyWeekAnalytics(userId: string) {
     });
 
     const dayIds = new Set<number>();
-    const weekVolume = [0, 0, 0, 0, 0, 0, 0];
+    const weekVolume = Array(7).fill(0);
     weekExercises.forEach((exercise) => {
       if (!dayIds.has(exercise.dayId)) {
         dayIds.add(exercise.dayId);
