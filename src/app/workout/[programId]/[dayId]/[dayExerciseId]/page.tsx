@@ -44,12 +44,14 @@ export default async function MyDayExercise(context: any | unknown) {
           title="Exercise Analytics"
           measureOf="Volume"
           xLabels={
-            lastSessionVolume!.length < currentSessionVolume!.length
-              ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
-              : lastSessionVolume!.map((_, index) => `Set ${index + 1}`)
+            lastSessionVolume
+              ? lastSessionVolume!.length < currentSessionVolume!.length
+                ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
+                : lastSessionVolume!.map((_, index) => `Set ${index + 1}`)
+              : currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
           }
-          prevLabel="Last Session's Volume"
-          previousData={lastSessionVolume!}
+          prevLabel={lastSessionVolume ? "Last Session's Volume" : undefined}
+          previousData={lastSessionVolume ? lastSessionVolume : undefined}
           currentLabel="Current Session's Volume"
           currentData={currentSessionVolume!}
         />

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-export async function TodaysMuscles({
+export function TodaysMuscles({
   muscleURLS,
 }: {
   muscleURLS: (string | undefined)[];

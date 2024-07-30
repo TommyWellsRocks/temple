@@ -342,7 +342,7 @@ export async function getMyExerciseAnalytics(
 ) {
   const lastSession = lastDayExercise
     ? calculateExerciseVolume(lastDayExercise)
-    : [0];
+    : undefined;
   const currentSession = calculateExerciseVolume(currentDayExercise);
 
   return [lastSession, currentSession];

@@ -37,7 +37,7 @@ export default async function MyDayOverview(context: any | unknown) {
           title="Week Analytics"
           measureOf="Volume"
           xLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-          prevLabel="Last Weeks's Volume"
+          prevLabel={"Last Weeks's Volume"}
           previousData={lastWeek!}
           currentLabel="This Week's Volume"
           currentData={thisWeek!}
