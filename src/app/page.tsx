@@ -10,15 +10,9 @@ export default async function Home() {
         <div className="flex gap-x-4">
           <Link
             className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="/login"
+            href="/signin"
           >
-            <h3 className="text-2xl font-bold">Login</h3>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="/signup"
-          >
-            <h3 className="text-2xl font-bold">Signup</h3>
+            <h3 className="text-2xl font-bold">Sign In / Sign Up</h3>
           </Link>
         </div>
       </div>
