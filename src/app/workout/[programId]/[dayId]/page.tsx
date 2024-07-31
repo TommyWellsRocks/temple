@@ -10,12 +10,15 @@ import { CheckList } from "~/components/workout/pages/ProgramDay/CheckList";
 
 export default async function DayOverview(context: any | unknown) {
   const session = await auth();
-  if (!session || !session.user || !session.user.id) return redirect("/signin");
-
   const { programId, dayId } = context.params as {
     programId: string;
     dayId: string;
   };
+  if (!session || !session.user || !session.user.id)
+    return redirect(
+      `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}`)}`,
+    );
+
   const programDay = await getMyProgramDay(
     session.user.id,
     Number(programId),

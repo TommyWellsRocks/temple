@@ -14,13 +14,16 @@ import { ExerciseInputs } from "~/components/workout/pages/Exercise/ExerciseInpu
 
 export default async function Exercise(context: any | unknown) {
   const session = await auth();
-  if (!session || !session.user || !session.user.id) return redirect("/signin");
-
   const { programId, dayId, dayExerciseId } = context.params as {
     programId: string;
     dayId: string;
     dayExerciseId: string;
   };
+  if (!session || !session.user || !session.user.id)
+    return redirect(
+      `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}/${dayExerciseId}`)}`,
+    );
+
   const dayExercise = await getMyDayExercise(
     session.user.id,
     Number(programId),

@@ -10,7 +10,8 @@ import { OverlayButton } from "~/components/workout/OverlayButton";
 
 export default async function Programs() {
   const session = await auth();
-  if (!session || !session.user || !session.user.id) return redirect("/signin");
+  if (!session || !session.user || !session.user.id)
+    return redirect(`/signin?return=${encodeURIComponent("/workout")}`);
 
   // LineChart
   const [lastYear, thisYear] = await getMyYearDaysActiveAnalytics(

@@ -4,6 +4,18 @@ import { db } from "~/server/db";
 import Google from "next-auth/providers/google";
 import { accounts, sessions, users, verificationTokens } from "./db/schema";
 
+const providers = [Google];
+
+export const providerMap = providers.map((provider) => {
+  if (typeof provider === "function") {
+    const providerData = provider({});
+    return { id: providerData.id, name: providerData.name };
+  }
+  // else {
+  //   return { id: provider.id, name: provider.name };
+  // }
+});
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db, {
     usersTable: users,
@@ -11,9 +23,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
   }),
-  providers: [Google],
-  // pages: {
-  //   signIn: "/signin",
-  //   signOut: "/signout"
-  // },
+  providers,
+  pages: {
+    signIn: "/signin",
+    // signOut: "/signout",
+  },
 });

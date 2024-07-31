@@ -10,9 +10,12 @@ import { DayList } from "~/components/workout/pages/ProgramDays/DayList";
 
 export default async function Days(context: any | unknown) {
   const session = await auth();
-  if (!session || !session.user || !session.user.id) return redirect("/signin");
-
   const { programId } = context.params as { programId: string };
+  if (!session || !session.user || !session.user.id)
+    return redirect(
+      `/signin?return=${encodeURIComponent(`/workout/${programId}`)}`,
+    );
+
   const program = await getMyProgram(session.user.id, Number(programId));
   if (!program) return redirect("/workout");
 
