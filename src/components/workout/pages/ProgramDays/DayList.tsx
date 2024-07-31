@@ -10,6 +10,7 @@ import { EditGroupsButton } from "~/components/workout/pages/ProgramDays/EditGro
 import { Program } from "~/server/types";
 
 const DAY_NAME_MAX_LENGTH = 12;
+const DAY_EXERCISE_MAX_LENGTH = 5;
 
 export function DayList({
   userId,
@@ -86,11 +87,13 @@ export function DayList({
                 >
                   <div className="mt-8 flex flex-col gap-2">
                     <div className="ml-4 flex flex-col text-base">
-                      {day.dayExercises.map((exercise) => (
-                        <div>
-                          {exercise.reps.length} x {exercise.info.name}
-                        </div>
-                      ))}
+                      {day.dayExercises
+                        .map((exercise) => (
+                          <div>
+                            {exercise.reps.length} x {exercise.info.name}
+                          </div>
+                        ))
+                        .slice(0, DAY_EXERCISE_MAX_LENGTH)}
                     </div>
                   </div>
                   <Image

@@ -367,12 +367,13 @@ export async function getMyDayExercise(
         eq(model.id, dayExerciseId),
       ),
     columns: {
-      reps: true,
-      dayId: true,
       id: true,
+      userId: true,
+      programId: true,
+      dayId: true,
+      reps: true,
       weight: true,
       updatedAt: true,
-      userId: true,
       exerciseId: true,
     },
     with: {
@@ -436,23 +437,24 @@ export async function deleteDayExercise(
     );
 }
 
-export async function updateDayExerciseInput(
-  userId: string,
-  dayExerciseId: number,
-  updateType: "Reps" | "Weight",
-  newValues: number[],
-) {
+export async function updateDayExerciseInput(dayExercise: {
+  id: number;
+  dayId: number;
+  userId: string;
+  reps: number[];
+  weight: number[];
+}) {
   await db
     .update(workoutDayExercises)
-    .set(
-      updateType === "Reps"
-        ? { reps: newValues, updatedAt: new Date() }
-        : { weight: newValues, updatedAt: new Date() },
-    )
+    .set({
+      reps: dayExercise!.reps,
+      weight: dayExercise!.weight,
+      updatedAt: new Date(),
+    })
     .where(
       and(
-        eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, dayExerciseId),
+        eq(workoutDayExercises.userId, dayExercise.userId),
+        eq(workoutDayExercises.id, dayExercise!.id),
       ),
     );
 }

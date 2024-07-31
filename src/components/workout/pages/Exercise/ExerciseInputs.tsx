@@ -10,6 +10,7 @@ export function ExerciseInputs({
   lastDayExercise: DayExercise;
   dayExercise: {
     id: number;
+    programId: number;
     dayId: number;
     userId: string;
     reps: number[];
@@ -28,10 +29,7 @@ export function ExerciseInputs({
         {setCount === 1 ? " Set" : " Sets"}
       </div>
       <div className="flex flex-col gap-y-5">
-        <InputRows
-          lastDayExercise={lastDayExercise}
-          dayExercise={dayExercise}
-        />
+        <InputRows dayExercise={dayExercise} />
       </div>
       <div className="flex gap-x-5">
         <EditSetCount method="Add" dayExercise={dayExercise} />

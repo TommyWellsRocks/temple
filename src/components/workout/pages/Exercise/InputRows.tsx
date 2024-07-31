@@ -3,18 +3,11 @@
 import { handleExerciseVolumeInput } from "~/components/workout/ServerComponents/DayExercise";
 
 export function InputRows({
-  lastDayExercise,
   dayExercise,
 }: {
-  lastDayExercise?: {
-    id: number;
-    dayId: number;
-    userId: string;
-    reps: number[];
-    weight: number[];
-  };
   dayExercise: {
     id: number;
+    programId: number;
     dayId: number;
     userId: string;
     reps: number[];
@@ -26,13 +19,10 @@ export function InputRows({
   const countBoxClassFocus =
     "flex h-11 w-11 items-center justify-center bg-primary font-semibold text-black";
 
-  return dayExercise!.reps.map((repCount, index) => {
+  return dayExercise!.reps.map((repValue, index) => {
     const weightValue = dayExercise.weight[index];
     return (
-      <div
-        className="flex items-center gap-x-3 text-2xl font-light text-gray-600"
-        key={index}
-      >
+      <div className="flex items-center gap-x-3 text-2xl font-light text-gray-600">
         <div
           className={countBoxClassDefault}
           style={{
@@ -45,7 +35,7 @@ export function InputRows({
         <input
           className="w-12 cursor-pointer bg-transparent text-center"
           type="number"
-          defaultValue={repCount}
+          defaultValue={repValue}
           onFocus={(e) => {
             const countBox = e.currentTarget.parentNode!.firstElementChild!;
             countBox.className = countBoxClassFocus;
@@ -59,12 +49,10 @@ export function InputRows({
               newValue = 0;
               e.target.value = "0";
             }
-            const values = dayExercise!.reps;
-            const currentTargetValue = values[index];
 
-            if (currentTargetValue !== newValue) {
-              values[index] = newValue;
-              handleExerciseVolumeInput(dayExercise, "Reps", values);
+            if (dayExercise!.reps[index] !== newValue) {
+              dayExercise.reps[index] = newValue;
+              handleExerciseVolumeInput(dayExercise);
             }
           }}
         />
@@ -87,12 +75,13 @@ export function InputRows({
               newValue = 0;
               e.target.value = "0";
             }
-            const values = dayExercise!.weight;
-            const currentTargetValue = values[index];
 
-            if (currentTargetValue !== newValue) {
-              values[index] = newValue;
-              handleExerciseVolumeInput(dayExercise, "Weight", values);
+            if (dayExercise!.weight[index] !== newValue) {
+              // Set To Remaining Weights
+              for (let i = index; i < dayExercise.weight.length; i++) {
+                dayExercise.weight[i] = newValue;
+              }
+              handleExerciseVolumeInput(dayExercise);
             }
           }}
         />

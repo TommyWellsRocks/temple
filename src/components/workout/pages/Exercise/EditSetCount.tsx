@@ -10,8 +10,9 @@ export function EditSetCount({
   method: "Add" | "Delete";
   dayExercise: {
     id: number;
-    dayId: number;
     userId: string;
+    programId: number;
+    dayId: number;
     reps: number[];
     weight: number[];
   };
@@ -29,7 +30,7 @@ export function EditSetCount({
 
         if (method === "Add") {
           repValues.push(0);
-          weightValues.push(0);
+          weightValues.push(weightValues[weightValues.length - 1]!);
         } else {
           repValues.pop();
           weightValues.pop();

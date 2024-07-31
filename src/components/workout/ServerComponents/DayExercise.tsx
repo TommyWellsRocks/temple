@@ -7,27 +7,24 @@ import {
   updateDayExerciseSets,
 } from "~/server/queries/workouts";
 
-export async function handleExerciseVolumeInput(
-  dayExercise: {
-    id: number;
-    dayId: number;
-    userId: string;
-  },
-  updateType: "Reps" | "Weight",
-  newValues: number[],
-) {
-  await updateDayExerciseInput(
-    dayExercise!.userId,
-    dayExercise!.id,
-    updateType,
-    newValues,
+export async function handleExerciseVolumeInput(dayExercise: {
+  id: number;
+  programId: number;
+  dayId: number;
+  userId: string;
+  reps: number[];
+  weight: number[];
+}) {
+  await updateDayExerciseInput(dayExercise);
+  revalidatePath(
+    `/workout/${dayExercise!.programId}/${dayExercise!.dayId}/${dayExercise!.id}`,
   );
-  revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
 }
 
 export async function handleEditSetCount(
   dayExercise: {
     id: number;
+    programId: number;
     dayId: number;
     userId: string;
   },
@@ -40,12 +37,15 @@ export async function handleEditSetCount(
     repValues,
     weightValues,
   );
-  revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
+  revalidatePath(
+    `/workout/${dayExercise!.programId}/${dayExercise!.dayId}/${dayExercise!.id}`,
+  );
 }
 
 export async function handleExerciseNoteInput(
   dayExercise: {
     id: number;
+    programId: number;
     dayId: number;
     userId: string;
     exerciseId: number;
@@ -59,5 +59,7 @@ export async function handleExerciseNoteInput(
     noteValue,
     noteId,
   );
-  revalidatePath(`/workout/${dayExercise!.dayId}/${dayExercise!.id}`);
+  revalidatePath(
+    `/workout/${dayExercise!.programId}/${dayExercise!.dayId}/${dayExercise!.id}`,
+  );
 }
