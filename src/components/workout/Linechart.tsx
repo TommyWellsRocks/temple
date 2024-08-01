@@ -54,15 +54,7 @@ function chartOptions(currentData: number[], previousData?: number[]) {
   return {
     plugins: {
       legend: {
-        position: "bottom",
-      },
-    },
-    layout: {
-      padding: {
-        left: 0,
-        right: 0,
-        top: 40,
-        bottom: 0,
+        display: false,
       },
     },
     x: {
@@ -94,7 +86,6 @@ function chartOptions(currentData: number[], previousData?: number[]) {
 }
 
 export function LineChart({
-  title,
   measureOf,
   xLabels,
   prevLabel,
@@ -102,7 +93,6 @@ export function LineChart({
   currentLabel,
   currentData,
 }: {
-  title: string;
   measureOf: string;
   xLabels: string[] | number[];
   prevLabel?: string;
@@ -123,13 +113,10 @@ export function LineChart({
   ) as _DeepPartialObject<CoreChartOptions<"line">>;
 
   return (
-    <div className="relative flex">
-      <div className="absolute left-0 right-0 top-2 text-center text-2xl">
-        {title}
-      </div>
-      <div className="border-1 absolute right-2 top-2 rounded-sm border px-1.5 py-1 text-base">
+    <div className="relative flex rounded-lg bg-black bg-opacity-30">
+      <span className="border-1 absolute right-1 top-1.5 rounded-sm border px-1.5 text-sm font-light min-[380px]:right-2 min-[380px]:top-2.5 min-[380px]:py-0.5 min-[380px]:text-base">
         {measureOf}
-      </div>
+      </span>
       <Line data={chartDataSetup} options={chartAdditionalOptions} />
     </div>
   );

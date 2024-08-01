@@ -18,7 +18,6 @@ export default async function SignIn() {
         Your browser does not support this video {" :("}. That&apos;s too bad!
         It&apos;s a really good video!
       </video>
-      {/* <Image alt="Image showing how much we don't want you to leave!" src={} /> */}
       <form
         action={async () => {
           "use server";

@@ -73,7 +73,7 @@ export function ExerciseForm({
                 Number(values.exercise),
               );
         })}
-        className="space-y-6"
+        className="mx-auto w-[260px] space-y-4"
       >
         <FormField
           control={form.control}

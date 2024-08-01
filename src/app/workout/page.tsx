@@ -19,14 +19,13 @@ export default async function Programs() {
   );
 
   return (
-    <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
+    <main className="flex flex-col gap-y-4 text-left text-xl font-medium ">
       <nav>
         <Navigation backURL="/workout" heading="Workout Programs" />
       </nav>
 
-      <section className="rounded-lg bg-black bg-opacity-30 p-2">
+      <section>
         <LineChart
-          title="Year Analytics"
           measureOf="Active-Days"
           xLabels={Array.from({ length: 12 }, (_, i) =>
             new Date(0, i).toLocaleString("en", { month: "short" }),
@@ -38,19 +37,17 @@ export default async function Programs() {
         />
       </section>
 
-      <section className="flex flex-col gap-4">
-        <div className="flex justify-end">
-          <OverlayButton
-            title="Create Workout Program"
-            description="Build and plan out your program. Click create when you're done."
-            formType="Program"
-            formProps={{ userId: session.user.id }}
-          />
-        </div>
+      <section className="flex justify-end">
+        <OverlayButton
+          title="Create Workout Program"
+          description="Build and plan out your program. Click create when you're done."
+          formType="Program"
+          formProps={{ userId: session.user.id }}
+        />
+      </section>
 
-        <div>
-          <ProgramsList userId={session.user.id} />
-        </div>
+      <section>
+        <ProgramsList userId={session.user.id} />
       </section>
     </main>
   );

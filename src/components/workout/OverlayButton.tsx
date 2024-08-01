@@ -52,7 +52,13 @@ export function OverlayButton({
   if (formType === "Program") {
     FormComponent = <ProgramForm userId={formProps.userId} />;
   } else if (formType === "ProgramDays") {
-    FormComponent = <DayForm userId={formProps.userId} programId={formProps.programId} groupId={formProps.groupId} />;
+    FormComponent = (
+      <DayForm
+        userId={formProps.userId}
+        programId={formProps.programId}
+        groupId={formProps.groupId}
+      />
+    );
   } else if (formType === "Exercise") {
     FormComponent = (
       <ExerciseForm

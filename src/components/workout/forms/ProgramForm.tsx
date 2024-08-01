@@ -92,7 +92,7 @@ export function ProgramForm({
                 values.end,
               );
         })}
-        className="flex flex-col gap-4"
+        className="mx-auto flex w-[260px] flex-col gap-4"
       >
         <FormField
           control={form.control}
@@ -101,7 +101,7 @@ export function ProgramForm({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Squatober" {...field} className="w-2/3" />
+                <Input placeholder="Squatober" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,7 +120,7 @@ export function ProgramForm({
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-2/3 justify-start text-left font-normal",
+                        "justify-start text-left font-normal",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -133,7 +133,7 @@ export function ProgramForm({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -161,7 +161,7 @@ export function ProgramForm({
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-2/3 justify-start text-left font-normal",
+                        "justify-start text-left font-normal",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -174,7 +174,7 @@ export function ProgramForm({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -196,10 +196,9 @@ export function ProgramForm({
           {!programInfo ? (
             <Button type="submit">Create</Button>
           ) : (
-            <>
+            <div className="flex justify-between">
               <Button
-                className="mr-auto"
-                variant={"destructive"}
+                variant="destructive"
                 type="button"
                 onClick={() =>
                   handleDeleteProgram(programInfo.userId, programInfo.id)
@@ -207,10 +206,10 @@ export function ProgramForm({
               >
                 Delete
               </Button>
-              <Button variant={"secondary"} type="submit">
-                Edit
+              <Button variant="outline" type="submit">
+                Save
               </Button>
-            </>
+            </div>
           )}
         </DialogFooter>
       </form>

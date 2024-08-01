@@ -29,6 +29,7 @@ export function PopoverButton({
           id: number;
           userId: string;
           programId: number;
+          groupId: number;
         };
       };
     }
@@ -47,6 +48,7 @@ export function PopoverButton({
       <DayForm
         userId={formProps.dayInfo!.userId}
         programId={formProps.dayInfo!.programId}
+        groupId={formProps.dayInfo!.groupId}
         dayInfo={formProps.dayInfo}
       />
     );
@@ -61,8 +63,8 @@ export function PopoverButton({
       </PopoverTrigger>
 
       <PopoverContent className="w-80">
-        <div className="grid gap-4">
-          <div className="space-y-2">
+        <div className="grid gap-3">
+          <div className="space-y-2 text-center">
             <h4 className="font-medium leading-none">{title}</h4>
             <p className="text-sm text-muted-foreground">{description}</p>
           </div>

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import BackButtonURL from "/public/content/images/back-button.svg";
+import { toTitleCase } from "~/lib/utils";
+import { ChevronLeft } from "lucide-react";
 
 export function Navigation({
   backURL,
@@ -10,14 +10,14 @@ export function Navigation({
   heading: string;
 }) {
   return (
-    <div className="grid grid-cols-3 items-center">
+    <div className="flex items-center justify-between">
       <Link href={backURL}>
-        <Image className="cursor-pointer" src={BackButtonURL} alt="Back" />
+        <ChevronLeft />
       </Link>
-      <div className="justify-self-center text-center text-2xl font-semibold">
-        {heading}
-      </div>
-      <div />
+      <span className="text-center text-xl font-semibold sm:text-2xl">
+        {toTitleCase(heading)}
+      </span>
+      <div className="w-[24px]" />
     </div>
   );
 }

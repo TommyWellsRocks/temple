@@ -75,9 +75,15 @@ export function DayForm({
                 values.name,
                 values.repeatOn,
               )
-            : handleCreateDay(userId, programId, groupId, values.name, values.repeatOn);
+            : handleCreateDay(
+                userId,
+                programId,
+                groupId,
+                values.name,
+                values.repeatOn,
+              );
         })}
-        className="flex flex-col gap-4"
+        className="mx-auto flex w-[260px] flex-col gap-4"
       >
         <FormField
           control={form.control}
@@ -86,7 +92,7 @@ export function DayForm({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Leg day" {...field} className="w-2/3" />
+                <Input placeholder="Leg day" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,13 +104,7 @@ export function DayForm({
           render={() => (
             <FormItem>
               <FormLabel>Repeat</FormLabel>
-              <div
-                className={
-                  dayInfo
-                    ? "grid grid-cols-2 gap-y-2"
-                    : "grid grid-cols-3 gap-y-4"
-                }
-              >
+              <div className="grid grid-cols-2 gap-y-3">
                 {days.map((day) => (
                   <FormField
                     key={day.id}
@@ -151,10 +151,10 @@ export function DayForm({
           {!dayInfo ? (
             <Button type="submit">Create</Button>
           ) : (
-            <>
+            <div className="flex">
               <Button
                 className="mr-auto"
-                variant={"destructive"}
+                variant="destructive"
                 type="button"
                 onClick={() =>
                   handleDeleteProgramDay(
@@ -166,10 +166,10 @@ export function DayForm({
               >
                 Delete
               </Button>
-              <Button variant={"secondary"} type="submit">
-                Edit
+              <Button variant="outline" type="submit">
+                Save
               </Button>
-            </>
+            </div>
           )}
         </DialogFooter>
       </form>
