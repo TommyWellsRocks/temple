@@ -1,10 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import futureButtonURL from "/public/content/images/workout/action-future.svg";
-import { PopoverButton } from "~/components/workout/PopoverButton";
 import { getMyPrograms } from "~/server/queries/workouts";
+import { InfoContainer } from "../../InfoContainer";
+import { PopoverButton } from "../../PopoverButton";
+
+const PROGRAM_DAY_MAX_LENGTH = 3;
 
 export async function ProgramsList({ userId }: { userId: string }) {
   const workoutPrograms = await getMyPrograms(userId);
@@ -20,9 +21,9 @@ export async function ProgramsList({ userId }: { userId: string }) {
         const latestGroup = program.groups[program.groups.length - 1];
 
         return (
-          <div className="relative flex">
-            <div className="absolute left-2.5 top-2 flex gap-1.5 px-1.5 align-middle">
-              {program.name}
+          <InfoContainer
+            title={program.name}
+            editButton={
               <PopoverButton
                 title="Edit Workout Program"
                 description="Remember to click save when your done."
@@ -31,29 +32,20 @@ export async function ProgramsList({ userId }: { userId: string }) {
                   programInfo: program,
                 }}
               />
-            </div>
-            <Link
-              href={`/workout/${program.id}`}
-              className={`flex w-full items-center justify-between rounded-xl px-4 py-2 ${isActiveProgram ? "bg-undoneDark" : "bg-doneDark"}`}
-            >
-              <div className="ml-4 mt-7 flex flex-wrap gap-x-2 text-base">
-                {latestGroup!.groupDays.map((day) => (
-                  <div>&bull; {day.name}</div>
-                ))}
-              </div>
-              <Image
-                className="rounded-full border border-primary"
-                src={
-                  isActiveProgram
-                    ? playButtonURL
-                    : isFutureProgram
-                      ? futureButtonURL
-                      : trophyButtonURL
-                }
-                alt="Action."
-              />
-            </Link>
-          </div>
+            }
+            items={latestGroup!.groupDays.map((day) => (
+              <div>&bull; {day.name}</div>
+            )).slice(0, PROGRAM_DAY_MAX_LENGTH)}
+            isDark={!isActiveProgram}
+            actionIconURL={
+              isActiveProgram
+                ? playButtonURL
+                : isFutureProgram
+                  ? futureButtonURL
+                  : trophyButtonURL
+            }
+            linkTo={`/workout/${program.id}`}
+          />
         );
       })}
     </div>

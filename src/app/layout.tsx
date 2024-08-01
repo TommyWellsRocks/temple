@@ -20,7 +20,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" className={`${GeistSans.variable} m-3`}>
-      <body>
+      <body className="flex flex-col gap-y-4 text-left text-xl font-medium">
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"

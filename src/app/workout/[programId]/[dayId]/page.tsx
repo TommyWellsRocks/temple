@@ -40,7 +40,6 @@ export default async function DayOverview(context: any | unknown) {
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
-          title="Week Analytics"
           measureOf="Volume"
           xLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
           prevLabel={"Last Weeks's Volume"}

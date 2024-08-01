@@ -47,7 +47,6 @@ export default async function Exercise(context: any | unknown) {
 
       <section className="rounded-lg bg-black bg-opacity-30 p-2">
         <LineChart
-          title="Exercise Analytics"
           measureOf="Volume"
           xLabels={
             lastSessionVolume

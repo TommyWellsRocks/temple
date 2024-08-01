@@ -113,7 +113,7 @@ export function LineChart({
   ) as _DeepPartialObject<CoreChartOptions<"line">>;
 
   return (
-    <div className="relative flex rounded-lg bg-black bg-opacity-30">
+    <div className="relative flex rounded-lg bg-black bg-opacity-30 p-1.5">
       <span className="border-1 absolute right-1 top-1.5 rounded-sm border px-1.5 text-sm font-light min-[380px]:right-2 min-[380px]:top-2.5 min-[380px]:py-0.5 min-[380px]:text-base">
         {measureOf}
       </span>

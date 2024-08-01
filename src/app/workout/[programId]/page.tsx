@@ -23,18 +23,15 @@ export default async function Days(context: any | unknown) {
   const currentProgramVolume = calculateProgramVolumeAnalytics(program);
 
   return (
-    <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
+    <>
       <nav>
         <Navigation backURL="/workout" heading={`${program.name} Days`} />
       </nav>
 
-      <section className="rounded-lg bg-black bg-opacity-30 p-2">
+      <section>
         <LineChart
-          title="Program Analytics"
           measureOf="Volume"
-          xLabels={currentProgramVolume.map(
-            (_, index) => `Sprint ${index + 1}`,
-          )}
+          xLabels={currentProgramVolume.map((_, index) => `Group ${index + 1}`)}
           currentLabel="Your Volume"
           currentData={currentProgramVolume as number[]}
         />
@@ -47,6 +44,6 @@ export default async function Days(context: any | unknown) {
           program={program}
         />
       </section>
-    </main>
+    </>
   );
 }

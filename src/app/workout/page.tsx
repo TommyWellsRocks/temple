@@ -19,7 +19,7 @@ export default async function Programs() {
   );
 
   return (
-    <main className="flex flex-col gap-y-4 text-left text-xl font-medium ">
+    <>
       <nav>
         <Navigation backURL="/workout" heading="Workout Programs" />
       </nav>
@@ -49,7 +49,7 @@ export default async function Programs() {
       <section>
         <ProgramsList userId={session.user.id} />
       </section>
-    </main>
+    </>
   );
 }
 

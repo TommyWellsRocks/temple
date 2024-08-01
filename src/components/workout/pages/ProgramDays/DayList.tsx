@@ -1,5 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "~/components/ui/carousel";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import futureButtonURL from "/public/content/images/workout/action-future.svg";
@@ -8,9 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { OverlayButton } from "~/components/workout/OverlayButton";
 import { EditGroupsButton } from "~/components/workout/pages/ProgramDays/EditGroupsButton";
 import { Program } from "~/server/types";
+import { InfoContainer } from "../../InfoContainer";
 
-const DAY_NAME_MAX_LENGTH = 12;
-const DAY_EXERCISE_MAX_LENGTH = 5;
+const DAY_EXERCISE_MAX_LENGTH = 3;
 
 export function DayList({
   userId,
@@ -26,24 +29,40 @@ export function DayList({
 
   return (
     <Tabs defaultValue={String(program.groups[program.groups.length - 1]!.id)}>
-      <div className="mb-6 grid grid-cols-3">
-        <div />
-        <TabsList className="justify-self-center">
+      <div className="flex flex-col justify-between gap-2 min-[450px]:flex-row">
+        <div className="min-w-[40px]" />
+
+        <div className="mx-auto flex w-[300px] justify-between rounded-lg bg-secondary sm:w-[450px]">
           {program.groups.length > 1 ? (
             <EditGroupsButton
               userId={userId}
               programId={programId}
               groupId={program.groups[program.groups.length - 1]!.id}
             />
-          ) : null}
-          {program.groups.map((group, index) => (
-            <TabsTrigger value={String(group.id)}>
-              Sprint {index + 1}
-            </TabsTrigger>
-          ))}
+          ) : (
+            <div />
+          )}
+
+          <TabsList>
+            <Carousel
+              opts={{ startIndex: program.groups.length - 1, dragFree: true }}
+            >
+              <CarouselContent className="w-[240px] sm:w-[390px]">
+                {program.groups.map((group, index) => (
+                  <CarouselItem>
+                    <TabsTrigger value={String(group.id)}>
+                      Group {index + 1}
+                    </TabsTrigger>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </TabsList>
+
           <EditGroupsButton userId={userId} programId={programId} />
-        </TabsList>
-        <div className="justify-self-end">
+        </div>
+
+        <div className="flex justify-end">
           <OverlayButton
             title="Create Day"
             description="Design and schedule your program days. Click create when you're done."
@@ -71,44 +90,33 @@ export function DayList({
               !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
 
             return (
-              <div className="relative flex">
-                <div className="absolute left-2.5 top-2 flex gap-1.5 px-1.5 align-middle">
-                  {day.name.slice(0, DAY_NAME_MAX_LENGTH)}
+              <InfoContainer
+                title={day.name}
+                editButton={
                   <PopoverButton
                     title="Edit Workout Program"
                     description="Remember to click edit when your done."
                     formType="ProgramDays"
                     formProps={{ dayInfo: day }}
                   />
-                </div>
-                <Link
-                  href={`/workout/${day.programId}/${day.id}`}
-                  className={`flex w-full items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneDark" : "bg-undoneDark"}`}
-                >
-                  <div className="mt-8 flex flex-col gap-2">
-                    <div className="ml-4 flex flex-col text-base">
-                      {day.dayExercises
-                        .map((exercise) => (
-                          <div>
-                            {exercise.reps.length} x {exercise.info.name}
-                          </div>
-                        ))
-                        .slice(0, DAY_EXERCISE_MAX_LENGTH)}
+                }
+                items={day.dayExercises
+                  .map((exercise) => (
+                    <div>
+                      {exercise.reps.length} x {exercise.info.name}
                     </div>
-                  </div>
-                  <Image
-                    className="rounded-full border border-primary"
-                    src={
-                      isDone
-                        ? trophyButtonURL
-                        : isFutureDay
-                          ? futureButtonURL
-                          : playButtonURL
-                    }
-                    alt="Action."
-                  />
-                </Link>
-              </div>
+                  ))
+                  .slice(0, DAY_EXERCISE_MAX_LENGTH)}
+                isDark={isDone}
+                actionIconURL={
+                  isDone
+                    ? trophyButtonURL
+                    : isFutureDay
+                      ? futureButtonURL
+                      : playButtonURL
+                }
+                linkTo={`/workout/${day.programId}/${day.id}`}
+              />
             );
           })}
         </TabsContent>
