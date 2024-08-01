@@ -30,7 +30,7 @@ export default async function DayOverview(context: any | unknown) {
   const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id!);
 
   return (
-    <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
+    <>
       <nav>
         <Navigation
           backURL={`/workout/${programId}`}
@@ -38,7 +38,7 @@ export default async function DayOverview(context: any | unknown) {
         />
       </nav>
 
-      <section className="rounded-lg bg-black bg-opacity-30 p-2">
+      <section>
         <LineChart
           measureOf="Volume"
           xLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
@@ -66,6 +66,6 @@ export default async function DayOverview(context: any | unknown) {
           programDay={programDay}
         />
       </section>
-    </main>
+    </>
   );
 }
