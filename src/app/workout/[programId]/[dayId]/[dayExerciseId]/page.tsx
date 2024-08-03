@@ -39,13 +39,15 @@ export default async function Exercise(context: any | unknown) {
     await getMyExerciseAnalytics(dayExercise, lastDayExercise);
 
   return (
-    <main className="flex flex-col gap-y-9 text-left text-xl font-medium">
-      <Navigation
-        backURL={`/workout/${programId}/${dayId}`}
-        heading={`${dayExercise.info.name}`}
-      />
+    <>
+      <nav>
+        <Navigation
+          backURL={`/workout/${programId}/${dayId}`}
+          heading={`${dayExercise.info.name}`}
+        />
+      </nav>
 
-      <section className="rounded-lg bg-black bg-opacity-30 p-2">
+      <section>
         <LineChart
           measureOf="Volume"
           xLabels={
@@ -62,7 +64,7 @@ export default async function Exercise(context: any | unknown) {
         />
       </section>
 
-      <section className="flex flex-col items-center justify-center gap-y-5">
+      <section>
         <ExerciseInputs
           lastDayExercise={lastDayExercise}
           dayExercise={dayExercise}
@@ -72,6 +74,6 @@ export default async function Exercise(context: any | unknown) {
       <section>
         <ExerciseTabs dayExercise={dayExercise} />
       </section>
-    </main>
+    </>
   );
 }

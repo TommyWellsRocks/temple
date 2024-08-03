@@ -33,7 +33,7 @@ export function PreviousSessionButton({
         </DialogHeader>
 
         {previousExercise!.reps.map((repCount, index) => (
-          <div className="flex items-center gap-1 rounded-md border border-gray-600">
+          <div className="flex items-center gap-1 rounded-md border border-gray-600 text-base">
             <span className="rounded-s-md border border-gray-600 bg-gray-900 px-1 font-medium text-gray-400">
               Set {index + 1}:
             </span>

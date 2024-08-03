@@ -2,6 +2,7 @@
 
 import { Minus, Plus } from "lucide-react";
 import { handleEditSetCount } from "~/components/workout/ServerComponents/DayExercise";
+import { clipPathHexagon } from "./Hexagon";
 
 export function EditSetCount({
   method,
@@ -19,10 +20,9 @@ export function EditSetCount({
 }) {
   return (
     <button
-      className="flex h-11 w-11 items-center justify-center bg-gray-600 "
+      className="flex h-11 w-11 items-center justify-center bg-primary"
       style={{
-        clipPath:
-          "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
+        clipPath: clipPathHexagon,
       }}
       onClick={() => {
         let repValues = dayExercise!.reps;

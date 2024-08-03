@@ -5,6 +5,12 @@ import { DayExercise } from "~/server/types";
 import { handleExerciseNoteInput } from "~/components/workout/ServerComponents/DayExercise";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Textarea } from "~/components/ui/textarea";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "~/components/ui/carousel";
 
 export function ExerciseTabs({ dayExercise }: { dayExercise: DayExercise }) {
   // Notes
@@ -26,8 +32,8 @@ export function ExerciseTabs({ dayExercise }: { dayExercise: DayExercise }) {
       </div>
       <TabsContent value="notes">
         <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
-          <input
-            className="w-full bg-transparent"
+          <Textarea
+            className="border-none bg-transparent"
             defaultValue={notesValue}
             onBlur={(e) => {
               let newValue = e.target.value;
@@ -60,17 +66,25 @@ export function ExerciseTabs({ dayExercise }: { dayExercise: DayExercise }) {
         </div>
       </TabsContent>
       <TabsContent value="muscles">
-        <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
-          {dayExercise!.info.targetMuscleImages &&
-            dayExercise!.info.targetMuscleImages.map((img) => (
-              <Image
-                className="w-15 rounded-lg border border-primary bg-white p-0.5"
-                src={img}
-                alt="Target muscle image."
-                width={80}
-                height={80}
-              />
-            ))}
+        <div className="rounded-xl bg-black bg-opacity-15 px-3 py-2">
+          <Carousel opts={{ dragFree: true }}>
+            <CarouselContent>
+              {dayExercise!.info.targetMuscleImages &&
+                dayExercise!.info.targetMuscleImages.map((img) => {
+                  return (
+                    <CarouselItem>
+                      <Image
+                        className="w-15 rounded-lg border border-primary bg-white p-0.5"
+                        src={img}
+                        alt="Target muscle image."
+                        width={100}
+                        height={100}
+                      />
+                    </CarouselItem>
+                  );
+                })}
+            </CarouselContent>
+          </Carousel>
         </div>
       </TabsContent>
     </Tabs>
