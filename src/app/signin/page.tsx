@@ -15,7 +15,7 @@ export default async function SignIn({
   searchParams: { return: string };
 }) {
   const session = await auth();
-  const returnURL = searchParams.return || "/workout";
+  const returnURL = searchParams.return || "/";
   if (session && session.user && session.user.id) return redirect(returnURL);
 
   return (
@@ -32,7 +32,7 @@ export default async function SignIn({
               // not existing, or the user not having the correct role.
               // In some cases, you may want to redirect to a custom error
               if (error instanceof AuthError) {
-                return redirect(`/workout?error=${error.type}`);
+                return redirect(`/?error=${error.type}`);
               }
 
               // Otherwise if a redirects happens NextJS can handle it

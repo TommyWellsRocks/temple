@@ -21,7 +21,7 @@ export default async function Programs() {
   return (
     <>
       <nav>
-        <Navigation backURL="/workout" heading="Workout Programs" />
+        <Navigation backURL="/" heading="Workout Programs" />
       </nav>
 
       <section>

@@ -14,7 +14,7 @@ export default async function SignIn() {
         <span>Are you sure you want to go?</span>
         <span>We are going to miss you a lot!!!</span>
       </div>
-      <video src="content/videos/bye_gif.mp4" autoPlay loop muted>
+      <video src="content/videos/auth/bye_gif.mp4" autoPlay loop muted>
         Your browser does not support this video {" :("}. That&apos;s too bad!
         It&apos;s a really good video!
       </video>

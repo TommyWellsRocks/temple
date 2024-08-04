@@ -3,6 +3,7 @@
 
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   date,
   index,
   integer,
@@ -331,5 +332,25 @@ export const workoutDayExerciseRelations = relations(
       fields: [workoutDayExercises.exerciseId],
       references: [exercise_notes.exerciseId],
     }),
+  }),
+);
+
+// * Sheer Related
+export const sheerResponses = createTable(
+  "sheer_responses",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    response: boolean("response").notNull(),
+    why: varchar("why"),
+    date: timestamp("date", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    userIndex: index().on(table.userId),
+    dateIndex: index().on(table.date),
   }),
 );
