@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/server/auth";
-import { ThemeProvider } from "~/app/lib/theme-provider";
+import { ThemeProvider } from "~/lib/theme-provider";
 
 export const metadata = {
   title: "Temple",

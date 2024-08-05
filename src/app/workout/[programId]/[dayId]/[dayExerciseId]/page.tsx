@@ -5,11 +5,11 @@ import {
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { Navigation } from "~/app/components/ui/Navigation";
-import { LineChart } from "~/app/components/ui/Linechart";
-import { ActivityInfo } from "~/app/components/workout/Exercise/ActivityInfo";
-import { SetInputs } from "~/app/components/workout/Exercise/SetInputs";
-import { ExerciseTabs } from "~/app/components/workout/Exercise/ExerciseTabs";
+import { Navigation } from "~/components/ui/Navigation";
+import { LineChart } from "~/components/ui/Linechart";
+import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
+import { SetInputs } from "~/components/workout/Exercise/SetInputs";
+import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 
 // * EXERCISE PAGE
 

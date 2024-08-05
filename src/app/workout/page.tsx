@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getMyYearDaysActiveAnalytics } from "~/server/queries/workouts";
-import { Navigation } from "~/app/components/ui/Navigation";
-import { LineChart } from "~/app/components/ui/Linechart";
-import { ProgramsList } from "~/app/components/workout/ProgramList/ProgramsList";
-import { AddButtonOverlay } from "~/app/components/workout/AddButtonOverlay";
-import { ProgramForm } from "../components/workout/ProgramList/ProgramForm";
+import { Navigation } from "~/components/ui/Navigation";
+import { LineChart } from "~/components/ui/Linechart";
+import { ProgramsList } from "~/components/workout/ProgramList/ProgramsList";
+import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
+import { ProgramForm } from "~/components/workout/ProgramList/ProgramForm";
 
 // * PROGRAMS PAGE
 

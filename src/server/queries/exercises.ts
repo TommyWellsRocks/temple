@@ -1,7 +1,7 @@
 import "server-only";
 
-import { db } from "../db";
-import { exercise_notes } from "../db/schema";
+import { db } from "~/server/db";
+import { exercise_notes } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getExercises() {

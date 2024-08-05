@@ -1,6 +1,6 @@
 import "server-only";
 
-import { db } from "../db";
+import { db } from "~/server/db";
 import {
   calculateExerciseVolume,
   calculateSessionVolume,
@@ -9,13 +9,13 @@ import {
   getYearsEndDates,
   calculateMonthActiveDays,
 } from "./utils/workoutVolume";
-import { DayExercise } from "../types";
+import { DayExercise } from "~/server/types";
 import {
   workoutDayExercises,
   workoutProgramDayGroups,
   workoutProgramDays,
   workoutPrograms,
-} from "../db/schema";
+} from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 // * Program

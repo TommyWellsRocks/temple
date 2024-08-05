@@ -1,10 +1,10 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { getMyProgram } from "~/server/queries/workouts";
-import { Navigation } from "~/app/components/ui/Navigation";
-import { LineChart } from "~/app/components/ui/Linechart";
+import { Navigation } from "~/components/ui/Navigation";
+import { LineChart } from "~/components/ui/Linechart";
 import { calculateProgramVolumeAnalytics } from "~/server/queries/utils/workoutVolume";
-import { DayList } from "~/app/components/workout/DayList/DayList";
+import { DayList } from "~/components/workout/DayList/DayList";
 
 // * DAYS PAGE
 

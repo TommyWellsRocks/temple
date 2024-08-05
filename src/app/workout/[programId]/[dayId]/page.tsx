@@ -1,10 +1,10 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { getMyWeekAnalytics, getMyProgramDay } from "~/server/queries/workouts";
-import { Navigation } from "~/app/components/ui/Navigation";
-import { LineChart } from "~/app/components/ui/Linechart";
-import { TodaysMuscles } from "~/app/components/workout/ExerciseList/TodaysMuscles";
-import { CheckList } from "~/app/components/workout/ExerciseList/CheckList";
+import { Navigation } from "~/components/ui/Navigation";
+import { LineChart } from "~/components/ui/Linechart";
+import { TodaysMuscles } from "~/components/workout/ExerciseList/TodaysMuscles";
+import { CheckList } from "~/components/workout/ExerciseList/CheckList";
 
 // * DAY OVERVIEW PAGE
 

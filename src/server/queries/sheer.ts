@@ -1,7 +1,7 @@
 import "server-only";
 
-import { db } from "../db";
-import { sheerResponses } from "../db/schema";
+import { db } from "~/server/db";
+import { sheerResponses } from "~/server/db/schema";
 
 export async function getTodaysResponse(userId: string) {
   const todayStart = new Date(new Date().setHours(0, 0, 0, 0));

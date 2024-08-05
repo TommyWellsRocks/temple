@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
-import { Navigation } from "~/app/components/ui/Navigation";
-import { isAfter7PM } from "~/app/utils/helpers";
+import { Navigation } from "~/components/ui/Navigation";
+import { isAfter7PM } from "~/utils/helpers";
 import { auth } from "~/server/auth";
 import { getTodaysResponse, getWinStreak } from "~/server/queries/sheer";
-import { ResponseButtons } from "~/app/components/sheer/ResponseButtons";
-import { ResponseFeedBack } from "~/app/components/sheer/ResponseFeedback";
+import { ResponseButtons } from "~/components/sheer/ResponseButtons";
+import { ResponseFeedBack } from "~/components/sheer/ResponseFeedback";
 
 export default async function Sheer() {
   const session = await auth();
