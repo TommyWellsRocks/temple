@@ -164,6 +164,7 @@ export const exercise_notes = createTable(
   },
   (table) => ({
     idIndex: index().on(table.id),
+    userIndex: index().on(table.userId),    
   }),
 );
 
@@ -186,6 +187,7 @@ export const workoutPrograms = createTable(
   },
   (table) => ({
     idIndex: index().on(table.id),
+    userIndex: index().on(table.userId),
   }),
 );
 
@@ -202,6 +204,7 @@ export const workoutProgramDayGroups = createTable(
   },
   (table) => ({
     idIndex: index().on(table.id),
+    programIndex: index().on(table.programId),
   }),
 );
 
@@ -229,6 +232,7 @@ export const workoutProgramDays = createTable(
   },
   (table) => ({
     idIndex: index().on(table.id),
+    programIndex: index().on(table.programId),
   }),
 );
 
@@ -267,7 +271,8 @@ export const workoutDayExercises = createTable(
       .notNull(),
   },
   (table) => ({
-    idIndex: index().on(table.id),
+    userIndex: index().on(table.userId),
+    dayIndex: index().on(table.dayId),
   }),
 );
 
