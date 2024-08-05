@@ -10,7 +10,7 @@ import {
   TabsTrigger,
 } from "~/app/components/ui/tabs";
 import { Textarea } from "~/app/components/ui/textarea";
-import { MuscleCarousel } from "../MuscleCarousel";
+import { MuscleCarousel } from "~/app/components/workout/MuscleCarousel";
 
 function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   const haveExistingNote =

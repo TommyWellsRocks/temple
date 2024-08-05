@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import { OverlayButton } from "../OverlayButton";
+import { AddButtonOverlay } from "../AddButtonOverlay";
 import { ProgramDay } from "~/server/types";
 
 import { getExercises } from "~/server/queries/exercises";
+import { ExerciseForm } from "~/app/components/workout/ExerciseList/ExerciseForm";
 
 function CheckListHeader({
   doneCount,
@@ -100,31 +101,38 @@ function CheckListItems({
   );
 }
 
-async function EditExercisesButtons() {
+async function EditExercisesButtons({
+  programDay,
+}: {
+  programDay: ProgramDay;
+}) {
   const allExercises = await getExercises();
 
   return (
     <section>
       <div className="flex justify-center gap-3 pt-5">
-        <OverlayButton
+        <AddButtonOverlay
           title="Add Exercise"
           description="Add an exercise to your workout. Click add when you're done."
-          formType="Exercise"
-          formProps={{
-            method: "Add",
-            programDay,
-            exercises: allExercises,
-          }}
+          formComponent={
+            <ExerciseForm
+              programDay={programDay}
+              exercises={allExercises}
+              method="Add"
+            />
+          }
         />
-        <OverlayButton
+        <AddButtonOverlay
           title="Delete Exercise"
           description="Delete an exercise from your workout. Click delete when you're done."
-          formType="Exercise"
-          formProps={{
-            method: "Delete",
-            programDay,
-            exercises: allExercises,
-          }}
+          formComponent={
+            <ExerciseForm
+              programDay={programDay}
+              exercises={allExercises}
+              method="Delete"
+            />
+          }
+          method="Delete"
         />
       </div>
     </section>
@@ -154,7 +162,7 @@ export async function CheckList({
         programId={programId}
         dayId={dayId}
       />
-      <EditExercisesButtons />
+      <EditExercisesButtons programDay={programDay} />
     </section>
   );
 }

@@ -3,7 +3,8 @@ import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { getMyPrograms } from "~/server/queries/workouts";
 import { ActionCard } from "../ActionCard";
-import { PopoverButton } from "../PopoverButton";
+import { EditButtonPopover } from "~/app/components/workout/EditButtonPopover";
+import { ProgramForm } from "~/app/components/workout/ProgramList/ProgramForm";
 
 const PROGRAM_DAY_MAX_LENGTH = 3;
 
@@ -24,13 +25,12 @@ export async function ProgramsList({ userId }: { userId: string }) {
           <ActionCard
             title={program.name}
             editButton={
-              <PopoverButton
+              <EditButtonPopover
                 title="Edit Workout Program"
                 description="Remember to click save when your done."
-                formType="Program"
-                formProps={{
-                  programInfo: program,
-                }}
+                formComponent={
+                  <ProgramForm userId={userId} programInfo={program} />
+                }
               />
             }
             items={latestGroup!.groupDays

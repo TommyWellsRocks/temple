@@ -3,8 +3,9 @@ import { auth } from "~/server/auth";
 import { getMyYearDaysActiveAnalytics } from "~/server/queries/workouts";
 import { Navigation } from "~/app/components/ui/Navigation";
 import { LineChart } from "~/app/components/ui/Linechart";
-import { ProgramsList } from "~/components/workout/pages/Programs/ProgramsList";
-import { OverlayButton } from "~/components/workout/OverlayButton";
+import { ProgramsList } from "~/app/components/workout/ProgramList/ProgramsList";
+import { AddButtonOverlay } from "~/app/components/workout/AddButtonOverlay";
+import { ProgramForm } from "../components/workout/ProgramList/ProgramForm";
 
 // * PROGRAMS PAGE
 
@@ -34,11 +35,10 @@ export default async function Programs() {
       />
 
       <section className="flex justify-end">
-        <OverlayButton
+        <AddButtonOverlay
           title="Create Workout Program"
           description="Build and plan out your program. Click create when you're done."
-          formType="Program"
-          formProps={{ userId: session.user.id }}
+          formComponent={<ProgramForm userId={session.user.id} />}
         />
       </section>
 

@@ -12,10 +12,11 @@ import {
 import playButtonURL from "/public/content/images/workout/action-play.svg";
 import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import futureButtonURL from "/public/content/images/workout/action-future.svg";
-import { PopoverButton } from "~/app/components/workout/PopoverButton";
-import { OverlayButton } from "~/app/components/workout/OverlayButton";
+import { EditButtonPopover } from "~/app/components/workout/EditButtonPopover";
+import { AddButtonOverlay } from "~/app/components/workout/AddButtonOverlay";
 import { EditGroupsButton } from "~/app/components/workout/DayList/EditGroupsButton";
 import { ActionCard } from "~/app/components/workout/ActionCard";
+import { DayForm } from "~/app/components/workout/DayList/DayForm";
 import { Program } from "~/server/types";
 
 const DAY_EXERCISE_MAX_LENGTH = 3;
@@ -82,15 +83,16 @@ function GroupsInfo({
       <GroupList userId={userId} programId={programId} program={program} />
 
       <div className="flex justify-end">
-        <OverlayButton
+        <AddButtonOverlay
           title="Create Day"
           description="Design and schedule your program days. Click create when you're done."
-          formType="ProgramDays"
-          formProps={{
-            userId: userId,
-            programId: programId,
-            groupId: program.groups[program.groups.length - 1]!.id,
-          }}
+          formComponent={
+            <DayForm
+              userId={userId}
+              programId={programId}
+              groupId={program.groups[program.groups.length - 1]!.id}
+            />
+          }
         />
       </div>
     </div>
@@ -119,11 +121,17 @@ function GroupDays({ program }: { program: Program }) {
               <ActionCard
                 title={day.name}
                 editButton={
-                  <PopoverButton
+                  <EditButtonPopover
                     title="Edit Workout Program"
                     description="Remember to click edit when your done."
-                    formType="ProgramDays"
-                    formProps={{ dayInfo: day }}
+                    formComponent={
+                      <DayForm
+                        userId={day.userId}
+                        programId={day.programId}
+                        groupId={day.groupId}
+                        dayInfo={day}
+                      />
+                    }
                   />
                 }
                 items={day.dayExercises

@@ -4,17 +4,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/ui/popover";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
+} from "~/app/components/ui/popover";
+import { Button } from "~/app/components/ui/button";
+import { Input } from "~/app/components/ui/input";
 import { format, addDays } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "~/lib/utils";
-import { Calendar } from "~/components/ui/calendar";
-import { DialogFooter } from "~/components/ui/dialog";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Calendar } from "~/app/components/ui/calendar";
+import { DialogFooter } from "~/app/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -23,13 +19,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
+} from "~/app/components/ui/form";
+import { cn } from "~/app/lib/utils";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { WorkoutPrograms } from "~/server/types";
 import {
   handleEditProgram,
   handleCreateProgram,
   handleDeleteProgram,
-} from "~/components/workout/ServerComponents/Program";
+} from "~/server/components/workout/ProgramListActions";
 
 const PROGRAM_ACTIVE_DAYS = 45;
 

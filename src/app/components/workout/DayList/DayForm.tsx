@@ -1,12 +1,5 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { DialogFooter } from "~/components/ui/dialog";
-import { Checkbox } from "~/components/ui/checkbox";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -14,12 +7,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
+} from "~/app/components/ui/form";
+import { Button } from "~/app/components/ui/button";
+import { Input } from "~/app/components/ui/input";
+import { DialogFooter } from "~/app/components/ui/dialog";
+import { Checkbox } from "~/app/components/ui/checkbox";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import {
   handleCreateDay,
   handleDeleteProgramDay,
   handleEditProgramDay,
-} from "~/components/workout/ServerComponents/ProgramDay";
+} from "~/server/components/workout/DayListActions";
 
 export function DayForm({
   userId,
