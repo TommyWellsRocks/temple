@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getMyYearDaysActiveAnalytics } from "~/server/queries/workouts";
-import { Navigation } from "~/components/workout/Navigation";
-import { LineChart } from "~/components/workout/Linechart";
+import { Navigation } from "~/app/components/ui/Navigation";
+import { LineChart } from "~/app/components/ui/Linechart";
 import { ProgramsList } from "~/components/workout/pages/Programs/ProgramsList";
 import { OverlayButton } from "~/components/workout/OverlayButton";
 
@@ -20,22 +20,18 @@ export default async function Programs() {
 
   return (
     <>
-      <nav>
-        <Navigation backURL="/" heading="Workout Programs" />
-      </nav>
+      <Navigation backURL="/" heading="Workout Programs" />
 
-      <section>
-        <LineChart
-          measureOf="Active-Days"
-          xLabels={Array.from({ length: 12 }, (_, i) =>
-            new Date(0, i).toLocaleString("en", { month: "short" }),
-          )}
-          prevLabel="Last Year"
-          previousData={lastYear as number[]}
-          currentLabel="This Year"
-          currentData={thisYear as number[]}
-        />
-      </section>
+      <LineChart
+        measureOf="Active-Days"
+        xLabels={Array.from({ length: 12 }, (_, i) =>
+          new Date(0, i).toLocaleString("en", { month: "short" }),
+        )}
+        prevLabel="Last Year"
+        previousData={lastYear as number[]}
+        currentLabel="This Year"
+        currentData={thisYear as number[]}
+      />
 
       <section className="flex justify-end">
         <OverlayButton

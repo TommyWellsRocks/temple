@@ -1,10 +1,10 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { getMyProgram } from "~/server/queries/workouts";
-import { Navigation } from "~/components/workout/Navigation";
-import { LineChart } from "~/components/workout/Linechart";
+import { Navigation } from "~/app/components/ui/Navigation";
+import { LineChart } from "~/app/components/ui/Linechart";
 import { calculateProgramVolumeAnalytics } from "~/server/queries/utils/workoutVolume";
-import { DayList } from "~/components/workout/pages/ProgramDays/DayList";
+import { DayList } from "~/app/components/workout/DayList/DayList";
 
 // * DAYS PAGE
 
@@ -24,26 +24,20 @@ export default async function Days(context: any | unknown) {
 
   return (
     <>
-      <nav>
-        <Navigation backURL="/workout" heading={`${program.name} Days`} />
-      </nav>
+      <Navigation backURL="/workout" heading={`${program.name} Days`} />
 
-      <section>
-        <LineChart
-          measureOf="Volume"
-          xLabels={currentProgramVolume.map((_, index) => `Group ${index + 1}`)}
-          currentLabel="Your Volume"
-          currentData={currentProgramVolume as number[]}
-        />
-      </section>
+      <LineChart
+        measureOf="Volume"
+        xLabels={currentProgramVolume.map((_, index) => `Group ${index + 1}`)}
+        currentLabel="Your Volume"
+        currentData={currentProgramVolume as number[]}
+      />
 
-      <section>
-        <DayList
-          userId={session.user.id}
-          programId={Number(programId)}
-          program={program}
-        />
-      </section>
+      <DayList
+        userId={session.user.id}
+        programId={Number(programId)}
+        program={program}
+      />
     </>
   );
 }

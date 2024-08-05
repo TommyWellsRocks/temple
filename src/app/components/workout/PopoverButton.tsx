@@ -1,0 +1,77 @@
+"use client";
+
+import { Pencil } from "lucide-react";
+import { ProgramForm } from "./ProgramList/ProgramForm";
+import { DayForm } from "~/components/workout/forms/DayForm";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+import { WorkoutPrograms } from "~/server/types";
+
+export function PopoverButton({
+  title,
+  description,
+  formType,
+  formProps,
+}: {
+  title: string;
+  description: string;
+} & (
+  | { formType: "Program"; formProps: { programInfo: WorkoutPrograms[0] } }
+  | {
+      formType: "ProgramDays";
+      formProps: {
+        dayInfo: {
+          repeatOn: number[] | null;
+          name: string;
+          id: number;
+          userId: string;
+          programId: number;
+          groupId: number;
+        };
+      };
+    }
+)) {
+  let FormComponent;
+
+  if (formType === "Program") {
+    FormComponent = (
+      <ProgramForm
+        userId={formProps.programInfo.userId}
+        programInfo={formProps.programInfo}
+      />
+    );
+  } else if (formType === "ProgramDays") {
+    FormComponent = (
+      <DayForm
+        userId={formProps.dayInfo!.userId}
+        programId={formProps.dayInfo!.programId}
+        groupId={formProps.dayInfo!.groupId}
+        dayInfo={formProps.dayInfo}
+      />
+    );
+  }
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button>
+          <Pencil width={15} height={15} />
+        </button>
+      </PopoverTrigger>
+
+      <PopoverContent className="w-80">
+        <div className="grid gap-3">
+          <div className="space-y-2 text-center">
+            <h4 className="font-medium leading-none">{title}</h4>
+            <p className="text-sm text-muted-foreground">{description}</p>
+          </div>
+
+          {FormComponent}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

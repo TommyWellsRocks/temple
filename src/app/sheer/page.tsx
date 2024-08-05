@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
-import { Buttons } from "~/components/sheer/Components";
-import { Response } from "~/components/sheer/Response";
-import { Navigation } from "~/components/workout/Navigation";
-import { isAfter7PM } from "~/lib/utils";
+import { Navigation } from "~/app/components/ui/Navigation";
+import { isAfter7PM } from "~/app/utils/helpers";
 import { auth } from "~/server/auth";
 import { getTodaysResponse, getWinStreak } from "~/server/queries/sheer";
+import { ResponseButtons } from "~/app/components/sheer/ResponseButtons";
+import { ResponseFeedBack } from "~/app/components/sheer/ResponseFeedback";
 
 export default async function Sheer() {
   const session = await auth();
@@ -25,13 +25,13 @@ export default async function Sheer() {
 
   return (
     <>
-      <nav>
-        <Navigation backURL="/" heading="Sheer" />
-      </nav>
+      <Navigation backURL="/" heading="Sheer" />
 
       <section className="flex flex-col gap-y-10 text-center">
         <div className="flex flex-col gap-y-2">
-          <span className="text-3xl">Did you choose to be your best today?</span>
+          <span className="text-3xl">
+            Did you choose to be your best today?
+          </span>
 
           <div className="flex flex-col text-base text-gray-400">
             <span>Did you love others?</span>
@@ -40,9 +40,12 @@ export default async function Sheer() {
           </div>
         </div>
 
-        {responseReady ? <Buttons userId={session.user.id} /> : null}
+        {responseReady ? <ResponseButtons userId={session.user.id} /> : null}
         {todaysResponse ? (
-          <Response response={todaysResponse.response} winStreak={winStreak} />
+          <ResponseFeedBack
+            response={todaysResponse.response}
+            winStreak={winStreak}
+          />
         ) : null}
       </section>
     </>

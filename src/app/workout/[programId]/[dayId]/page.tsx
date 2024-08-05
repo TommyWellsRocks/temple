@@ -1,10 +1,10 @@
-import { Navigation } from "~/components/workout/Navigation";
-import { LineChart } from "~/components/workout/Linechart";
-import { getMyWeekAnalytics, getMyProgramDay } from "~/server/queries/workouts";
-import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { TodaysMuscles } from "~/components/workout/pages/ProgramDay/TodaysMuscles";
-import { CheckList } from "~/components/workout/pages/ProgramDay/CheckList";
+import { redirect } from "next/navigation";
+import { getMyWeekAnalytics, getMyProgramDay } from "~/server/queries/workouts";
+import { Navigation } from "~/app/components/ui/Navigation";
+import { LineChart } from "~/app/components/ui/Linechart";
+import { TodaysMuscles } from "~/app/components/workout/ExerciseList/TodaysMuscles";
+import { CheckList } from "~/app/components/workout/ExerciseList/CheckList";
 
 // * DAY OVERVIEW PAGE
 
@@ -29,43 +29,35 @@ export default async function DayOverview(context: any | unknown) {
   // LineChart
   const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id!);
 
+  const muscleURLs = programDay.dayExercises.map((ex) =>
+    ex.info.targetMuscleImages && ex.info.targetMuscleImages[0]
+      ? ex.info.targetMuscleImages[0]
+      : "",
+  );
+
   return (
     <>
-      <nav>
-        <Navigation
-          backURL={`/workout/${programId}`}
-          heading={`${programDay.name} Overview`}
-        />
-      </nav>
+      <Navigation
+        backURL={`/workout/${programId}`}
+        heading={`${programDay.name} Overview`}
+      />
 
-      <section>
-        <LineChart
-          measureOf="Volume"
-          xLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-          prevLabel={"Last Weeks's Volume"}
-          previousData={lastWeek!}
-          currentLabel="This Week's Volume"
-          currentData={thisWeek!}
-        />
-      </section>
+      <LineChart
+        measureOf="Volume"
+        xLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+        prevLabel={"Last Weeks's Volume"}
+        previousData={lastWeek!}
+        currentLabel="This Week's Volume"
+        currentData={thisWeek!}
+      />
 
-      <section>
-        <TodaysMuscles
-          muscleURLS={programDay.dayExercises.map((ex) =>
-            ex.info.targetMuscleImages
-              ? ex.info.targetMuscleImages[0]
-              : undefined,
-          )}
-        />
-      </section>
+      <TodaysMuscles muscleURLs={muscleURLs} />
 
-      <section>
-        <CheckList
-          programId={Number(programId)}
-          dayId={Number(dayId)}
-          programDay={programDay}
-        />
-      </section>
+      <CheckList
+        programId={Number(programId)}
+        dayId={Number(dayId)}
+        programDay={programDay}
+      />
     </>
   );
 }

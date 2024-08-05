@@ -5,10 +5,11 @@ import {
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
-import { Navigation } from "~/components/workout/Navigation";
-import { LineChart } from "~/components/workout/Linechart";
-import { ExerciseTabs } from "~/components/workout/pages/Exercise/ExerciseTabs";
-import { ExerciseInputs } from "~/components/workout/pages/Exercise/ExerciseInputs";
+import { Navigation } from "~/app/components/ui/Navigation";
+import { LineChart } from "~/app/components/ui/Linechart";
+import { ActivityInfo } from "~/app/components/workout/Exercise/ActivityInfo";
+import { SetInputs } from "~/app/components/workout/Exercise/SetInputs";
+import { ExerciseTabs } from "~/app/components/workout/Exercise/ExerciseTabs";
 
 // * EXERCISE PAGE
 
@@ -32,48 +33,45 @@ export default async function Exercise(context: any | unknown) {
   );
   if (!dayExercise) return redirect("/workout");
 
-  const lastDayExercise = await getLastSessionExercise(dayExercise);
+  const previousSessionExercise = await getLastSessionExercise(dayExercise);
 
   // LineChart
   const [lastSessionVolume, currentSessionVolume] =
-    await getMyExerciseAnalytics(dayExercise, lastDayExercise);
+    await getMyExerciseAnalytics(dayExercise, previousSessionExercise);
+
+  // ActivityInfo
+  const setCount = dayExercise.reps.length;
 
   return (
     <>
-      <nav>
-        <Navigation
-          backURL={`/workout/${programId}/${dayId}`}
-          heading={`${dayExercise.info.name}`}
-        />
-      </nav>
+      <Navigation
+        backURL={`/workout/${programId}/${dayId}`}
+        heading={`${dayExercise.info.name}`}
+      />
 
-      <section>
-        <LineChart
-          measureOf="Volume"
-          xLabels={
-            lastSessionVolume
-              ? lastSessionVolume!.length < currentSessionVolume!.length
-                ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
-                : lastSessionVolume!.map((_, index) => `Set ${index + 1}`)
-              : currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
-          }
-          prevLabel={lastSessionVolume ? "Last Session's Volume" : undefined}
-          previousData={lastSessionVolume ? lastSessionVolume : undefined}
-          currentLabel="Current Session's Volume"
-          currentData={currentSessionVolume!}
-        />
-      </section>
+      <LineChart
+        measureOf="Volume"
+        xLabels={
+          lastSessionVolume
+            ? lastSessionVolume!.length < currentSessionVolume!.length
+              ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
+              : lastSessionVolume!.map((_, index) => `Set ${index + 1}`)
+            : currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
+        }
+        prevLabel={lastSessionVolume ? "Last Session's Volume" : undefined}
+        previousData={lastSessionVolume ? lastSessionVolume : undefined}
+        currentLabel="Current Session's Volume"
+        currentData={currentSessionVolume!}
+      />
 
-      <section>
-        <ExerciseInputs
-          lastDayExercise={lastDayExercise}
-          dayExercise={dayExercise}
-        />
-      </section>
+      <ActivityInfo
+        setCount={setCount}
+        previousExercise={previousSessionExercise}
+      />
 
-      <section>
-        <ExerciseTabs dayExercise={dayExercise} />
-      </section>
+      <SetInputs dayExercise={dayExercise} />
+
+      <ExerciseTabs dayExercise={dayExercise} />
     </>
   );
 }
