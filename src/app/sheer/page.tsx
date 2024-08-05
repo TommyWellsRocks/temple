@@ -31,7 +31,7 @@ export default async function Sheer() {
 
       <section className="flex flex-col gap-y-10 text-center">
         <div className="flex flex-col gap-y-2">
-          <span className="text-3xl">Was today a success?</span>
+          <span className="text-3xl">Did you choose to be your best today?</span>
 
           <div className="flex flex-col text-base text-gray-400">
             <span>Did you love others?</span>
