@@ -13,12 +13,10 @@ export async function ProgramsList({ userId }: { userId: string }) {
   const today = new Date();
 
   return (
-    <div className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4">
       {workoutPrograms.map((program) => {
-        const startDate = new Date(program.startDate);
-        const endDate = new Date(program.endDate);
-        const isActiveProgram = startDate <= today && endDate >= today;
-        const isFutureProgram = !isActiveProgram && startDate > today;
+        const isActiveProgram = program.startDate <= today && program.endDate >= today;
+        const isFutureProgram = !isActiveProgram && program.startDate > today;
         const latestGroup = program.groups[program.groups.length - 1];
 
         return (
@@ -48,6 +46,6 @@ export async function ProgramsList({ userId }: { userId: string }) {
           />
         );
       })}
-    </div>
+    </section>
   );
 }

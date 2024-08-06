@@ -16,8 +16,8 @@ export async function handleCreateProgram(
   await createWorkoutProgram(
     userId,
     name,
-    startDate.toISOString(),
-    endDate.toISOString(),
+    startDate,
+    endDate,
   );
   revalidatePath("/workout");
 }
@@ -33,8 +33,8 @@ export async function handleEditProgram(
     userId,
     programId,
     name,
-    startDate.toISOString(),
-    endDate.toISOString(),
+    startDate,
+    endDate,
   );
   revalidatePath("/workout");
 }

@@ -77,20 +77,20 @@ export function ProgramForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
+          const startDate = new Date(values.start);
+          const endDate = new Date(values.end);
+          startDate.setHours(0, 0, 0, 0);
+          endDate.setHours(0, 0, 0, 0);
+
           programInfo
             ? handleEditProgram(
                 userId,
                 programInfo.id,
                 values.name,
-                values.start,
-                values.end,
+                startDate,
+                endDate,
               )
-            : handleCreateProgram(
-                userId,
-                values.name,
-                values.start,
-                values.end,
-              );
+            : handleCreateProgram(userId, values.name, startDate, endDate);
         })}
         className="mx-auto flex w-[260px] flex-col gap-4"
       >

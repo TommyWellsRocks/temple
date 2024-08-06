@@ -1,4 +1,4 @@
-import { ModeToggle } from "./_components/Theme";
+import { ModeToggle } from "~/lib/Theme";
 
 export default function Settings() {
   return (

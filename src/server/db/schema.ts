@@ -4,7 +4,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
   boolean,
-  date,
   index,
   integer,
   pgTableCreator,
@@ -25,25 +24,37 @@ import { AdapterAccountType } from "next-auth/adapters";
 export const createTable = pgTableCreator((name) => `temple_${name}`);
 
 // * General
-export const users = createTable("user", {
-  id: varchar("id", { length: 255 })
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("emailVerified", {
-    mode: "date",
-    withTimezone: true,
-  }).default(sql`CURRENT_TIMESTAMP`),
-  image: varchar("image", { length: 255 }),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-});
+export const users = createTable(
+  "user",
+  {
+    id: varchar("id", { length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: varchar("name", { length: 255 }),
+    email: varchar("email", { length: 255 }).notNull(),
+    emailVerified: timestamp("emailVerified", {
+      mode: "date",
+      withTimezone: true,
+    }).default(sql`CURRENT_TIMESTAMP`),
+    image: varchar("image", { length: 255 }),
+    darkMode: boolean("dark_mode").notNull().default(true),
+    redirectOnLoadWorkout: boolean("redirect_on_load_workout")
+      .notNull()
+      .default(true),
+    lastWorkoutRedirect: timestamp("last_workout_redirect"),
+    weightInPounds: boolean("weight_in_pounds").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    idIndex: index().on(table.id),
+  }),
+);
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
@@ -164,7 +175,7 @@ export const exercise_notes = createTable(
   },
   (table) => ({
     idIndex: index().on(table.id),
-    userIndex: index().on(table.userId),    
+    userIndex: index().on(table.userId),
   }),
 );
 
@@ -176,8 +187,8 @@ export const workoutPrograms = createTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     name: varchar("name").default("New Program").notNull(),
-    startDate: date("start_date").notNull(),
-    endDate: date("end_date").notNull(),
+    startDate: timestamp("start_date").notNull(),
+    endDate: timestamp("end_date").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
