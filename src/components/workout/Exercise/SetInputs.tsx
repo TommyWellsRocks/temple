@@ -4,6 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import { clipPathHexagon } from "~/components/ui/Hexagon";
 import { handleEditSetCount } from "~/server/components/workout/ExerciseActions";
 import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
+import { isFloat } from "~/utils/helpers";
 
 function InputArea({
   label,
@@ -39,7 +40,12 @@ function InputArea({
           let newValue = e.target.valueAsNumber;
           if (newValue < 0 || newValue >= 1000 || isNaN(newValue)) {
             newValue = 0;
-            e.target.value = "0";
+            e.target.value = String(newValue);
+          }
+
+          if (isFloat(newValue)) {
+            newValue = Number(newValue.toFixed(0));
+            e.target.value = String(newValue);
           }
 
           if (label === "Reps" && dayExercise.reps[index] !== newValue) {
