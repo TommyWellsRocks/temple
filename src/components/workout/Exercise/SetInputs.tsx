@@ -1,14 +1,9 @@
-"use client"
+"use client";
 
 import { Minus, Plus } from "lucide-react";
 import { clipPathHexagon } from "~/components/ui/Hexagon";
 import { handleEditSetCount } from "~/server/components/workout/ExerciseActions";
 import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
-
-const countBoxClassDefault =
-  "flex h-10 w-10 items-center justify-center bg-gray-600 font-semibold text-gray-900 -mr-3";
-const countBoxClassFocus =
-  "flex h-10 w-10 items-center justify-center bg-primary font-semibold text-black -mr-3";
 
 function InputArea({
   label,
@@ -31,38 +26,31 @@ function InputArea({
   return (
     <div className="flex items-center gap-x-1">
       <input
-        className="w-16 cursor-pointer bg-transparent text-center text-3xl font-bold italic"
+        className="w-20 cursor-pointer bg-transparent text-center text-3xl font-bold italic"
         type="number"
         defaultValue={defaultValue}
         onFocus={(e) => {
-          const countBox =
-            e.currentTarget.parentNode!.parentNode!.firstElementChild!;
-          countBox.className = countBoxClassFocus;
+          // Input Actions
+          if (e.target.valueAsNumber === 0 || isNaN(e.target.valueAsNumber))
+            e.target.value = "";
         }}
         onBlur={(e) => {
-          const countBox =
-            e.currentTarget.parentNode!.parentNode!.firstElementChild!;
-          countBox.className = countBoxClassDefault;
-
+          // Input Actions
           let newValue = e.target.valueAsNumber;
-          if (newValue < 0 || isNaN(newValue)) {
+          if (newValue < 0 || newValue >= 1000 || isNaN(newValue)) {
             newValue = 0;
             e.target.value = "0";
           }
 
-          if (label === "Reps") {
-            if (dayExercise!.reps[index] !== newValue) {
-              dayExercise.reps[index] = newValue;
-              handleExerciseVolumeInput(dayExercise);
-            }
-          } else if (label === "Weight") {
-            if (dayExercise!.weight[index] !== newValue) {
-              // Set To Remaining Weights
-              for (let i = index; i < dayExercise.weight.length; i++) {
-                dayExercise.weight[i] = newValue;
-              }
-              handleExerciseVolumeInput(dayExercise);
-            }
+          if (label === "Reps" && dayExercise.reps[index] !== newValue) {
+            dayExercise.reps[index] = newValue;
+            handleExerciseVolumeInput(dayExercise);
+          } else if (
+            label === "Weight" &&
+            dayExercise.weight[index] !== newValue
+          ) {
+            dayExercise.weight[index] = newValue;
+            handleExerciseVolumeInput(dayExercise);
           }
         }}
       />
@@ -89,9 +77,9 @@ function InputRow({
 }) {
   const weightValue = dayExercise.weight[index];
   return (
-    <div className="flex items-center gap-x-3">
+    <div className="flex items-center gap-x-2 min-[340px]:gap-x-3">
       <div
-        className={countBoxClassDefault}
+        className={`-mr-3 flex h-10 w-10 items-center justify-center font-semibold ${weightValue && repValue ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
         style={{
           clipPath: clipPathHexagon,
         }}

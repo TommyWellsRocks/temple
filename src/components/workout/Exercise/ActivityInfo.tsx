@@ -17,7 +17,7 @@ function PreviousSessionButton({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Last</Button>
+        <Button variant="secondary">Previous</Button>
       </DialogTrigger>
 
       <DialogContent className="flex flex-col items-center text-center sm:max-w-[425px]">
