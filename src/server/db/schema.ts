@@ -38,7 +38,6 @@ export const users = createTable(
       withTimezone: true,
     }).default(sql`CURRENT_TIMESTAMP`),
     image: varchar("image", { length: 255 }),
-    darkMode: boolean("dark_mode").notNull().default(true),
     redirectOnLoadWorkout: boolean("redirect_on_load_workout")
       .notNull()
       .default(true),
