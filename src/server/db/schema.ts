@@ -134,7 +134,7 @@ export const exercises = createTable(
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).unique().notNull(),
-    category: varchar("category", { length: 256 }).notNull(),
+    category: varchar("category", { length: 256 }),
     primaryMuscles: varchar("primary_muscles").array().notNull(),
     secondaryMuscles: varchar("secondary_muscles").array(),
     instructions: varchar("instructions").array().notNull(),
@@ -142,6 +142,7 @@ export const exercises = createTable(
     targetMuscleImages: varchar("target_muscle_images").array(),
     images: varchar("images").array(),
     videos: varchar("videos").array(),
+    equipment: varchar("equipment"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
