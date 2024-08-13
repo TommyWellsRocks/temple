@@ -1,6 +1,3 @@
-import playButtonURL from "/public/content/images/workout/action-play.svg";
-import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { getMyPrograms } from "~/server/queries/workouts";
 import { ActionCard } from "~/components/workout/ActionCard";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
@@ -35,13 +32,6 @@ export async function ProgramsList({ userId }: { userId: string }) {
               .map((day) => <div>&bull; {day.name}</div>)
               .slice(0, PROGRAM_DAY_MAX_LENGTH)}
             isDark={!isActiveProgram}
-            actionIconURL={
-              isActiveProgram
-                ? playButtonURL
-                : isFutureProgram
-                  ? futureButtonURL
-                  : trophyButtonURL
-            }
             linkTo={`/workout/${program.id}`}
           />
         );

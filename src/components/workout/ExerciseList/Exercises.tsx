@@ -8,7 +8,7 @@ import { ProgramDay } from "~/server/types";
 import { getExercises } from "~/server/queries/exercises";
 import { ExerciseForm } from "~/components/workout/ExerciseList/ExerciseForm";
 
-function CheckListHeader({
+function ExercisesHeader({
   doneCount,
   totalCount,
 }: {
@@ -17,7 +17,7 @@ function CheckListHeader({
 }) {
   return (
     <div className="flex justify-between">
-      <h3 className="pb-2">The Checklist 😎</h3>
+      <h3 className="pb-2">{totalCount} Exercises</h3>
       <h3 className="text-sm font-light">
         <strong className="text-xl">{doneCount}</strong> /{totalCount}
       </h3>
@@ -25,7 +25,7 @@ function CheckListHeader({
   );
 }
 
-function CheckListItem({
+function ExerciseItem({
   programId,
   dayId,
   exercise,
@@ -37,9 +37,6 @@ function CheckListItem({
     reps: number[];
     info: {
       name: string;
-      tips: string;
-      targetMuscleImages: string[] | null;
-      images: string[] | null;
     };
   };
 }) {
@@ -54,20 +51,14 @@ function CheckListItem({
       <div className="flex items-start gap-x-3">
         <Image
           className="mt-1 rounded-md"
-          src={
-            exercise.info.images
-              ? (exercise.info.images[0] as string)
-              : "https://placehold.co/200x200"
-          }
+          src={"https://placehold.co/200x200"}
           alt="Exercise Image."
           width={50}
           height={50}
         />
         <div>
           <div className="text-base">{exercise.info.name}</div>
-          <div className="text-sm font-light">
-            {exercise.info.tips.slice(0, 40)}...
-          </div>
+          <div className="text-sm font-light"></div>
         </div>
       </div>
       <Image
@@ -79,7 +70,7 @@ function CheckListItem({
   );
 }
 
-function CheckListItems({
+function Exercises({
   programDay,
   programId,
   dayId,
@@ -91,11 +82,7 @@ function CheckListItems({
   return (
     <div className="flex flex-col gap-y-3">
       {programDay!.dayExercises.map(async (exercise) => (
-        <CheckListItem
-          exercise={exercise}
-          programId={programId}
-          dayId={dayId}
-        />
+        <ExerciseItem exercise={exercise} programId={programId} dayId={dayId} />
       ))}
     </div>
   );
@@ -155,13 +142,9 @@ export async function CheckList({
 
   return (
     <section>
-      <CheckListHeader doneCount={doneCount} totalCount={totalCount} />
+      <ExercisesHeader doneCount={doneCount} totalCount={totalCount} />
 
-      <CheckListItems
-        programDay={programDay}
-        programId={programId}
-        dayId={dayId}
-      />
+      <Exercises programDay={programDay} programId={programId} dayId={dayId} />
       <EditExercisesButtons programDay={programDay} />
     </section>
   );

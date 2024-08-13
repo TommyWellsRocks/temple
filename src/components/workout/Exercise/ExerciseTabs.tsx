@@ -5,7 +5,9 @@ import { handleExerciseNoteInput } from "~/server/components/workout/ExerciseAct
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
-import { MuscleCarousel } from "~/components/workout/MuscleCarousel";
+import Link from "next/link";
+import Image from "next/image";
+import YouTubeURL from "public/content/images/workout/YouTube.svg";
 
 function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   const haveExistingNote =
@@ -37,37 +39,55 @@ function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   );
 }
 
-function TipsTabContent({ tips }: { tips: string }) {
-  return (
-    <TabsContent value="tips">
-      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
-        {tips}
-      </div>
-    </TabsContent>
-  );
-}
-
-function InstructionsTabContent({ instructions }: { instructions: string[] }) {
+function InstructionsTabContent({
+  instructionVideo,
+  exerciseName,
+}: {
+  instructionVideo: string | null;
+  exerciseName: string;
+}) {
   return (
     <TabsContent value="instructions">
-      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
-        <div className="flex flex-col gap-4">
-          {instructions.map((instruction, index) => (
-            <span>
-              {index + 1}. {instruction}
-            </span>
-          ))}
+      <div className="relative flex flex-col items-center rounded-xl bg-black bg-opacity-15 px-3 py-2 text-base">
+        <span className="absolute bottom-1/4">Click Me To Search</span>
+        <div className="max-w-[440px]">
+          <Link
+            href={
+              instructionVideo
+                ? instructionVideo
+                : `https://www.youtube.com/results?search_query=${encodeURI(`How to do a ${exerciseName} exercise`)}&sp=EgIYAQ%253D%253D`
+            }
+          >
+            <Image
+              src={YouTubeURL}
+              alt="Exercise instructional video"
+              className="rounded-xl"
+            />
+          </Link>
         </div>
       </div>
     </TabsContent>
   );
 }
 
-function MusclesTabContent({ muscleURLs }: { muscleURLs: string[] }) {
+function MusclesTabContent({
+  muscleURL,
+  muscles,
+}: {
+  muscleURL: string | null;
+  muscles: string[] | null;
+}) {
   return (
     <TabsContent value="muscles">
-      <div className="rounded-xl bg-black bg-opacity-15 px-3 py-2">
-        <MuscleCarousel muscleURLs={muscleURLs} />
+      <div className="flex flex-col items-center gap-4 rounded-xl bg-black bg-opacity-15 px-3 py-2">
+        {muscleURL ? (
+          <Image
+            src={muscleURL}
+            alt="Target Muscle Image"
+            width={200}
+            height={200}
+          />
+        ) : null}
       </div>
     </TabsContent>
   );
@@ -78,7 +98,6 @@ function TabSelectors() {
     <div className="flex justify-center">
       <TabsList className="bg-black">
         <TabsTrigger value="notes">Notes</TabsTrigger>
-        <TabsTrigger value="tips">Tips</TabsTrigger>
         <TabsTrigger value="instructions">Instructions</TabsTrigger>
         <TabsTrigger value="muscles">Muscles</TabsTrigger>
       </TabsList>
@@ -87,21 +106,17 @@ function TabSelectors() {
 }
 
 function TabContents({ dayExercise }: { dayExercise: DayExercise }) {
-  // Tips
-  const tips = dayExercise!.info.tips;
-  // Instructions
-  const instructions = dayExercise!.info.instructions;
-  // Muscles
-  const muscleURLs = dayExercise!.info.targetMuscleImages
-    ? dayExercise!.info.targetMuscleImages
-    : [""];
-
   return (
     <>
       <NotesTabContent dayExercise={dayExercise} />
-      <TipsTabContent tips={tips} />
-      <InstructionsTabContent instructions={instructions} />
-      <MusclesTabContent muscleURLs={muscleURLs} />
+      <InstructionsTabContent
+        instructionVideo={dayExercise!.info.video}
+        exerciseName={dayExercise!.info.name}
+      />
+      <MusclesTabContent
+        muscleURL={dayExercise!.info.musclesImage}
+        muscles={dayExercise!.info.muscles}
+      />
     </>
   );
 }

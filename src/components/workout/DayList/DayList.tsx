@@ -4,9 +4,6 @@ import {
   CarouselItem,
 } from "~/components/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import playButtonURL from "/public/content/images/workout/action-play.svg";
-import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
-import futureButtonURL from "/public/content/images/workout/action-future.svg";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { EditGroupsButton } from "~/components/workout/DayList/EditGroupsButton";
@@ -117,8 +114,8 @@ function GroupDays({ program }: { program: Program }) {
                 title={day.name}
                 editButton={
                   <EditButtonPopover
-                    title="Edit Workout Program"
-                    description="Remember to click edit when your done."
+                    title="Edit Program Day"
+                    description="Remember to click save when your done."
                     formComponent={
                       <DayForm
                         userId={day.userId}
@@ -137,13 +134,6 @@ function GroupDays({ program }: { program: Program }) {
                   ))
                   .slice(0, DAY_EXERCISE_MAX_LENGTH)}
                 isDark={isDone}
-                actionIconURL={
-                  isDone
-                    ? trophyButtonURL
-                    : isFutureDay
-                      ? futureButtonURL
-                      : playButtonURL
-                }
                 linkTo={`/workout/${day.programId}/${day.id}`}
               />
             );

@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import { getMyWeekAnalytics, getMyProgramDay } from "~/server/queries/workouts";
 import { Navigation } from "~/components/ui/Navigation";
 import { LineChart } from "~/components/ui/Linechart";
-import { TodaysMuscles } from "~/components/workout/ExerciseList/TodaysMuscles";
-import { CheckList } from "~/components/workout/ExerciseList/CheckList";
+import { TargetMuscles } from "~/components/workout/ExerciseList/TargetMuscles";
+import { CheckList } from "~/components/workout/ExerciseList/Exercises";
 
 // * DAY OVERVIEW PAGE
 
@@ -30,9 +30,7 @@ export default async function DayOverview(context: any | unknown) {
   const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id!);
 
   const muscleURLs = programDay.dayExercises.map((ex) =>
-    ex.info.targetMuscleImages && ex.info.targetMuscleImages[0]
-      ? ex.info.targetMuscleImages[0]
-      : "",
+    ex.info.musclesImage ? ex.info.musclesImage : ""
   );
 
   return (
@@ -51,7 +49,7 @@ export default async function DayOverview(context: any | unknown) {
         currentData={thisWeek!}
       />
 
-      <TodaysMuscles muscleURLs={muscleURLs} />
+      <TargetMuscles muscleURLs={muscleURLs} />
 
       <CheckList
         programId={Number(programId)}

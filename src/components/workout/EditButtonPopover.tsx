@@ -1,6 +1,7 @@
 "use client";
 
-import { Pencil } from "lucide-react";
+import Image from "next/image";
+import ellipsisURL from "public/content/images/workout/ellipsis.svg"
 import {
   Popover,
   PopoverContent,
@@ -20,7 +21,7 @@ export function EditButtonPopover({
     <Popover>
       <PopoverTrigger asChild>
         <button>
-          <Pencil width={15} height={15} />
+          <Image alt="NONE" src={ellipsisURL}/>
         </button>
       </PopoverTrigger>
 
