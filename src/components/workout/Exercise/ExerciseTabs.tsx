@@ -10,8 +10,9 @@ import Image from "next/image";
 import YouTubeURL from "public/content/images/workout/YouTube.svg";
 
 function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
-  const haveExistingNote =
-    dayExercise && dayExercise.notes && dayExercise.notes.notes;
+  const haveExistingNote = Boolean(
+    dayExercise && dayExercise.notes && dayExercise.notes.notes,
+  );
   let notesValue = haveExistingNote
     ? dayExercise!.notes.notes
     : "No notes for this exercise. Click here to start one!";
@@ -21,7 +22,7 @@ function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
       <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
         <Textarea
           className="border-none bg-transparent"
-          defaultValue={notesValue}
+          defaultValue={notesValue as string}
           onBlur={(e) => {
             let newValue = e.target.value;
             if (newValue !== notesValue) {
@@ -52,6 +53,7 @@ function InstructionsTabContent({
         <span className="absolute bottom-1/4">Click Me To Search</span>
         <div className="max-w-[440px]">
           <Link
+            target="_blank"
             href={
               instructionVideo
                 ? instructionVideo
