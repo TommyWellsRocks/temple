@@ -62,7 +62,7 @@ export async function getWorkoutRedirect(userId: string) {
   if (!activeProgram) return;
 
   // Will Return Redirect, So Input Into DB
-  await db.update(users).set({lastWorkoutRedirect: new Date()})
+  await db.update(users).set({ lastWorkoutRedirect: new Date() });
 
   // Stop If No Scheduled Day
   const todayDay = today.getDay();
@@ -333,7 +333,7 @@ export async function getMyProgramDay(
     columns: { createdAt: false, updatedAt: false },
     with: {
       dayExercises: {
-        columns: { reps: true, id: true },
+        columns: { id: true, reps: true, weight: true },
         with: {
           info: {
             columns: {
@@ -342,6 +342,7 @@ export async function getMyProgramDay(
               musclesImage: true,
             },
           },
+          notes: { columns: { id: true, name: true } },
         },
       },
     },
@@ -463,7 +464,7 @@ export async function getMyDayExercise(
           video: true,
         },
       },
-      notes: { columns: { notes: true, id: true } },
+      notes: { columns: { id: true, name: true, notes: true } },
     },
   });
 }
@@ -496,22 +497,13 @@ export async function addDayExercise(
     .values({ userId, programId, groupId, dayId, exerciseId });
 }
 
-export async function deleteDayExercise(
-  userId: string,
-  programId: number,
-  groupId: number,
-  dayId: number,
-  exerciseId: number,
-) {
+export async function deleteDayExercise(userId: string, dayExerciseId: number) {
   await db
     .delete(workoutDayExercises)
     .where(
       and(
         eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.programId, programId),
-        eq(workoutDayExercises.groupId, groupId),
-        eq(workoutDayExercises.dayId, dayId),
-        eq(workoutDayExercises.exerciseId, exerciseId),
+        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }

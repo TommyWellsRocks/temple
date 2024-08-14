@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import ellipsisURL from "public/content/images/workout/ellipsis.svg"
+import { EllipsisVertical } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -20,8 +19,8 @@ export function EditButtonPopover({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button>
-          <Image alt="NONE" src={ellipsisURL}/>
+        <button className="align-middle">
+          <EllipsisVertical />
         </button>
       </PopoverTrigger>
 

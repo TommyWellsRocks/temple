@@ -1,53 +1,47 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { cn } from "~/lib/utils";
-import { Button } from "~/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "~/components/ui/command";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { DialogFooter } from "~/components/ui/dialog";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { Exercises, ProgramDay } from "~/server/types";
-import {
-  handleAddExercise,
   handleDeleteExercise,
+  handleEditExerciseName,
 } from "~/server/components/workout/ExerciseListActions";
 
 export function ExerciseForm({
-  programDay,
-  exercises,
-  method,
+  userId,
+  programId,
+  dayExercise,
 }: {
-  programDay: ProgramDay;
-  exercises: Exercises;
-  method: "Add" | "Delete";
+  userId: string;
+  programId: number;
+  dayExercise: {
+    id: number;
+    reps: number[];
+    weight: number[];
+    info: {
+      name: string;
+      id: number;
+    };
+    notes: {
+      id: number;
+      name: string | null;
+    } | null;
+  };
 }) {
-  const exerciseOptions = programDay!.dayExercises;
-
   const formSchema = z.object({
-    exercise: z.string({
-      required_error: "Please select an exercise.",
-    }),
+    name: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,113 +52,47 @@ export function ExerciseForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
-          method === "Add"
-            ? handleAddExercise(
-                programDay!.userId,
-                programDay!.programId,
-                programDay!.groupId,
-                programDay!.id,
-                Number(values.exercise),
-              )
-            : handleDeleteExercise(
-                programDay!.userId,
-                programDay!.programId,
-                programDay!.id,
-                Number(values.exercise),
-              );
+          handleEditExerciseName(
+            userId,
+            programId,
+            dayExercise.info.id,
+            values.name,
+            dayExercise.notes?.id
+          );
         })}
-        className="mx-auto w-[260px] space-y-4"
+        className="mx-auto flex w-[260px] flex-col gap-4"
       >
         <FormField
           control={form.control}
-          name="exercise"
+          name="name"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "justify-between",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      {field.value
-                        ? method === "Add"
-                          ? exercises.find(
-                              (exercise) => String(exercise.id) === field.value,
-                            )?.name
-                          : exerciseOptions.find(
-                              (exercise) => String(exercise.id) === field.value,
-                            )?.info.name
-                        : "Select exercise"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <Command>
-                    <CommandInput placeholder="Search exercise..." />
-                    <CommandEmpty>No exercise found.</CommandEmpty>
-                    <CommandGroup>
-                      <CommandList>
-                        {method === "Add"
-                          ? exercises.map((exercise) => (
-                              <CommandItem
-                                value={exercise.name}
-                                key={exercise.id}
-                                onSelect={() => {
-                                  form.setValue(
-                                    "exercise",
-                                    String(exercise.id),
-                                  );
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    String(exercise.id) === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                                {exercise.name}
-                              </CommandItem>
-                            ))
-                          : exerciseOptions.map((exercise) => (
-                              <CommandItem
-                                value={exercise.info.name}
-                                key={exercise.id}
-                                onSelect={() => {
-                                  form.setValue(
-                                    "exercise",
-                                    String(exercise.id),
-                                  );
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    String(exercise.id) === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                                {exercise.info.name}
-                              </CommandItem>
-                            ))}
-                      </CommandList>
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+            <FormItem>
+              <FormLabel>Rename Exercise</FormLabel>
+              <FormControl>
+                <Input placeholder={dayExercise.info.name} {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">{method}</Button>
+
+        <DialogFooter>
+          <div className="flex">
+            <Button
+              className="mr-auto"
+              variant="destructive"
+              type="button"
+              onClick={() => {
+                handleDeleteExercise(userId, programId, dayExercise.id);
+              }}
+            >
+              Delete
+            </Button>
+            <Button variant="outline" type="submit">
+              Save
+            </Button>
+          </div>
+        </DialogFooter>
       </form>
     </Form>
   );

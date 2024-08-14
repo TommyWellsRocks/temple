@@ -4,10 +4,39 @@ import { db } from "~/server/db";
 import { exercise_notes } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
-export async function getExercises() {
+export async function getExercises(userId: string) {
   return await db.query.exercises.findMany({
-    columns: { name: true, id: true },
+    columns: { id: true, name: true },
+    with: {
+      notes: {
+        columns: { name: true },
+        where: (model, { eq }) => eq(model.userId, userId),
+      },
+    },
   });
+}
+
+export async function editUserExerciseName(
+  userId: string,
+  exerciseId: number,
+  newName: string,
+  noteId?: number,
+) {
+  noteId
+    ? await db
+        .update(exercise_notes)
+        .set({ name: newName })
+        .where(
+          and(
+            eq(exercise_notes.userId, userId),
+            eq(exercise_notes.exerciseId, exerciseId),
+          ),
+        )
+    : await db.insert(exercise_notes).values({
+        userId,
+        exerciseId,
+        name: newName,
+      });
 }
 
 export async function editExerciseNote(
@@ -19,7 +48,7 @@ export async function editExerciseNote(
   noteId
     ? await db
         .update(exercise_notes)
-        .set({ notes: noteValue })
+        .set({ notes: noteValue, updatedAt: new Date() })
         .where(
           and(
             eq(exercise_notes.userId, userId),
@@ -31,6 +60,5 @@ export async function editExerciseNote(
         userId,
         exerciseId,
         notes: noteValue,
-        updatedAt: new Date(),
       });
 }

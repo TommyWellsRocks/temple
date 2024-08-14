@@ -46,7 +46,7 @@ export default async function Exercise(context: any | unknown) {
     <>
       <Navigation
         backURL={`/workout/${programId}/${dayId}`}
-        heading={`${dayExercise.info.name}`}
+        heading={`${dayExercise.notes && dayExercise.notes.name ? dayExercise.notes.name : dayExercise.info.name}`}
       />
 
       <LineChart

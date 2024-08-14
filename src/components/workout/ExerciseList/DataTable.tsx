@@ -36,6 +36,9 @@ import { ProgramDay } from "~/server/types";
 export type Exercise = {
   id: number;
   name: string;
+  notes: {
+    name: string | null;
+  }[];
 };
 
 export function DataTable({
@@ -46,6 +49,7 @@ export function DataTable({
   exercises: Exercise[];
 }) {
   if (!programDay) return;
+  const dayExercisesIds = programDay.dayExercises.map((ex) => ex.info.id);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -59,11 +63,11 @@ export function DataTable({
       id: "select",
       cell: ({ row }) => (
         <Checkbox
-          checked={Boolean(programDay.dayExercises.find(ex => ex.info.id === row.original.id))}
-          onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
+          checked={dayExercisesIds.includes(row.original.id)}
+          onCheckedChange={(isChecked) => {
+            row.toggleSelected(!!isChecked);
 
-            if (value) {
+            if (isChecked) {
               handleAddExercise(
                 programDay.userId,
                 programDay.programId,
@@ -75,9 +79,9 @@ export function DataTable({
               handleDeleteExercise(
                 programDay.userId,
                 programDay.programId,
-                programDay.groupId,
-                programDay.id,
-                row.original.id,
+                programDay.dayExercises.find(
+                  (ex) => ex.info.id === row.original.id,
+                )!.id,
               );
             }
           }}
@@ -88,7 +92,11 @@ export function DataTable({
       enableHiding: false,
     },
     {
-      accessorKey: "name",
+      id: "name",
+      accessorFn: (row) =>
+        row.notes && row.notes[0] && row.notes[0].name
+          ? row.notes[0].name
+          : row.name,
       header: ({ column }) => {
         return (
           <Button
@@ -100,7 +108,18 @@ export function DataTable({
           </Button>
         );
       },
-      cell: ({ row }) => <div>{toTitleCase(row.getValue("name"))}</div>,
+      cell: ({ row }) => (
+        <div>
+          {toTitleCase(
+            row.original.notes &&
+              row.original.notes.length === 1 &&
+              row.original.notes[0]!.name !== null &&
+              row.original.notes[0]!.name !== ""
+              ? row.original.notes[0]!.name
+              : row.original.name,
+          )}
+        </div>
+      ),
     },
   ];
 

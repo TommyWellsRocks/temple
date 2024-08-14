@@ -1,80 +1,98 @@
-import Image from "next/image";
-import Link from "next/link";
-import playButtonURL from "/public/content/images/workout/action-play.svg";
-import trophyButtonURL from "/public/content/images/workout/action-trophy.svg";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { ProgramDay } from "~/server/types";
 
 import { getExercises } from "~/server/queries/exercises";
 import { DataTable } from "./DataTable";
+import { ActionCard } from "../ActionCard";
+import { EditButtonPopover } from "../EditButtonPopover";
+import { ExerciseForm } from "./ExerciseForm";
 
-function ExercisesHeader({
-  doneCount,
-  totalCount,
-}: {
-  doneCount: number;
-  totalCount: number;
-}) {
+async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
+  const allExercises = await getExercises(programDay!.userId);
+
   return (
-    <div className="flex justify-between">
-      <h3 className="pb-2">{totalCount} Exercises</h3>
-      <h3 className="text-sm font-light">
-        <strong className="text-xl">{doneCount}</strong> /{totalCount}
-      </h3>
+    <AddButtonOverlay
+      title="Add Exercise"
+      description="Add an exercise to your workout. Click add when you're done."
+      formComponent={
+        <DataTable programDay={programDay} exercises={allExercises} />
+      }
+    />
+  );
+}
+
+function ExercisesHeader({ programDay }: { programDay: ProgramDay }) {
+  const totalCount = programDay!.dayExercises.length;
+
+  return (
+    <div className="flex items-center justify-between">
+      <h3>{totalCount} Exercises</h3>
+      <EditExercisesButton programDay={programDay} />
     </div>
   );
 }
 
-function ExerciseItem({
+function ExerciseCard({
+  userId,
   programId,
   dayId,
   exercise,
 }: {
+  userId: string;
   programId: number;
   dayId: number;
   exercise: {
     id: number;
     reps: number[];
+    weight: number[];
     info: {
+      id: number;
       name: string;
     };
+    notes: {
+      id: number;
+      name: string | null;
+    } | null;
   };
 }) {
   if (!exercise) return;
   const isDone = !exercise.reps.includes(0);
 
   return (
-    <Link
-      className={`flex cursor-pointer items-center justify-between rounded-xl px-4 py-2 ${isDone ? "bg-doneDark" : "bg-undoneDark"}`}
-      href={`/workout/${programId}/${dayId}/${exercise.id}`}
-    >
-      <div className="flex items-start gap-x-3">
-        <Image
-          className="mt-1 rounded-md"
-          src={"https://placehold.co/200x200"}
-          alt="Exercise Image."
-          width={50}
-          height={50}
+    <ActionCard
+      linkTo={`/workout/${programId}/${dayId}/${exercise.id}`}
+      imageURL="https://placehold.co/200x600"
+      title={
+        exercise.notes && exercise.notes.name
+          ? exercise.notes.name
+          : exercise.info.name
+      }
+      subtext={`${exercise.reps.length} Sets`}
+      editButton={
+        <EditButtonPopover
+          title="Edit Exercise"
+          description={`Remember to click save when you're done.`}
+          formComponent={
+            <ExerciseForm
+              userId={userId}
+              programId={programId}
+              dayExercise={exercise}
+            />
+          }
         />
-        <div>
-          <div className="text-base">{exercise.info.name}</div>
-          <div className="text-sm font-light"></div>
-        </div>
-      </div>
-      <Image
-        className="rounded-full border border-primary"
-        src={isDone ? trophyButtonURL : playButtonURL}
-        alt="Action."
-      />
-    </Link>
+      }
+      isDark={isDone}
+    />
   );
 }
 
 function Exercises({
+  userId,
   programDay,
   programId,
   dayId,
 }: {
+  userId: string;
   programDay: ProgramDay;
   programId: number;
   dayId: number;
@@ -82,54 +100,38 @@ function Exercises({
   return (
     <div className="flex flex-col gap-y-3">
       {programDay!.dayExercises.map(async (exercise) => (
-        <ExerciseItem exercise={exercise} programId={programId} dayId={dayId} />
+        <ExerciseCard
+          userId={userId}
+          exercise={exercise}
+          programId={programId}
+          dayId={dayId}
+        />
       ))}
     </div>
   );
 }
 
-async function EditExercisesButtons({
-  programDay,
-}: {
-  programDay: ProgramDay;
-}) {
-  const allExercises = await getExercises();
-
-  return (
-    <section>
-      <div className="flex justify-center gap-3 pt-5">
-        <AddButtonOverlay
-          title="Add Exercise"
-          description="Add an exercise to your workout. Click add when you're done."
-          formComponent={<DataTable
-            programDay={programDay}
-            exercises={allExercises} />}
-        />
-      </div>
-    </section>
-  );
-}
-
 export async function CheckList({
+  userId,
   programId,
   dayId,
   programDay,
 }: {
+  userId: string;
   programId: number;
   dayId: number;
   programDay: ProgramDay;
 }) {
-  const doneCount = programDay!.dayExercises.filter(
-    (exercise) => !exercise.reps.includes(0),
-  ).length;
-  const totalCount = programDay!.dayExercises.length;
-
   return (
-    <section>
-      <ExercisesHeader doneCount={doneCount} totalCount={totalCount} />
+    <section className="flex flex-col gap-y-2">
+      <ExercisesHeader programDay={programDay} />
 
-      <Exercises programDay={programDay} programId={programId} dayId={dayId} />
-      <EditExercisesButtons programDay={programDay} />
+      <Exercises
+        userId={userId}
+        programDay={programDay}
+        programId={programId}
+        dayId={dayId}
+      />
     </section>
   );
 }

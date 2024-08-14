@@ -52,6 +52,7 @@ export default async function DayOverview(context: any | unknown) {
       <TargetMuscles muscleURLs={muscleURLs} />
 
       <CheckList
+        userId={session.user.id}
         programId={Number(programId)}
         dayId={Number(dayId)}
         programDay={programDay}

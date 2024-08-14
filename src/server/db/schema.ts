@@ -138,7 +138,7 @@ export const exercises = createTable(
     muscles: varchar("muscles").array(),
     musclesImage: varchar("muscles_image"),
     equipment: varchar("equipment").array(),
-    video: varchar('video'),
+    video: varchar("video"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -161,7 +161,8 @@ export const exercise_notes = createTable(
     exerciseId: integer("exercise_id")
       .notNull()
       .references(() => exercises.id, { onDelete: "cascade" }),
-    notes: varchar("notes").notNull(),
+    name: varchar("name"),
+    notes: varchar("notes"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -346,6 +347,17 @@ export const workoutDayExerciseRelations = relations(
     }),
   }),
 );
+
+export const exerciseRelations = relations(exercises, ({ many }) => ({
+  notes: many(exercise_notes),
+}));
+
+export const exerciseNotesRelations = relations(exercise_notes, ({ one }) => ({
+  note: one(exercises, {
+    fields: [exercise_notes.exerciseId],
+    references: [exercises.id],
+  }),
+}));
 
 // * Sheer Related
 export const sheerResponses = createTable(

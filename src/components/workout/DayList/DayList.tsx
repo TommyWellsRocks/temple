@@ -132,7 +132,7 @@ function GroupDays({ program }: { program: Program }) {
                       {exercise.reps.length} x {exercise.info.name}
                     </div>
                   ))
-                  .slice(0, DAY_EXERCISE_MAX_LENGTH)}
+}
                 isDark={isDone}
                 linkTo={`/workout/${day.programId}/${day.id}`}
               />

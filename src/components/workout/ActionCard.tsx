@@ -1,35 +1,42 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function ActionCard({
+  imageURL,
   title,
   editButton,
-  items,
+  subtext,
   isDark,
   linkTo,
 }: {
+  imageURL?: string;
   title: string;
-  editButton: JSX.Element | undefined;
-  items: JSX.Element[];
+  editButton?: JSX.Element;
+  subtext: string;
   isDark: boolean;
   linkTo: string;
 }) {
   return (
-    <div className="relative flex">
-      <div className="absolute left-2.5 top-2 flex gap-1.5 px-1.5 align-middle">
-        {title}
-      </div>
+    <div className="relative flex items-center">
       <Link
         href={linkTo}
-        className={`flex w-full items-center justify-between rounded-xl px-4 py-2 ${isDark ? "bg-doneDark" : "bg-undoneDark"}`}
+        className={`flex w-full items-center gap-x-4 rounded-lg pr-12 ${isDark ? "bg-doneDark" : "bg-neutral-800"} ${imageURL ? "" : "pl-4 py-2"}`}
       >
-        <div className="ml-4 mt-7 flex flex-col gap-x-2 text-base">{items}</div>
-        {/* <Image
-          className="rounded-full border border-primary"
-          src={actionIconURL}
-          alt="Action."
-        /> */}
+        {imageURL ? (
+          <Image
+            src={imageURL}
+            alt="Image"
+            width={10}
+            height={10}
+            className="h-[100px] w-[60px] rounded-sm object-cover"
+          />
+        ) : null}
+        <div className="flex flex-col">
+          <span>{title}</span>
+          <span className="text-base font-light text-gray-500">{subtext}</span>
+        </div>
       </Link>
-      <div className="absolute right-2.5 top-5 px-1.5">{editButton}</div>
+      <div className="absolute right-1 mx-2 pb-1">{editButton}</div>
     </div>
   );
 }
