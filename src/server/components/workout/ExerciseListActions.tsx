@@ -17,9 +17,10 @@ export async function handleAddExercise(
 export async function handleDeleteExercise(
   userId: string,
   programId: number,
+  groupId: number,
   dayId: number,
-  dayExerciseId: number,
+  exerciseId: number,
 ) {
-  await deleteDayExercise(userId, programId, dayId, dayExerciseId);
+  await deleteDayExercise(userId, programId, groupId, dayId, exerciseId);
   revalidatePath(`/workout/${programId}`);
 }

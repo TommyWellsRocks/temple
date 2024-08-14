@@ -6,7 +6,7 @@ import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { ProgramDay } from "~/server/types";
 
 import { getExercises } from "~/server/queries/exercises";
-import { ExerciseForm } from "~/components/workout/ExerciseList/ExerciseForm";
+import { DataTable } from "./DataTable";
 
 function ExercisesHeader({
   doneCount,
@@ -101,25 +101,9 @@ async function EditExercisesButtons({
         <AddButtonOverlay
           title="Add Exercise"
           description="Add an exercise to your workout. Click add when you're done."
-          formComponent={
-            <ExerciseForm
-              programDay={programDay}
-              exercises={allExercises}
-              method="Add"
-            />
-          }
-        />
-        <AddButtonOverlay
-          title="Delete Exercise"
-          description="Delete an exercise from your workout. Click delete when you're done."
-          formComponent={
-            <ExerciseForm
-              programDay={programDay}
-              exercises={allExercises}
-              method="Delete"
-            />
-          }
-          method="Delete"
+          formComponent={<DataTable
+            programDay={programDay}
+            exercises={allExercises} />}
         />
       </div>
     </section>

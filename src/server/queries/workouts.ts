@@ -337,6 +337,7 @@ export async function getMyProgramDay(
         with: {
           info: {
             columns: {
+              id: true,
               name: true,
               musclesImage: true,
             },
@@ -498,8 +499,9 @@ export async function addDayExercise(
 export async function deleteDayExercise(
   userId: string,
   programId: number,
+  groupId: number,
   dayId: number,
-  dayExerciseId: number,
+  exerciseId: number,
 ) {
   await db
     .delete(workoutDayExercises)
@@ -507,8 +509,9 @@ export async function deleteDayExercise(
       and(
         eq(workoutDayExercises.userId, userId),
         eq(workoutDayExercises.programId, programId),
+        eq(workoutDayExercises.groupId, groupId),
         eq(workoutDayExercises.dayId, dayId),
-        eq(workoutDayExercises.id, dayExerciseId),
+        eq(workoutDayExercises.exerciseId, exerciseId),
       ),
     );
 }
