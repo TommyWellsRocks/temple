@@ -30,7 +30,7 @@ export const users = createTable(
     id: varchar("id", { length: 255 })
       .notNull()
       .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
+      .$defaultFn(() => crypto.randomUUID()).unique(),
     name: varchar("name", { length: 255 }),
     email: varchar("email", { length: 255 }).notNull(),
     emailVerified: timestamp("emailVerified", {
@@ -132,7 +132,7 @@ export const verificationTokens = createTable(
 export const exercises = createTable(
   "exercises",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     name: varchar("name", { length: 256 }).unique().notNull(),
     category: varchar("category", { length: 256 }),
     muscles: varchar("muscles").array(),
@@ -154,7 +154,7 @@ export const exercises = createTable(
 export const exercise_notes = createTable(
   "exercise_notes",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -179,7 +179,7 @@ export const exercise_notes = createTable(
 export const workoutPrograms = createTable(
   "workout_programs",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     userId: varchar("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -202,7 +202,7 @@ export const workoutPrograms = createTable(
 export const workoutProgramDayGroups = createTable(
   "workout_program_day_groups",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     userId: varchar("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -219,7 +219,7 @@ export const workoutProgramDayGroups = createTable(
 export const workoutProgramDays = createTable(
   "workout_program_days",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     userId: varchar("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -247,7 +247,7 @@ export const workoutProgramDays = createTable(
 export const workoutDayExercises = createTable(
   "workout_day_exercises",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -363,7 +363,7 @@ export const exerciseNotesRelations = relations(exercise_notes, ({ one }) => ({
 export const sheerResponses = createTable(
   "sheer_responses",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().unique(),
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
