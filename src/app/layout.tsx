@@ -9,7 +9,7 @@ import { ThemeProvider } from "~/lib/theme-provider";
 export const metadata = {
   title: "Temple",
   description: "Your Temple. Built To Spec.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
 export default async function RootLayout({
