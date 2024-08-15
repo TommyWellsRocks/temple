@@ -6,9 +6,11 @@ import { getTodaysResponse, getWinStreak } from "~/server/queries/sheer";
 import { ResponseButtons } from "~/components/sheer/ResponseButtons";
 import { ResponseFeedBack } from "~/components/sheer/ResponseFeedback";
 
+export const dynamic = "force-dynamic"
+
 export default async function Sheer() {
   const session = await auth();
-  if (!session || !session.user || !session.user.id)
+  if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/sheer")}`);
 
   const now = new Date();

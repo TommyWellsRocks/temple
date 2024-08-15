@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -93,10 +93,7 @@ export function DataTable({
     },
     {
       id: "name",
-      accessorFn: (row) =>
-        row.notes && row.notes[0] && row.notes[0].name
-          ? row.notes[0].name
-          : row.name,
+      accessorFn: (row) => (row.notes[0]?.name ? row.notes[0].name : row.name),
       header: ({ column }) => {
         return (
           <Button

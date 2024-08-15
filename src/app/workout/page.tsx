@@ -12,9 +12,11 @@ import { ProgramForm } from "~/components/workout/ProgramList/ProgramForm";
 
 // * PROGRAMS PAGE
 
+export const dynamic = "force-dynamic"
+
 export default async function Programs() {
   const session = await auth();
-  if (!session || !session.user || !session.user.id)
+  if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/workout")}`);
 
   const workoutRedirect = await getWorkoutRedirect(session.user.id);
@@ -35,9 +37,9 @@ export default async function Programs() {
           new Date(0, i).toLocaleString("en", { month: "short" }),
         )}
         prevLabel="Last Year"
-        previousData={lastYear as number[]}
+        previousData={lastYear}
         currentLabel="This Year"
-        currentData={thisYear as number[]}
+        currentData={thisYear!}
       />
 
       <section className="flex justify-end">

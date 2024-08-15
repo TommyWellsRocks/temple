@@ -2,8 +2,8 @@
 
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
-import { ChartData, CoreChartOptions } from "chart.js/auto";
-import { _DeepPartialObject } from "node_modules/chart.js/dist/types/utils";
+import type { ChartData, CoreChartOptions } from "chart.js/auto";
+import type { _DeepPartialObject } from "node_modules/chart.js/dist/types/utils";
 
 function chartData(
   xLabels: string[] | number[],

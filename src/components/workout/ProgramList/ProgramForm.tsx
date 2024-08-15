@@ -24,7 +24,7 @@ import { cn } from "~/lib/utils";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { WorkoutPrograms } from "~/server/types";
+import type { WorkoutPrograms } from "~/server/types";
 import {
   handleEditProgram,
   handleCreateProgram,

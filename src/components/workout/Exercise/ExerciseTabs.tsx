@@ -1,6 +1,6 @@
 "use client";
 
-import { DayExercise } from "~/server/types";
+import type { DayExercise } from "~/server/types";
 import { handleExerciseNoteInput } from "~/server/components/workout/ExerciseActions";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -11,7 +11,7 @@ import YouTubeURL from "public/content/images/workout/YouTube.svg";
 
 function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   const haveExistingNote = Boolean(
-    dayExercise && dayExercise.notes && dayExercise.notes.notes,
+    dayExercise?.notes?.notes,
   );
   let notesValue = haveExistingNote
     ? dayExercise!.notes.notes
@@ -22,9 +22,9 @@ function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
       <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
         <Textarea
           className="border-none bg-transparent"
-          defaultValue={notesValue as string}
+          defaultValue={notesValue!}
           onBlur={(e) => {
-            let newValue = e.target.value;
+            const newValue = e.target.value;
             if (newValue !== notesValue) {
               notesValue = newValue;
               handleExerciseNoteInput(
@@ -61,7 +61,7 @@ function InstructionsTabContent({
             }
           >
             <Image
-              src={YouTubeURL}
+              src={YouTubeURL as string}
               alt="Exercise instructional video"
               className="rounded-xl"
             />

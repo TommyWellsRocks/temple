@@ -1,5 +1,5 @@
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
-import { ProgramDay } from "~/server/types";
+import type { ProgramDay } from "~/server/types";
 
 import { getExercises } from "~/server/queries/exercises";
 import { DataTable } from "./DataTable";
@@ -63,7 +63,7 @@ function ExerciseCard({
       linkTo={`/workout/${programId}/${dayId}/${exercise.id}`}
       imageURL="https://placehold.co/200x600"
       title={
-        exercise.notes && exercise.notes.name
+        exercise.notes?.name
           ? exercise.notes.name
           : exercise.info.name
       }
@@ -101,6 +101,7 @@ function Exercises({
     <div className="flex flex-col gap-y-3">
       {programDay!.dayExercises.map(async (exercise) => (
         <ExerciseCard
+          key={exercise.id}
           userId={userId}
           exercise={exercise}
           programId={programId}

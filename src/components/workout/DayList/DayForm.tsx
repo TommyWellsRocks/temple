@@ -59,7 +59,7 @@ export function DayForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: dayInfo ? dayInfo.name : undefined,
-      repeatOn: dayInfo && dayInfo.repeatOn != null ? dayInfo.repeatOn : [1],
+      repeatOn: dayInfo?.repeatOn != null ? dayInfo.repeatOn : [1],
     },
   });
 
@@ -122,7 +122,7 @@ export function DayForm({
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([
-                                      ...(field.value as number[]),
+                                      ...(field.value!),
                                       day.id,
                                     ])
                                   : field.onChange(

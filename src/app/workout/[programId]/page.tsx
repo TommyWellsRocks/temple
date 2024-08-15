@@ -8,10 +8,12 @@ import { DayList } from "~/components/workout/DayList/DayList";
 
 // * DAYS PAGE
 
+export const dynamic = "force-dynamic"
+
 export default async function Days(context: any | unknown) {
   const session = await auth();
   const { programId } = context.params as { programId: string };
-  if (!session || !session.user || !session.user.id)
+  if (!session?.user?.id)
     return redirect(
       `/signin?return=${encodeURIComponent(`/workout/${programId}`)}`,
     );
@@ -30,7 +32,7 @@ export default async function Days(context: any | unknown) {
         measureOf="Volume"
         xLabels={currentProgramVolume.map((_, index) => `Group ${index + 1}`)}
         currentLabel="Your Volume"
-        currentData={currentProgramVolume as number[]}
+        currentData={currentProgramVolume}
       />
 
       <DayList

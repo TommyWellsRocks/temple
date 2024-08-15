@@ -1,4 +1,4 @@
-import { DayExercise, Program } from "~/server/types";
+import type { DayExercise, Program } from "~/server/types";
 
 export function getYearsEndDates() {
   const today = new Date();
@@ -31,12 +31,6 @@ export function getWeeksEndDates() {
   return [lastSun, lastSat, thisSun, thisSat];
 }
 
-function getWeekNumber(date: Date): number {
-  const firstJan = new Date(date.getFullYear(), 0, 1);
-  const pastDaysOfYear = (date.getTime() - firstJan.getTime()) / 86400000;
-  return Math.ceil((pastDaysOfYear + firstJan.getDay() + 1) / 7);
-}
-
 export function getDayOfWeek(timestamp: Date) {
   const date = new Date(timestamp);
   return date.getDay();
@@ -44,8 +38,8 @@ export function getDayOfWeek(timestamp: Date) {
 
 export function calculateMonthActiveDays(
   sessionExercises: { dayId: number; updatedAt: Date }[],
-) {
-  const year: number[] = Array(12).fill(0);
+): number[] {
+  const year: number[] = Array<number>(12).fill(0);
   const dayIds = new Set<number>();
   sessionExercises.forEach((session) => {
     if (!dayIds.has(session.dayId)) {
@@ -71,7 +65,7 @@ export function calculateSessionVolume(
   return sessionExercises.reduce((totalVolume, exercise) => {
     const exerciseVolume = exercise.reps.reduce(
       (total, repCount, index) =>
-        total + repCount * (exercise.weight[index] || 1),
+        total + repCount * (exercise.weight[index] ?? 1),
       0,
     );
     return totalVolume + exerciseVolume;
@@ -82,7 +76,7 @@ export function calculateExerciseVolume(
   dayExercise: DayExercise | { reps: number[]; weight: number[] },
 ) {
   const volume = dayExercise!.reps.map(
-    (repCount, index) => repCount * (dayExercise!.weight[index] || 1),
+    (repCount, index) => repCount * (dayExercise!.weight[index] ?? 1),
   );
   if (!volume) return [0];
   return volume;

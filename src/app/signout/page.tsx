@@ -2,9 +2,11 @@ import { Button } from "~/components/ui/button";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "~/server/auth";
 
+export const dynamic = "force-dynamic"
+
 export default async function SignIn() {
   const session = await auth();
-  if (!session || !session.user || !session.user.id)
+  if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/signout")}`);
 
   return (

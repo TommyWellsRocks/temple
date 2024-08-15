@@ -126,8 +126,8 @@ function InputRows({
 }) {
   return (
     <div className="flex flex-col gap-y-5 text-2xl font-light text-gray-600">
-      {dayExercise!.reps.map((repValue, index) => (
-        <InputRow index={index} repValue={repValue} dayExercise={dayExercise} />
+      {dayExercise.reps.map((repValue, index) => (
+        <InputRow key={index} index={index} repValue={repValue} dayExercise={dayExercise} />
       ))}
     </div>
   );
@@ -154,8 +154,8 @@ function EditSetButton({
         clipPath: clipPathHexagon,
       }}
       onClick={() => {
-        let repValues = dayExercise!.reps;
-        let weightValues = dayExercise!.weight;
+        const repValues = dayExercise.reps;
+        const weightValues = dayExercise.weight;
 
         if (method === "Add") {
           repValues.push(0);
@@ -165,7 +165,7 @@ function EditSetButton({
           weightValues.pop();
         }
 
-        handleEditSetCount(dayExercise!, repValues, weightValues);
+        handleEditSetCount(dayExercise, repValues, weightValues);
       }}
     >
       {method === "Add" ? <Plus /> : <Minus />}

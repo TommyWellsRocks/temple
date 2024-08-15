@@ -12,7 +12,7 @@ export function ActionCard({
   imageURL?: string;
   title: string;
   editButton?: JSX.Element;
-  subtext: string;
+  subtext?: string;
   isDark: boolean;
   linkTo: string;
 }) {

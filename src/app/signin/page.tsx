@@ -5,8 +5,10 @@ import googleIconURL from "public/content/images/auth/google-icon.svg";
 import Image from "next/image";
 import { AuthError } from "next-auth";
 
+export const dynamic = "force-dynamic"
+
 const authIcons: { name: string; icon: string }[] = [
-  { name: "Google", icon: googleIconURL },
+  { name: "Google", icon: googleIconURL as string },
 ];
 
 export default async function SignIn({
@@ -16,13 +18,14 @@ export default async function SignIn({
 }) {
   const session = await auth();
   const returnURL = searchParams.return || "/";
-  if (session && session.user && session.user.id) return redirect(returnURL);
+  if (session?.user?.id) return redirect(returnURL);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-5">
       <div className="text-3xl font-semibold">Sign In / Sign Up</div>
       {Object.values(providerMap).map((provider) => (
         <form
+          key={provider!.id}
           action={async () => {
             "use server";
             try {

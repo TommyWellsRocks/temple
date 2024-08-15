@@ -9,7 +9,7 @@ import {
   getYearsEndDates,
   calculateMonthActiveDays,
 } from "./utils/workoutVolume";
-import { DayExercise } from "~/server/types";
+import type { DayExercise } from "~/server/types";
 import {
   users,
   workoutDayExercises,
@@ -26,13 +26,13 @@ export async function getWorkoutRedirect(userId: string) {
     where: (model, { eq }) => eq(model.id, userId),
   });
   // Stop If Shouldn't Redirect
-  if (!shouldRedirect || !shouldRedirect.redirectOnLoadWorkout) return;
+  if (!shouldRedirect?.redirectOnLoadWorkout) return;
 
   const today = new Date();
 
   // Stop If Redirected Already Today
   if (shouldRedirect.lastWorkoutRedirect) {
-    const lastRedirect = new Date(shouldRedirect.lastWorkoutRedirect!);
+    const lastRedirect = new Date(shouldRedirect.lastWorkoutRedirect);
     today.setHours(0, 0, 0, 0);
     lastRedirect.setHours(0, 0, 0, 0);
     if (today.getDate() === lastRedirect.getDate()) return;
@@ -62,13 +62,13 @@ export async function getWorkoutRedirect(userId: string) {
   if (!activeProgram) return;
 
   // Will Return Redirect, So Input Into DB
-  await db.update(users).set({ lastWorkoutRedirect: new Date() });
+  await db.update(users).set({ lastWorkoutRedirect: new Date() }).where(eq(users.id, userId));
 
   // Stop If No Scheduled Day
   const todayDay = today.getDay();
   const finalGroupScheduledDay = activeProgram.groups[
     activeProgram.groups.length - 1
-  ]!.groupDays.find((day) => day.repeatOn && day.repeatOn.includes(todayDay));
+  ]!.groupDays.find((day) => day.repeatOn?.includes(todayDay));
   if (!finalGroupScheduledDay) return `workout/${activeProgram.id}`;
 
   // If Complete, Start New Group And Return Day
@@ -86,7 +86,7 @@ export async function getWorkoutRedirect(userId: string) {
       },
     }))!.groupDays;
     const newGroupDayId = groupDays.find(
-      (day) => day.repeatOn && day.repeatOn.includes(todayDay),
+      (day) => day.repeatOn?.includes(todayDay),
     )!.id;
     return `/workout/${activeProgram.id}/${newGroupDayId}`;
   }
@@ -212,7 +212,7 @@ export async function addPrevDaysToNewGroup(
 ) {
   const program = await getMyProgram(userId, programId);
 
-  if (program && program.programDays.length) {
+  if (program?.programDays.length) {
     const latestGroupDays =
       program.groups[program.groups.length - 2]!.groupDays;
 
@@ -407,7 +407,7 @@ export async function getMyWeekAnalytics(userId: string) {
         weekVolume[dayOfWeek]! += sessionVolume;
       }
     });
-    return weekVolume;
+    return weekVolume as number[];
   };
 
   const [lastSun, lastSat, thisSun, thisSat] = getWeeksEndDates();
@@ -518,14 +518,14 @@ export async function updateDayExerciseInput(dayExercise: {
   await db
     .update(workoutDayExercises)
     .set({
-      reps: dayExercise!.reps,
-      weight: dayExercise!.weight,
+      reps: dayExercise.reps,
+      weight: dayExercise.weight,
       updatedAt: new Date(),
     })
     .where(
       and(
         eq(workoutDayExercises.userId, dayExercise.userId),
-        eq(workoutDayExercises.id, dayExercise!.id),
+        eq(workoutDayExercises.id, dayExercise.id),
       ),
     );
 }

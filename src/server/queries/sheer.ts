@@ -36,7 +36,7 @@ export async function getWinStreak(userId: string) {
   let contiguousWins = 0;
   if (responses.length === 0) return contiguousWins;
 
-  let currentDate = new Date();
+  const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
   for (const { date } of responses) {

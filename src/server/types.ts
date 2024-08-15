@@ -1,10 +1,10 @@
-import {
+import type {
   getMyDayExercise,
   getMyPrograms,
   getMyProgram,
   getMyProgramDay,
 } from "./queries/workouts";
-import { getExercises } from "./queries/exercises";
+import type { getExercises } from "./queries/exercises";
 
 export type WorkoutPrograms = Awaited<ReturnType<typeof getMyPrograms>>;
 export type Program = Awaited<ReturnType<typeof getMyProgram>>;

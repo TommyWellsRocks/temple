@@ -1,4 +1,4 @@
-import { DayExercise } from "~/server/types";
+import type { DayExercise } from "~/server/types";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -31,7 +31,10 @@ function PreviousSessionButton({
         </DialogHeader>
 
         {previousExercise!.reps.map((repCount, index) => (
-          <div className="flex items-center gap-1 rounded-md border border-gray-600 text-base">
+          <div
+            key={index}
+            className="flex items-center gap-1 rounded-md border border-gray-600 text-base"
+          >
             <span className="rounded-s-md border border-gray-600 bg-gray-900 px-1 font-medium text-gray-400">
               Set {index + 1}:
             </span>

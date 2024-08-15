@@ -9,9 +9,7 @@ import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { EditGroupsButton } from "~/components/workout/DayList/EditGroupsButton";
 import { ActionCard } from "~/components/workout/ActionCard";
 import { DayForm } from "~/components/workout/DayList/DayForm";
-import { Program } from "~/server/types";
-
-const DAY_EXERCISE_MAX_LENGTH = 3;
+import type { Program } from "~/server/types";
 
 function GroupList({
   userId,
@@ -38,11 +36,11 @@ function GroupList({
 
       <TabsList>
         <Carousel
-          opts={{ startIndex: program!.groups.length - 1, dragFree: true }}
+          opts={{ startIndex: program.groups.length - 1, dragFree: true }}
         >
           <CarouselContent className="w-[240px] sm:w-[390px]">
-            {program!.groups.map((group, index) => (
-              <CarouselItem>
+            {program.groups.map((group, index) => (
+              <CarouselItem key={group.id}>
                 <TabsTrigger value={String(group.id)}>
                   Group {index + 1}
                 </TabsTrigger>
@@ -92,25 +90,26 @@ function GroupsInfo({
 }
 
 function GroupDays({ program }: { program: Program }) {
-  const todaysDay = new Date().getDay();
+  // const todaysDay = new Date().getDay();
 
   return (
     <>
       {program!.groups.map((group) => (
-        <TabsContent className="flex flex-col gap-5" value={String(group.id)}>
+        <TabsContent className="flex flex-col gap-5" value={String(group.id)} key={group.id}>
           {group.groupDays.map((day) => {
             // Has Exercises and none have undone reps
             const isDone =
               day.dayExercises.length >= 1 &&
               day.dayExercises.filter((ex) => ex.reps.includes(0)).length === 0;
             // Not done and do date isn't today
-            const isFutureDay =
-              !isDone &&
-              day.repeatOn !== null &&
-              !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
+            // const isFutureDay =
+            //   !isDone &&
+            //   day.repeatOn !== null &&
+            //   !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
 
             return (
               <ActionCard
+                key={day.id}
                 title={day.name}
                 editButton={
                   <EditButtonPopover
@@ -126,13 +125,6 @@ function GroupDays({ program }: { program: Program }) {
                     }
                   />
                 }
-                items={day.dayExercises
-                  .map((exercise) => (
-                    <div>
-                      {exercise.reps.length} x {exercise.info.name}
-                    </div>
-                  ))
-}
                 isDark={isDone}
                 linkTo={`/workout/${day.programId}/${day.id}`}
               />

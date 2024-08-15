@@ -15,7 +15,7 @@ function LossText() {
         <span>
           Listen to the wisdom of your spirit, not the desires of the flesh.
         </span>
-        <span>Don't trade the long term for the short term.</span>
+        <span>Don&apos;t trade the long term for the short term.</span>
         <span>
           And remember, there is hope... You get to choose what you will next.
         </span>
@@ -67,7 +67,7 @@ function WinText({ winStreak }: { winStreak: number }) {
           Your winstreak: {winStreak} {winStreak === 1 ? "Day" : "Days"}{" "}
         </span>
         {winStreak > 0 && winStreak <= 13 ? (
-          <span>WHAT'CHU GOT?? YOU GONNA GIVE UP?? 👅🤭👺</span>
+          <span>WHAT&apos;CHU GOT?? YOU GONNA GIVE UP?? 👅🤭👺</span>
         ) : null}
         {winStreak >= 14 && winStreak <= 29 ? (
           <span>
@@ -76,7 +76,7 @@ function WinText({ winStreak }: { winStreak: number }) {
           </span>
         ) : null}
         {winStreak >= 30 && winStreak <= 59 ? (
-          <span>OH BABY, NOW YOU'RE COOKING!! 🎉🎉👏👏</span>
+          <span>OH BABY, NOW YOU&apos;RE COOKING!! 🎉🎉👏👏</span>
         ) : null}
         {winStreak >= 60 && winStreak <= 89 ? (
           <span>MAD RESPECT!! LEGEND IN THE MAKING!! 🏆🥇🫡</span>

@@ -13,6 +13,8 @@ import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 
 // * EXERCISE PAGE
 
+export const dynamic = "force-dynamic"
+
 export default async function Exercise(context: any | unknown) {
   const session = await auth();
   const { programId, dayId, dayExerciseId } = context.params as {
@@ -20,7 +22,7 @@ export default async function Exercise(context: any | unknown) {
     dayId: string;
     dayExerciseId: string;
   };
-  if (!session || !session.user || !session.user.id)
+  if (!session?.user?.id)
     return redirect(
       `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}/${dayExerciseId}`)}`,
     );
@@ -46,16 +48,16 @@ export default async function Exercise(context: any | unknown) {
     <>
       <Navigation
         backURL={`/workout/${programId}/${dayId}`}
-        heading={`${dayExercise.notes && dayExercise.notes.name ? dayExercise.notes.name : dayExercise.info.name}`}
+        heading={`${dayExercise.notes?.name ? dayExercise.notes.name : dayExercise.info.name}`}
       />
 
       <LineChart
         measureOf="Volume"
         xLabels={
           lastSessionVolume
-            ? lastSessionVolume!.length < currentSessionVolume!.length
+            ? lastSessionVolume.length < currentSessionVolume!.length
               ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
-              : lastSessionVolume!.map((_, index) => `Set ${index + 1}`)
+              : lastSessionVolume.map((_, index) => `Set ${index + 1}`)
             : currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
         }
         prevLabel={lastSessionVolume ? "Last Session's Volume" : undefined}

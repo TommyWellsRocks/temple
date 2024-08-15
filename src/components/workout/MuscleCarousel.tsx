@@ -23,8 +23,8 @@ export function MuscleCarousel({ muscleURLs }: { muscleURLs: string[] }) {
   return (
     <Carousel opts={{ dragFree: true }}>
       <CarouselContent>
-        {muscleURLs.map((url) => {
-          return <MuscleImageItem muscleURL={url} />;
+        {muscleURLs.map((url, index) => {
+          return <MuscleImageItem key={index} muscleURL={url} />;
         })}
       </CarouselContent>
     </Carousel>

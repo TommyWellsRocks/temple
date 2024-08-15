@@ -8,6 +8,8 @@ import {
   WeightPoundsSwitch,
 } from "~/components/settings/Switches";
 
+export const dynamic = "force-dynamic"
+
 function SettingsItem({
   label,
   switchComponent,
@@ -25,7 +27,7 @@ function SettingsItem({
 
 export default async function Settings() {
   const session = await auth();
-  if (!session || !session.user || !session.user.id)
+  if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/settings")}`);
 
   const userId = session.user.id;

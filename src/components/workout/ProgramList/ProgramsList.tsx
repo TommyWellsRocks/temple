@@ -3,8 +3,6 @@ import { ActionCard } from "~/components/workout/ActionCard";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { ProgramForm } from "~/components/workout/ProgramList/ProgramForm";
 
-const PROGRAM_DAY_MAX_LENGTH = 3;
-
 export async function ProgramsList({ userId }: { userId: string }) {
   const workoutPrograms = await getMyPrograms(userId);
   const today = new Date();
@@ -13,11 +11,12 @@ export async function ProgramsList({ userId }: { userId: string }) {
     <section className="flex flex-col gap-4">
       {workoutPrograms.map((program) => {
         const isActiveProgram = program.startDate <= today && program.endDate >= today;
-        const isFutureProgram = !isActiveProgram && program.startDate > today;
-        const latestGroup = program.groups[program.groups.length - 1];
+        // const isFutureProgram = !isActiveProgram && program.startDate > today;
+        // const latestGroup = program.groups[program.groups.length - 1];
 
         return (
           <ActionCard
+            key={program.id}
             title={program.name}
             editButton={
               <EditButtonPopover
@@ -28,9 +27,6 @@ export async function ProgramsList({ userId }: { userId: string }) {
                 }
               />
             }
-            items={latestGroup!.groupDays
-              .map((day) => <div>&bull; {day.name}</div>)
-              .slice(0, PROGRAM_DAY_MAX_LENGTH)}
             isDark={!isActiveProgram}
             linkTo={`/workout/${program.id}`}
           />

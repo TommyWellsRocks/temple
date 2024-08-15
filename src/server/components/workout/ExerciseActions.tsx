@@ -17,7 +17,7 @@ export async function handleExerciseVolumeInput(dayExercise: {
 }) {
   await updateDayExerciseInput(dayExercise);
   revalidatePath(
-    `/workout/${dayExercise!.programId}/${dayExercise!.dayId}/${dayExercise!.id}`,
+    `/workout/${dayExercise.programId}/${dayExercise.dayId}/${dayExercise.id}`,
   );
 }
 
@@ -32,13 +32,13 @@ export async function handleEditSetCount(
   weightValues: number[],
 ) {
   await updateDayExerciseSets(
-    dayExercise!.userId,
-    dayExercise!.id,
+    dayExercise.userId,
+    dayExercise.id,
     repValues,
     weightValues,
   );
   revalidatePath(
-    `/workout/${dayExercise!.programId}/${dayExercise!.dayId}/${dayExercise!.id}`,
+    `/workout/${dayExercise.programId}/${dayExercise.dayId}/${dayExercise.id}`,
   );
 }
 
@@ -54,12 +54,12 @@ export async function handleExerciseNoteInput(
   noteId?: number,
 ) {
   await editExerciseNote(
-    dayExercise!.userId,
-    dayExercise!.exerciseId,
+    dayExercise.userId,
+    dayExercise.exerciseId,
     noteValue,
     noteId,
   );
   revalidatePath(
-    `/workout/${dayExercise!.programId}/${dayExercise!.dayId}/${dayExercise!.id}`,
+    `/workout/${dayExercise.programId}/${dayExercise.dayId}/${dayExercise.id}`,
   );
 }
