@@ -1,7 +1,7 @@
 import "server-only";
 
 import { db } from "~/server/db";
-import { exercise_notes } from "~/server/db/schema";
+import { exercise_notes, exercises } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getExercises(userId: string) {
@@ -61,4 +61,15 @@ export async function editExerciseNote(
         exerciseId,
         notes: noteValue,
       });
+}
+
+// ! ADMIN
+export async function insertExercises(formattedData: {
+  name: string;
+  category: string;
+  muscles: string[];
+  musclesImage: string;
+  equipment: string[];
+}[]) {
+  await db.insert(exercises).values(formattedData);
 }

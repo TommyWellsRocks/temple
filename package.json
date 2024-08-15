@@ -30,6 +30,7 @@
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.39.0",
     "@tanstack/react-table": "^8.19.2",
+    "@vercel/postgres": "^0.9.0",
     "chart.js": "^4.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
