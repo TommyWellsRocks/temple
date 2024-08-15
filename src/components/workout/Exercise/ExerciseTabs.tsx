@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import Link from "next/link";
 import Image from "next/image";
-import YouTubeURL from "public/content/images/workout/YouTube.svg";
+import YouTubeURL from "public/content/images/workout/youtube.svg";
 
 function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   const haveExistingNote = Boolean(
