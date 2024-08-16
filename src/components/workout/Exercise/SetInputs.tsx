@@ -85,7 +85,7 @@ function InputRow({
   return (
     <div className="flex items-center gap-x-2 min-[340px]:gap-x-3">
       <div
-        className={`-mr-3 flex h-10 w-10 items-center justify-center font-semibold ${weightValue && repValue ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
+        className={`-mr-3 flex h-10 w-10 items-center justify-center font-semibold ${repValue ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
         style={{
           clipPath: clipPathHexagon,
         }}

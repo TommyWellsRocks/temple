@@ -65,7 +65,7 @@ export function calculateSessionVolume(
   return sessionExercises.reduce((totalVolume, exercise) => {
     const exerciseVolume = exercise.reps.reduce(
       (total, repCount, index) =>
-        total + repCount * (exercise.weight[index] ?? 1),
+        total + repCount * (exercise.weight[index] || 1),
       0,
     );
     return totalVolume + exerciseVolume;
@@ -76,7 +76,7 @@ export function calculateExerciseVolume(
   dayExercise: DayExercise | { reps: number[]; weight: number[] },
 ) {
   const volume = dayExercise!.reps.map(
-    (repCount, index) => repCount * (dayExercise!.weight[index] ?? 1),
+    (repCount, index) => repCount * (dayExercise!.weight[index] || 1),
   );
   if (!volume) return [0];
   return volume;
