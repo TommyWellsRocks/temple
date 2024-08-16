@@ -62,7 +62,10 @@ export async function getWorkoutRedirect(userId: string) {
   if (!activeProgram) return;
 
   // Will Return Redirect, So Input Into DB
-  await db.update(users).set({ lastWorkoutRedirect: new Date() }).where(eq(users.id, userId));
+  await db
+    .update(users)
+    .set({ lastWorkoutRedirect: new Date() })
+    .where(eq(users.id, userId));
 
   // Stop If No Scheduled Day
   const todayDay = today.getDay();
@@ -85,8 +88,8 @@ export async function getWorkoutRedirect(userId: string) {
         groupDays: { columns: { id: true, repeatOn: true } },
       },
     }))!.groupDays;
-    const newGroupDayId = groupDays.find(
-      (day) => day.repeatOn?.includes(todayDay),
+    const newGroupDayId = groupDays.find((day) =>
+      day.repeatOn?.includes(todayDay),
     )!.id;
     return `/workout/${activeProgram.id}/${newGroupDayId}`;
   }
@@ -492,9 +495,22 @@ export async function addDayExercise(
   dayId: number,
   exerciseId: number,
 ) {
-  await db
-    .insert(workoutDayExercises)
-    .values({ userId, programId, groupId, dayId, exerciseId });
+  const last = await db.query.workoutDayExercises.findFirst({
+    columns: { reps: true, weight: true },
+    where: (model, { and, eq }) =>
+      and(eq(model.userId, userId), eq(model.exerciseId, exerciseId)),
+    orderBy: (model, { desc }) => desc(model.updatedAt),
+  });
+
+  await db.insert(workoutDayExercises).values({
+    userId,
+    programId,
+    groupId,
+    dayId,
+    exerciseId,
+    reps: last?.reps ?? [0, 0, 0, 0],
+    weight: last?.weight ?? [0, 0, 0, 0],
+  });
 }
 
 export async function deleteDayExercise(userId: string, dayExerciseId: number) {
@@ -546,25 +562,3 @@ export async function updateDayExerciseSets(
       ),
     );
 }
-
-// export async function getTodaysWorkout(userId: string) {
-//   const today = new Date();
-//   const todayString = String(today);
-//   return await db.query.workoutProgramDays.findFirst({
-//     where: (model, { and, eq, gte, lte, sql }) =>
-//       and(
-//         eq(model.userId, userId),
-//         lte(model.repeatStart, todayString),
-//         gte(model.repeatEnd, todayString),
-//         sql`${model.repeatOn} @> {${today.getDay()}}`,
-//       ),
-//     with: {
-//       sessionExercises: {
-//         with: {
-//           info: true,
-//           notes: true,
-//         },
-//       },
-//     },
-//   });
-// }

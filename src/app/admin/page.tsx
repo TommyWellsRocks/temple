@@ -4,7 +4,12 @@ import { JsonFileUpload } from "~/components/admin/JsonFileUpload";
 
 export default async function Admin() {
   const session = await auth();
-  if (!(session?.user?.email === "tommywellsrocks@gmail.com" && session?.user?.id === "41069402-2b1f-43d5-be90-de9b4a6c875c"))
+  if (
+    !(
+      session?.user?.email === "tommywellsrocks@gmail.com" &&
+      session?.user?.id === "41069402-2b1f-43d5-be90-de9b4a6c875c"
+    )
+  )
     return redirect(`/`);
 
   return (
@@ -18,7 +23,7 @@ export default async function Admin() {
       </section>
 
       <section>
-        <span>Upload Exercises JSON</span>
+        <span>Upload Temple_Exercises JSON</span>
         <JsonFileUpload />
       </section>
     </>
