@@ -5,6 +5,8 @@ import { GeistSans } from "geist/font/sans";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/server/auth";
 import { ThemeProvider } from "~/lib/theme-provider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   title: "Temple",
@@ -29,6 +31,8 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Analytics />
+            <SpeedInsights />
           </ThemeProvider>
         </SessionProvider>
       </body>
