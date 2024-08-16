@@ -49,13 +49,17 @@ function InputArea({
           }
 
           if (label === "Reps" && dayExercise.reps[index] !== newValue) {
-            dayExercise.reps[index] = newValue;
+            for (let i = index; i < dayExercise.reps.length; i++) {
+              dayExercise.reps[i] = newValue;
+            }
             handleExerciseVolumeInput(dayExercise);
           } else if (
             label === "Weight" &&
             dayExercise.weight[index] !== newValue
           ) {
-            dayExercise.weight[index] = newValue;
+            for (let i = index; i < dayExercise.weight.length; i++) {
+              dayExercise.weight[i] = newValue;
+            }
             handleExerciseVolumeInput(dayExercise);
           }
         }}
@@ -127,7 +131,12 @@ function InputRows({
   return (
     <div className="flex flex-col gap-y-5 text-2xl font-light text-gray-600">
       {dayExercise.reps.map((repValue, index) => (
-        <InputRow key={index} index={index} repValue={repValue} dayExercise={dayExercise} />
+        <InputRow
+          key={index}
+          index={index}
+          repValue={repValue}
+          dayExercise={dayExercise}
+        />
       ))}
     </div>
   );
