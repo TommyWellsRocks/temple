@@ -32,6 +32,7 @@ const config = {
         argsIgnorePattern: "^_",
       },
     ],
+    "@typescript-eslint/prefer-nullish-coalescing": "warn",
     "@typescript-eslint/require-await": "off",
     "@typescript-eslint/no-unsafe-assignment": "warn",
     "@typescript-eslint/no-misused-promises": [

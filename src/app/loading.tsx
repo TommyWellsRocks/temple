@@ -21,8 +21,8 @@ function LoadingSpinnerSVG() {
 
 export default function Loading() {
   return (
-    <main className="flex h-full flex-col items-center min-h-svh">
-      <div className="flex items-center gap-2 my-auto">
+    <main className="flex h-full min-h-svh flex-col items-center">
+      <div className="my-auto flex items-center gap-2">
         <LoadingSpinnerSVG /> Loading
       </div>
     </main>

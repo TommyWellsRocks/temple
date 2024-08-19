@@ -40,7 +40,7 @@ function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   );
 }
 
-function InstructionsTabContent({
+function InfoTabContent({
   instructionVideo,
   exerciseName,
 }: {
@@ -48,7 +48,7 @@ function InstructionsTabContent({
   exerciseName: string;
 }) {
   return (
-    <TabsContent value="instructions">
+    <TabsContent value="info">
       <div className="relative flex flex-col items-center rounded-xl bg-black bg-opacity-15 px-3 py-2 text-base">
         <span className="absolute bottom-1/4">Click Me To Search</span>
         <div className="max-w-[440px]">
@@ -95,13 +95,23 @@ function MusclesTabContent({
   );
 }
 
+function HistoryTabContent() {
+  return (
+    <TabsContent value="history">
+      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
+      </div>
+    </TabsContent>
+  );
+}
+
 function TabSelectors() {
   return (
     <div className="flex justify-center">
       <TabsList className="bg-black">
         <TabsTrigger value="notes">Notes</TabsTrigger>
-        <TabsTrigger value="instructions">Instructions</TabsTrigger>
+        <TabsTrigger value="info">Info</TabsTrigger>
         <TabsTrigger value="muscles">Muscles</TabsTrigger>
+        <TabsTrigger value="history">History</TabsTrigger>
       </TabsList>
     </div>
   );
@@ -111,7 +121,7 @@ function TabContents({ dayExercise }: { dayExercise: DayExercise }) {
   return (
     <>
       <NotesTabContent dayExercise={dayExercise} />
-      <InstructionsTabContent
+      <InfoTabContent
         instructionVideo={dayExercise!.info.video}
         exerciseName={dayExercise!.info.name}
       />
@@ -119,6 +129,7 @@ function TabContents({ dayExercise }: { dayExercise: DayExercise }) {
         muscleURL={dayExercise!.info.musclesImage}
         muscles={dayExercise!.info.muscles}
       />
+      <HistoryTabContent />
     </>
   );
 }

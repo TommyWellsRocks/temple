@@ -1,7 +1,9 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { clipPathHexagon } from "~/components/ui/Hexagon";
+// import { Timer } from "lucide-react";
+// import { useEffect, useState } from "react";
+import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { handleEditSetCount } from "~/server/components/workout/ExerciseActions";
 import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
 import { isFloat } from "~/utils/helpers";
@@ -69,6 +71,29 @@ function InputArea({
   );
 }
 
+// function SetTimer() {
+//   const [timerSeconds, setTimerSeconds] = useState<number>(0);
+
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setTimerSeconds((prevTimerSeconds) => prevTimerSeconds + 1);
+//     }, 1000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const minutes = Math.floor(timerSeconds / 60);
+//   const seconds = timerSeconds % 60;
+
+//   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+//   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+//   return (
+//     <span>
+//       {formattedMinutes}:{formattedSeconds}
+//     </span>
+//   );
+// }
+
 function InputRow({
   index,
   repValue,
@@ -87,31 +112,39 @@ function InputRow({
 }) {
   const weightValue = dayExercise.weight[index];
   return (
-    <div className="flex items-center gap-x-2 min-[340px]:gap-x-3">
-      <div
-        className={`-mr-3 flex h-10 w-10 items-center justify-center font-semibold ${repValue ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
-        style={{
-          clipPath: clipPathHexagon,
-        }}
+    <div className="flex flex-col items-end">
+      {/* <button
+        className="flex items-center gap-1 w-24 rounded-t-lg bg-black px-2 py-1 text-base"
+        onClick={() => {}}
       >
-        {index + 1}
+        <Timer /> <SetTimer />
+      </button> */}
+      <div className="flex items-center gap-x-2 min-[340px]:gap-x-3">
+        <div
+          className={`-mr-3 flex h-10 w-10 items-center justify-center font-semibold ${repValue ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
+          style={{
+            clipPath: clipPathParallelogram,
+          }}
+        >
+          {index + 1}
+        </div>
+
+        <InputArea
+          dayExercise={dayExercise}
+          index={index}
+          label="Reps"
+          defaultValue={repValue}
+        />
+
+        <div className="h-4 rotate-[20deg] border border-gray-800"></div>
+
+        <InputArea
+          dayExercise={dayExercise}
+          index={index}
+          label="Weight"
+          defaultValue={weightValue!}
+        />
       </div>
-
-      <InputArea
-        dayExercise={dayExercise}
-        index={index}
-        label="Reps"
-        defaultValue={repValue}
-      />
-
-      <div className="h-4 rotate-[20deg] border border-gray-800"></div>
-
-      <InputArea
-        dayExercise={dayExercise}
-        index={index}
-        label="Weight"
-        defaultValue={weightValue!}
-      />
     </div>
   );
 }
@@ -160,7 +193,7 @@ function EditSetButton({
     <button
       className="flex h-11 w-11 items-center justify-center bg-primary"
       style={{
-        clipPath: clipPathHexagon,
+        clipPath: clipPathParallelogram,
       }}
       onClick={() => {
         const repValues = dayExercise.reps;
