@@ -1,14 +1,14 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getMyProgram } from "~/server/queries/workouts";
 import { Navigation } from "~/components/ui/Navigation";
 import { LineChart } from "~/components/ui/Linechart";
 import { calculateProgramVolumeAnalytics } from "~/server/queries/utils/workoutVolume";
 import { DayList } from "~/components/workout/DayList/DayList";
+import { useProgram } from "~/context/useProgram";
 
 // * DAYS PAGE
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function Days(context: any | unknown) {
   const session = await auth();
@@ -18,7 +18,7 @@ export default async function Days(context: any | unknown) {
       `/signin?return=${encodeURIComponent(`/workout/${programId}`)}`,
     );
 
-  const program = await getMyProgram(session.user.id, Number(programId));
+  const program = await useProgram(session.user.id, Number(programId))
   if (!program) return redirect("/workout");
 
   // LineChart

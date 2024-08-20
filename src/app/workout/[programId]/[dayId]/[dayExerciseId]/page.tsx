@@ -1,6 +1,5 @@
 import {
   getLastSessionExercise,
-  getMyDayExercise,
   getMyExerciseAnalytics,
 } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
@@ -10,10 +9,11 @@ import { LineChart } from "~/components/ui/Linechart";
 import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
 import { SetInputs } from "~/components/workout/Exercise/SetInputs";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
+import { useProgram } from "~/context/useProgram";
 
 // * EXERCISE PAGE
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function Exercise(context: any | unknown) {
   const session = await auth();
@@ -27,11 +27,12 @@ export default async function Exercise(context: any | unknown) {
       `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}/${dayExerciseId}`)}`,
     );
 
-  const dayExercise = await getMyDayExercise(
-    session.user.id,
-    Number(programId),
-    Number(dayId),
-    Number(dayExerciseId),
+  const program = await useProgram(session.user.id, Number(programId));
+  const programDay = program?.programDays.find(
+    (day) => day.id === Number(dayId),
+  );
+  const dayExercise = programDay?.dayExercises.find(
+    (ex) => ex.id === Number(dayExerciseId),
   );
   if (!dayExercise) return redirect("/workout");
 

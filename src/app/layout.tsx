@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/server/auth";
-import { ThemeProvider } from "~/lib/theme-provider";
+import { ThemeProvider } from "~/context/theme-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -26,7 +26,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

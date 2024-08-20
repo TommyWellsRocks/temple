@@ -191,8 +191,11 @@ export async function getMyProgram(userId: string, programId: number) {
         with: {
           group: { columns: { id: true } },
           dayExercises: {
-            columns: { reps: true, weight: true },
-            with: { info: { columns: { name: true } } },
+            columns: { id: true, userId: true, programId: true, dayId: true, reps: true, weight: true, updatedAt: true, exerciseId: true },
+            with: {
+              info: { columns: { id: true, name: true, musclesImage: true, muscles: true, video: true } },
+              notes: { columns: { id: true, name: true, notes: true } },
+            },
           },
         },
       },

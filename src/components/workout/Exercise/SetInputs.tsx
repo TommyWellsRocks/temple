@@ -51,9 +51,7 @@ function InputArea({
           }
 
           if (label === "Reps" && dayExercise.reps[index] !== newValue) {
-            for (let i = index; i < dayExercise.reps.length; i++) {
-              dayExercise.reps[i] = newValue;
-            }
+            dayExercise.reps[index] = newValue;
             handleExerciseVolumeInput(dayExercise);
           } else if (
             label === "Weight" &&

@@ -1,10 +1,11 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getMyWeekAnalytics, getMyProgramDay } from "~/server/queries/workouts";
+import { getMyWeekAnalytics } from "~/server/queries/workouts";
 import { Navigation } from "~/components/ui/Navigation";
 import { LineChart } from "~/components/ui/Linechart";
 import { TargetMuscles } from "~/components/workout/ExerciseList/TargetMuscles";
 import { CheckList } from "~/components/workout/ExerciseList/Exercises";
+import { useProgram } from "~/context/useProgram";
 
 // * DAY OVERVIEW PAGE
 
@@ -21,11 +22,8 @@ export default async function DayOverview(context: any | unknown) {
       `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}`)}`,
     );
 
-  const programDay = await getMyProgramDay(
-    session.user.id,
-    Number(programId),
-    Number(dayId),
-  );
+  const program = await useProgram(session.user.id, Number(programId))
+  const programDay = program?.programDays.find(day => day.id === Number(dayId))
   if (!programDay) return redirect("/workout");
 
   // LineChart
