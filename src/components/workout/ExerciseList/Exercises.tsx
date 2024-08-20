@@ -6,6 +6,7 @@ import { DataTable } from "./DataTable";
 import { ActionCard } from "../ActionCard";
 import { EditButtonPopover } from "../EditButtonPopover";
 import { ExerciseForm } from "./ExerciseForm";
+import { toTitleCase } from "~/utils/helpers";
 
 async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
   const allExercises = await getExercises(programDay!.userId);
@@ -64,8 +65,8 @@ function ExerciseCard({
       imageURL="https://placehold.co/200x600"
       title={
         exercise.notes?.name
-          ? exercise.notes.name
-          : exercise.info.name
+          ? toTitleCase(exercise.notes.name)
+          : toTitleCase(exercise.info.name)
       }
       subtext={`${exercise.reps.length} Sets`}
       editButton={
