@@ -97,10 +97,7 @@ function GroupDays({ program }: { program: Program }) {
       {program!.groups.map((group) => (
         <TabsContent className="flex flex-col gap-5" value={String(group.id)} key={group.id}>
           {group.groupDays.map((day) => {
-            // Has Exercises and none have undone reps
-            const isDone =
-              day.dayExercises.length >= 1 &&
-              day.dayExercises.filter((ex) => ex.reps.includes(0)).length === 0;
+            const isDone = day.startedWorkout !== null && day.endedWorkout !== null
             // Not done and do date isn't today
             // const isFutureDay =
             //   !isDone &&

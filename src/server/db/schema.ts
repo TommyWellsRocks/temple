@@ -231,12 +231,8 @@ export const workoutProgramDays = createTable(
       .references(() => workoutProgramDayGroups.id, { onDelete: "cascade" }),
     name: varchar("name").default("New Day").notNull(),
     repeatOn: integer("repeat").array(),
-    startedWorkout: timestamp("started_at", { withTimezone: true }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    endedWorkout: timestamp("ended_at", { withTimezone: true }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
+    startedWorkout: timestamp("started_at", { withTimezone: true }),
+    endedWorkout: timestamp("ended_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

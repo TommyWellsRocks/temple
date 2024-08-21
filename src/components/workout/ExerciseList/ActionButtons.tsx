@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "~/components/ui/button";
 import { Flag, Zap } from "lucide-react";
 import type { ProgramDay } from "~/server/types";
@@ -10,19 +12,38 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
+import {
+  handleEndWorkout,
+  handleStartWorkout,
+} from "~/server/components/workout/ExerciseListActions";
+import { useState } from "react";
 
 export function ActionButtons({ programDay }: { programDay: ProgramDay }) {
-  const isStartReady = programDay?.dayExercises.filter((ex) =>
-    ex.reps.includes(0),
-  ).length;
+  const [showStartButton, setShowStartButton] = useState(
+    programDay?.startedWorkout === null,
+  );
+  const [showEndButton, setShowEndButton] = useState(
+    programDay?.startedWorkout !== null && programDay?.endedWorkout === null,
+  );
+
+  if (!showStartButton && !showEndButton) return;
 
   return (
     <div className="sticky bottom-5 flex justify-end">
-      {isStartReady ? (
-        <Button className="flex gap-1">
+      {showStartButton ? (
+        <Button
+          className="flex gap-1"
+          onClick={() => {
+            handleStartWorkout(programDay!.userId, programDay!.id);
+            setShowStartButton(false);
+            setShowEndButton(true);
+          }}
+        >
           <Zap width={15} /> Start Workout
         </Button>
-      ) : (
+      ) : null}
+
+      {showEndButton ? (
         <Drawer nested>
           <DrawerTrigger>
             <Button className="flex gap-1 border-2 border-primary bg-white text-black">
@@ -35,15 +56,23 @@ export function ActionButtons({ programDay }: { programDay: ProgramDay }) {
             </DrawerHeader>
             <DrawerFooter>
               <DrawerClose>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   <Button className="w-full bg-white text-black">Resume</Button>
-                  <Button className="w-full">Log Workout</Button>
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setShowEndButton(false);
+                      handleEndWorkout(programDay!.userId, programDay!.id);
+                    }}
+                  >
+                    Log Workout
+                  </Button>
                 </div>
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
-      )}
+      ) : null}
     </div>
   );
 }

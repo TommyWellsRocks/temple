@@ -9,7 +9,7 @@ export function ActionButtons({ dayExercise }: { dayExercise: DayExercise }) {
   return (
     <div className="sticky bottom-5 flex justify-between">
       {isDone ? (
-        <Link href={`/workout/${dayExercise?.dayId}`} className="mx-auto">
+        <Link href={`/workout/${dayExercise?.programId}/${dayExercise?.dayId}`} className="mx-auto">
           <Button className="flex gap-1 bg-white text-black">
             <ArrowLeft width={15} /> DONE
           </Button>
