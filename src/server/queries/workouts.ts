@@ -202,6 +202,7 @@ export async function getMyProgram(userId: string, programId: number) {
               exerciseId: true,
             },
             with: {
+              day: { columns: { startedWorkout: true, endedWorkout: true } },
               info: {
                 columns: {
                   id: true,
@@ -478,6 +479,7 @@ export async function getMyDayExercise(
       exerciseId: true,
     },
     with: {
+      day: { columns: { startedWorkout: true, endedWorkout: true } },
       info: {
         columns: {
           id: true,
@@ -562,23 +564,6 @@ export async function updateDayExerciseInput(dayExercise: {
       and(
         eq(workoutDayExercises.userId, dayExercise.userId),
         eq(workoutDayExercises.id, dayExercise.id),
-      ),
-    );
-}
-
-export async function updateDayExerciseSets(
-  userId: string,
-  dayExerciseId: number,
-  repValues: number[],
-  weightValues: number[],
-) {
-  await db
-    .update(workoutDayExercises)
-    .set({ reps: repValues, weight: weightValues, updatedAt: new Date() })
-    .where(
-      and(
-        eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }

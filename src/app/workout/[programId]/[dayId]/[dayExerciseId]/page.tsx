@@ -1,12 +1,12 @@
-import {
-  getLastSessionExercise,
-  getMyExerciseAnalytics,
-} from "~/server/queries/workouts";
+// import {
+//   getLastSessionExercise,
+//   getMyExerciseAnalytics,
+// } from "~/server/queries/workouts";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { Navigation } from "~/components/ui/Navigation";
-import { LineChart } from "~/components/ui/Linechart";
-import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
+// import { LineChart } from "~/components/ui/Linechart";
+// import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
 import { SetInputs } from "~/components/workout/Exercise/SetInputs";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 import { useProgram } from "~/context/useProgram";
@@ -37,14 +37,14 @@ export default async function Exercise(context: any | unknown) {
   );
   if (!dayExercise) return redirect("/workout");
 
-  const previousSessionExercise = await getLastSessionExercise(dayExercise);
+  // const previousSessionExercise = await getLastSessionExercise(dayExercise);
 
-  // LineChart
-  const [lastSessionVolume, currentSessionVolume] =
-    await getMyExerciseAnalytics(dayExercise, previousSessionExercise);
+  // // LineChart
+  // const [lastSessionVolume, currentSessionVolume] =
+  //   await getMyExerciseAnalytics(dayExercise, previousSessionExercise);
 
   // ActivityInfo
-  const setCount = dayExercise.reps.length;
+  // const setCount = dayExercise.reps.length;
 
   return (
     <>
@@ -53,7 +53,7 @@ export default async function Exercise(context: any | unknown) {
         heading={`${dayExercise.notes?.name ? dayExercise.notes.name : dayExercise.info.name}`}
       />
 
-      <LineChart
+      {/* <LineChart
         measureOf="Volume"
         xLabels={
           lastSessionVolume
@@ -71,7 +71,7 @@ export default async function Exercise(context: any | unknown) {
       <ActivityInfo
         setCount={setCount}
         previousExercise={previousSessionExercise}
-      />
+      /> */}
 
       <SetInputs dayExercise={dayExercise} />
 
