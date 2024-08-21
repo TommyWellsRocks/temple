@@ -6,6 +6,7 @@ import { LineChart } from "~/components/ui/Linechart";
 import { TargetMuscles } from "~/components/workout/ExerciseList/TargetMuscles";
 import { CheckList } from "~/components/workout/ExerciseList/Exercises";
 import { useProgram } from "~/context/useProgram";
+import { ActionButtons } from "~/components/workout/ExerciseList/ActionButtons";
 
 // * DAY OVERVIEW PAGE
 
@@ -57,6 +58,8 @@ export default async function DayOverview(context: any | unknown) {
         dayId={Number(dayId)}
         programDay={programDay}
       />
+
+      <ActionButtons programDay={programDay} />
     </>
   );
 }

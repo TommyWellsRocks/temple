@@ -10,6 +10,7 @@ import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
 import { SetInputs } from "~/components/workout/Exercise/SetInputs";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 import { useProgram } from "~/context/useProgram";
+import { ActionButtons } from "~/components/workout/Exercise/ActionButtons";
 
 // * EXERCISE PAGE
 
@@ -75,6 +76,8 @@ export default async function Exercise(context: any | unknown) {
       <SetInputs dayExercise={dayExercise} />
 
       <ExerciseTabs dayExercise={dayExercise} />
+
+      <ActionButtons dayExercise={dayExercise}/>
     </>
   );
 }
