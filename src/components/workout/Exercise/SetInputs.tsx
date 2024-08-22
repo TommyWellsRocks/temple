@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
@@ -43,34 +43,45 @@ function InputArea({
   label: "Reps" | "Weight";
 }) {
   return (
-    <div className="flex items-center gap-x-1">
-      <input
-        className="w-20 cursor-pointer bg-transparent text-center text-3xl font-bold italic"
-        type="number"
-        defaultValue={value}
-        onFocus={(e) => {
-          // Input Actions
-          if (e.target.valueAsNumber === 0 || isNaN(e.target.valueAsNumber))
-            e.target.value = "";
-        }}
-        onBlur={(e) => {
-          // Input Actions
-          let newValue = e.target.valueAsNumber;
-          if (newValue < 0 || newValue > 999 || isNaN(newValue)) {
-            newValue = 0;
-            e.target.value = String(newValue);
-          }
+    // <div className="flex items-center gap-x-1">
+    <input
+      id={`${crypto.randomUUID()}-${label}`}
+      className={`${label === "Reps" ? "w-[3ch]" : "w-[4ch]"} cursor-pointer bg-transparent text-center text-3xl font-bold italic focus:outline-none`}
+      type="number"
+      inputMode="numeric"
+      defaultValue={value}
+      onInput={(e) => {
+        if (isNaN(e.currentTarget.valueAsNumber)) e.currentTarget.value = "0";
+        else if (label === "Reps" && e.currentTarget.valueAsNumber >= 2) {
+          e.currentTarget.blur();
+        } else if (label === "Weight" && e.currentTarget.value.length > 2)
+          e.currentTarget.blur();
+      }}
+      onFocus={(e) => {
+        e.target.select();
+      }}
+      onBlur={(e) => {
+        // Input Actions
+        let newValue = e.target.valueAsNumber;
+        if (
+          newValue < 0 ||
+          newValue > 999 ||
+          isNaN(newValue) ||
+          (label === "Reps" && newValue > 20)
+        ) {
+          newValue = 0;
+          e.target.value = String(newValue);
+        }
 
-          if (isFloat(newValue)) {
-            newValue = Number(newValue.toFixed(0));
-            e.target.value = String(newValue);
-          }
+        if (isFloat(newValue)) {
+          newValue = Number(newValue.toFixed(0));
+          e.target.value = String(newValue);
+        }
 
-          changeFunc(label, index, newValue);
-        }}
-      />
-      <div className="text-base">{label === "Weight" ? "Pounds" : label}</div>
-    </div>
+        changeFunc(label, index, newValue);
+      }}
+    />
+    // </div>
   );
 }
 
@@ -102,7 +113,7 @@ function InputRows({
       </button> */}
             <div className="flex items-center gap-x-2 min-[340px]:gap-x-3">
               <div
-                className={`-mr-3 flex h-10 w-10 items-center justify-center font-semibold ${isLogged ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
+                className={`flex h-10 w-10 items-center justify-center font-semibold ${isLogged ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
                 style={{
                   clipPath: clipPathParallelogram,
                 }}
@@ -117,6 +128,7 @@ function InputRows({
                 changeFunc={handleInputChangeFunc}
                 label="Reps"
               />
+              <span className="text-base">Reps</span>
 
               <div className="h-4 rotate-[20deg] border border-gray-800"></div>
 
@@ -127,6 +139,7 @@ function InputRows({
                 changeFunc={handleInputChangeFunc}
                 label="Weight"
               />
+              <span className="text-base">Pounds</span>
             </div>
           </div>
         );
@@ -150,7 +163,7 @@ function EditSetButton({
       }}
       onClick={() => {
         setDayEx((prevDayEx: DayExercise) => {
-          if (!prevDayEx) return
+          if (!prevDayEx) return;
           const newDayEx = { ...prevDayEx };
           if (method === "Add") {
             newDayEx.reps?.push(0);
