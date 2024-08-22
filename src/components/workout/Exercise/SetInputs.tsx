@@ -150,6 +150,7 @@ function EditSetButton({
       }}
       onClick={() => {
         setDayEx((prevDayEx: DayExercise) => {
+          if (!prevDayEx) return
           const newDayEx = { ...prevDayEx };
           if (method === "Add") {
             newDayEx.reps?.push(0);
@@ -160,6 +161,7 @@ function EditSetButton({
             newDayEx.reps?.pop();
             newDayEx.weight?.pop();
           }
+          handleExerciseVolumeInput(newDayEx);
           return newDayEx;
         });
       }}
