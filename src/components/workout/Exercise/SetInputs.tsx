@@ -3,6 +3,7 @@
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
+import { useActiveInputs } from "~/context/ActiveExerciseInputContext";
 import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
 import { isFloat } from "~/utils/helpers";
@@ -98,11 +99,14 @@ function InputRows({
 }) {
   if (!dayExercise) return;
 
+  const { loggedSetList, activeSetIndex } = useActiveInputs()!;
+
   return (
     <div className="flex flex-col gap-y-5 text-2xl font-light text-gray-600">
       {dayExercise.reps.map((repCount, index) => {
         const weightCount = dayExercise.weight[index]!;
-        const isLogged = true;
+        const isLogged = loggedSetList.includes(index);
+        const isActiveSet = index === activeSetIndex;
         return (
           <div className="flex flex-col items-end" key={crypto.randomUUID()}>
             {/* <button
@@ -111,7 +115,9 @@ function InputRows({
       >
         <Timer /> <SetTimer />
       </button> */}
-            <div className="flex items-center gap-x-2 min-[340px]:gap-x-3">
+            <div
+              className={`flex items-center gap-x-2 min-[340px]:gap-x-3 ${isActiveSet ? "text-gray-200" : null}`}
+            >
               <div
                 className={`flex h-10 w-10 items-center justify-center font-semibold ${isLogged ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
                 style={{
@@ -155,6 +161,8 @@ function EditSetButton({
   method: "Add" | "Delete";
   setDayEx: (...args: any) => any;
 }) {
+  const { setLoggedSetList, activeSetIndex, setActiveSetIndex, inputLen } =
+    useActiveInputs()!;
   return (
     <button
       className="flex h-11 w-11 items-center justify-center bg-primary"
@@ -173,6 +181,17 @@ function EditSetButton({
           } else {
             newDayEx.reps?.pop();
             newDayEx.weight?.pop();
+            if (activeSetIndex === inputLen) {
+              setActiveSetIndex((prevActiveIndex) => prevActiveIndex - 1);
+              setLoggedSetList((prevLoggedSets) => {
+                if (prevLoggedSets.length >= 1) {
+                  const newLoggedSets = [...prevLoggedSets];
+                  newLoggedSets.pop();
+                  return newLoggedSets;
+                }
+                return prevLoggedSets;
+              });
+            }
           }
           return newDayEx;
         });
@@ -187,9 +206,11 @@ export function SetInputs({ dayExercise }: { dayExercise: DayExercise }) {
   if (!dayExercise) return;
 
   const [dayEx, setDayEx] = useState(dayExercise);
+  const { setInputLen } = useActiveInputs()!;
 
   useEffect(() => {
     handleExerciseVolumeInput(dayEx);
+    setInputLen(dayEx.reps.length);
   }, [dayEx]);
 
   function handleInputChange(

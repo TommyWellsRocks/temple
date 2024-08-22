@@ -11,6 +11,7 @@ import { SetInputs } from "~/components/workout/Exercise/SetInputs";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 import { useProgram } from "~/context/useProgram";
 import { ActionButtons } from "~/components/workout/Exercise/ActionButtons";
+import { ActiveInputsProvider } from "~/context/ActiveExerciseInputContext";
 
 // * EXERCISE PAGE
 
@@ -73,11 +74,13 @@ export default async function Exercise(context: any | unknown) {
         previousExercise={previousSessionExercise}
       /> */}
 
-      <SetInputs dayExercise={dayExercise} />
+      <ActiveInputsProvider>
+        <SetInputs dayExercise={dayExercise} />
 
-      <ExerciseTabs dayExercise={dayExercise} />
+        <ExerciseTabs dayExercise={dayExercise} />
 
-      <ActionButtons dayExercise={dayExercise}/>
+        <ActionButtons dayExercise={dayExercise} />
+      </ActiveInputsProvider>
     </>
   );
 }
