@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { editExerciseNote } from "~/server/queries/exercises";
 import {
   updateDayExerciseInput,
@@ -33,8 +32,5 @@ export async function handleExerciseNoteInput(
     dayExercise.exerciseId,
     noteValue,
     noteId,
-  );
-  revalidatePath(
-    `/workout/${dayExercise.programId}/${dayExercise.dayId}/${dayExercise.id}`,
   );
 }
