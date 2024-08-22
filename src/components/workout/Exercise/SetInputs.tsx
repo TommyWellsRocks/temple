@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
@@ -174,7 +174,6 @@ function EditSetButton({
             newDayEx.reps?.pop();
             newDayEx.weight?.pop();
           }
-          handleExerciseVolumeInput(newDayEx);
           return newDayEx;
         });
       }}
@@ -189,6 +188,10 @@ export function SetInputs({ dayExercise }: { dayExercise: DayExercise }) {
 
   const [dayEx, setDayEx] = useState(dayExercise);
 
+  useEffect(() => {
+    handleExerciseVolumeInput(dayEx);
+  }, [dayEx]);
+
   function handleInputChange(
     label: "Reps" | "Weight",
     index: number,
@@ -198,12 +201,10 @@ export function SetInputs({ dayExercise }: { dayExercise: DayExercise }) {
       const newDayEx = { ...prevDayEx };
       if (label === "Reps" && newDayEx.reps[index] !== value) {
         newDayEx.reps[index] = value;
-        handleExerciseVolumeInput(newDayEx);
       } else if (label === "Weight" && newDayEx.weight[index] !== value) {
         for (let i = index; i < newDayEx.weight.length; i++) {
           newDayEx.weight[i] = value;
         }
-        handleExerciseVolumeInput(newDayEx);
       }
       return newDayEx;
     });
