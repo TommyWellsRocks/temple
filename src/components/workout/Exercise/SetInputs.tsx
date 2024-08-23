@@ -196,7 +196,8 @@ export function SetInputs() {
       (label === "Reps" && dayEx?.reps[index] !== value) ||
       (label === "Weight" && dayEx?.weight[index] !== value)
     )
-      setDayEx((prevDayEx: any) => {
+      setDayEx((prevDayEx) => {
+        if (!prevDayEx) return
         const newDayEx = { ...prevDayEx };
         if (label === "Reps") {
           newDayEx.reps[index] = value;

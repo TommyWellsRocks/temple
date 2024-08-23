@@ -77,7 +77,7 @@ export default async function Exercise(context: any | unknown) {
       <ActiveInputsProvider dayExercise={dayExercise}>
         <SetInputs />
 
-        <ExerciseTabs dayExercise={dayExercise} />
+        <ExerciseTabs />
 
         <ActionButtons />
       </ActiveInputsProvider>

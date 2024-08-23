@@ -37,7 +37,8 @@ export function ActionButtons() {
             className="w-2/3"
             variant={"secondary"}
             onClick={() => {
-              setDayEx((prevDayEx: any) => {
+              setDayEx((prevDayEx) => {
+                if (!prevDayEx) return
                 const newDayEx = { ...prevDayEx };
                 newDayEx.loggedSetsCount = newDayEx.loggedSetsCount + 1;
                 return newDayEx;
@@ -50,7 +51,8 @@ export function ActionButtons() {
             className="rounded-full px-2"
             variant={"outline"}
             onClick={() => {
-              setDayEx((prevDayEx: any) => {
+              setDayEx((prevDayEx) => {
+                if (!prevDayEx) return
                 const newDayEx = { ...prevDayEx };
                 newDayEx.loggedSetsCount = newDayEx.reps?.length;
                 return newDayEx;

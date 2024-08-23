@@ -1,36 +1,35 @@
 "use client";
 
-import type { DayExercise } from "~/server/types";
-import { handleExerciseNoteInput } from "~/server/components/workout/ExerciseActions";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import Link from "next/link";
 import Image from "next/image";
 import YouTubeURL from "public/content/images/workout/youtube.svg";
+import { useActiveInputs } from "~/context/ActiveExerciseInputContext";
+import { handleExerciseNoteInput } from "~/server/components/workout/ExerciseActions";
 
-function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
-  const haveExistingNote = Boolean(
-    dayExercise?.notes?.notes,
-  );
-  let notesValue = haveExistingNote
-    ? dayExercise!.notes.notes
-    : "No notes for this exercise. Click here to start one!";
+function NotesTabContent() {
+  const { dayEx } = useActiveInputs()!;
+  if (!dayEx) return;
+
+  let defaultValue =
+    dayEx.notes.notes ||
+    "No notes for this exercise. Click here to start one!";
 
   return (
     <TabsContent value="notes">
       <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
         <Textarea
           className="border-none bg-transparent"
-          defaultValue={notesValue!}
+          defaultValue={defaultValue}
           onBlur={(e) => {
             const newValue = e.target.value;
-            if (newValue !== notesValue) {
-              notesValue = newValue;
+            if (newValue !== defaultValue) {
+              defaultValue = newValue;
               handleExerciseNoteInput(
-                dayExercise!,
+                dayEx,
                 newValue,
-                haveExistingNote ? dayExercise!.notes.id : undefined,
+                dayEx.notes.id ? dayEx.notes.id : undefined,
               );
             }
           }}
@@ -40,13 +39,10 @@ function NotesTabContent({ dayExercise }: { dayExercise: DayExercise }) {
   );
 }
 
-function InfoTabContent({
-  instructionVideo,
-  exerciseName,
-}: {
-  instructionVideo: string | null;
-  exerciseName: string;
-}) {
+function InfoTabContent() {
+  const { dayEx } = useActiveInputs()!;
+  if (!dayEx) return;
+
   return (
     <TabsContent value="info">
       <div className="relative flex flex-col items-center rounded-xl bg-black bg-opacity-15 px-3 py-2 text-base">
@@ -55,9 +51,9 @@ function InfoTabContent({
           <Link
             target="_blank"
             href={
-              instructionVideo
-                ? instructionVideo
-                : `https://www.youtube.com/results?search_query=${encodeURI(`How to do a ${exerciseName} exercise`)}&sp=EgIYAQ%253D%253D`
+              dayEx.info.video
+                ? dayEx.info.video
+                : `https://www.youtube.com/results?search_query=${encodeURI(`How to do a ${dayEx.info.name} exercise`)}&sp=EgIYAQ%253D%253D`
             }
           >
             <Image
@@ -72,19 +68,16 @@ function InfoTabContent({
   );
 }
 
-function MusclesTabContent({
-  muscleURL,
-  muscles,
-}: {
-  muscleURL: string | null;
-  muscles: string[] | null;
-}) {
+function MusclesTabContent() {
+  const { dayEx } = useActiveInputs()!;
+  if (!dayEx) return;
+
   return (
     <TabsContent value="muscles">
       <div className="flex flex-col items-center gap-4 rounded-xl bg-black bg-opacity-15 px-3 py-2">
-        {muscleURL ? (
+        {dayEx.info.musclesImage ? (
           <Image
-            src={muscleURL}
+            src={dayEx.info.musclesImage}
             alt="Target Muscle Image"
             width={200}
             height={200}
@@ -98,8 +91,7 @@ function MusclesTabContent({
 function HistoryTabContent() {
   return (
     <TabsContent value="history">
-      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
-      </div>
+      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm"></div>
     </TabsContent>
   );
 }
@@ -117,30 +109,24 @@ function TabSelectors() {
   );
 }
 
-function TabContents({ dayExercise }: { dayExercise: DayExercise }) {
+function TabContents() {
   return (
     <>
-      <NotesTabContent dayExercise={dayExercise} />
-      <InfoTabContent
-        instructionVideo={dayExercise!.info.video}
-        exerciseName={dayExercise!.info.name}
-      />
-      <MusclesTabContent
-        muscleURL={dayExercise!.info.musclesImage}
-        muscles={dayExercise!.info.muscles}
-      />
+      <NotesTabContent />
+      <InfoTabContent />
+      <MusclesTabContent />
       <HistoryTabContent />
     </>
   );
 }
 
-export function ExerciseTabs({ dayExercise }: { dayExercise: DayExercise }) {
+export function ExerciseTabs() {
   return (
     <section>
       <Tabs defaultValue="notes">
         <TabSelectors />
 
-        <TabContents dayExercise={dayExercise} />
+        <TabContents />
       </Tabs>
     </section>
   );
