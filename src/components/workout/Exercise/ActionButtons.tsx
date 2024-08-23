@@ -1,38 +1,29 @@
 "use client";
 
-import type { DayExercise } from "~/server/types";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ArrowLeft, CheckCheck } from "lucide-react";
 import { useActiveInputs } from "~/context/ActiveExerciseInputContext";
 
-export function ActionButtons({ dayExercise }: { dayExercise: DayExercise }) {
+export function ActionButtons() {
+  const { dayEx, setDayEx } = useActiveInputs()!;
+  if (!dayEx) return;
+
   const dayNotStarted =
-    dayExercise?.day.startedWorkout === null &&
-    dayExercise?.day.endedWorkout === null;
+    dayEx.day.startedWorkout === null && dayEx.day.endedWorkout === null;
   if (dayNotStarted) return;
 
   const dayIsDone =
-    dayExercise?.day.startedWorkout !== null &&
-    dayExercise?.day.endedWorkout !== null;
+    dayEx.day.startedWorkout !== null && dayEx.day.endedWorkout !== null;
   if (dayIsDone) return;
 
-  const {
-    loggedSetList,
-    setLoggedSetList,
-    activeSetIndex,
-    setActiveSetIndex,
-    inputLen,
-    setInputLen,
-  } = useActiveInputs()!;
-
-  const allLogged = loggedSetList.length === inputLen;
+  const allLogged = dayEx.loggedSetsCount === dayEx.reps.length;
 
   return (
     <div className="sticky bottom-5 flex justify-between">
       {allLogged ? (
         <Link
-          href={`/workout/${dayExercise?.programId}/${dayExercise?.dayId}`}
+          href={`/workout/${dayEx.programId}/${dayEx.dayId}`}
           className="mx-auto"
         >
           <Button className="flex gap-1 bg-white text-black">
@@ -46,10 +37,10 @@ export function ActionButtons({ dayExercise }: { dayExercise: DayExercise }) {
             className="w-2/3"
             variant={"secondary"}
             onClick={() => {
-              setActiveSetIndex((prevActiveSet: number) => prevActiveSet + 1);
-              setLoggedSetList((prevLoggedSets: number[]) => {
-                const newLoggedSets = [...prevLoggedSets, activeSetIndex];
-                return newLoggedSets;
+              setDayEx((prevDayEx: any) => {
+                const newDayEx = { ...prevDayEx };
+                newDayEx.loggedSetsCount = newDayEx.loggedSetsCount + 1;
+                return newDayEx;
               });
             }}
           >
@@ -59,12 +50,10 @@ export function ActionButtons({ dayExercise }: { dayExercise: DayExercise }) {
             className="rounded-full px-2"
             variant={"outline"}
             onClick={() => {
-              setActiveSetIndex(dayExercise.reps.length);
-              setLoggedSetList(() => {
-                const newLoggedSets = [];
-                for (let i = 0; i < dayExercise.reps.length; i++)
-                  newLoggedSets.push(i);
-                return newLoggedSets;
+              setDayEx((prevDayEx: any) => {
+                const newDayEx = { ...prevDayEx };
+                newDayEx.loggedSetsCount = newDayEx.reps?.length;
+                return newDayEx;
               });
             }}
           >

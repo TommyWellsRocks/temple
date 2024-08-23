@@ -267,6 +267,7 @@ export const workoutDayExercises = createTable(
       .references(() => exercises.id, { onDelete: "cascade" }),
     reps: integer("reps").array().notNull(),
     weight: integer("weight").array().notNull(),
+    loggedSetsCount: integer("logged_sets_count").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

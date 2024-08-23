@@ -74,12 +74,12 @@ export default async function Exercise(context: any | unknown) {
         previousExercise={previousSessionExercise}
       /> */}
 
-      <ActiveInputsProvider>
-        <SetInputs dayExercise={dayExercise} />
+      <ActiveInputsProvider dayExercise={dayExercise}>
+        <SetInputs />
 
         <ExerciseTabs dayExercise={dayExercise} />
 
-        <ActionButtons dayExercise={dayExercise} />
+        <ActionButtons />
       </ActiveInputsProvider>
     </>
   );

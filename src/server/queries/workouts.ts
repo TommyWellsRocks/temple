@@ -200,6 +200,7 @@ export async function getMyProgram(userId: string, programId: number) {
               weight: true,
               updatedAt: true,
               exerciseId: true,
+              loggedSetsCount: true,
             },
             with: {
               day: { columns: { startedWorkout: true, endedWorkout: true } },
@@ -477,6 +478,7 @@ export async function getMyDayExercise(
       weight: true,
       updatedAt: true,
       exerciseId: true,
+      loggedSetsCount: true,
     },
     with: {
       day: { columns: { startedWorkout: true, endedWorkout: true } },
@@ -564,6 +566,35 @@ export async function updateDayExerciseInput(dayExercise: {
       and(
         eq(workoutDayExercises.userId, dayExercise.userId),
         eq(workoutDayExercises.id, dayExercise.id),
+      ),
+    );
+}
+
+export async function updateExercise(dayExercise: DayExercise) {
+  if (!dayExercise) return;
+  await db
+    .update(workoutDayExercises)
+    .set({ ...dayExercise, updatedAt: new Date() })
+    .where(
+      and(
+        eq(workoutDayExercises.userId, dayExercise.userId),
+        eq(workoutDayExercises.id, dayExercise.id),
+      ),
+    );
+}
+
+export async function updateLoggedSets(
+  id: number,
+  userId: string,
+  loggedSetsCount: number,
+) {
+  await db
+    .update(workoutDayExercises)
+    .set({ loggedSetsCount: loggedSetsCount, updatedAt: new Date() })
+    .where(
+      and(
+        eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.id, id),
       ),
     );
 }

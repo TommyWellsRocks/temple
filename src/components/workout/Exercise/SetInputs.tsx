@@ -1,10 +1,8 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { useActiveInputs } from "~/context/ActiveExerciseInputContext";
-import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
 import { isFloat } from "~/utils/helpers";
 // import { Timer } from "lucide-react";
@@ -44,7 +42,6 @@ function InputArea({
   label: "Reps" | "Weight";
 }) {
   return (
-    // <div className="flex items-center gap-x-1">
     <input
       id={`${crypto.randomUUID()}-${label}`}
       className={`${label === "Reps" ? "w-[3ch]" : "w-[4ch]"} cursor-pointer bg-transparent text-center text-3xl font-bold italic focus:outline-none`}
@@ -79,34 +76,31 @@ function InputArea({
           e.target.value = String(newValue);
         }
 
+        // Update State
         changeFunc(label, index, newValue);
       }}
     />
-    // </div>
   );
 }
 
 function InputRows({
-  dayExercise,
   handleInputChangeFunc,
 }: {
-  dayExercise: DayExercise;
   handleInputChangeFunc: (
     label: "Reps" | "Weight",
     index: number,
     value: number,
   ) => void;
 }) {
-  if (!dayExercise) return;
-
-  const { loggedSetList, activeSetIndex } = useActiveInputs()!;
+  const { dayEx } = useActiveInputs()!;
+  if (!dayEx) return;
 
   return (
     <div className="flex flex-col gap-y-5 text-2xl font-light text-gray-600">
-      {dayExercise.reps.map((repCount, index) => {
-        const weightCount = dayExercise.weight[index]!;
-        const isLogged = loggedSetList.includes(index);
-        const isActiveSet = index === activeSetIndex;
+      {dayEx.reps.map((repCount, index) => {
+        const weightCount = dayEx.weight[index]!;
+        const isLogged = dayEx.loggedSetsCount > index;
+        const isActiveSet = index === dayEx.loggedSetsCount;
         return (
           <div className="flex flex-col items-end" key={crypto.randomUUID()}>
             {/* <button
@@ -154,15 +148,10 @@ function InputRows({
   );
 }
 
-function EditSetButton({
-  method,
-  setDayEx,
-}: {
-  method: "Add" | "Delete";
-  setDayEx: (...args: any) => any;
-}) {
-  const { setLoggedSetList, activeSetIndex, setActiveSetIndex, inputLen } =
-    useActiveInputs()!;
+function EditSetButton({ method }: { method: "Add" | "Delete" }) {
+  const { dayEx, setDayEx } = useActiveInputs()!;
+  if (!dayEx) return;
+
   return (
     <button
       className="flex h-11 w-11 items-center justify-center bg-primary"
@@ -174,23 +163,15 @@ function EditSetButton({
           if (!prevDayEx) return;
           const newDayEx = { ...prevDayEx };
           if (method === "Add") {
-            newDayEx.reps?.push(0);
-            newDayEx.weight?.push(
-              newDayEx.weight[newDayEx.weight?.length - 1] || 0,
+            newDayEx.reps.push(0);
+            newDayEx.weight.push(
+              newDayEx.weight[newDayEx.weight.length - 1] || 0,
             );
           } else {
-            newDayEx.reps?.pop();
-            newDayEx.weight?.pop();
-            if (activeSetIndex === inputLen) {
-              setActiveSetIndex((prevActiveIndex) => prevActiveIndex - 1);
-              setLoggedSetList((prevLoggedSets) => {
-                if (prevLoggedSets.length >= 1) {
-                  const newLoggedSets = [...prevLoggedSets];
-                  newLoggedSets.pop();
-                  return newLoggedSets;
-                }
-                return prevLoggedSets;
-              });
+            newDayEx.reps.pop();
+            newDayEx.weight.pop();
+            if (prevDayEx.loggedSetsCount > prevDayEx.reps.length) {
+              newDayEx.loggedSetsCount--;
             }
           }
           return newDayEx;
@@ -202,45 +183,39 @@ function EditSetButton({
   );
 }
 
-export function SetInputs({ dayExercise }: { dayExercise: DayExercise }) {
-  if (!dayExercise) return;
-
-  const [dayEx, setDayEx] = useState(dayExercise);
-  const { setInputLen } = useActiveInputs()!;
-
-  useEffect(() => {
-    handleExerciseVolumeInput(dayEx);
-    setInputLen(dayEx.reps.length);
-  }, [dayEx]);
+export function SetInputs() {
+  const { dayEx, setDayEx } = useActiveInputs()!;
+  if (!dayEx) return;
 
   function handleInputChange(
     label: "Reps" | "Weight",
     index: number,
     value: number,
   ) {
-    setDayEx((prevDayEx) => {
-      const newDayEx = { ...prevDayEx };
-      if (label === "Reps" && newDayEx.reps[index] !== value) {
-        newDayEx.reps[index] = value;
-      } else if (label === "Weight" && newDayEx.weight[index] !== value) {
-        for (let i = index; i < newDayEx.weight.length; i++) {
-          newDayEx.weight[i] = value;
+    if (
+      (label === "Reps" && dayEx?.reps[index] !== value) ||
+      (label === "Weight" && dayEx?.weight[index] !== value)
+    )
+      setDayEx((prevDayEx: any) => {
+        const newDayEx = { ...prevDayEx };
+        if (label === "Reps") {
+          newDayEx.reps[index] = value;
+        } else if (label === "Weight") {
+          for (let i = index; i < newDayEx.weight.length; i++) {
+            newDayEx.weight[i] = value;
+          }
         }
-      }
-      return newDayEx;
-    });
+        return newDayEx;
+      });
   }
 
   return (
     <section className="flex flex-col items-center justify-center gap-y-5">
-      <InputRows
-        dayExercise={dayEx}
-        handleInputChangeFunc={handleInputChange}
-      />
+      <InputRows handleInputChangeFunc={handleInputChange} />
 
       <div className="mb-10 flex gap-x-10">
-        <EditSetButton method="Add" setDayEx={setDayEx} />
-        <EditSetButton method="Delete" setDayEx={setDayEx} />
+        <EditSetButton method="Add" />
+        <EditSetButton method="Delete" />
       </div>
     </section>
   );

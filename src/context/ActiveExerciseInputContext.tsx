@@ -1,37 +1,35 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { handleUpdateExercise } from "~/server/components/workout/ExerciseActions";
+import type { DayExercise } from "~/server/types";
 
 const ActiveInputsContext = createContext<
   | {
-      loggedSetList: number[];
-      setLoggedSetList: React.Dispatch<React.SetStateAction<number[]>>;
-      activeSetIndex: number;
-      setActiveSetIndex: React.Dispatch<React.SetStateAction<number>>;
-      inputLen: number;
-      setInputLen: React.Dispatch<React.SetStateAction<number>>;
+      dayEx: DayExercise;
+      setDayEx: React.Dispatch<React.SetStateAction<DayExercise>>;
     }
   | undefined
 >(undefined);
 
 export function ActiveInputsProvider({
+  dayExercise,
   children,
 }: {
+  dayExercise: DayExercise;
   children: React.ReactNode;
 }) {
-  const [loggedSetList, setLoggedSetList] = useState<number[]>([]);
-  const [activeSetIndex, setActiveSetIndex] = useState<number>(0);
-  const [inputLen, setInputLen] = useState<number>(0);
+  const [dayEx, setDayEx] = useState(dayExercise);
+
+  useEffect(() => {
+    handleUpdateExercise(dayEx);
+  }, [dayEx]);
 
   return (
     <ActiveInputsContext.Provider
       value={{
-        loggedSetList,
-        setLoggedSetList,
-        activeSetIndex,
-        setActiveSetIndex,
-        inputLen,
-        setInputLen,
+        dayEx,
+        setDayEx,
       }}
     >
       {children}
