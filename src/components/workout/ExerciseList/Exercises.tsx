@@ -87,7 +87,7 @@ function ExerciseCard({
   );
 }
 
-function Exercises({
+function ExerciseItems({
   userId,
   programDay,
   programId,
@@ -113,26 +113,17 @@ function Exercises({
   );
 }
 
-export async function CheckList({
-  userId,
-  programId,
-  dayId,
-  programDay,
-}: {
-  userId: string;
-  programId: number;
-  dayId: number;
-  programDay: ProgramDay;
-}) {
+export async function Exercises({ programDay }: { programDay: ProgramDay }) {
+  if (!programDay) return;
   return (
     <section className="flex flex-col gap-y-2">
       <ExercisesHeader programDay={programDay} />
 
-      <Exercises
-        userId={userId}
+      <ExerciseItems
+        userId={programDay.userId}
         programDay={programDay}
-        programId={programId}
-        dayId={dayId}
+        programId={programDay.programId}
+        dayId={programDay.id}
       />
     </section>
   );

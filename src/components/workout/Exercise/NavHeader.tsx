@@ -1,24 +1,24 @@
 import { Navigation } from "~/components/ui/Navigation";
 import { EditButtonPopover } from "../EditButtonPopover";
 import { DayForm } from "../DayList/DayForm";
-import { ProgramDay } from "~/server/types";
+import type { ProgramDay } from "~/server/types";
 
-export function NavHeader({ day }: { day: ProgramDay }) {
-  if (!day) return;
+export function NavHeader({ programDay }: { programDay: ProgramDay }) {
+  if (!programDay) return;
   return (
     <Navigation
-      backURL={`/workout/${day.programId}`}
-      heading={`${day.name} Overview`}
+      backURL={`/workout/${programDay.programId}`}
+      heading={`${programDay.name} Overview`}
       editButton={
         <EditButtonPopover
           title="Edit Exercise"
           description={`Remember to click save when you're done.`}
           formComponent={
             <DayForm
-              userId={day.userId}
-              programId={day.programId}
-              groupId={day.groupId}
-              dayInfo={day}
+              userId={programDay.userId}
+              programId={programDay.programId}
+              groupId={programDay.groupId}
+              dayInfo={programDay}
             />
           }
         />

@@ -1,7 +1,7 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { TargetMuscles } from "~/components/workout/ExerciseList/TargetMuscles";
-import { CheckList } from "~/components/workout/ExerciseList/Exercises";
+import { Exercises } from "~/components/workout/ExerciseList/Exercises";
 import { useProgram } from "~/context/useProgram";
 import { ActionButtons } from "~/components/workout/ExerciseList/ActionButtons";
 import { NavHeader } from "~/components/workout/Exercise/NavHeader";
@@ -27,22 +27,13 @@ export default async function DayOverview(context: any | unknown) {
   );
   if (!programDay) return redirect("/workout");
 
-  const muscleURLs = programDay.dayExercises.map((ex) =>
-    ex.info.musclesImage ? ex.info.musclesImage : "",
-  );
-
   return (
     <>
-      <NavHeader day={programDay} />
+      <NavHeader programDay={programDay} />
 
-      <TargetMuscles muscleURLs={muscleURLs} />
+      <TargetMuscles programDay={programDay} />
 
-      <CheckList
-        userId={session.user.id}
-        programId={Number(programId)}
-        dayId={Number(dayId)}
-        programDay={programDay}
-      />
+      <Exercises programDay={programDay} />
 
       <ActionButtons programDay={programDay} />
     </>
