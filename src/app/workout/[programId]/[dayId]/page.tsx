@@ -10,7 +10,7 @@ import { ActionButtons } from "~/components/workout/ExerciseList/ActionButtons";
 
 // * DAY OVERVIEW PAGE
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function DayOverview(context: any | unknown) {
   const session = await auth();
@@ -23,8 +23,10 @@ export default async function DayOverview(context: any | unknown) {
       `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}`)}`,
     );
 
-  const program = await useProgram(session.user.id, Number(programId))
-  const programDay = program?.programDays.find(day => day.id === Number(dayId))
+  const program = await useProgram(session.user.id, Number(programId));
+  const programDay = program?.programDays.find(
+    (day) => day.id === Number(dayId),
+  );
   if (!programDay) return redirect("/workout");
 
   // LineChart

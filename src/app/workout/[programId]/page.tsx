@@ -18,7 +18,7 @@ export default async function Days(context: any | unknown) {
       `/signin?return=${encodeURIComponent(`/workout/${programId}`)}`,
     );
 
-  const program = await useProgram(session.user.id, Number(programId))
+  const program = await useProgram(session.user.id, Number(programId));
   if (!program) return redirect("/workout");
 
   // LineChart

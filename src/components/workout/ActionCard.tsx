@@ -20,7 +20,7 @@ export function ActionCard({
     <div className="relative flex items-center">
       <Link
         href={linkTo}
-        className={`flex w-full items-center gap-x-4 rounded-lg pr-12 ${isDark ? "bg-doneDark" : "bg-neutral-800"} ${imageURL ? "" : "pl-4 py-2"}`}
+        className={`flex w-full items-center gap-x-4 rounded-lg pr-12 ${isDark ? "bg-doneDark text-muted-foreground" : "bg-undoneDark"} ${imageURL ? "" : "pl-4 py-2"}`}
       >
         {imageURL ? (
           <Image
@@ -33,7 +33,7 @@ export function ActionCard({
         ) : null}
         <div className="flex flex-col">
           <span>{title}</span>
-          <span className="text-base font-light text-gray-500">{subtext}</span>
+          <span className="text-base font-light text-muted-foreground">{subtext}</span>
         </div>
       </Link>
       <div className="absolute right-1 mx-2 pb-1">{editButton}</div>

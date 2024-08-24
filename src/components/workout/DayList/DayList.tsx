@@ -67,7 +67,7 @@ function GroupsInfo({
   if (!program) return;
 
   return (
-    <div className="flex flex-col justify-between gap-2 min-[450px]:flex-row">
+    <div className="mb-5 flex flex-col justify-between gap-2 min-[450px]:flex-row">
       <div className="min-w-[40px]" />
 
       <GroupList userId={userId} programId={programId} program={program} />
@@ -95,9 +95,14 @@ function GroupDays({ program }: { program: Program }) {
   return (
     <>
       {program!.groups.map((group) => (
-        <TabsContent className="flex flex-col gap-5" value={String(group.id)} key={group.id}>
+        <TabsContent
+          className="flex flex-col gap-y-4"
+          value={String(group.id)}
+          key={group.id}
+        >
           {group.groupDays.map((day) => {
-            const isDone = day.startedWorkout !== null && day.endedWorkout !== null
+            const isDone =
+              day.startedWorkout !== null && day.endedWorkout !== null;
             // Not done and do date isn't today
             // const isFutureDay =
             //   !isDone &&

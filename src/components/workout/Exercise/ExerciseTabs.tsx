@@ -13,12 +13,12 @@ function NotesTabContent() {
   if (!dayEx) return;
 
   let defaultValue =
-    dayEx.notes.notes ||
+    dayEx.notes?.notes ||
     "No notes for this exercise. Click here to start one!";
 
   return (
     <TabsContent value="notes">
-      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm">
+      <div className="flex rounded-xl bg-secondary px-3 py-2 text-sm">
         <Textarea
           className="border-none bg-transparent"
           defaultValue={defaultValue}
@@ -45,7 +45,7 @@ function InfoTabContent() {
 
   return (
     <TabsContent value="info">
-      <div className="relative flex flex-col items-center rounded-xl bg-black bg-opacity-15 px-3 py-2 text-base">
+      <div className="relative flex flex-col items-center rounded-xl bg-secondary px-3 py-2 text-base">
         <span className="absolute bottom-1/4">Click Me To Search</span>
         <div className="max-w-[440px]">
           <Link
@@ -74,7 +74,7 @@ function MusclesTabContent() {
 
   return (
     <TabsContent value="muscles">
-      <div className="flex flex-col items-center gap-4 rounded-xl bg-black bg-opacity-15 px-3 py-2">
+      <div className="flex flex-col items-center gap-4 rounded-xl bg-secondary px-3 py-2">
         {dayEx.info.musclesImage ? (
           <Image
             src={dayEx.info.musclesImage}
@@ -91,7 +91,7 @@ function MusclesTabContent() {
 function HistoryTabContent() {
   return (
     <TabsContent value="history">
-      <div className="flex rounded-xl bg-black bg-opacity-15 px-3 py-2 text-sm"></div>
+      <div className="flex rounded-xl bg-secondary px-3 py-2 text-sm"></div>
     </TabsContent>
   );
 }
@@ -99,7 +99,7 @@ function HistoryTabContent() {
 function TabSelectors() {
   return (
     <div className="flex justify-center">
-      <TabsList className="bg-black">
+      <TabsList>
         <TabsTrigger value="notes">Notes</TabsTrigger>
         <TabsTrigger value="info">Info</TabsTrigger>
         <TabsTrigger value="muscles">Muscles</TabsTrigger>

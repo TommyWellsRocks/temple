@@ -12,7 +12,7 @@ import { ProgramForm } from "~/components/workout/ProgramList/ProgramForm";
 
 // * PROGRAMS PAGE
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function Programs() {
   const session = await auth();

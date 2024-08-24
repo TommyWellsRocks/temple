@@ -20,7 +20,7 @@ export function ActionButtons() {
   const allLogged = dayEx.loggedSetsCount === dayEx.reps.length;
 
   return (
-    <div className="sticky bottom-5 flex justify-between">
+    <div className="sticky bottom-5 flex justify-between gap-x-4">
       {allLogged ? (
         <Link
           href={`/workout/${dayEx.programId}/${dayEx.dayId}`}
@@ -34,8 +34,7 @@ export function ActionButtons() {
         <>
           <div className="w-[42px]" />
           <Button
-            className="w-2/3"
-            variant={"secondary"}
+            className="w-full"
             onClick={() => {
               setDayEx((prevDayEx) => {
                 if (!prevDayEx) return
