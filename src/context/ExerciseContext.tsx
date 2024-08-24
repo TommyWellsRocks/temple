@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { handleUpdateExercise } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
 
-const ActiveInputsContext = createContext<
+const ExerciseContext = createContext<
   | {
       dayEx: DayExercise;
       setDayEx: React.Dispatch<React.SetStateAction<DayExercise>>;
@@ -12,7 +12,7 @@ const ActiveInputsContext = createContext<
   | undefined
 >(undefined);
 
-export function ActiveInputsProvider({
+export function ExerciseProvider({
   dayExercise,
   children,
 }: {
@@ -26,17 +26,17 @@ export function ActiveInputsProvider({
   }, [dayEx]);
 
   return (
-    <ActiveInputsContext.Provider
+    <ExerciseContext.Provider
       value={{
         dayEx,
         setDayEx,
       }}
     >
       {children}
-    </ActiveInputsContext.Provider>
+    </ExerciseContext.Provider>
   );
 }
 
-export function useActiveInputs() {
-  return useContext(ActiveInputsContext);
+export function useExercise() {
+  return useContext(ExerciseContext);
 }

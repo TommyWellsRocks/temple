@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ArrowLeft, CheckCheck } from "lucide-react";
-import { useActiveInputs } from "~/context/ActiveExerciseInputContext";
+import { useExercise } from "~/context/ExerciseContext";
 
 export function ActionButtons() {
-  const { dayEx, setDayEx } = useActiveInputs()!;
+  const { dayEx, setDayEx } = useExercise()!;
   if (!dayEx) return;
 
   const dayNotStarted =
@@ -37,7 +37,7 @@ export function ActionButtons() {
             className="w-full"
             onClick={() => {
               setDayEx((prevDayEx) => {
-                if (!prevDayEx) return
+                if (!prevDayEx) return;
                 const newDayEx = { ...prevDayEx };
                 newDayEx.loggedSetsCount = newDayEx.loggedSetsCount + 1;
                 return newDayEx;
@@ -51,7 +51,7 @@ export function ActionButtons() {
             variant={"outline"}
             onClick={() => {
               setDayEx((prevDayEx) => {
-                if (!prevDayEx) return
+                if (!prevDayEx) return;
                 const newDayEx = { ...prevDayEx };
                 newDayEx.loggedSetsCount = newDayEx.reps?.length;
                 return newDayEx;

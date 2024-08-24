@@ -2,7 +2,7 @@
 
 import { Minus, Plus } from "lucide-react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
-import { useActiveInputs } from "~/context/ActiveExerciseInputContext";
+import { useExercise } from "~/context/ExerciseContext";
 import type { DayExercise } from "~/server/types";
 import { isFloat } from "~/utils/helpers";
 // import { Timer } from "lucide-react";
@@ -93,7 +93,7 @@ function InputRows({
     value: number,
   ) => void;
 }) {
-  const { dayEx } = useActiveInputs()!;
+  const { dayEx } = useExercise()!;
   if (!dayEx) return;
 
   return (
@@ -150,7 +150,7 @@ function InputRows({
 }
 
 function EditSetButton({ method }: { method: "Add" | "Delete" }) {
-  const { dayEx, setDayEx } = useActiveInputs()!;
+  const { dayEx, setDayEx } = useExercise()!;
   if (!dayEx) return;
 
   return (
@@ -185,7 +185,7 @@ function EditSetButton({ method }: { method: "Add" | "Delete" }) {
 }
 
 export function SetInputs() {
-  const { dayEx, setDayEx } = useActiveInputs()!;
+  const { dayEx, setDayEx } = useExercise()!;
   if (!dayEx) return;
 
   function handleInputChange(
@@ -196,7 +196,7 @@ export function SetInputs() {
     if (
       (label === "Reps" && dayEx?.reps[index] !== value) ||
       (label === "Weight" && dayEx?.weight[index] !== value)
-    )
+    ) {
       setDayEx((prevDayEx) => {
         if (!prevDayEx) return;
         const newDayEx = { ...prevDayEx };
@@ -209,6 +209,7 @@ export function SetInputs() {
         }
         return newDayEx;
       });
+    }
   }
 
   return (
