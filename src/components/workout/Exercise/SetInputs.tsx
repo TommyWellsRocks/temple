@@ -49,7 +49,8 @@ function InputArea({
       inputMode="numeric"
       defaultValue={value}
       onInput={(e) => {
-        if (isNaN(e.currentTarget.valueAsNumber)) e.currentTarget.value = "0";
+        if (isNaN(e.currentTarget.valueAsNumber))
+          e.currentTarget.value = `${value}`;
         else if (label === "Reps" && e.currentTarget.valueAsNumber >= 2) {
           e.currentTarget.blur();
         } else if (label === "Weight" && e.currentTarget.value.length > 2)
@@ -62,12 +63,12 @@ function InputArea({
         // Input Actions
         let newValue = e.target.valueAsNumber;
         if (
+          isNaN(newValue) ||
           newValue < 0 ||
           newValue > 999 ||
-          isNaN(newValue) ||
           (label === "Reps" && newValue > 20)
         ) {
-          newValue = 0;
+          newValue = value;
           e.target.value = String(newValue);
         }
 
@@ -197,7 +198,7 @@ export function SetInputs() {
       (label === "Weight" && dayEx?.weight[index] !== value)
     )
       setDayEx((prevDayEx) => {
-        if (!prevDayEx) return
+        if (!prevDayEx) return;
         const newDayEx = { ...prevDayEx };
         if (label === "Reps") {
           newDayEx.reps[index] = value;
