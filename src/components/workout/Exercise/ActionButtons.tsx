@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ArrowLeft, CheckCheck } from "lucide-react";
 import { useExercise } from "~/context/ExerciseContext";
+import { useEffect } from "react";
+import { handleUpdateLoggedSets } from "~/server/components/workout/ExerciseActions";
 
 export function ActionButtons() {
   const { dayEx, setDayEx } = useExercise()!;
@@ -18,6 +20,10 @@ export function ActionButtons() {
   if (dayIsDone) return;
 
   const allLogged = dayEx.loggedSetsCount === dayEx.reps.length;
+
+  useEffect(() => {
+    handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
+  }, [dayEx.loggedSetsCount]);
 
   return (
     <div className="sticky bottom-5 flex justify-between gap-x-4">

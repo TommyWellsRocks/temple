@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { handleUpdateExercise } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
 
 const ExerciseContext = createContext<
@@ -20,10 +19,6 @@ export function ExerciseProvider({
   children: React.ReactNode;
 }) {
   const [dayEx, setDayEx] = useState(dayExercise);
-
-  useEffect(() => {
-    handleUpdateExercise(dayEx);
-  }, [dayEx]);
 
   return (
     <ExerciseContext.Provider

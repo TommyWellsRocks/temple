@@ -548,43 +548,29 @@ export async function deleteDayExercise(userId: string, dayExerciseId: number) {
     );
 }
 
-export async function updateDayExerciseInput(dayExercise: {
-  id: number;
-  dayId: number;
-  userId: string;
-  reps: number[];
-  weight: number[];
-}) {
+export async function updateDayExerciseInput(
+  dayExerciseId: number,
+  userId: string,
+  reps: number[],
+  weight: number[],
+) {
   await db
     .update(workoutDayExercises)
     .set({
-      reps: dayExercise.reps,
-      weight: dayExercise.weight,
+      reps: reps,
+      weight: weight,
       updatedAt: new Date(),
     })
     .where(
       and(
-        eq(workoutDayExercises.userId, dayExercise.userId),
-        eq(workoutDayExercises.id, dayExercise.id),
-      ),
-    );
-}
-
-export async function updateExercise(dayExercise: DayExercise) {
-  if (!dayExercise) return;
-  await db
-    .update(workoutDayExercises)
-    .set({ ...dayExercise, updatedAt: new Date() })
-    .where(
-      and(
-        eq(workoutDayExercises.userId, dayExercise.userId),
-        eq(workoutDayExercises.id, dayExercise.id),
+        eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }
 
 export async function updateLoggedSets(
-  id: number,
+  dayExerciseId: number,
   userId: string,
   loggedSetsCount: number,
 ) {
@@ -594,7 +580,7 @@ export async function updateLoggedSets(
     .where(
       and(
         eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, id),
+        eq(workoutDayExercises.id, dayExerciseId),
       ),
     );
 }

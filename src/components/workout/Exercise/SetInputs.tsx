@@ -1,8 +1,10 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { useExercise } from "~/context/ExerciseContext";
+import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
 import { isFloat } from "~/utils/helpers";
 // import { Timer } from "lucide-react";
@@ -188,6 +190,12 @@ export function SetInputs() {
   const { dayEx, setDayEx } = useExercise()!;
   if (!dayEx) return;
 
+  const [inputChangeFlag, setInputChangeFlag] = useState(false);
+
+  useEffect(() => {
+    handleExerciseVolumeInput(dayEx.id, dayEx.userId, dayEx.reps, dayEx.weight);
+  }, [inputChangeFlag, dayEx.reps.length, dayEx.weight.length]);
+
   function handleInputChange(
     label: "Reps" | "Weight",
     index: number,
@@ -202,10 +210,12 @@ export function SetInputs() {
         const newDayEx = { ...prevDayEx };
         if (label === "Reps") {
           newDayEx.reps[index] = value;
+          setInputChangeFlag((flag) => !flag);
         } else if (label === "Weight") {
           for (let i = index; i < newDayEx.weight.length; i++) {
             newDayEx.weight[i] = value;
           }
+          setInputChangeFlag((flag) => !flag);
         }
         return newDayEx;
       });
