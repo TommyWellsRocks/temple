@@ -1,12 +1,10 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getMyWeekAnalytics } from "~/server/queries/workouts";
-import { Navigation } from "~/components/ui/Navigation";
-import { LineChart } from "~/components/ui/Linechart";
 import { TargetMuscles } from "~/components/workout/ExerciseList/TargetMuscles";
 import { CheckList } from "~/components/workout/ExerciseList/Exercises";
 import { useProgram } from "~/context/useProgram";
 import { ActionButtons } from "~/components/workout/ExerciseList/ActionButtons";
+import { NavHeader } from "~/components/workout/Exercise/NavHeader";
 
 // * DAY OVERVIEW PAGE
 
@@ -29,28 +27,13 @@ export default async function DayOverview(context: any | unknown) {
   );
   if (!programDay) return redirect("/workout");
 
-  // LineChart
-  const [lastWeek, thisWeek] = await getMyWeekAnalytics(session.user.id);
-
   const muscleURLs = programDay.dayExercises.map((ex) =>
     ex.info.musclesImage ? ex.info.musclesImage : "",
   );
 
   return (
     <>
-      <Navigation
-        backURL={`/workout/${programId}`}
-        heading={`${programDay.name} Overview`}
-      />
-
-      <LineChart
-        measureOf="Volume"
-        xLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-        prevLabel={"Last Weeks's Volume"}
-        previousData={lastWeek}
-        currentLabel="This Week's Volume"
-        currentData={thisWeek!}
-      />
+      <NavHeader day={programDay} />
 
       <TargetMuscles muscleURLs={muscleURLs} />
 

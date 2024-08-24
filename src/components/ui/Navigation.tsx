@@ -5,9 +5,11 @@ import { ChevronLeft } from "lucide-react";
 export function Navigation({
   backURL,
   heading,
+  editButton,
 }: {
   backURL: string;
   heading: string;
+  editButton?: JSX.Element;
 }) {
   return (
     <header>
@@ -19,7 +21,7 @@ export function Navigation({
           <span className="text-center text-xl font-semibold sm:text-2xl">
             {toTitleCase(heading)}
           </span>
-          <div className="w-[24px]" />
+          {editButton ? editButton : <div className="w-[24px]" />}
         </div>
       </nav>
     </header>
