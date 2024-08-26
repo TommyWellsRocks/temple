@@ -7,6 +7,7 @@ import { ActionCard } from "../ActionCard";
 import { EditButtonPopover } from "../EditButtonPopover";
 import { ExerciseForm } from "./ExerciseForm";
 import { toTitleCase } from "~/utils/helpers";
+import { PageHeader } from "../PageHeader";
 
 async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
   const allExercises = await getExercises(programDay!.userId);
@@ -27,7 +28,9 @@ function ExercisesHeader({ programDay }: { programDay: ProgramDay }) {
 
   return (
     <div className="flex items-center justify-between">
-      <h3>{totalCount} Exercises</h3>
+      <PageHeader
+        title={`${totalCount} ${totalCount > 1 ? "Exercises" : "Exercise"}`}
+      />
       <EditExercisesButton programDay={programDay} />
     </div>
   );

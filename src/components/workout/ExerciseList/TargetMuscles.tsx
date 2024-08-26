@@ -1,21 +1,19 @@
 import { MuscleCarousel } from "~/components/workout/MuscleCarousel";
 import type { ProgramDay } from "~/server/types";
-
-function MusclesHeader() {
-  return <h3 className="pb-2">Target Muscles</h3>;
-}
+import { PageHeader } from "../PageHeader";
 
 export function TargetMuscles({ programDay }: { programDay: ProgramDay }) {
   if (!programDay) return;
-  return (
-    <section>
-      <MusclesHeader />
 
-      <MuscleCarousel
-        muscleURLs={programDay.dayExercises.map((ex) =>
-          ex.info.musclesImage ? ex.info.musclesImage : "",
-        )}
-      />
+  const muscleURLS = programDay.dayExercises.map((ex) =>
+    ex.info.musclesImage ? ex.info.musclesImage : "",
+  );
+
+  return (
+    <section className="flex flex-col gap-y-2">
+      <PageHeader title="Target Muscles" />
+
+      <MuscleCarousel muscleURLs={muscleURLS} />
     </section>
   );
 }
