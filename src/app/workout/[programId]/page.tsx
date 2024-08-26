@@ -1,8 +1,6 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { Navigation } from "~/components/ui/Navigation";
-import { LineChart } from "~/components/ui/Linechart";
-import { calculateProgramVolumeAnalytics } from "~/server/queries/utils/workoutVolume";
 import { DayList } from "~/components/workout/DayList/DayList";
 import { useProgram } from "~/context/useProgram";
 
@@ -21,19 +19,9 @@ export default async function Days(context: any | unknown) {
   const program = await useProgram(session.user.id, Number(programId));
   if (!program) return redirect("/workout");
 
-  // LineChart
-  const currentProgramVolume = calculateProgramVolumeAnalytics(program);
-
   return (
     <>
-      <Navigation backURL="/workout" heading={`${program.name} Days`} />
-
-      <LineChart
-        measureOf="Volume"
-        xLabels={currentProgramVolume.map((_, index) => `Group ${index + 1}`)}
-        currentLabel="Your Volume"
-        currentData={currentProgramVolume}
-      />
+      <Navigation backURL="/workout" heading={program.name} />
 
       <DayList
         userId={session.user.id}
