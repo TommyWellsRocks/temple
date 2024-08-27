@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { Switch } from "~/components/ui/switch";
-import { handleToggleRedirectWorkout } from "~/server/components/settings/Actions";
+import { handleToggleRedirectWorkout } from "~/server/actions/settings/Actions";
 
 export function DarkModeSwitch() {
   const { theme, setTheme } = useTheme();

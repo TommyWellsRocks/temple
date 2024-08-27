@@ -4,7 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import {
   handleCreateDayGroup,
   handleDeleteDayGroup,
-} from "~/server/components/workout/DayListActions";
+} from "~/server/actions/workout/ProgramActions";
 
 export function EditGroupsButton({
   userId,

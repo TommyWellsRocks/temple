@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 import { ArrowLeft, CheckCheck } from "lucide-react";
 import { useExercise } from "~/context/ExerciseContext";
 import { useEffect } from "react";
-import { handleUpdateLoggedSets } from "~/server/components/workout/ExerciseActions";
+import { handleUpdateLoggedSets } from "~/server/actions/workout/ExerciseActions";
 
 export function ActionButtons() {
   const { dayEx, setDayEx } = useExercise()!;

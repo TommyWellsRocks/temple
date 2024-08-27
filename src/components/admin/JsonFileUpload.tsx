@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { handleInsertExercises } from "~/server/components/admin/Actions";
+import { handleInsertExercises } from "~/server/actions/admin/Actions";
 
 interface ExerciseFormat {
   name: string;
@@ -40,7 +40,7 @@ export function JsonFileUpload() {
                       equipment: ex.equipment,
                     }));
                     handleInsertExercises(formattedData);
-                    console.log("DONE")
+                    console.log("DONE");
                   } catch (error) {
                     console.error("Invalid JSON file");
                   }

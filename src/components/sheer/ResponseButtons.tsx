@@ -21,7 +21,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { handlePostTodaysResponse } from "~/server/components/sheer/Actions";
+import { handlePostTodaysResponse } from "~/server/actions/sheer/Actions";
 
 const FormSchema = z.object({
   why: z.string().optional(),

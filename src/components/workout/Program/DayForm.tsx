@@ -19,7 +19,7 @@ import {
   handleCreateDay,
   handleDeleteProgramDay,
   handleEditProgramDay,
-} from "~/server/components/workout/DayListActions";
+} from "~/server/actions/workout/ProgramActions";
 
 export function DayForm({
   userId,
@@ -121,10 +121,7 @@ export function DayForm({
                               checked={field.value?.includes(day.id)}
                               onCheckedChange={(checked) => {
                                 return checked
-                                  ? field.onChange([
-                                      ...(field.value!),
-                                      day.id,
-                                    ])
+                                  ? field.onChange([...field.value!, day.id])
                                   : field.onChange(
                                       field.value?.filter(
                                         (value) => value !== day.id,

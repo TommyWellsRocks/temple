@@ -30,7 +30,7 @@ import { toTitleCase } from "~/utils/helpers";
 import {
   handleAddExercise,
   handleDeleteExercise,
-} from "~/server/components/workout/ExerciseListActions";
+} from "~/server/actions/workout/DayActions";
 import { ProgramDay } from "~/server/types";
 
 export type Exercise = {

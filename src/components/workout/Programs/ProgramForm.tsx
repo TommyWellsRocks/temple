@@ -29,7 +29,7 @@ import {
   handleEditProgram,
   handleCreateProgram,
   handleDeleteProgram,
-} from "~/server/components/workout/ProgramListActions";
+} from "~/server/actions/workout/ProgramsActions";
 
 const PROGRAM_ACTIVE_DAYS = 45;
 

@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import YouTubeURL from "public/content/images/workout/youtube.svg";
 import { useExercise } from "~/context/ExerciseContext";
-import { handleExerciseNoteInput } from "~/server/components/workout/ExerciseActions";
+import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
 
 function NotesTabContent() {
   const { dayEx } = useExercise()!;

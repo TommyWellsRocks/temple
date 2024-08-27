@@ -4,7 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { useExercise } from "~/context/ExerciseContext";
-import { handleExerciseVolumeInput } from "~/server/components/workout/ExerciseActions";
+import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActions";
 import type { DayExercise } from "~/server/types";
 import { isFloat } from "~/utils/helpers";
 // import { Timer } from "lucide-react";

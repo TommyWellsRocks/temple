@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import {
   handleDeleteExercise,
   handleEditExerciseName,
-} from "~/server/components/workout/ExerciseListActions";
+} from "~/server/actions/workout/DayActions";
 
 export function ExerciseForm({
   userId,
@@ -57,7 +57,7 @@ export function ExerciseForm({
             programId,
             dayExercise.info.id,
             values.name,
-            dayExercise.notes?.id
+            dayExercise.notes?.id,
           );
         })}
         className="mx-auto flex w-[260px] flex-col gap-4"

@@ -15,7 +15,7 @@ import {
 import {
   handleEndWorkout,
   handleStartWorkout,
-} from "~/server/components/workout/ExerciseListActions";
+} from "~/server/actions/workout/DayActions";
 import { useState } from "react";
 
 export function ActionButtons({ programDay }: { programDay: ProgramDay }) {
