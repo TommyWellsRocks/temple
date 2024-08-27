@@ -4,11 +4,11 @@ import {
   CarouselItem,
 } from "~/components/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
-import { EditGroupsButton } from "~/components/workout/DayList/EditGroupsButton";
-import { ActionCard } from "~/components/workout/ActionCard";
-import { DayForm } from "~/components/workout/DayList/DayForm";
+import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
+import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
+import { EditGroupsButton } from "~/components/workout/Program/EditGroupsButton";
+import { ActionCard } from "~/components/workout/Common/ActionCard";
+import { DayForm } from "~/components/workout/Program/DayForm";
 import type { Program } from "~/server/types";
 
 function GroupList({

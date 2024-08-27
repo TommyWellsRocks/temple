@@ -1,9 +1,9 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { TargetMuscles } from "~/components/workout/ExerciseList/TargetMuscles";
-import { Exercises } from "~/components/workout/ExerciseList/Exercises";
+import { TargetMuscles } from "~/components/workout/Day/TargetMuscles";
+import { Exercises } from "~/components/workout/Day/Exercises";
 import { useProgram } from "~/context/useProgram";
-import { ActionButtons } from "~/components/workout/ExerciseList/ActionButtons";
+import { ActionButtons } from "~/components/workout/Day/ActionButtons";
 import { NavHeader } from "~/components/workout/Exercise/NavHeader";
 
 // * DAY OVERVIEW PAGE

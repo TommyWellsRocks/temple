@@ -1,7 +1,7 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { Navigation } from "~/components/ui/Navigation";
-import { DayList } from "~/components/workout/DayList/DayList";
+import { DayList } from "~/components/workout/Program/DayList";
 import { useProgram } from "~/context/useProgram";
 
 // * DAYS PAGE

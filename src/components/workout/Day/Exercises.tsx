@@ -1,13 +1,13 @@
-import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
+import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
 import type { ProgramDay } from "~/server/types";
 
 import { getExercises } from "~/server/queries/exercises";
 import { DataTable } from "./DataTable";
-import { ActionCard } from "../ActionCard";
-import { EditButtonPopover } from "../EditButtonPopover";
+import { ActionCard } from "../Common/ActionCard";
+import { EditButtonPopover } from "../Common/EditButtonPopover";
 import { ExerciseForm } from "./ExerciseForm";
 import { toTitleCase } from "~/utils/helpers";
-import { PageHeader } from "../PageHeader";
+import { PageHeader } from "../Common/PageHeader";
 
 async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
   const allExercises = await getExercises(programDay!.userId);
