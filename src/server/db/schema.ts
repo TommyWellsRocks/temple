@@ -134,17 +134,10 @@ export const exercises = createTable(
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).unique().notNull(),
-    category: varchar("category", { length: 256 }),
-    muscles: varchar("muscles").array(),
-    musclesImage: varchar("muscles_image"),
     equipment: varchar("equipment").array(),
+    primaryMuscle: varchar("primary_muscle"),
+    secondaryMuscles: varchar("secondary_muscles").array(),
     video: varchar("video"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
   },
   (table) => ({
     idIndex: index().on(table.id),

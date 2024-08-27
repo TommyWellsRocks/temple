@@ -5,11 +5,12 @@ import { Input } from "~/components/ui/input";
 import { handleInsertExercises } from "~/server/actions/admin/Actions";
 
 interface ExerciseFormat {
+  id: number | null;
   name: string;
-  category: string;
-  muscles: string[];
-  muscles_image: string;
   equipment: string[];
+  primaryMuscle: string;
+  secondaryMuscles: string[];
+  video: undefined;
 }
 
 export function JsonFileUpload() {
@@ -33,11 +34,12 @@ export function JsonFileUpload() {
                     );
 
                     const formattedData = jsonData.map((ex) => ({
+                      id: ex.id !== null ? ex.id : undefined,
                       name: ex.name,
-                      category: ex.category,
-                      muscles: ex.muscles,
-                      musclesImage: ex.muscles_image,
                       equipment: ex.equipment,
+                      primaryMuscle: ex.primaryMuscle,
+                      secondaryMuscles: ex.secondaryMuscles,
+                      video: ex.video,
                     }));
                     handleInsertExercises(formattedData);
                     console.log("DONE");

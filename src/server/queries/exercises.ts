@@ -64,12 +64,15 @@ export async function editExerciseNote(
 }
 
 // ! ADMIN
-export async function insertExercises(formattedData: {
-  name: string;
-  category: string;
-  muscles: string[];
-  musclesImage: string;
-  equipment: string[];
-}[]) {
+export async function insertExercises(
+  formattedData: {
+    id: number | undefined;
+    name: string;
+    equipment: string[];
+    primaryMuscle: string;
+    secondaryMuscles: string[];
+    video: undefined;
+  }[],
+) {
   await db.insert(exercises).values(formattedData);
 }

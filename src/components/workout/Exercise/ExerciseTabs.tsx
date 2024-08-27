@@ -74,7 +74,7 @@ function MusclesTabContent() {
 
   return (
     <TabsContent value="muscles">
-      <div className="flex flex-col items-center gap-4 rounded-xl bg-secondary px-3 py-2">
+      {/* <div className="flex flex-col items-center gap-4 rounded-xl bg-secondary px-3 py-2">
         {dayEx.info.musclesImage ? (
           <Image
             src={dayEx.info.musclesImage}
@@ -83,7 +83,7 @@ function MusclesTabContent() {
             height={200}
           />
         ) : null}
-      </div>
+      </div> */}
     </TabsContent>
   );
 }

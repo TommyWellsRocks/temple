@@ -208,9 +208,9 @@ export async function getMyProgram(userId: string, programId: number) {
                 columns: {
                   id: true,
                   name: true,
-                  musclesImage: true,
-                  muscles: true,
                   video: true,
+                  primaryMuscle: true,
+                  secondaryMuscles: true
                 },
               },
               notes: { columns: { id: true, name: true, notes: true } },
@@ -364,7 +364,8 @@ export async function getMyProgramDay(
             columns: {
               id: true,
               name: true,
-              musclesImage: true,
+              primaryMuscle: true,
+              secondaryMuscles: true,
             },
           },
           notes: { columns: { id: true, name: true } },
@@ -486,8 +487,6 @@ export async function getMyDayExercise(
         columns: {
           id: true,
           name: true,
-          musclesImage: true,
-          muscles: true,
           video: true,
         },
       },

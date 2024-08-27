@@ -4,11 +4,12 @@ import { insertExercises } from "~/server/queries/exercises";
 
 export async function handleInsertExercises(
   formattedData: {
+    id: number | undefined;
     name: string;
-    category: string;
-    muscles: string[];
-    musclesImage: string;
     equipment: string[];
+    primaryMuscle: string;
+    secondaryMuscles: string[];
+    video: undefined;
   }[],
 ) {
   await insertExercises(formattedData);
