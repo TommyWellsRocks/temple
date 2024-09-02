@@ -7,7 +7,7 @@ import { ActionCard } from "../Common/ActionCard";
 import { EditButtonPopover } from "../Common/EditButtonPopover";
 import { ExerciseForm } from "./ExerciseForm";
 import { toTitleCase } from "~/utils/helpers";
-import { PageHeader } from "../Common/PageHeader";
+import { ExerciseMuscleImage } from "~/utils/ExerciseMuscleImage";
 
 async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
   const allExercises = await getExercises(programDay!.userId);
@@ -20,19 +20,6 @@ async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
         <DataTable programDay={programDay} exercises={allExercises} />
       }
     />
-  );
-}
-
-function ExercisesHeader({ programDay }: { programDay: ProgramDay }) {
-  const totalCount = programDay!.dayExercises.length;
-
-  return (
-    <div className="flex items-center justify-between">
-      <PageHeader
-        title={`${totalCount} ${totalCount > 1 ? "Exercises" : "Exercise"}`}
-      />
-      <EditExercisesButton programDay={programDay} />
-    </div>
   );
 }
 
@@ -64,8 +51,14 @@ function ExerciseCard({
 
   return (
     <ActionCard
+      img={
+        <ExerciseMuscleImage
+          primaryMuscle=""
+          secondaryMuscles={[]}
+          widthInPx={100}
+        />
+      }
       linkTo={`/workout/${programId}/${dayId}/${exercise.id}`}
-      imageURL="https://placehold.co/200x600"
       title={
         exercise.notes?.name
           ? toTitleCase(exercise.notes.name)
@@ -90,7 +83,9 @@ function ExerciseCard({
   );
 }
 
-function ExerciseItems({
+
+
+export function ExerciseItems({
   userId,
   programDay,
   programId,
@@ -113,21 +108,5 @@ function ExerciseItems({
         />
       ))}
     </div>
-  );
-}
-
-export async function Exercises({ programDay }: { programDay: ProgramDay }) {
-  if (!programDay) return;
-  return (
-    <section className="flex flex-col gap-y-2">
-      <ExercisesHeader programDay={programDay} />
-
-      <ExerciseItems
-        userId={programDay.userId}
-        programDay={programDay}
-        programId={programDay.programId}
-        dayId={programDay.id}
-      />
-    </section>
   );
 }

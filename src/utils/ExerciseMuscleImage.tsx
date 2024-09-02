@@ -52,10 +52,19 @@ export function ExerciseMuscleImage({
   secondaryMuscles,
   widthInPx,
 }: {
-  primaryMuscle: string;
+  primaryMuscle: string | null;
   secondaryMuscles: string[] | null;
   widthInPx: number;
 }) {
+  if (!primaryMuscle)
+    return (
+      <Image
+        alt="Muscle Image"
+        src={Base}
+        width={widthInPx}
+        className={`rounded-lg border border-primary bg-white p-0.5`}
+      />
+    );
   return (
     <div className="relative">
       <Image
@@ -75,6 +84,7 @@ export function ExerciseMuscleImage({
       {secondaryMuscles?.map((secondary) => {
         return (
           <Image
+            key={secondary}
             alt="Secondary Muscle"
             src={muscles[secondary]!}
             className={`absolute top-0 rounded-lg p-0.5`}

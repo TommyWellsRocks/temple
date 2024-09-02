@@ -24,6 +24,7 @@ const config = {
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/no-floating-promises": "warn",
     "@typescript-eslint/no-redundant-type-constituents": "warn",
+    "@typescript-eslint/consistent-indexed-object-style": "warn",
     "@typescript-eslint/no-unsafe-member-access": "warn",
     "react-hooks/rules-of-hooks": "warn",
     "@typescript-eslint/no-unused-vars": [

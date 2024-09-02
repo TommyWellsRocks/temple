@@ -1,10 +1,18 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { TargetMuscles } from "~/components/workout/Day/TargetMuscles";
-import { Exercises } from "~/components/workout/Day/Exercises";
 import { useProgram } from "~/context/useProgram";
 import { ActionButtons } from "~/components/workout/Day/ActionButtons";
 import { NavHeader } from "~/components/workout/Exercise/NavHeader";
+import { SectionHeader } from "~/components/workout/Common/SectionHeader";
+import { MuscleCarousel } from "~/components/workout/Common/MuscleCarousel";
+import { getExercises } from "~/server/queries/exercises";
+import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
+import { DataTable } from "~/components/workout/Day/DataTable";
+import { ActionCard } from "~/components/workout/Common/ActionCard";
+import { ExerciseMuscleImage } from "~/utils/ExerciseMuscleImage";
+import { toTitleCase } from "~/utils/helpers";
+import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
+import { ExerciseForm } from "~/components/workout/Day/ExerciseForm";
 
 // * DAY OVERVIEW PAGE
 
@@ -26,14 +34,71 @@ export default async function DayOverview(context: any | unknown) {
     (day) => day.id === Number(dayId),
   );
   if (!programDay) return redirect("/workout");
+  const allExercises = await getExercises(programDay.userId);
 
   return (
     <>
       <NavHeader programDay={programDay} />
 
-      <TargetMuscles programDay={programDay} />
+      <section className="flex flex-col gap-y-2">
+        <SectionHeader title="Target Muscles" />
 
-      <Exercises programDay={programDay} />
+        <MuscleCarousel dayExercises={programDay.dayExercises} />
+      </section>
+
+      <section className="flex flex-col gap-y-2">
+        <div className="flex justify-between">
+          <SectionHeader
+            title={`${programDay.dayExercises.length} ${programDay.dayExercises.length > 1 ? "Exercises" : "Exercise"}`}
+          />
+          <AddButtonOverlay
+            title="Add Exercise"
+            description="Add an exercise to your workout. Click add when you're done."
+            formComponent={
+              <DataTable programDay={programDay} exercises={allExercises} />
+            }
+          />
+        </div>
+
+        <div className="flex flex-col gap-y-3">
+          {programDay.dayExercises.map(async (exercise) => {
+            const isDone = exercise.reps.length === exercise.loggedSetsCount;
+            return (
+              <ActionCard
+                key={exercise.id}
+                img={
+                  <ExerciseMuscleImage
+                    primaryMuscle={exercise.info.primaryMuscle}
+                    secondaryMuscles={exercise.info.secondaryMuscles}
+                    widthInPx={100}
+                  />
+                }
+                linkTo={`/workout/${programId}/${dayId}/${exercise.id}`}
+                title={
+                  exercise.notes?.name
+                    ? toTitleCase(exercise.notes.name)
+                    : toTitleCase(exercise.info.name)
+                }
+                subtext={`${exercise.reps.length} Sets`}
+                editButton={
+                  <EditButtonPopover
+                    title="Edit Exercise"
+                    description={`Remember to click save when you're done.`}
+                    formComponent={
+                      <ExerciseForm
+                        userId={session.user!.id!}
+                        programId={Number(programId)}
+                        dayExercise={exercise}
+                      />
+                    }
+                  />
+                }
+                isDark={isDone}
+              />
+            );
+          })}
+        </div>
+      </section>
 
       <ActionButtons programDay={programDay} />
     </>
