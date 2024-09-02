@@ -3,7 +3,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "~/components/ui/carousel";
-import { MuscleImage } from "~/utils/MuscleImageGen";
+import { ExerciseMuscleImage } from "~/utils/ExerciseMuscleImage";
 
 function MuscleItem({
   dayExercise,
@@ -15,9 +15,10 @@ function MuscleItem({
     };
   };
 }) {
+  if (!dayExercise.info.primaryMuscle) return;
   return (
     <CarouselItem className="flex items-center gap-x-1">
-      <MuscleImage
+      <ExerciseMuscleImage
         primaryMuscle={dayExercise.info.primaryMuscle}
         secondaryMuscles={dayExercise.info.secondaryMuscles}
         widthInPx={200}
