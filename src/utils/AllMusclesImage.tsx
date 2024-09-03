@@ -23,7 +23,7 @@ import UpperAbs from "public/content/images/workout/muscles/Upper Abs.svg";
 import Abs from "public/content/images/workout/muscles/Abs.svg";
 import type { StaticImport } from "next/dist/shared/lib/get-img-props";
 
-const muscles: { [key: string]: StaticImport } = {
+export const muscles: { [key: string]: StaticImport } = {
   Abs,
   Abductors,
   Adductors,
@@ -62,7 +62,7 @@ export function ExerciseMuscleImage({
         alt="Muscle Image"
         src={Base}
         width={widthInPx}
-        className={`rounded-lg border border-primary bg-white p-0.5`}
+        className={`rounded-lg border border-primary bg-black p-0.5`}
       />
     );
   return (
@@ -71,7 +71,7 @@ export function ExerciseMuscleImage({
         alt="Muscle Image"
         src={Base}
         width={widthInPx}
-        className={`rounded-lg border border-primary bg-white p-0.5`}
+        className={`rounded-lg border border-primary bg-black p-0.5`}
       />
       <Image
         alt="Primary Muscle"

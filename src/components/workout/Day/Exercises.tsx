@@ -7,7 +7,7 @@ import { ActionCard } from "../Common/ActionCard";
 import { EditButtonPopover } from "../Common/EditButtonPopover";
 import { ExerciseForm } from "./ExerciseForm";
 import { toTitleCase } from "~/utils/helpers";
-import { ExerciseMuscleImage } from "~/utils/ExerciseMuscleImage";
+import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
 
 async function EditExercisesButton({ programDay }: { programDay: ProgramDay }) {
   const allExercises = await getExercises(programDay!.userId);
@@ -82,8 +82,6 @@ function ExerciseCard({
     />
   );
 }
-
-
 
 export function ExerciseItems({
   userId,

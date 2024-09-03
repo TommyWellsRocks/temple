@@ -4,15 +4,15 @@ import { useProgram } from "~/context/useProgram";
 import { ActionButtons } from "~/components/workout/Day/ActionButtons";
 import { NavHeader } from "~/components/workout/Exercise/NavHeader";
 import { SectionHeader } from "~/components/workout/Common/SectionHeader";
-import { MuscleCarousel } from "~/components/workout/Common/MuscleCarousel";
 import { getExercises } from "~/server/queries/exercises";
 import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
 import { DataTable } from "~/components/workout/Day/DataTable";
-import { ActionCard } from "~/components/workout/Common/ActionCard";
-import { ExerciseMuscleImage } from "~/utils/ExerciseMuscleImage";
+import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
 import { toTitleCase } from "~/utils/helpers";
 import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
 import { ExerciseForm } from "~/components/workout/Day/ExerciseForm";
+import { FocusMuscles } from "~/components/workout/Day/FocusMuscles";
+import Link from "next/link";
 
 // * DAY OVERVIEW PAGE
 
@@ -41,9 +41,9 @@ export default async function DayOverview(context: any | unknown) {
       <NavHeader programDay={programDay} />
 
       <section className="flex flex-col gap-y-2">
-        <SectionHeader title="Target Muscles" />
+        <SectionHeader title="Today's Focus" />
 
-        <MuscleCarousel dayExercises={programDay.dayExercises} />
+        <FocusMuscles programDay={programDay} />
       </section>
 
       <section className="flex flex-col gap-y-2">
@@ -61,26 +61,60 @@ export default async function DayOverview(context: any | unknown) {
         </div>
 
         <div className="flex flex-col gap-y-3">
-          {programDay.dayExercises.map(async (exercise) => {
+          {programDay.dayExercises.map((exercise) => {
             const isDone = exercise.reps.length === exercise.loggedSetsCount;
+            const maxReps = Math.max(...exercise.reps);
+            const maxWeight = Math.max(...exercise.weight);
             return (
-              <ActionCard
-                key={exercise.id}
-                img={
+              <div className="relative flex items-center" key={exercise.id}>
+                <Link
+                  href={`/workout/${programId}/${dayId}/${exercise.id}`}
+                  className={`flex w-full items-center gap-x-2 rounded-lg pr-10 ${isDone ? "bg-doneDark text-muted-foreground" : "bg-undoneDark"}`}
+                >
                   <ExerciseMuscleImage
                     primaryMuscle={exercise.info.primaryMuscle}
                     secondaryMuscles={exercise.info.secondaryMuscles}
                     widthInPx={100}
                   />
-                }
-                linkTo={`/workout/${programId}/${dayId}/${exercise.id}`}
-                title={
-                  exercise.notes?.name
-                    ? toTitleCase(exercise.notes.name)
-                    : toTitleCase(exercise.info.name)
-                }
-                subtext={`${exercise.reps.length} Sets`}
-                editButton={
+                  <div className="flex flex-col gap-y-1">
+                    <span className="text-base">
+                      {exercise.notes?.name
+                        ? toTitleCase(exercise.notes.name)
+                        : toTitleCase(exercise.info.name)}
+                    </span>
+                    <div className="flex flex-wrap gap-x-2 text-sm font-light text-muted-foreground">
+                      <span>{exercise.reps.length} Sets</span>
+                      {maxReps > 0 ? (
+                        <>
+                          <span>x</span>
+                          <span>{maxReps} Reps</span>
+                        </>
+                      ) : null}
+                      {maxWeight > 0 ? (
+                        <>
+                          <span>x</span>
+                          <span>{maxWeight} lbs</span>
+                        </>
+                      ) : null}
+                    </div>
+                    <div className="flex flex-wrap gap-x-2 text-xs">
+                      {exercise.info.primaryMuscle ? (
+                        <span className="rounded-md bg-muted-foreground px-2 py-0.5">
+                          {exercise.info.primaryMuscle}
+                        </span>
+                      ) : null}
+                      {exercise.info.secondaryMuscles?.map((muscle) => (
+                        <span
+                          key={muscle}
+                          className="rounded-md bg-muted px-2 py-0.5"
+                        >
+                          {muscle}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </Link>
+                <div className="absolute right-1 mx-2 pb-1">
                   <EditButtonPopover
                     title="Edit Exercise"
                     description={`Remember to click save when you're done.`}
@@ -92,9 +126,8 @@ export default async function DayOverview(context: any | unknown) {
                       />
                     }
                   />
-                }
-                isDark={isDone}
-              />
+                </div>
+              </div>
             );
           })}
         </div>
