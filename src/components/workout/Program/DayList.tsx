@@ -100,38 +100,49 @@ function GroupDays({ program }: { program: Program }) {
           value={String(group.id)}
           key={group.id}
         >
-          {group.groupDays.map((day) => {
-            const isDone =
-              day.startedWorkout !== null && day.endedWorkout !== null;
-            // Not done and do date isn't today
-            // const isFutureDay =
-            //   !isDone &&
-            //   day.repeatOn !== null &&
-            //   !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
+          {group.groupDays
+            .sort((a, b) => {
+              if (a.repeatOn && b.repeatOn) {
+                return (
+                  a.repeatOn.reduce((total, cur) => total + cur) -
+                  b.repeatOn.reduce((total, cur) => total + cur)
+                );
+              } else {
+                return a.id - b.id;
+              }
+            })
+            .map((day) => {
+              const isDone =
+                day.startedWorkout !== null && day.endedWorkout !== null;
+              // Not done and do date isn't today
+              // const isFutureDay =
+              //   !isDone &&
+              //   day.repeatOn !== null &&
+              //   !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
 
-            return (
-              <ActionCard
-                key={day.id}
-                title={day.name}
-                editButton={
-                  <EditButtonPopover
-                    title="Edit Program Day"
-                    description="Remember to click save when your done."
-                    formComponent={
-                      <DayForm
-                        userId={day.userId}
-                        programId={day.programId}
-                        groupId={day.groupId}
-                        dayInfo={day}
-                      />
-                    }
-                  />
-                }
-                isDark={isDone}
-                linkTo={`/workout/${day.programId}/${day.id}`}
-              />
-            );
-          })}
+              return (
+                <ActionCard
+                  key={day.id}
+                  title={day.name}
+                  editButton={
+                    <EditButtonPopover
+                      title="Edit Program Day"
+                      description="Remember to click save when your done."
+                      formComponent={
+                        <DayForm
+                          userId={day.userId}
+                          programId={day.programId}
+                          groupId={day.groupId}
+                          dayInfo={day}
+                        />
+                      }
+                    />
+                  }
+                  isDark={isDone}
+                  linkTo={`/workout/${day.programId}/${day.id}`}
+                />
+              );
+            })}
         </TabsContent>
       ))}
     </>
