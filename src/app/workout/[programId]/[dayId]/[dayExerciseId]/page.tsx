@@ -16,7 +16,7 @@ import { ExerciseProvider } from "~/context/ExerciseContext";
 
 // * EXERCISE PAGE
 
-export default async function Exercise({
+export default function Exercise({
   params,
 }: {
   params: { programId: string; dayExerciseId: string; dayId: string };

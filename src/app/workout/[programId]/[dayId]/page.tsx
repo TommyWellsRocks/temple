@@ -12,7 +12,7 @@ import { DayExercisesList } from "~/components/workout/Day/DayExercisesList";
 
 // * DAY OVERVIEW PAGE
 
-export default async function DayOverview({
+export default function DayOverview({
   params,
 }: {
   params: { dayId: string };

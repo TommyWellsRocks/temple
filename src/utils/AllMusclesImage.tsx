@@ -34,15 +34,15 @@ export const muscles: { [key: string]: StaticImport } = {
   Forearms,
   Glutes,
   Hamstrings,
-  LowerAbs,
-  LowerBack,
+  "Lower Abs": LowerAbs,
+  "Lower Back": LowerBack,
   Neck,
   Obliques,
   Quads,
   Shoulders,
   Traps,
   Triceps,
-  UpperAbs,
+  "Upper Abs": UpperAbs,
 };
 
 // For now, abs category is Obliques, Lower and Upper Abs
@@ -82,6 +82,7 @@ export function ExerciseMuscleImage({
         }}
       />
       {secondaryMuscles?.map((secondary) => {
+        console.log(secondary);
         return (
           <Image
             key={secondary}

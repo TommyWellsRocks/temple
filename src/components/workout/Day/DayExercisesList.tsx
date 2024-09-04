@@ -58,14 +58,16 @@ export function DayExercisesList({ dayId }: { dayId: number }) {
                         {exercise.info.primaryMuscle}
                       </span>
                     ) : null}
-                    {exercise.info.secondaryMuscles?.map((muscle) => (
-                      <span
-                        key={muscle}
-                        className="rounded-md bg-muted px-2 py-0.5"
-                      >
-                        {muscle}
-                      </span>
-                    ))}
+                    {exercise.info.secondaryMuscles
+                      ?.slice(0, 2)
+                      .map((muscle) => (
+                        <span
+                          key={muscle}
+                          className="rounded-md bg-muted px-2 py-0.5"
+                        >
+                          {muscle}
+                        </span>
+                      ))}
                   </div>
                 </div>
               </Link>
