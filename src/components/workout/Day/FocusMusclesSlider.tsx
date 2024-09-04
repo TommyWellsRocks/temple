@@ -29,21 +29,19 @@ export function FocusMusclesSlider({ dayId }: { dayId: number }) {
   return (
     <Carousel opts={{ dragFree: true }}>
       <CarouselContent>
-        <div className="flex gap-x-2">
-          {Object.keys(muscleCount).map((muscle) => (
-            <CarouselItem className="flex items-center gap-x-1" key={muscle}>
-              <div className="flex gap-x-1 rounded-md bg-secondary px-2 py-1 text-base">
-                <span>
-                  {((muscleCount[muscle]! / dayExercises.length) * 100).toFixed(
-                    0,
-                  )}
-                  %
-                </span>
-                <span>{muscle}</span>
-              </div>
-            </CarouselItem>
-          ))}
-        </div>
+        {Object.keys(muscleCount).map((muscle) => (
+          <CarouselItem className="flex items-center gap-x-1" key={muscle}>
+            <div className="flex gap-x-1 rounded-md bg-secondary px-2 py-1 text-base">
+              <span>
+                {((muscleCount[muscle]! / dayExercises.length) * 100).toFixed(
+                  0,
+                )}
+                %
+              </span>
+              <span>{muscle}</span>
+            </div>
+          </CarouselItem>
+        ))}
       </CarouselContent>
     </Carousel>
   );
