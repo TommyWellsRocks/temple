@@ -3,98 +3,96 @@ import {
   CarouselContent,
   CarouselItem,
 } from "~/components/ui/carousel";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
 import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
-import { EditGroupsButton } from "~/components/workout/Program/EditGroupsButton";
 import { ActionCard } from "~/components/workout/Common/ActionCard";
 import { DayForm } from "~/components/workout/Program/DayForm";
-import type { Program } from "~/server/types";
+import { useProgram } from "~/stores/ProgramStore";
+import { Minus, Plus } from "lucide-react";
 
-function GroupList({
-  userId,
-  programId,
-  program,
-}: {
-  userId: string;
-  programId: number;
-  program: Program;
-}) {
-  if (!program) return;
+import {
+  handleCreateDayGroup,
+  handleDeleteDayGroup,
+} from "~/server/actions/workout/ProgramActions";
+
+export function EditGroupsButton({ groupId }: { groupId?: number }) {
+  const [userId, programId] = useProgram((state) => [
+    state.program?.userId,
+    state.program?.id,
+  ]);
+  if (!userId || !programId) return;
 
   return (
-    <div className="mx-auto flex w-[300px] justify-between rounded-lg bg-secondary sm:w-[450px]">
-      {program.groups.length > 1 ? (
-        <EditGroupsButton
-          userId={userId}
-          programId={programId}
-          groupId={program.groups[program.groups.length - 1]!.id}
-        />
-      ) : (
-        <div />
-      )}
-
-      <TabsList>
-        <Carousel
-          opts={{ startIndex: program.groups.length - 1, dragFree: true }}
-        >
-          <CarouselContent className="w-[240px] sm:w-[390px]">
-            {program.groups.map((group, index) => (
-              <CarouselItem key={group.id}>
-                <TabsTrigger value={String(group.id)}>
-                  Group {index + 1}
-                </TabsTrigger>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </TabsList>
-
-      <EditGroupsButton userId={userId} programId={programId} />
-    </div>
+    <button
+      className="mx-1"
+      onClick={() => {
+        if (groupId) {
+          const shouldDelete = confirm(
+            "Are you sure you want to remove latest sprint? ",
+          );
+          if (shouldDelete) handleDeleteDayGroup(userId, programId, groupId);
+        } else {
+          handleCreateDayGroup(userId, programId);
+        }
+      }}
+    >
+      {groupId ? <Minus /> : <Plus />}
+    </button>
   );
 }
 
-function GroupsInfo({
-  userId,
-  programId,
-  program,
-}: {
-  userId: string;
-  programId: number;
-  program: Program;
-}) {
-  if (!program) return;
+export function GroupsInfo() {
+  const [userId, programId, groups] = useProgram((state) => [
+    state.program?.userId,
+    state.program?.id,
+    state.program?.groups,
+  ]);
+  if (!userId || !programId || !groups) return;
 
   return (
     <div className="mb-5 flex flex-col justify-between gap-2 min-[450px]:flex-row">
       <div className="min-w-[40px]" />
 
-      <GroupList userId={userId} programId={programId} program={program} />
+      <div className="mx-auto flex w-[300px] justify-between rounded-lg bg-secondary sm:w-[450px]">
+        <EditGroupsButton groupId={groups[groups.length - 1]!.id} />
+
+        <TabsList>
+          <Carousel opts={{ startIndex: groups.length - 1, dragFree: true }}>
+            <CarouselContent className="w-[240px] sm:w-[390px]">
+              {groups.map((group, index) => (
+                <CarouselItem key={group.id}>
+                  <TabsTrigger value={String(group.id)}>
+                    Group {index + 1}
+                  </TabsTrigger>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </TabsList>
+
+        <EditGroupsButton />
+      </div>
 
       <div className="flex justify-end">
         <AddButtonOverlay
           title="Create Day"
           description="Design and schedule your program days. Click create when you're done."
-          formComponent={
-            <DayForm
-              userId={userId}
-              programId={programId}
-              groupId={program.groups[program.groups.length - 1]!.id}
-            />
-          }
+          formComponent={<DayForm groupId={groups[groups.length - 1]!.id} />}
         />
       </div>
     </div>
   );
 }
 
-function GroupDays({ program }: { program: Program }) {
+export function GroupDays() {
+  const groups = useProgram((state) => state.program?.groups);
+  if (!groups) return;
   // const todaysDay = new Date().getDay();
 
   return (
     <>
-      {program!.groups.map((group) => (
+      {groups.map((group) => (
         <TabsContent
           className="flex flex-col gap-y-4"
           value={String(group.id)}
@@ -129,12 +127,7 @@ function GroupDays({ program }: { program: Program }) {
                       title="Edit Program Day"
                       description="Remember to click save when your done."
                       formComponent={
-                        <DayForm
-                          userId={day.userId}
-                          programId={day.programId}
-                          groupId={day.groupId}
-                          dayInfo={day}
-                        />
+                        <DayForm groupId={day.groupId} dayInfo={day} />
                       }
                     />
                   }
@@ -146,29 +139,5 @@ function GroupDays({ program }: { program: Program }) {
         </TabsContent>
       ))}
     </>
-  );
-}
-
-export function DayList({
-  userId,
-  programId,
-  program,
-}: {
-  userId: string;
-  programId: number;
-  program: Program;
-}) {
-  if (!program) return;
-
-  return (
-    <section>
-      <Tabs
-        defaultValue={String(program.groups[program.groups.length - 1]!.id)}
-      >
-        <GroupsInfo userId={userId} programId={programId} program={program} />
-
-        <GroupDays program={program} />
-      </Tabs>
-    </section>
   );
 }

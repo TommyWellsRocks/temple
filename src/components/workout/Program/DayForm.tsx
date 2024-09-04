@@ -20,15 +20,12 @@ import {
   handleDeleteProgramDay,
   handleEditProgramDay,
 } from "~/server/actions/workout/ProgramActions";
+import { useProgram } from "~/stores/ProgramStore";
 
 export function DayForm({
-  userId,
-  programId,
   groupId,
   dayInfo,
 }: {
-  userId: string;
-  programId: number;
   groupId: number;
   dayInfo?: {
     repeatOn: number[] | null;
@@ -38,6 +35,12 @@ export function DayForm({
     programId: number;
   };
 }) {
+  const [userId, programId] = useProgram((state) => [
+    state.program?.userId,
+    state.program?.id,
+  ]);
+  if (!userId || !programId) return
+
   const days = [
     { day: "Sunday", id: 0 },
     { day: "Monday", id: 1 },

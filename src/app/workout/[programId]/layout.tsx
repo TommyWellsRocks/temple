@@ -15,6 +15,7 @@ export default async function ProgramLayout({
   if (!session?.user?.id) return redirect("/workout");
 
   const program = await getMyProgram(session.user.id, Number(params.programId));
+  if (!program) return redirect("/workout");
 
   return (
     <>
