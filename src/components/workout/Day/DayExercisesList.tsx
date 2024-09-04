@@ -31,7 +31,7 @@ export function DayExercisesList({ dayId }: { dayId: number }) {
                   secondaryMuscles={exercise.info.secondaryMuscles}
                   widthInPx={100}
                 />
-                <div className="flex flex-col gap-y-1">
+                <div className="flex flex-col gap-y-1 py-4">
                   <span className="text-base">
                     {exercise.notes?.name
                       ? toTitleCase(exercise.notes.name)
@@ -54,7 +54,7 @@ export function DayExercisesList({ dayId }: { dayId: number }) {
                   </div>
                   <div className="flex flex-wrap gap-x-2 text-xs">
                     {exercise.info.primaryMuscle ? (
-                      <span className="rounded-md bg-muted-foreground px-2 py-0.5">
+                      <span className="rounded-md bg-muted-foreground px-2 py-0.5 text-muted">
                         {exercise.info.primaryMuscle}
                       </span>
                     ) : null}
