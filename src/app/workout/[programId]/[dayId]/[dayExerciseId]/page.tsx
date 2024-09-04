@@ -19,19 +19,17 @@ import { ExerciseProvider } from "~/context/ExerciseContext";
 export default async function Exercise({
   params,
 }: {
-  params: { dayExerciseId: string; dayId: string };
+  params: { programId: string; dayExerciseId: string; dayId: string };
 }) {
   const router = useRouter();
-  const program = useProgram((state) => state.program);
-  if (!program) return router.push("/workout");
 
-  const programDay = program.programDays.find(
-    (day) => day.id === Number(params.dayId),
+  const dayExercise = useProgram((state) =>
+    state.program?.programDays
+      .find((day) => day.id === Number(params.dayId))
+      ?.dayExercises.find((ex) => ex.id === Number(params.dayExerciseId)),
   );
-  const dayExercise = programDay?.dayExercises.find(
-    (ex) => ex.id === Number(params.dayExerciseId),
-  );
-  if (!dayExercise) return router.push(`/workout/${program.id}/${params.dayId}`);
+  if (!dayExercise)
+    return router.push(`/workout/${Number(params.programId)}/${params.dayId}`);
 
   // const previousSessionExercise = await getLastSessionExercise(dayExercise);
 
@@ -45,7 +43,7 @@ export default async function Exercise({
   return (
     <>
       <Navigation
-        backURL={`/workout/${program.id}/${params.dayId}`}
+        backURL={`/workout/${Number(params.programId)}/${params.dayId}`}
         heading={`${dayExercise.notes?.name ? dayExercise.notes.name : dayExercise.info.name}`}
       />
 
