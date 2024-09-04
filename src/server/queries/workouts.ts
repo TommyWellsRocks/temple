@@ -219,7 +219,7 @@ export async function getMyProgram(userId: string, programId: number) {
         },
       },
     },
-    columns: { name: true, userId: true, id: true },
+    columns: { name: true, userId: true, id: true, startDate: true, endDate: true },
   });
 }
 

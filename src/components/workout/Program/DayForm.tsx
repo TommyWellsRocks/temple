@@ -39,7 +39,7 @@ export function DayForm({
     state.program?.userId,
     state.program?.id,
   ]);
-  if (!userId || !programId) return
+  if (!userId || !programId) return;
 
   const days = [
     { day: "Sunday", id: 0 },
@@ -70,21 +70,23 @@ export function DayForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
-          dayInfo
-            ? handleEditProgramDay(
-                userId,
-                programId,
-                dayInfo.id,
-                values.name,
-                values.repeatOn,
-              )
-            : handleCreateDay(
-                userId,
-                programId,
-                groupId,
-                values.name,
-                values.repeatOn,
-              );
+          if (dayInfo) {
+            handleEditProgramDay(
+              userId,
+              programId,
+              dayInfo.id,
+              values.name,
+              values.repeatOn,
+            );
+          } else {
+            handleCreateDay(
+              userId,
+              programId,
+              groupId,
+              values.name,
+              values.repeatOn,
+            );
+          }
         })}
         className="mx-auto flex w-[260px] flex-col gap-4"
       >
