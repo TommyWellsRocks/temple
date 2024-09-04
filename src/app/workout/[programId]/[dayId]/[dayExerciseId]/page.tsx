@@ -1,42 +1,37 @@
+"use client";
+
 // import {
 //   getLastSessionExercise,
 //   getMyExerciseAnalytics,
 // } from "~/server/queries/workouts";
-import { redirect } from "next/navigation";
-import { auth } from "~/server/auth";
-import { Navigation } from "~/components/ui/Navigation";
 // import { LineChart } from "~/components/ui/Linechart";
 // import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
+import { useRouter } from "next/navigation";
+import { useProgram } from "~/stores/ProgramStore";
+import { Navigation } from "~/components/ui/Navigation";
 import { SetInputs } from "~/components/workout/Exercise/SetInputs";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
-import { useProgram } from "~/context/useProgram";
 import { ActionButtons } from "~/components/workout/Exercise/ActionButtons";
 import { ExerciseProvider } from "~/context/ExerciseContext";
 
 // * EXERCISE PAGE
 
-export const dynamic = "force-dynamic";
+export default async function Exercise({
+  params,
+}: {
+  params: { dayExerciseId: string; dayId: string };
+}) {
+  const router = useRouter();
+  const program = useProgram((state) => state.program);
+  if (!program) return router.push("/workout");
 
-export default async function Exercise(context: any | unknown) {
-  const session = await auth();
-  const { programId, dayId, dayExerciseId } = context.params as {
-    programId: string;
-    dayId: string;
-    dayExerciseId: string;
-  };
-  if (!session?.user?.id)
-    return redirect(
-      `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}/${dayExerciseId}`)}`,
-    );
-
-  const program = await useProgram(session.user.id, Number(programId));
-  const programDay = program?.programDays.find(
-    (day) => day.id === Number(dayId),
+  const programDay = program.programDays.find(
+    (day) => day.id === Number(params.dayId),
   );
   const dayExercise = programDay?.dayExercises.find(
-    (ex) => ex.id === Number(dayExerciseId),
+    (ex) => ex.id === Number(params.dayExerciseId),
   );
-  if (!dayExercise) return redirect("/workout");
+  if (!dayExercise) return router.push(`/workout/${program.id}/${params.dayId}`);
 
   // const previousSessionExercise = await getLastSessionExercise(dayExercise);
 
@@ -50,7 +45,7 @@ export default async function Exercise(context: any | unknown) {
   return (
     <>
       <Navigation
-        backURL={`/workout/${programId}/${dayId}`}
+        backURL={`/workout/${program.id}/${params.dayId}`}
         heading={`${dayExercise.notes?.name ? dayExercise.notes.name : dayExercise.info.name}`}
       />
 

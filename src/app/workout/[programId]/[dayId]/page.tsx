@@ -1,6 +1,7 @@
-import { auth } from "~/server/auth";
-import { redirect } from "next/navigation";
-import { useProgram } from "~/context/useProgram";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useProgram } from "~/stores/ProgramStore";
 import { ActionButtons } from "~/components/workout/Day/ActionButtons";
 import { NavHeader } from "~/components/workout/Exercise/NavHeader";
 import { SectionHeader } from "~/components/workout/Common/SectionHeader";
@@ -16,25 +17,20 @@ import Link from "next/link";
 
 // * DAY OVERVIEW PAGE
 
-export const dynamic = "force-dynamic";
+export default async function DayOverview({
+  params,
+}: {
+  params: { dayId: string };
+}) {
+  const router = useRouter();
+  const program = useProgram((state) => state.program);
+  if (!program) return router.push("/workout");
 
-export default async function DayOverview(context: any | unknown) {
-  const session = await auth();
-  const { programId, dayId } = context.params as {
-    programId: string;
-    dayId: string;
-  };
-  if (!session?.user?.id)
-    return redirect(
-      `/signin?return=${encodeURIComponent(`/workout/${programId}/${dayId}`)}`,
-    );
-
-  const program = await useProgram(session.user.id, Number(programId));
-  const programDay = program?.programDays.find(
-    (day) => day.id === Number(dayId),
+  const programDay = program.programDays.find(
+    (day) => day.id === Number(params.dayId),
   );
-  if (!programDay) return redirect("/workout");
-  const allExercises = await getExercises(programDay.userId);
+  if (!programDay) return router.push(`/workout/${program.id}`);
+  // const allExercises = await getExercises(programDay.userId);
 
   return (
     <>
@@ -51,13 +47,13 @@ export default async function DayOverview(context: any | unknown) {
           <SectionHeader
             title={`${programDay.dayExercises.length} ${programDay.dayExercises.length > 1 ? "Exercises" : "Exercise"}`}
           />
-          <AddButtonOverlay
+          {/* <AddButtonOverlay
             title="Add Exercise"
             description="Add an exercise to your workout. Click add when you're done."
             formComponent={
               <DataTable programDay={programDay} exercises={allExercises} />
             }
-          />
+          /> */}
         </div>
 
         <div className="flex flex-col gap-y-3">
@@ -70,7 +66,7 @@ export default async function DayOverview(context: any | unknown) {
               return (
                 <div className="relative flex items-center" key={exercise.id}>
                   <Link
-                    href={`/workout/${programId}/${dayId}/${exercise.id}`}
+                    href={`/workout/${program.id}/${params.dayId}/${exercise.id}`}
                     className={`flex w-full items-center gap-x-2 rounded-lg pr-10 ${isDone ? "bg-doneDark text-muted-foreground" : "bg-undoneDark"}`}
                   >
                     <ExerciseMuscleImage
@@ -122,8 +118,8 @@ export default async function DayOverview(context: any | unknown) {
                       description={`Remember to click save when you're done.`}
                       formComponent={
                         <ExerciseForm
-                          userId={session.user!.id!}
-                          programId={Number(programId)}
+                          userId={program.userId}
+                          programId={program.id}
                           dayExercise={exercise}
                         />
                       }

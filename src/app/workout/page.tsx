@@ -14,8 +14,8 @@ export default async function Programs() {
   if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/workout")}`);
 
-  const workoutRedirect = await getWorkoutRedirect(session.user.id);
-  if (workoutRedirect) return redirect(workoutRedirect);
+  // const workoutRedirect = await getWorkoutRedirect(session.user.id);
+  // if (workoutRedirect) return redirect(workoutRedirect);
 
   return (
     <>

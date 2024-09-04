@@ -210,7 +210,7 @@ export async function getMyProgram(userId: string, programId: number) {
                   name: true,
                   video: true,
                   primaryMuscle: true,
-                  secondaryMuscles: true
+                  secondaryMuscles: true,
                 },
               },
               notes: { columns: { id: true, name: true, notes: true } },
@@ -219,7 +219,7 @@ export async function getMyProgram(userId: string, programId: number) {
         },
       },
     },
-    columns: { name: true },
+    columns: { name: true, userId: true, id: true },
   });
 }
 
