@@ -2,7 +2,6 @@
 
 import { Button } from "~/components/ui/button";
 import { Flag, Zap } from "lucide-react";
-import type { ProgramDay } from "~/server/types";
 import {
   Drawer,
   DrawerClose,
@@ -17,13 +16,21 @@ import {
   handleStartWorkout,
 } from "~/server/actions/workout/DayActions";
 import { useState } from "react";
+import { useProgram } from "~/stores/ProgramStore";
 
-export function ActionButtons({ programDay }: { programDay: ProgramDay }) {
+export function ActionButtons({ dayId }: { dayId: number }) {
+  const [startedWorkout, endedWorkout, userId] = useProgram((state) => [
+    state.program?.programDays.find((day) => day.id === dayId)?.startedWorkout,
+    state.program?.programDays.find((day) => day.id === dayId)?.endedWorkout,
+    state.program?.userId,
+  ]);
+  if (!userId) return;
+
   const [showStartButton, setShowStartButton] = useState(
-    programDay?.startedWorkout === null,
+    startedWorkout === null,
   );
   const [showEndButton, setShowEndButton] = useState(
-    programDay?.startedWorkout !== null && programDay?.endedWorkout === null,
+    startedWorkout !== null && endedWorkout === null,
   );
 
   if (!showStartButton && !showEndButton) return;
@@ -34,7 +41,7 @@ export function ActionButtons({ programDay }: { programDay: ProgramDay }) {
         <Button
           className="flex gap-1"
           onClick={() => {
-            handleStartWorkout(programDay!.userId, programDay!.id);
+            handleStartWorkout(userId, dayId);
             setShowStartButton(false);
             setShowEndButton(true);
           }}
@@ -62,7 +69,7 @@ export function ActionButtons({ programDay }: { programDay: ProgramDay }) {
                     className="w-full"
                     onClick={() => {
                       setShowEndButton(false);
-                      handleEndWorkout(programDay!.userId, programDay!.id);
+                      handleEndWorkout(userId, dayId);
                     }}
                   >
                     Log Workout

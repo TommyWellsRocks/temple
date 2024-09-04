@@ -1,9 +1,12 @@
 import { Navigation } from "~/components/ui/Navigation";
 import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
 import { DayForm } from "~/components/workout/Program/DayForm";
-import type { ProgramDay } from "~/server/types";
+import { useProgram } from "~/stores/ProgramStore";
 
-export function NavHeader({ programDay }: { programDay: ProgramDay }) {
+export function NavHeader({ dayId }: { dayId: number }) {
+  const programDay = useProgram((state) =>
+    state.program?.programDays.find((day) => day.id === dayId),
+  );
   if (!programDay) return;
   return (
     <Navigation
@@ -14,12 +17,7 @@ export function NavHeader({ programDay }: { programDay: ProgramDay }) {
           title="Edit Exercise"
           description={`Remember to click save when you're done.`}
           formComponent={
-            <DayForm
-              userId={programDay.userId}
-              programId={programDay.programId}
-              groupId={programDay.groupId}
-              dayInfo={programDay}
-            />
+            <DayForm groupId={programDay.groupId} dayInfo={programDay} />
           }
         />
       }

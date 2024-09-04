@@ -1,11 +1,19 @@
-import { Carousel, CarouselContent, CarouselItem } from "~/components/ui/carousel";
-import type { ProgramDay } from "~/server/types";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "~/components/ui/carousel";
+import { useProgram } from "~/stores/ProgramStore";
 
-export function FocusMuscles({ programDay }: { programDay: ProgramDay }) {
-  if (!programDay) return;
+export function FocusMusclesSlider({ dayId }: { dayId: number }) {
+  const dayExercises = useProgram(
+    (state) =>
+      state.program?.programDays.find((day) => day.id === dayId)?.dayExercises,
+  );
+  if (!dayExercises) return;
 
   const muscleCount: { [muscle: string]: number } = {};
-  programDay.dayExercises.forEach((ex) => {
+  dayExercises.forEach((ex) => {
     const primaryMuscle = ex.info.primaryMuscle;
     const secondaryMuscles = ex.info.secondaryMuscles;
     if (primaryMuscle) {
@@ -26,10 +34,9 @@ export function FocusMuscles({ programDay }: { programDay: ProgramDay }) {
             <CarouselItem className="flex items-center gap-x-1" key={muscle}>
               <div className="flex gap-x-1 rounded-md bg-secondary px-2 py-1 text-base">
                 <span>
-                  {(
-                    (muscleCount[muscle]! / programDay.dayExercises.length) *
-                    100
-                  ).toFixed(0)}
+                  {((muscleCount[muscle]! / dayExercises.length) * 100).toFixed(
+                    0,
+                  )}
                   %
                 </span>
                 <span>{muscle}</span>
