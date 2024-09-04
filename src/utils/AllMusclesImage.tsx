@@ -1,26 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import Base from "public/content/images/workout/muscles/Base.svg";
-import Abductors from "public/content/images/workout/muscles/Abductors.svg";
-import Adductors from "public/content/images/workout/muscles/Adductors.svg";
-import Back from "public/content/images/workout/muscles/Back.svg";
-import Biceps from "public/content/images/workout/muscles/Biceps.svg";
-import Calves from "public/content/images/workout/muscles/Calves.svg";
-import Chest from "public/content/images/workout/muscles/Chest.svg";
-import Forearms from "public/content/images/workout/muscles/Forearms.svg";
-import Glutes from "public/content/images/workout/muscles/Glutes.svg";
-import Hamstrings from "public/content/images/workout/muscles/Hamstrings.svg";
-import LowerAbs from "public/content/images/workout/muscles/Lower Abs.svg";
-import LowerBack from "public/content/images/workout/muscles/Lower Back.svg";
-import Neck from "public/content/images/workout/muscles/Neck.svg";
-import Obliques from "public/content/images/workout/muscles/Obliques.svg";
-import Quads from "public/content/images/workout/muscles/Quads.svg";
-import Shoulders from "public/content/images/workout/muscles/Shoulders.svg";
-import Traps from "public/content/images/workout/muscles/Traps.svg";
-import Triceps from "public/content/images/workout/muscles/Triceps.svg";
-import UpperAbs from "public/content/images/workout/muscles/Upper Abs.svg";
-import Abs from "public/content/images/workout/muscles/Abs.svg";
+import Base from "public/content/images/workout/muscles/Base.png";
+import Abductors from "public/content/images/workout/muscles/Abductors.png";
+import Adductors from "public/content/images/workout/muscles/Adductors.png";
+import Back from "public/content/images/workout/muscles/Back.png";
+import Biceps from "public/content/images/workout/muscles/Biceps.png";
+import Calves from "public/content/images/workout/muscles/Calves.png";
+import Chest from "public/content/images/workout/muscles/Chest.png";
+import Forearms from "public/content/images/workout/muscles/Forearms.png";
+import Glutes from "public/content/images/workout/muscles/Glutes.png";
+import Hamstrings from "public/content/images/workout/muscles/Hamstrings.png";
+import LowerAbs from "public/content/images/workout/muscles/Lower Abs.png";
+import LowerBack from "public/content/images/workout/muscles/Lower Back.png";
+import Neck from "public/content/images/workout/muscles/Neck.png";
+import Obliques from "public/content/images/workout/muscles/Obliques.png";
+import Quads from "public/content/images/workout/muscles/Quads.png";
+import Shoulders from "public/content/images/workout/muscles/Shoulders.png";
+import Traps from "public/content/images/workout/muscles/Traps.png";
+import Triceps from "public/content/images/workout/muscles/Triceps.png";
+import UpperAbs from "public/content/images/workout/muscles/Upper Abs.png";
+import Abs from "public/content/images/workout/muscles/Abs.png";
 import type { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export const muscles: { [key: string]: StaticImport } = {
