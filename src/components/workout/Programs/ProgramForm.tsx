@@ -24,7 +24,15 @@ import { cn } from "~/lib/utils";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type { Program } from "~/server/types";
+
+interface Program {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  id: number;
+  userId: string;
+}
+
 import {
   handleEditProgram,
   handleCreateProgram,

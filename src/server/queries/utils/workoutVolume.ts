@@ -50,14 +50,14 @@ export function calculateMonthActiveDays(
   return year;
 }
 
-export function calculateProgramVolumeAnalytics(program: Program) {
-  return program!.groups.map((group) =>
-    group.groupDays.reduce(
-      (total, day) => total + calculateSessionVolume(day.dayExercises),
-      0,
-    ),
-  );
-}
+// export function calculateProgramVolumeAnalytics(program: Program) {
+//   return program!.groups.map((group) =>
+//     group.groupDays.reduce(
+//       (total, day) => total + calculateSessionVolume(day.dayExercises),
+//       0,
+//     ),
+//   );
+// }
 
 export function calculateSessionVolume(
   sessionExercises: { reps: number[]; weight: number[] }[],
