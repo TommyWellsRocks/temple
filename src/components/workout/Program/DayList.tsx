@@ -106,9 +106,8 @@ export function GroupDays() {
 }
 
 function DayList({ groupId }: { groupId: number }) {
-  const groupDays = useProgram(
-    (state) =>
-      state.programGroups?.find((group) => group.id === groupId)?.groupDays,
+  const groupDays = useProgram((state) =>
+    state.program?.programDays.filter((day) => day.groupId === groupId),
   );
   if (!groupDays) return;
 
