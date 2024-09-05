@@ -24,7 +24,7 @@ import { cn } from "~/lib/utils";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type { WorkoutPrograms } from "~/server/types";
+import type { Program } from "~/server/types";
 import {
   handleEditProgram,
   handleCreateProgram,
@@ -38,7 +38,7 @@ export function ProgramForm({
   programInfo,
 }: {
   userId: string;
-  programInfo?: WorkoutPrograms[0];
+  programInfo?: Program;
 }) {
   const today = new Date();
 

@@ -12,7 +12,7 @@ import { useProgram } from "~/stores/ProgramStore";
 export default function Days() {
   const [programName, programGroups, userId] = useProgram((state) => [
     state.program?.name,
-    state.program?.groups,
+    state.programGroups,
     state.program?.userId,
   ]);
   const program = useProgram((state) => state.program);

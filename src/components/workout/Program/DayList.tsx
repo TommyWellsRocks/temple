@@ -46,7 +46,7 @@ export function GroupsInfo() {
   const [userId, programId, groups] = useProgram((state) => [
     state.program?.userId,
     state.program?.id,
-    state.program?.groups,
+    state.programGroups,
   ]);
   if (!userId || !programId || !groups) return;
 
@@ -86,7 +86,7 @@ export function GroupsInfo() {
 }
 
 export function GroupDays() {
-  const groups = useProgram((state) => state.program?.groups);
+  const groups = useProgram((state) => state.programGroups);
   if (!groups) return;
   // const todaysDay = new Date().getDay();
 
@@ -98,46 +98,63 @@ export function GroupDays() {
           value={String(group.id)}
           key={group.id}
         >
-          {group.groupDays
-            .sort((a, b) => {
-              if (a.repeatOn && b.repeatOn) {
-                return (
-                  a.repeatOn.reduce((total, cur) => total + cur) -
-                  b.repeatOn.reduce((total, cur) => total + cur)
-                );
-              } else {
-                return a.id - b.id;
-              }
-            })
-            .map((day) => {
-              const isDone =
-                day.startedWorkout !== null && day.endedWorkout !== null;
-              // Not done and do date isn't today
-              // const isFutureDay =
-              //   !isDone &&
-              //   day.repeatOn !== null &&
-              //   !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
-
-              return (
-                <ActionCard
-                  key={day.id}
-                  title={day.name}
-                  editButton={
-                    <EditButtonPopover
-                      title="Edit Program Day"
-                      description="Remember to click save when your done."
-                      formComponent={
-                        <DayForm groupId={day.groupId} dayInfo={day} />
-                      }
-                    />
-                  }
-                  isDark={isDone}
-                  linkTo={`/workout/${day.programId}/${day.id}`}
-                />
-              );
-            })}
+          <DayList groupId={group.id} />
         </TabsContent>
       ))}
     </>
+  );
+}
+
+function DayList({ groupId }: { groupId: number }) {
+  const groupDays = useProgram(
+    (state) =>
+      state.programGroups?.find((group) => group.id === groupId)?.groupDays,
+  );
+  if (!groupDays) return;
+
+  return (
+    <>
+      {groupDays
+        .sort((a, b) => {
+          const sumRepeatOn = (days: number[] | null) =>
+            days?.reduce((acc, day) => acc + day, 0) || 0;
+          return (
+            sumRepeatOn(a.repeatOn) - sumRepeatOn(b.repeatOn) || a.id - b.id
+          );
+        })
+        .map((day) => (
+          <DayCard key={day.id} dayId={day.id} />
+        ))}
+    </>
+  );
+}
+
+function DayCard({ dayId }: { dayId: number }) {
+  const day = useProgram((state) =>
+    state.program?.programDays.find((day) => day.id === dayId),
+  );
+  if (!day) return;
+
+  const isDone = day.startedWorkout !== null && day.endedWorkout !== null;
+  // Not done and do date isn't today
+  // const isFutureDay =
+  //   !isDone &&
+  //   day.repeatOn !== null &&
+  //   !day.repeatOn.filter((repeatDay) => repeatDay === todaysDay);
+
+  return (
+    <ActionCard
+      key={day.id}
+      title={day.name}
+      editButton={
+        <EditButtonPopover
+          title="Edit Program Day"
+          description="Remember to click save when your done."
+          formComponent={<DayForm groupId={day.groupId} dayInfo={day} />}
+        />
+      }
+      isDark={isDone}
+      linkTo={`/workout/${day.programId}/${day.id}`}
+    />
   );
 }

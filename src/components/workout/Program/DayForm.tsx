@@ -21,19 +21,14 @@ import {
   handleEditProgramDay,
 } from "~/server/actions/workout/ProgramActions";
 import { useProgram } from "~/stores/ProgramStore";
+import type { ProgDay } from "~/server/types";
 
 export function DayForm({
   groupId,
   dayInfo,
 }: {
   groupId: number;
-  dayInfo?: {
-    repeatOn: number[] | null;
-    name: string;
-    id: number;
-    userId: string;
-    programId: number;
-  };
+  dayInfo?: ProgDay
 }) {
   const [userId, programId] = useProgram((state) => [
     state.program?.userId,
@@ -70,13 +65,16 @@ export function DayForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) => {
+          const newRepeatOn = values.repeatOn ?? null;
           if (dayInfo) {
+            const setDayDetails = useProgram.getState().setDayDetails;
+            setDayDetails(dayInfo.id, values.name, newRepeatOn);
             handleEditProgramDay(
               userId,
               programId,
               dayInfo.id,
               values.name,
-              values.repeatOn,
+              newRepeatOn,
             );
           } else {
             handleCreateDay(
@@ -84,7 +82,7 @@ export function DayForm({
               programId,
               groupId,
               values.name,
-              values.repeatOn,
+              newRepeatOn,
             );
           }
         })}

@@ -15,10 +15,9 @@ export async function handleCreateDay(
   programId: number,
   groupId: number,
   name: string,
-  repeatOn: number[] | undefined,
+  repeatOn: number[] | null,
 ) {
-  await createProgramDay(userId, programId, groupId, name, repeatOn ?? null);
-  revalidatePath("/workout");
+  await createProgramDay(userId, programId, groupId, name, repeatOn);
 }
 
 export async function handleEditProgramDay(
@@ -26,10 +25,9 @@ export async function handleEditProgramDay(
   programId: number,
   dayId: number,
   name: string,
-  repeatOn: number[] | undefined,
+  repeatOn: number[] | null,
 ) {
-  await editProgramDay(userId, programId, dayId, name, repeatOn ?? null);
-  revalidatePath("/workout");
+  await editProgramDay(userId, programId, dayId, name, repeatOn);
 }
 
 export async function handleDeleteProgramDay(

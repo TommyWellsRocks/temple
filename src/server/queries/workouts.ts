@@ -167,25 +167,10 @@ export async function deleteWorkoutProgram(userId: string, programId: number) {
 
 // * Program Days
 export async function getMyProgram(userId: string, programId: number) {
-  return await db.query.workoutPrograms.findFirst({
+  const program = await db.query.workoutPrograms.findFirst({
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.id, programId)),
     with: {
-      groups: {
-        columns: { id: true },
-        with: {
-          groupDays: {
-            columns: { createdAt: false },
-            with: {
-              group: { columns: { id: true } },
-              dayExercises: {
-                columns: { reps: true, weight: true },
-                with: { info: { columns: { name: true, id: true } } },
-              },
-            },
-          },
-        },
-      },
       programDays: {
         columns: { createdAt: false },
         with: {
@@ -221,6 +206,7 @@ export async function getMyProgram(userId: string, programId: number) {
     },
     columns: { name: true, userId: true, id: true, startDate: true, endDate: true },
   });
+  return program
 }
 
 export async function createDayGroup(userId: string, programId: number) {
@@ -230,54 +216,54 @@ export async function createDayGroup(userId: string, programId: number) {
     .returning({ newGroupId: workoutProgramDayGroups.id });
 }
 
-export async function addPrevDaysToNewGroup(
-  userId: string,
-  programId: number,
-  newGroupId: number,
-) {
-  const program = await getMyProgram(userId, programId);
+// ! export async function addPrevDaysToNewGroup(
+//   userId: string,
+//   programId: number,
+//   newGroupId: number,
+// ) {
+//   const program = await getMyProgram(userId, programId);
 
-  if (program?.programDays.length) {
-    const latestGroupDays =
-      program.groups[program.groups.length - 2]!.groupDays;
+//   if (program?.programDays.length) {
+//     const latestGroupDays =
+//       program.groups[program.groups.length - 2]!.groupDays;
 
-    // Map Day Info And Exercises
-    const duplicateDaysInfo = latestGroupDays.map((day) => ({
-      userId,
-      programId,
-      groupId: newGroupId,
-      name: day.name,
-      repeatOn: day.repeatOn,
-    }));
+//     // Map Day Info And Exercises
+//     const duplicateDaysInfo = latestGroupDays.map((day) => ({
+//       userId,
+//       programId,
+//       groupId: newGroupId,
+//       name: day.name,
+//       repeatOn: day.repeatOn,
+//     }));
 
-    const duplicateExercisesInfo = latestGroupDays.map((day) =>
-      day.dayExercises.map((ex) => ({
-        userId,
-        programId,
-        groupId: newGroupId,
-        dayId: 0,
-        exerciseId: ex.info.id,
-        reps: Array(ex.reps.length).fill(0),
-        weight: Array(ex.weight.length).fill(0),
-      })),
-    );
+//     const duplicateExercisesInfo = latestGroupDays.map((day) =>
+//       day.dayExercises.map((ex) => ({
+//         userId,
+//         programId,
+//         groupId: newGroupId,
+//         dayId: 0,
+//         exerciseId: ex.info.id,
+//         reps: Array(ex.reps.length).fill(0),
+//         weight: Array(ex.weight.length).fill(0),
+//       })),
+//     );
 
-    // Create Days
-    const newDays = await db
-      .insert(workoutProgramDays)
-      .values(duplicateDaysInfo)
-      .returning({ dayId: workoutProgramDays.id });
+//     // Create Days
+//     const newDays = await db
+//       .insert(workoutProgramDays)
+//       .values(duplicateDaysInfo)
+//       .returning({ dayId: workoutProgramDays.id });
 
-    // Map Duplicate Days To New DayId Then Insert Exercises To Day
-    duplicateExercisesInfo.forEach(async (day, index) => {
-      const newDayId = newDays[index]!.dayId;
-      day.forEach((ex) => (ex.dayId = newDayId));
+//     // Map Duplicate Days To New DayId Then Insert Exercises To Day
+//     duplicateExercisesInfo.forEach(async (day, index) => {
+//       const newDayId = newDays[index]!.dayId;
+//       day.forEach((ex) => (ex.dayId = newDayId));
 
-      // Add Exercises To Each Day
-      await db.insert(workoutDayExercises).values(day);
-    });
-  }
-}
+//       // Add Exercises To Each Day
+//       await db.insert(workoutDayExercises).values(day);
+//     });
+//   }
+// }
 
 export async function deleteDayGroup(
   userId: string,
