@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import Link from "next/link";
 import Image from "next/image";
@@ -96,7 +96,7 @@ function HistoryTabContent() {
   );
 }
 
-function TabSelectors() {
+export function TabSelectors() {
   return (
     <div className="flex justify-center">
       <TabsList>
@@ -109,7 +109,7 @@ function TabSelectors() {
   );
 }
 
-function TabContents() {
+export function TabContents() {
   return (
     <>
       <NotesTabContent />
@@ -117,17 +117,5 @@ function TabContents() {
       <MusclesTabContent />
       <HistoryTabContent />
     </>
-  );
-}
-
-export function ExerciseTabs() {
-  return (
-    <section>
-      <Tabs defaultValue="notes">
-        <TabSelectors />
-
-        <TabContents />
-      </Tabs>
-    </section>
   );
 }

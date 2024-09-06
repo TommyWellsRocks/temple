@@ -1,16 +1,11 @@
 "use client";
 
-// import {
-//   getLastSessionExercise,
-//   getMyExerciseAnalytics,
-// } from "~/server/queries/workouts";
-// import { LineChart } from "~/components/ui/Linechart";
-// import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
 import { setDayExercise, useProgram } from "~/stores/ProgramStore";
 import { Navigation } from "~/components/ui/Navigation";
 import { SetInputs } from "~/components/workout/Exercise/SetInputs";
-import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
+import { TabContents, TabSelectors } from "~/components/workout/Exercise/ExerciseTabs";
 import { ActionButtons } from "~/components/workout/Exercise/ActionButtons";
+import { Tabs } from "~/components/ui/tabs";
 
 // * EXERCISE PAGE
 
@@ -23,15 +18,6 @@ export default function Exercise({
   const dayExercise = useProgram((state) => state.dayExercise);
   if (!dayExercise) return;
 
-  // const previousSessionExercise = await getLastSessionExercise(dayExercise);
-
-  // // LineChart
-  // const [lastSessionVolume, currentSessionVolume] =
-  //   await getMyExerciseAnalytics(dayExercise, previousSessionExercise);
-
-  // ActivityInfo
-  // const setCount = dayExercise.reps.length;
-
   return (
     <>
       <Navigation
@@ -39,29 +25,17 @@ export default function Exercise({
         heading={`${dayExercise.notes?.name ? dayExercise.notes.name : dayExercise.info.name}`}
       />
 
-      {/* <LineChart
-        measureOf="Volume"
-        xLabels={
-          lastSessionVolume
-            ? lastSessionVolume.length < currentSessionVolume!.length
-              ? currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
-              : lastSessionVolume.map((_, index) => `Set ${index + 1}`)
-            : currentSessionVolume!.map((_, index) => `Set ${index + 1}`)
-        }
-        prevLabel={lastSessionVolume ? "Last Session's Volume" : undefined}
-        previousData={lastSessionVolume ? lastSessionVolume : undefined}
-        currentLabel="Current Session's Volume"
-        currentData={currentSessionVolume!}
-      />
-
-      <ActivityInfo
-        setCount={setCount}
-        previousExercise={previousSessionExercise}
-      /> */}
+      <div />
 
       <SetInputs />
 
-      <ExerciseTabs />
+      <section>
+        <Tabs defaultValue="notes">
+          <TabSelectors />
+
+          <TabContents />
+        </Tabs>
+      </section>
 
       <ActionButtons />
     </>

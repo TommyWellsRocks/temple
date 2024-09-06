@@ -4,30 +4,6 @@ import { Minus, Plus } from "lucide-react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { useProgram } from "~/stores/ProgramStore";
 import { isFloat } from "~/utils/helpers";
-// import { Timer } from "lucide-react";
-// import { useEffect, useState } from "react";
-// function SetTimer() {
-//   const [timerSeconds, setTimerSeconds] = useState<number>(0);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setTimerSeconds((prevTimerSeconds) => prevTimerSeconds + 1);
-//     }, 1000);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   const minutes = Math.floor(timerSeconds / 60);
-//   const seconds = timerSeconds % 60;
-
-//   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-//   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-
-//   return (
-//     <span>
-//       {formattedMinutes}:{formattedSeconds}
-//     </span>
-//   );
-// }
 
 function InputArea({
   index,
@@ -103,12 +79,6 @@ function InputRows({
         const isActiveSet = index === dayEx.loggedSetsCount;
         return (
           <div className="flex flex-col items-end" key={crypto.randomUUID()}>
-            {/* <button
-        className="flex items-center gap-1 w-24 rounded-t-lg bg-black px-2 py-1 text-base"
-        onClick={() => {}}
-      >
-        <Timer /> <SetTimer />
-      </button> */}
             <div
               className={`flex items-center gap-x-2 min-[340px]:gap-x-3 ${isActiveSet ? "text-gray-200" : null}`}
             >
@@ -149,9 +119,7 @@ function InputRows({
 }
 
 function EditSetButton({ method }: { method: "Add" | "Delete" }) {
-  const dayEx = useProgram((state) => state.dayExercise);
   const setDayExSets = useProgram().setDayExerciseSets;
-  if (!dayEx) return;
 
   return (
     <button
@@ -169,9 +137,6 @@ function EditSetButton({ method }: { method: "Add" | "Delete" }) {
 }
 
 export function SetInputs() {
-  const dayExercise = useProgram((state) => state.dayExercise);
-  if (!dayExercise) return;
-
   const handleInputChange = useProgram().setDayExerciseInputs;
 
   return (
