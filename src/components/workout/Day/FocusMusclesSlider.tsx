@@ -5,11 +5,8 @@ import {
 } from "~/components/ui/carousel";
 import { useProgram } from "~/stores/ProgramStore";
 
-export function FocusMusclesSlider({ dayId }: { dayId: number }) {
-  const dayExercises = useProgram(
-    (state) =>
-      state.program?.programDays.find((day) => day.id === dayId)?.dayExercises,
-  );
+export function FocusMusclesSlider() {
+  const dayExercises = useProgram((state) => state.day?.dayExercises);
   if (!dayExercises) return;
 
   const muscleCount: { [muscle: string]: number } = {};

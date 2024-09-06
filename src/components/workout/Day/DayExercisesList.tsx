@@ -5,11 +5,8 @@ import { toTitleCase } from "~/utils/helpers";
 import { EditButtonPopover } from "../Common/EditButtonPopover";
 import { ExerciseForm } from "./ExerciseForm";
 
-export function DayExercisesList({ dayId }: { dayId: number }) {
-  const dayExercises = useProgram(
-    (state) =>
-      state.program?.programDays.find((day) => day.id == dayId)?.dayExercises,
-  );
+export function DayExercisesList() {
+  const dayExercises = useProgram((state) => state.day?.dayExercises);
   if (!dayExercises) return;
 
   return (

@@ -18,13 +18,14 @@ import {
 import { useState } from "react";
 import { useProgram } from "~/stores/ProgramStore";
 
-export function ActionButtons({ dayId }: { dayId: number }) {
-  const [startedWorkout, endedWorkout, userId] = useProgram((state) => [
-    state.program?.programDays.find((day) => day.id === dayId)?.startedWorkout,
-    state.program?.programDays.find((day) => day.id === dayId)?.endedWorkout,
+export function ActionButtons() {
+  const [dayId, startedWorkout, endedWorkout, userId] = useProgram((state) => [
+    state.day?.id,
+    state.day?.startedWorkout,
+    state.day?.endedWorkout,
     state.program?.userId,
   ]);
-  if (!userId) return;
+  if (!dayId || !startedWorkout || !endedWorkout || !userId) return;
 
   const [showStartButton, setShowStartButton] = useState(
     startedWorkout === null,

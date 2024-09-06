@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { Program, ProgDay } from "~/server/types";
+import type { Program, ProgramDay, DayExercise } from "~/server/types";
 import { useEffect } from "react";
 import {
   handleExerciseSetsChange,
@@ -14,7 +14,7 @@ interface ProgramState {
   programGroups:
     | {
         id: number;
-        groupDays: ProgDay[];
+        groupDays: ProgramDay[];
       }[]
     | null;
   setProgram: (program: Program) => void;
@@ -24,12 +24,14 @@ interface ProgramState {
     newStartDate: Date,
     newEndDate: Date,
   ) => void;
+  day: null | ProgramDay;
+  setDay: (dayId: number) => void;
   setDayDetails: (
     dayId: number,
     newName: string,
     newRepeatOn: number[] | null,
   ) => void;
-  dayExercise: null | unknown;
+  dayExercise: null | DayExercise;
   setDayExercise: (dayId: number, dayExerciseId: number) => void;
   setDayExerciseInputs: (
     label: "Reps" | "Weight",
@@ -45,7 +47,7 @@ export const useProgram = create<ProgramState>((set) => ({
   programGroups: null,
   setProgram: (program) => set({ program }),
   setProgramGroups: (program) => {
-    const groupObjects: { id: number; groupDays: ProgDay[] }[] = []; // Groups[groupDays, id]
+    const groupObjects: { id: number; groupDays: ProgramDay[] }[] = []; // Groups[groupDays, id]
     new Set(program?.programDays.map((day) => day.groupId)).forEach((groupId) =>
       groupObjects.push({ id: groupId, groupDays: [] }),
     );
@@ -71,6 +73,16 @@ export const useProgram = create<ProgramState>((set) => ({
       };
     }),
   // Days
+  day: null,
+  setDay: (dayId) =>
+    set((state) => {
+      const day = state.program?.programDays.find((day) => day.id === dayId);
+
+      return {
+        ...state,
+        day,
+      };
+    }),
   setDayDetails: (dayId, newName, newRepeatOn) =>
     set((state) => {
       if (!state.program) return state;
@@ -103,6 +115,8 @@ export const useProgram = create<ProgramState>((set) => ({
   setDayExerciseInputs: (label, index, value) =>
     set((state) => {
       const dayEx = state.dayExercise;
+      if (!dayEx) return state;
+
       if (
         (label === "Reps" && dayEx?.reps[index] !== value) ||
         (label === "Weight" && dayEx?.weight[index] !== value)
@@ -131,6 +145,7 @@ export const useProgram = create<ProgramState>((set) => ({
   setDayExerciseSets: (method) =>
     set((state) => {
       const dayEx = state.dayExercise;
+      if (!dayEx) return state;
 
       if (method === "Add") {
         dayEx.reps.push(0);
@@ -159,6 +174,8 @@ export const useProgram = create<ProgramState>((set) => ({
   setDayExerciseLoggedSet: (loggedSetsCount) =>
     set((state) => {
       const dayEx = state.dayExercise;
+      if (!dayEx) return state;
+
       dayEx.loggedSetsCount = loggedSetsCount;
 
       handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
@@ -182,12 +199,14 @@ export function SetProgram({ program }: { program: Program }) {
   return null;
 }
 
+export function setDay(dayId: number) {
+  const setDay = useProgram.getState().setDay;
+
+  setDay(dayId);
+}
+
 export function setDayExercise(dayId: number, dayExerciseId: number) {
   const setDayEx = useProgram.getState().setDayExercise;
 
-  useEffect(() => {
-    setDayEx(dayId, dayExerciseId);
-  }, [dayExerciseId]);
-
-  return;
+  setDayEx(dayId, dayExerciseId);
 }

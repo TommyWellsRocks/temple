@@ -21,14 +21,14 @@ import {
   handleEditProgramDay,
 } from "~/server/actions/workout/ProgramActions";
 import { useProgram } from "~/stores/ProgramStore";
-import type { ProgDay } from "~/server/types";
+import type { ProgramDay } from "~/server/types";
 
 export function DayForm({
   groupId,
   dayInfo,
 }: {
   groupId: number;
-  dayInfo?: ProgDay
+  dayInfo?: ProgramDay
 }) {
   const [userId, programId] = useProgram((state) => [
     state.program?.userId,

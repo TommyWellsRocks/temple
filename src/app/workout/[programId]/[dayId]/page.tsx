@@ -1,6 +1,6 @@
 "use client";
 
-import { useProgram } from "~/stores/ProgramStore";
+import { setDay, useProgram } from "~/stores/ProgramStore";
 import { ActionButtons } from "~/components/workout/Day/ActionButtons";
 import { NavHeader } from "~/components/workout/Exercise/NavHeader";
 import { SectionHeader } from "~/components/workout/Common/SectionHeader";
@@ -12,15 +12,10 @@ import { DayExercisesList } from "~/components/workout/Day/DayExercisesList";
 
 // * DAY OVERVIEW PAGE
 
-export default function DayOverview({
-  params,
-}: {
-  params: { dayId: string };
-}) {
+export default function DayOverview({ params }: { params: { dayId: string } }) {
+  setDay(Number(params.dayId));
   const dayExercisesCount = useProgram(
-    (state) =>
-      state.program?.programDays.find((day) => day.id === Number(params.dayId))
-        ?.dayExercises.length,
+    (state) => state.day?.dayExercises.length,
   );
   if (!dayExercisesCount) return;
 
@@ -28,12 +23,12 @@ export default function DayOverview({
 
   return (
     <>
-      <NavHeader dayId={Number(params.dayId)} />
+      <NavHeader />
 
       <section className="flex flex-col gap-y-2">
         <SectionHeader title="Today's Focus" />
 
-        <FocusMusclesSlider dayId={Number(params.dayId)} />
+        <FocusMusclesSlider />
       </section>
 
       <section className="flex flex-col gap-y-2">
@@ -50,10 +45,10 @@ export default function DayOverview({
           /> */}
         </div>
 
-        <DayExercisesList dayId={Number(params.dayId)} />
+        <DayExercisesList />
       </section>
 
-      <ActionButtons dayId={Number(params.dayId)} />
+      <ActionButtons />
     </>
   );
 }

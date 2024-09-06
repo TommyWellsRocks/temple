@@ -3,10 +3,8 @@ import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover
 import { DayForm } from "~/components/workout/Program/DayForm";
 import { useProgram } from "~/stores/ProgramStore";
 
-export function NavHeader({ dayId }: { dayId: number }) {
-  const programDay = useProgram((state) =>
-    state.program?.programDays.find((day) => day.id === dayId),
-  );
+export function NavHeader() {
+  const programDay = useProgram((state) => state.day);
   if (!programDay) return;
   return (
     <Navigation
