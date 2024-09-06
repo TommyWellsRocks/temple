@@ -27,9 +27,10 @@ function NotesTabContent() {
             if (newValue !== defaultValue) {
               defaultValue = newValue;
               handleExerciseNoteInput(
-                dayEx,
+                dayEx.userId,
+                dayEx.exerciseId,
                 newValue,
-                dayEx.notes.id ? dayEx.notes.id : undefined,
+                dayEx.notes?.id ? dayEx.notes?.id : undefined,
               );
             }
           }}

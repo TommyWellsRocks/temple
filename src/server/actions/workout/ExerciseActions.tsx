@@ -33,22 +33,12 @@ export async function handleExerciseSetsChange(
 }
 
 export async function handleExerciseNoteInput(
-  dayExercise: {
-    id: number;
-    programId: number;
-    dayId: number;
-    userId: string;
-    exerciseId: number;
-  },
+  userId: string,
+  exerciseId: number,
   noteValue: string,
   noteId?: number,
 ) {
-  await editExerciseNote(
-    dayExercise.userId,
-    dayExercise.exerciseId,
-    noteValue,
-    noteId,
-  );
+  await editExerciseNote(userId, exerciseId, noteValue, noteId);
 }
 
 export async function handleUpdateLoggedSets(
