@@ -8,6 +8,7 @@ import YouTube from "public/content/images/workout/youtube.svg";
 import Google from "public/content/images/workout/google.png";
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
 import { useProgram } from "~/stores/ProgramStore";
+import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
 
 function NotesTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
@@ -60,7 +61,7 @@ function InfoTabContent() {
 
   return (
     <TabsContent value="info">
-      <div className="relative flex flex-col items-center gap-y-2 rounded-xl bg-secondary px-3 py-2 text-base min-[380px]:flex-row min-[380px]:justify-center min-[380px]:gap-x-2">
+      <div className="relative flex flex-col items-center gap-y-2 rounded-xl bg-secondary px-3 py-2 text-base min-[400px]:flex-row min-[400px]:justify-center min-[400px]:gap-x-2">
         {searches.map((search) => {
           return (
             <Link
@@ -88,16 +89,31 @@ function MusclesTabContent() {
 
   return (
     <TabsContent value="muscles">
-      {/* <div className="flex flex-col items-center gap-4 rounded-xl bg-secondary px-3 py-2">
-        {dayEx.info.musclesImage ? (
-          <Image
-            src={dayEx.info.musclesImage}
-            alt="Target Muscle Image"
-            width={200}
-            height={200}
+      <div className="flex flex-col items-center gap-y-4">
+        <div className="w-[200px]">
+          <ExerciseMuscleImage
+            primaryMuscle={dayEx.info.primaryMuscle}
+            secondaryMuscles={dayEx.info.secondaryMuscles}
           />
-        ) : null}
-      </div> */}
+        </div>
+        <div className="flex flex-col gap-y-2 text-center text-base">
+          <div className="flex gap-x-2 rounded-md bg-secondary px-2 py-1">
+            <span>Primary Muscle:</span>
+            <span>{dayEx.info.primaryMuscle}</span>
+          </div>
+          {dayEx.info.secondaryMuscles &&
+          dayEx.info.secondaryMuscles.length >= 1 ? (
+            <div className="flex items-start rounded-md bg-muted px-2 py-1 gap-x-2">
+              <span>Secondary Muscles:</span>
+              <div className="flex flex-col">
+                {dayEx.info.secondaryMuscles?.map((muscle) => (
+                  <span>{muscle}</span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
     </TabsContent>
   );
 }

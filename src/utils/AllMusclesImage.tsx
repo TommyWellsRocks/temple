@@ -50,18 +50,15 @@ export const muscles: { [key: string]: StaticImport } = {
 export function ExerciseMuscleImage({
   primaryMuscle,
   secondaryMuscles,
-  widthInPx,
 }: {
   primaryMuscle: string | null;
   secondaryMuscles: string[] | null;
-  widthInPx: number;
 }) {
   if (!primaryMuscle)
     return (
       <Image
         alt="Muscle Image"
         src={Base}
-        width={widthInPx}
         className={`rounded-lg border border-primary bg-black p-0.5`}
       />
     );
@@ -70,7 +67,6 @@ export function ExerciseMuscleImage({
       <Image
         alt="Muscle Image"
         src={Base}
-        width={widthInPx}
         className={`rounded-lg border border-primary bg-black p-0.5`}
       />
       <Image
