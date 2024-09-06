@@ -4,7 +4,8 @@ import { TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import Link from "next/link";
 import Image from "next/image";
-import YouTubeURL from "public/content/images/workout/youtube.svg";
+import YouTube from "public/content/images/workout/youtube.svg";
+import Google from "public/content/images/workout/google.png";
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
 import { useProgram } from "~/stores/ProgramStore";
 
@@ -18,7 +19,7 @@ function NotesTabContent() {
 
   return (
     <TabsContent value="notes">
-      <div className="flex rounded-xl bg-secondary px-3 py-2 text-sm">
+      <div className="flex rounded-xl bg-secondary text-sm">
         <Textarea
           className="border-none bg-transparent"
           defaultValue={defaultValue}
@@ -44,26 +45,38 @@ function InfoTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return;
 
+  const searches = [
+    {
+      platform: "YouTube",
+      icon: YouTube as string,
+      searchUrl: `https://www.youtube.com/results?search_query=${encodeURI(`How to do a ${dayEx.info.name} exercise`)}&sp=EgIYAQ%253D%253D`,
+    },
+    {
+      platform: "Google",
+      icon: Google,
+      searchUrl: `https://www.google.com/search?q=${encodeURI(`${dayEx.info.name} exercise instructions`)}`,
+    },
+  ];
+
   return (
     <TabsContent value="info">
-      <div className="relative flex flex-col items-center rounded-xl bg-secondary px-3 py-2 text-base">
-        <span className="absolute bottom-1/4">Click Me To Search</span>
-        <div className="max-w-[440px]">
-          <Link
-            target="_blank"
-            href={
-              dayEx.info.video
-                ? dayEx.info.video
-                : `https://www.youtube.com/results?search_query=${encodeURI(`How to do a ${dayEx.info.name} exercise`)}&sp=EgIYAQ%253D%253D`
-            }
-          >
-            <Image
-              src={YouTubeURL as string}
-              alt="Exercise instructional video"
-              className="rounded-xl"
-            />
-          </Link>
-        </div>
+      <div className="relative flex flex-col items-center gap-y-2 rounded-xl bg-secondary px-3 py-2 text-base min-[380px]:flex-row min-[380px]:justify-center min-[380px]:gap-x-2">
+        {searches.map((search) => {
+          return (
+            <Link
+              target="_blank"
+              href={dayEx.info.video ? dayEx.info.video : search.searchUrl}
+              className="flex items-center gap-x-2 rounded-md bg-white px-2 py-1 text-black"
+            >
+              <span>Search {search.platform}</span>
+              <Image
+                src={search.icon}
+                alt={`Search Exercise instructions on ${search.platform}`}
+                className="w-8"
+              />
+            </Link>
+          );
+        })}
       </div>
     </TabsContent>
   );
