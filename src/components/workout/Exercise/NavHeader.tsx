@@ -12,7 +12,7 @@ export function NavHeader() {
       heading={`${programDay.name} Overview`}
       editButton={
         <EditButtonPopover
-          title="Edit Exercise"
+          title="Edit Day"
           description={`Remember to click save when you're done.`}
           formComponent={
             <DayForm groupId={programDay.groupId} dayInfo={programDay} />
