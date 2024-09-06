@@ -202,11 +202,11 @@ export function SetProgram({ program }: { program: Program }) {
 export function setDay(dayId: number) {
   const setDay = useProgram.getState().setDay;
 
-  setDay(dayId);
+  useEffect(() => setDay(dayId), [dayId]);
 }
 
 export function setDayExercise(dayId: number, dayExerciseId: number) {
   const setDayEx = useProgram.getState().setDayExercise;
 
-  setDayEx(dayId, dayExerciseId);
+  useEffect(() => setDayEx(dayId, dayExerciseId), [dayId, dayExerciseId]);
 }

@@ -25,15 +25,15 @@ export function ActionButtons() {
     state.day?.endedWorkout,
     state.program?.userId,
   ]);
-  if (!dayId || !startedWorkout || !endedWorkout || !userId) return;
-
+  
   const [showStartButton, setShowStartButton] = useState(
     startedWorkout === null,
   );
   const [showEndButton, setShowEndButton] = useState(
     startedWorkout !== null && endedWorkout === null,
   );
-
+  
+  if (!dayId || !startedWorkout || !endedWorkout || !userId) return;
   if (!showStartButton && !showEndButton) return;
 
   return (
