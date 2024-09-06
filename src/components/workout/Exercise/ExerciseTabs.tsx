@@ -65,6 +65,7 @@ function InfoTabContent() {
         {searches.map((search) => {
           return (
             <Link
+              key={search.platform}
               target="_blank"
               href={dayEx.info.video ? dayEx.info.video : search.searchUrl}
               className="flex items-center gap-x-2 rounded-md bg-white px-2 py-1 text-black"
@@ -103,11 +104,11 @@ function MusclesTabContent() {
           </div>
           {dayEx.info.secondaryMuscles &&
           dayEx.info.secondaryMuscles.length >= 1 ? (
-            <div className="flex items-start rounded-md bg-muted px-2 py-1 gap-x-2">
+            <div className="flex items-start gap-x-2 rounded-md bg-muted px-2 py-1">
               <span>Secondary Muscles:</span>
               <div className="flex flex-col">
                 {dayEx.info.secondaryMuscles?.map((muscle) => (
-                  <span>{muscle}</span>
+                  <span key={muscle}>{muscle}</span>
                 ))}
               </div>
             </div>

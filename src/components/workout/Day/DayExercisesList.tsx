@@ -23,11 +23,12 @@ export function DayExercisesList() {
                 href={`/workout/${exercise.programId}/${exercise.dayId}/${exercise.id}`}
                 className={`flex w-full items-center gap-x-2 rounded-lg pr-10 ${isDone ? "bg-doneDark text-muted-foreground" : "bg-undoneDark"}`}
               >
-                <ExerciseMuscleImage
-                  primaryMuscle={exercise.info.primaryMuscle}
-                  secondaryMuscles={exercise.info.secondaryMuscles}
-                  widthInPx={100}
-                />
+                <div className="min-w-[100px] max-w-[100px]">
+                  <ExerciseMuscleImage
+                    primaryMuscle={exercise.info.primaryMuscle}
+                    secondaryMuscles={exercise.info.secondaryMuscles}
+                  />
+                </div>
                 <div className="flex flex-col gap-y-1 py-4">
                   <span className="text-base">
                     {exercise.notes?.name
