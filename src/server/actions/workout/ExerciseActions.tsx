@@ -3,6 +3,7 @@
 import { editExerciseNote } from "~/server/queries/exercises";
 import {
   updateDayExerciseInput,
+  updateDayExerciseSets,
   updateLoggedSets,
 } from "~/server/queries/workouts";
 
@@ -13,6 +14,22 @@ export async function handleExerciseVolumeInput(
   weight: number[],
 ) {
   await updateDayExerciseInput(dayExerciseId, userId, reps, weight);
+}
+
+export async function handleExerciseSetsChange(
+  dayExerciseId: number,
+  userId: string,
+  reps: number[],
+  weight: number[],
+  loggedSetsCount: number,
+) {
+  await updateDayExerciseSets(
+    dayExerciseId,
+    userId,
+    reps,
+    weight,
+    loggedSetsCount,
+  );
 }
 
 export async function handleExerciseNoteInput(

@@ -3,6 +3,11 @@
 import { create } from "zustand";
 import type { Program, ProgDay } from "~/server/types";
 import { useEffect } from "react";
+import {
+  handleExerciseSetsChange,
+  handleExerciseVolumeInput,
+  handleUpdateLoggedSets,
+} from "~/server/actions/workout/ExerciseActions";
 
 interface ProgramState {
   program: Program | null;
@@ -24,6 +29,15 @@ interface ProgramState {
     newName: string,
     newRepeatOn: number[] | null,
   ) => void;
+  dayExercise: null | unknown;
+  setDayExercise: (dayId: number, dayExerciseId: number) => void;
+  setDayExerciseInputs: (
+    label: "Reps" | "Weight",
+    index: number,
+    value: number,
+  ) => void;
+  setDayExerciseSets: (method: "Add" | "Delete") => void;
+  setDayExerciseLoggedSet: (loggedSetsCount: number) => void;
 }
 
 export const useProgram = create<ProgramState>((set) => ({
@@ -76,6 +90,84 @@ export const useProgram = create<ProgramState>((set) => ({
         },
       };
     }),
+  // Exercise
+  dayExercise: null,
+  setDayExercise: (dayId, dayExerciseId) => {
+    set((state) => {
+      const dayEx = state.program?.programDays
+        .find((day) => day.id === dayId)
+        ?.dayExercises.find((ex) => ex.id === dayExerciseId);
+      return { ...state, dayExercise: dayEx };
+    });
+  },
+  setDayExerciseInputs: (label, index, value) =>
+    set((state) => {
+      const dayEx = state.dayExercise;
+      if (
+        (label === "Reps" && dayEx?.reps[index] !== value) ||
+        (label === "Weight" && dayEx?.weight[index] !== value)
+      ) {
+        if (label === "Reps") {
+          dayEx.reps[index] = value;
+          console.log(dayEx.reps);
+        } else if (label === "Weight") {
+          for (let i = index; i < dayEx.weight.length; i++) {
+            dayEx.weight[i] = value;
+          }
+        }
+        handleExerciseVolumeInput(
+          dayEx.id,
+          dayEx.userId,
+          dayEx.reps,
+          dayEx.weight,
+        );
+
+        return {
+          ...state,
+          dayExercise: dayEx,
+        };
+      } else return state;
+    }),
+  setDayExerciseSets: (method) =>
+    set((state) => {
+      const dayEx = state.dayExercise;
+
+      if (method === "Add") {
+        dayEx.reps.push(0);
+        dayEx.weight.push(dayEx.weight[dayEx.weight.length - 1] || 0);
+      } else {
+        dayEx.reps.pop();
+        dayEx.weight.pop();
+        if (dayEx.loggedSetsCount > dayEx.reps.length) {
+          dayEx.loggedSetsCount--;
+        }
+      }
+
+      handleExerciseSetsChange(
+        dayEx.id,
+        dayEx.userId,
+        dayEx.reps,
+        dayEx.weight,
+        dayEx.loggedSetsCount,
+      );
+
+      return {
+        ...state,
+        dayExercise: dayEx,
+      };
+    }),
+  setDayExerciseLoggedSet: (loggedSetsCount) =>
+    set((state) => {
+      const dayEx = state.dayExercise;
+      dayEx.loggedSetsCount = loggedSetsCount;
+
+      handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
+
+      return {
+        ...state,
+        dayExercise: dayEx,
+      };
+    }),
 }));
 
 export function SetProgram({ program }: { program: Program }) {
@@ -88,4 +180,14 @@ export function SetProgram({ program }: { program: Program }) {
   }, [program, setProgram]);
 
   return null;
+}
+
+export function setDayExercise(dayId: number, dayExerciseId: number) {
+  const setDayEx = useProgram.getState().setDayExercise;
+
+  useEffect(() => {
+    setDayEx(dayId, dayExerciseId);
+  }, [dayExerciseId]);
+
+  return;
 }

@@ -5,11 +5,11 @@ import { Textarea } from "~/components/ui/textarea";
 import Link from "next/link";
 import Image from "next/image";
 import YouTubeURL from "public/content/images/workout/youtube.svg";
-import { useExercise } from "~/context/ExerciseContext";
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
+import { useProgram } from "~/stores/ProgramStore";
 
 function NotesTabContent() {
-  const { dayEx } = useExercise()!;
+  const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return;
 
   let defaultValue =
@@ -40,7 +40,7 @@ function NotesTabContent() {
 }
 
 function InfoTabContent() {
-  const { dayEx } = useExercise()!;
+  const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return;
 
   return (
@@ -69,7 +69,7 @@ function InfoTabContent() {
 }
 
 function MusclesTabContent() {
-  const { dayEx } = useExercise()!;
+  const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return;
 
   return (

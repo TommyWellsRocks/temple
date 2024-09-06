@@ -6,13 +6,11 @@
 // } from "~/server/queries/workouts";
 // import { LineChart } from "~/components/ui/Linechart";
 // import { ActivityInfo } from "~/components/workout/Exercise/ActivityInfo";
-import { useRouter } from "next/navigation";
-import { useProgram } from "~/stores/ProgramStore";
+import { setDayExercise, useProgram } from "~/stores/ProgramStore";
 import { Navigation } from "~/components/ui/Navigation";
 import { SetInputs } from "~/components/workout/Exercise/SetInputs";
 import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs";
 import { ActionButtons } from "~/components/workout/Exercise/ActionButtons";
-import { ExerciseProvider } from "~/context/ExerciseContext";
 
 // * EXERCISE PAGE
 
@@ -21,15 +19,9 @@ export default function Exercise({
 }: {
   params: { programId: string; dayExerciseId: string; dayId: string };
 }) {
-  const router = useRouter();
-
-  const dayExercise = useProgram((state) =>
-    state.program?.programDays
-      .find((day) => day.id === Number(params.dayId))
-      ?.dayExercises.find((ex) => ex.id === Number(params.dayExerciseId)),
-  );
-  if (!dayExercise)
-    return router.push(`/workout/${Number(params.programId)}/${params.dayId}`);
+  setDayExercise(Number(params.dayId), Number(params.dayExerciseId));
+  const dayExercise = useProgram((state) => state.dayExercise);
+  if (!dayExercise) return;
 
   // const previousSessionExercise = await getLastSessionExercise(dayExercise);
 
@@ -67,13 +59,11 @@ export default function Exercise({
         previousExercise={previousSessionExercise}
       /> */}
 
-      <ExerciseProvider dayExercise={dayExercise}>
-        <SetInputs />
+      <SetInputs />
 
-        <ExerciseTabs />
+      <ExerciseTabs />
 
-        <ActionButtons />
-      </ExerciseProvider>
+      <ActionButtons />
     </>
   );
 }

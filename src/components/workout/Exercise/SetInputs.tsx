@@ -1,11 +1,8 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
-import { useExercise } from "~/context/ExerciseContext";
-import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActions";
-import type { DayExercise } from "~/server/types";
+import { useProgram } from "~/stores/ProgramStore";
 import { isFloat } from "~/utils/helpers";
 // import { Timer } from "lucide-react";
 // import { useEffect, useState } from "react";
@@ -95,7 +92,7 @@ function InputRows({
     value: number,
   ) => void;
 }) {
-  const { dayEx } = useExercise()!;
+  const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return;
 
   return (
@@ -152,7 +149,8 @@ function InputRows({
 }
 
 function EditSetButton({ method }: { method: "Add" | "Delete" }) {
-  const { dayEx, setDayEx } = useExercise()!;
+  const dayEx = useProgram((state) => state.dayExercise);
+  const setDayExSets = useProgram().setDayExerciseSets;
   if (!dayEx) return;
 
   return (
@@ -162,23 +160,7 @@ function EditSetButton({ method }: { method: "Add" | "Delete" }) {
         clipPath: clipPathParallelogram,
       }}
       onClick={() => {
-        setDayEx((prevDayEx: DayExercise) => {
-          if (!prevDayEx) return;
-          const newDayEx = { ...prevDayEx };
-          if (method === "Add") {
-            newDayEx.reps.push(0);
-            newDayEx.weight.push(
-              newDayEx.weight[newDayEx.weight.length - 1] || 0,
-            );
-          } else {
-            newDayEx.reps.pop();
-            newDayEx.weight.pop();
-            if (prevDayEx.loggedSetsCount > prevDayEx.reps.length) {
-              newDayEx.loggedSetsCount--;
-            }
-          }
-          return newDayEx;
-        });
+        setDayExSets(method);
       }}
     >
       {method === "Add" ? <Plus /> : <Minus />}
@@ -187,40 +169,10 @@ function EditSetButton({ method }: { method: "Add" | "Delete" }) {
 }
 
 export function SetInputs() {
-  const { dayEx, setDayEx } = useExercise()!;
-  if (!dayEx) return;
+  const dayExercise = useProgram((state) => state.dayExercise);
+  if (!dayExercise) return;
 
-  const [inputChangeFlag, setInputChangeFlag] = useState(false);
-
-  useEffect(() => {
-    handleExerciseVolumeInput(dayEx.id, dayEx.userId, dayEx.reps, dayEx.weight);
-  }, [inputChangeFlag, dayEx.reps.length, dayEx.weight.length]);
-
-  function handleInputChange(
-    label: "Reps" | "Weight",
-    index: number,
-    value: number,
-  ) {
-    if (
-      (label === "Reps" && dayEx?.reps[index] !== value) ||
-      (label === "Weight" && dayEx?.weight[index] !== value)
-    ) {
-      setDayEx((prevDayEx) => {
-        if (!prevDayEx) return;
-        const newDayEx = { ...prevDayEx };
-        if (label === "Reps") {
-          newDayEx.reps[index] = value;
-          setInputChangeFlag((flag) => !flag);
-        } else if (label === "Weight") {
-          for (let i = index; i < newDayEx.weight.length; i++) {
-            newDayEx.weight[i] = value;
-          }
-          setInputChangeFlag((flag) => !flag);
-        }
-        return newDayEx;
-      });
-    }
-  }
+  const handleInputChange = useProgram().setDayExerciseInputs;
 
   return (
     <section className="flex flex-col items-center justify-center gap-y-5">

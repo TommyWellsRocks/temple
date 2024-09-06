@@ -204,9 +204,15 @@ export async function getMyProgram(userId: string, programId: number) {
         },
       },
     },
-    columns: { name: true, userId: true, id: true, startDate: true, endDate: true },
+    columns: {
+      name: true,
+      userId: true,
+      id: true,
+      startDate: true,
+      endDate: true,
+    },
   });
-  return program
+  return program;
 }
 
 export async function createDayGroup(userId: string, programId: number) {
@@ -224,11 +230,15 @@ export async function addPrevDaysToNewGroup(
   const program = await getMyProgram(userId, programId);
 
   if (program?.programDays.length) {
-    const sortedGroupIds: number[] = []
-    new Set(program.programDays.map(day => day.groupId)).forEach(groupId => sortedGroupIds.push(groupId))
-    sortedGroupIds.sort((a, b) => a - b)
-    const latestGroupId = sortedGroupIds[sortedGroupIds.length - 1]
-    const latestGroupDays = program.programDays.filter(day => day.groupId === latestGroupId)
+    const sortedGroupIds: number[] = [];
+    new Set(program.programDays.map((day) => day.groupId)).forEach((groupId) =>
+      sortedGroupIds.push(groupId),
+    );
+    sortedGroupIds.sort((a, b) => a - b);
+    const latestGroupId = sortedGroupIds[sortedGroupIds.length - 1];
+    const latestGroupDays = program.programDays.filter(
+      (day) => day.groupId === latestGroupId,
+    );
 
     // Map Day Info And Exercises
     const duplicateDaysInfo = latestGroupDays.map((day) => ({
@@ -545,9 +555,32 @@ export async function updateDayExerciseInput(
   await db
     .update(workoutDayExercises)
     .set({
-      reps: reps,
-      weight: weight,
+      reps,
+      weight,
       updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(workoutDayExercises.userId, userId),
+        eq(workoutDayExercises.id, dayExerciseId),
+      ),
+    );
+}
+
+export async function updateDayExerciseSets(
+  dayExerciseId: number,
+  userId: string,
+  reps: number[],
+  weight: number[],
+  loggedSetsCount: number,
+) {
+  await db
+    .update(workoutDayExercises)
+    .set({
+      reps,
+      weight,
+      updatedAt: new Date(),
+      loggedSetsCount,
     })
     .where(
       and(

@@ -82,7 +82,6 @@ export function ExerciseMuscleImage({
         }}
       />
       {secondaryMuscles?.map((secondary) => {
-        console.log(secondary);
         return (
           <Image
             key={secondary}

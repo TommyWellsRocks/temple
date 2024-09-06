@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ArrowLeft, CheckCheck } from "lucide-react";
-import { useExercise } from "~/context/ExerciseContext";
-import { useEffect } from "react";
-import { handleUpdateLoggedSets } from "~/server/actions/workout/ExerciseActions";
+import { useProgram } from "~/stores/ProgramStore";
 
 export function ActionButtons() {
-  const { dayEx, setDayEx } = useExercise()!;
+  const dayEx = useProgram((state) => state.dayExercise);
+  const setLoggedSets = useProgram().setDayExerciseLoggedSet;
   if (!dayEx) return;
 
   const dayNotStarted =
@@ -20,10 +19,6 @@ export function ActionButtons() {
   if (dayIsDone) return;
 
   const allLogged = dayEx.loggedSetsCount === dayEx.reps.length;
-
-  useEffect(() => {
-    handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
-  }, [dayEx.loggedSetsCount]);
 
   return (
     <div className="sticky bottom-5 flex justify-between gap-x-4">
@@ -42,12 +37,7 @@ export function ActionButtons() {
           <Button
             className="w-full"
             onClick={() => {
-              setDayEx((prevDayEx) => {
-                if (!prevDayEx) return;
-                const newDayEx = { ...prevDayEx };
-                newDayEx.loggedSetsCount = newDayEx.loggedSetsCount + 1;
-                return newDayEx;
-              });
+              setLoggedSets(dayEx.loggedSetsCount + 1);
             }}
           >
             Log Set
@@ -56,12 +46,7 @@ export function ActionButtons() {
             className="rounded-full px-2"
             variant={"outline"}
             onClick={() => {
-              setDayEx((prevDayEx) => {
-                if (!prevDayEx) return;
-                const newDayEx = { ...prevDayEx };
-                newDayEx.loggedSetsCount = newDayEx.reps?.length;
-                return newDayEx;
-              });
+              setLoggedSets(dayEx.reps.length);
             }}
           >
             <CheckCheck />
