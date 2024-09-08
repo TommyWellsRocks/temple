@@ -1,7 +1,7 @@
 import { getMyPrograms } from "~/server/queries/workouts";
-import { ActionCard } from "~/components/workout/Common/ActionCard";
 import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
 import { ProgramForm } from "~/components/workout/Programs/ProgramForm";
+import { ActionCard } from "~/components/workout/Common/ActionCard";
 
 export async function ProgramsList({ userId }: { userId: string }) {
   const workoutPrograms = await getMyPrograms(userId);
@@ -19,6 +19,15 @@ export async function ProgramsList({ userId }: { userId: string }) {
           <ActionCard
             key={program.id}
             title={program.name}
+            linkTo={`/workout/${program.id}`}
+            textContent={
+              <div className="flex flex-col text-sm font-light text-muted-foreground">
+                <span>
+                  {program.startDate.toDateString()} -{" "}
+                  {program.endDate.toDateString()}
+                </span>
+              </div>
+            }
             editButton={
               <EditButtonPopover
                 title="Edit Workout Program"
@@ -29,7 +38,6 @@ export async function ProgramsList({ userId }: { userId: string }) {
               />
             }
             isDark={!isActiveProgram}
-            linkTo={`/workout/${program.id}`}
           />
         );
       })}
