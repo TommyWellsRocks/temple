@@ -10,7 +10,7 @@ export function DayExercisesList() {
   if (!dayExercises) return;
 
   return (
-    <div className="flex flex-col gap-y-3">
+    <div className="flex flex-col gap-y-6">
       {dayExercises
         .sort((a, b) => a.id - b.id)
         .map((exercise) => {
@@ -21,7 +21,7 @@ export function DayExercisesList() {
             <div className="relative flex items-center" key={exercise.id}>
               <Link
                 href={`/workout/${exercise.programId}/${exercise.dayId}/${exercise.id}`}
-                className={`flex w-full items-center gap-x-2 rounded-lg pr-10 ${isDone ? "bg-doneDark text-muted-foreground" : "bg-undoneDark"}`}
+                className={`flex w-full items-center gap-x-2 rounded-lg pr-10`}
               >
                 <div className="min-w-[100px] max-w-[100px]">
                   <ExerciseMuscleImage
@@ -29,8 +29,8 @@ export function DayExercisesList() {
                     secondaryMuscles={exercise.info.secondaryMuscles}
                   />
                 </div>
-                <div className="flex flex-col gap-y-1 py-4">
-                  <span className="text-base">
+                <div className="flex flex-col gap-y-1">
+                  <span className={`${isDone ? "line-through" : ""} text-base`}>
                     {exercise.notes?.name
                       ? toTitleCase(exercise.notes.name)
                       : toTitleCase(exercise.info.name)}
