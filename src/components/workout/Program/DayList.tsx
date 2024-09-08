@@ -63,7 +63,7 @@ export function GroupsInfo() {
               {groups.map((group, index) => (
                 <CarouselItem key={group.id}>
                   <TabsTrigger value={String(group.id)}>
-                    Group {index + 1}
+                    Week {index + 1}
                   </TabsTrigger>
                 </CarouselItem>
               ))}
@@ -144,6 +144,8 @@ function DayCard({ dayId }: { dayId: number }) {
   return (
     <ActionCard
       key={day.id}
+      linkTo={`/workout/${day.programId}/${day.id}`}
+      isDark={isDone}
       title={day.name}
       editButton={
         <EditButtonPopover
@@ -152,8 +154,6 @@ function DayCard({ dayId }: { dayId: number }) {
           formComponent={<DayForm groupId={day.groupId} dayInfo={day} />}
         />
       }
-      isDark={isDone}
-      linkTo={`/workout/${day.programId}/${day.id}`}
     />
   );
 }
