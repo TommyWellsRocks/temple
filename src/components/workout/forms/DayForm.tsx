@@ -20,7 +20,7 @@ import {
   handleDeleteProgramDay,
   handleEditProgramDay,
 } from "~/server/actions/workout/ProgramActions";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 import type { ProgramDay } from "~/server/types";
 
 export function DayForm({
@@ -28,7 +28,7 @@ export function DayForm({
   dayInfo,
 }: {
   groupId: number;
-  dayInfo?: ProgramDay
+  dayInfo?: ProgramDay;
 }) {
   const [userId, programId] = useProgram((state) => [
     state.program?.userId,

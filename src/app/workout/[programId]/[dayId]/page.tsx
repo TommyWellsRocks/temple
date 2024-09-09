@@ -1,6 +1,6 @@
 "use client";
 
-import { setDay, useProgram } from "~/stores/ProgramStore";
+import { setDay, useProgram } from "~/hooks/workout/useProgram";
 import { ActionButtons } from "./_components/ActionButtons";
 import { NavHeader } from "./_components/NavHeader";
 import { SectionHeader } from "~/components/workout/SectionHeader";

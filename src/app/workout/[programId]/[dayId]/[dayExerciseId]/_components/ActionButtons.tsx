@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ArrowLeft, CheckCheck } from "lucide-react";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 
 export function ActionButtons() {
   const [dayEx, startedWorkout, endedWorkout] = useProgram((state) => [

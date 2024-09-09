@@ -1,7 +1,7 @@
 import { auth } from "~/server/auth";
 import { SessionProvider } from "next-auth/react";
 import { getMyProgram } from "~/server/queries/workouts";
-import { SetProgram } from "~/stores/ProgramStore";
+import { SetProgram } from "~/hooks/workout/useProgram";
 import { redirect } from "next/navigation";
 
 export default async function ProgramLayout({

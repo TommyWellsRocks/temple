@@ -8,7 +8,7 @@ import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { ActionCard } from "~/components/workout/ActionCard";
 import { DayForm } from "~/components/workout/forms/DayForm";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 import { Minus, Plus } from "lucide-react";
 
 import {

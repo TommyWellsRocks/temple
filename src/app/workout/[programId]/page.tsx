@@ -5,7 +5,7 @@ import { Tabs } from "~/components/ui/tabs";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { GroupDays, GroupsInfo } from "./_components/DayList";
 import { ProgramForm } from "~/components/workout/forms/ProgramForm";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 
 // * DAYS PAGE
 

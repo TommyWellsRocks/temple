@@ -3,7 +3,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "~/components/ui/carousel";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 
 export function FocusMusclesSlider() {
   const dayExercises = useProgram((state) => state.day?.dayExercises);

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
 import { toTitleCase } from "~/utils/helpers";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";

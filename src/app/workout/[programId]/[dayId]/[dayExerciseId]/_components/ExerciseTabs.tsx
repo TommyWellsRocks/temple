@@ -7,7 +7,7 @@ import Image from "next/image";
 import YouTube from "public/content/images/workout/youtube.svg";
 import Google from "public/content/images/workout/google.png";
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
 
 function NotesTabContent() {

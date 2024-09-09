@@ -1,7 +1,7 @@
 import { Navigation } from "~/components/ui/Navigation";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { DayForm } from "~/components/workout/forms/DayForm";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 
 export function NavHeader() {
   const programDay = useProgram((state) => state.day);

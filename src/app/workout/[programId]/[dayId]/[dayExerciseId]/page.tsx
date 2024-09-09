@@ -1,6 +1,6 @@
 "use client";
 
-import { setDayExercise, useProgram } from "~/stores/ProgramStore";
+import { setDayExercise, useProgram } from "~/hooks/workout/useProgram";
 import { Navigation } from "~/components/ui/Navigation";
 import { SetInputs } from "./_components/SetInputs";
 import { TabContents, TabSelectors } from "./_components/ExerciseTabs";

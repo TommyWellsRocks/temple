@@ -11,7 +11,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 
 export function ActionButtons() {
   const [dayId, userId, startedWorkout, endedWorkout] = useProgram((state) => [
@@ -31,7 +31,7 @@ export function ActionButtons() {
     endedWorkout === undefined
   )
     return;
-  
+
   const showStartButton = startedWorkout === null;
   const showEndButton = startedWorkout !== null && endedWorkout === null;
 

@@ -2,7 +2,7 @@
 
 import { Minus, Plus } from "lucide-react";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
-import { useProgram } from "~/stores/ProgramStore";
+import { useProgram } from "~/hooks/workout/useProgram";
 import { isFloat } from "~/utils/helpers";
 
 function InputArea({
