@@ -1,6 +1,6 @@
 "use client";
 
-import { TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import Google from "public/content/images/workout/google.png";
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
 import { useProgram } from "~/hooks/workout/useProgram";
 import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { useExHistory } from "~/hooks/workout/useExerciseHistory";
 
 function NotesTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
@@ -120,33 +122,62 @@ function MusclesTabContent() {
 }
 
 function HistoryTabContent() {
+  const sessions = useExHistory()!;
+
   return (
     <TabsContent value="history">
-      <div className="flex rounded-xl bg-secondary px-3 py-2 text-sm"></div>
+      <div className="flex max-h-96 rounded-xl bg-secondary px-3 py-2 text-sm">
+        <ScrollArea className="w-full">
+          <div className="flex flex-col gap-y-4">
+            {sessions.map((session) => (
+              <div key={session.id} className="flex flex-col gap-y-1">
+                <div className="mr-2 flex items-center justify-between">
+                  <span className="text-lg font-semibold">
+                    {session.updatedAt.toDateString()}
+                  </span>
+                  <span className="rounded-xl bg-muted-foreground px-2 text-muted">
+                    Completed
+                  </span>
+                </div>
+                <div className="ml-2 flex flex-col gap-y-0.5 text-muted-foreground">
+                  {session.reps.map((repCount, index) => (
+                    <span key={index}>
+                      {index + 1} - {repCount} Reps x {session.weight[index]}{" "}
+                      lbs
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
     </TabsContent>
   );
 }
 
-export function TabSelectors() {
-  return (
-    <div className="flex justify-center">
-      <TabsList>
-        <TabsTrigger value="notes">Notes</TabsTrigger>
-        <TabsTrigger value="info">Info</TabsTrigger>
-        <TabsTrigger value="muscles">Muscles</TabsTrigger>
-        <TabsTrigger value="history">History</TabsTrigger>
-      </TabsList>
-    </div>
-  );
-}
+export function ExerciseTabs() {
+  const sessions = useExHistory()!;
 
-export function TabContents() {
   return (
-    <>
-      <NotesTabContent />
-      <InfoTabContent />
-      <MusclesTabContent />
-      <HistoryTabContent />
-    </>
+    <section>
+      <Tabs defaultValue="notes">
+        <div className="flex justify-center">
+          <TabsList>
+            <TabsTrigger value="notes">Notes</TabsTrigger>
+            <TabsTrigger value="info">Info</TabsTrigger>
+            <TabsTrigger value="muscles">Muscles</TabsTrigger>
+            {sessions ? (
+              <TabsTrigger value="history">History</TabsTrigger>
+            ) : null}
+          </TabsList>
+        </div>
+
+        <NotesTabContent />
+        <InfoTabContent />
+        <MusclesTabContent />
+        {sessions ? <HistoryTabContent /> : null}
+      </Tabs>
+    </section>
   );
 }

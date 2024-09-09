@@ -3,9 +3,8 @@
 import { setDayExercise, useProgram } from "~/hooks/workout/useProgram";
 import { Navigation } from "~/components/ui/Navigation";
 import { SetInputs } from "./_components/SetInputs";
-import { TabContents, TabSelectors } from "./_components/ExerciseTabs";
+import { ExerciseTabs } from "./_components/ExerciseTabs";
 import { ActionButtons } from "./_components/ActionButtons";
-import { Tabs } from "~/components/ui/tabs";
 import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 
@@ -44,13 +43,7 @@ export default function Exercise({
 
       <SetInputs />
 
-      <section>
-        <Tabs defaultValue="notes">
-          <TabSelectors />
-
-          <TabContents />
-        </Tabs>
-      </section>
+      <ExerciseTabs />
 
       <ActionButtons />
     </>

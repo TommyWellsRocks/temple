@@ -494,19 +494,27 @@ export async function getMyDayExercise(
   });
 }
 
-export async function getLastSessionExercise(dayExercise: DayExercise) {
+export async function getExerciseIdFromDay(dayExerciseId: number) {
   return await db.query.workoutDayExercises.findFirst({
-    where: (model, { and, eq, ne, lt }) =>
+    where: (model, { eq }) => eq(model.id, dayExerciseId),
+    columns: { userId: true, exerciseId: true },
+  });
+}
+
+export async function getExerciseHistory(
+  userId: string,
+  exerciseId: number,
+  dayId: number,
+) {
+  return await db.query.workoutDayExercises.findMany({
+    where: (model, { and, eq, ne, sql, lt }) =>
       and(
-        eq(model.userId, dayExercise!.userId),
-        eq(model.exerciseId, dayExercise!.exerciseId),
-        ne(model.dayId, dayExercise!.dayId),
-        lt(model.updatedAt, dayExercise!.updatedAt),
-        ne(model.reps, [0, 0, 0, 0]), // Last Not-Default
-        // not(sql`0 = ANY(${model.reps})`), // Last Fully completed
+        eq(model.userId, userId),
+        eq(model.exerciseId, exerciseId),
+        ne(model.dayId, dayId),
+        eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
       ),
     orderBy: (model, { desc }) => desc(model.updatedAt),
-    with: { info: true, notes: true },
   });
 }
 
