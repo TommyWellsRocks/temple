@@ -30,7 +30,7 @@ export function DayExercisesList() {
                   />
                 </div>
                 <div className="flex flex-col gap-y-1">
-                  <span className={`${isDone ? "line-through" : ""} text-base`}>
+                  <span className={`${isDone ? "line-through opacity-35" : ""} text-base`}>
                     {exercise.notes?.name
                       ? toTitleCase(exercise.notes.name)
                       : toTitleCase(exercise.info.name)}
