@@ -40,10 +40,18 @@ export async function handleDeleteExercise(
   revalidatePath(`/workout/${programId}`);
 }
 
-export async function handleStartWorkout(userId: string, dayId: number) {
-  await startWorkout(userId, dayId);
+export async function handleStartWorkout(
+  userId: string,
+  dayId: number,
+  startedWorkout: Date,
+) {
+  await startWorkout(userId, dayId, startedWorkout);
 }
 
-export async function handleEndWorkout(userId: string, dayId: number) {
-  await endWorkout(userId, dayId);
+export async function handleEndWorkout(
+  userId: string,
+  dayId: number,
+  endedWorkout: Date,
+) {
+  await endWorkout(userId, dayId, endedWorkout);
 }

@@ -606,10 +606,14 @@ export async function updateLoggedSets(
     );
 }
 
-export async function startWorkout(userId: string, dayId: number) {
+export async function startWorkout(
+  userId: string,
+  dayId: number,
+  startedWorkout: Date,
+) {
   await db
     .update(workoutProgramDays)
-    .set({ startedWorkout: new Date() })
+    .set({ startedWorkout })
     .where(
       and(
         eq(workoutProgramDays.userId, userId),
@@ -618,10 +622,14 @@ export async function startWorkout(userId: string, dayId: number) {
     );
 }
 
-export async function endWorkout(userId: string, dayId: number) {
+export async function endWorkout(
+  userId: string,
+  dayId: number,
+  endedWorkout: Date,
+) {
   await db
     .update(workoutProgramDays)
-    .set({ endedWorkout: new Date() })
+    .set({ endedWorkout })
     .where(
       and(
         eq(workoutProgramDays.userId, userId),

@@ -11,30 +11,29 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
-import {
-  handleEndWorkout,
-  handleStartWorkout,
-} from "~/server/actions/workout/DayActions";
-import { useState } from "react";
 import { useProgram } from "~/stores/ProgramStore";
 
 export function ActionButtons() {
-  const [dayId, startedWorkout, endedWorkout, userId] = useProgram((state) => [
+  const [dayId, userId, startedWorkout, endedWorkout] = useProgram((state) => [
     state.day?.id,
+    state.program?.userId,
     state.day?.startedWorkout,
     state.day?.endedWorkout,
-    state.program?.userId,
   ]);
+
+  const setStartWorkout = useProgram.getState().setStartWorkout;
+  const setEndWorkout = useProgram.getState().setEndWorkout;
+
+  if (
+    !dayId ||
+    !userId ||
+    startedWorkout === undefined ||
+    endedWorkout === undefined
+  )
+    return;
   
-  const [showStartButton, setShowStartButton] = useState(
-    startedWorkout === null,
-  );
-  const [showEndButton, setShowEndButton] = useState(
-    startedWorkout !== null && endedWorkout === null,
-  );
-  
-  if (!dayId || !startedWorkout || !endedWorkout || !userId) return;
-  if (!showStartButton && !showEndButton) return;
+  const showStartButton = startedWorkout === null;
+  const showEndButton = startedWorkout !== null && endedWorkout === null;
 
   return (
     <div className="sticky bottom-5 flex justify-end">
@@ -42,9 +41,7 @@ export function ActionButtons() {
         <Button
           className="flex gap-1"
           onClick={() => {
-            handleStartWorkout(userId, dayId);
-            setShowStartButton(false);
-            setShowEndButton(true);
+            setStartWorkout(userId, dayId);
           }}
         >
           <Zap width={15} /> Start Workout
@@ -69,8 +66,7 @@ export function ActionButtons() {
                   <Button
                     className="w-full"
                     onClick={() => {
-                      setShowEndButton(false);
-                      handleEndWorkout(userId, dayId);
+                      setEndWorkout(userId, dayId);
                     }}
                   >
                     Log Workout

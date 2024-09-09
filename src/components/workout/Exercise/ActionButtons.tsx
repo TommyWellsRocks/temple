@@ -6,16 +6,20 @@ import { ArrowLeft, CheckCheck } from "lucide-react";
 import { useProgram } from "~/stores/ProgramStore";
 
 export function ActionButtons() {
-  const dayEx = useProgram((state) => state.dayExercise);
+  const [dayEx, startedWorkout, endedWorkout] = useProgram((state) => [
+    state.dayExercise,
+    state.day?.startedWorkout,
+    state.day?.endedWorkout,
+  ]);
   const setLoggedSets = useProgram().setDayExerciseLoggedSet;
-  if (!dayEx) return;
 
-  const dayNotStarted =
-    dayEx.day.startedWorkout === null && dayEx.day.endedWorkout === null;
+  if (!dayEx || startedWorkout === undefined || endedWorkout === undefined)
+    return;
+
+  const dayNotStarted = startedWorkout === null && endedWorkout === null;
   if (dayNotStarted) return;
 
-  const dayIsDone =
-    dayEx.day.startedWorkout !== null && dayEx.day.endedWorkout !== null;
+  const dayIsDone = startedWorkout !== null && endedWorkout !== null;
   if (dayIsDone) return;
 
   const allLogged = dayEx.loggedSetsCount === dayEx.reps.length;

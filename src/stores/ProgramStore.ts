@@ -8,6 +8,10 @@ import {
   handleExerciseVolumeInput,
   handleUpdateLoggedSets,
 } from "~/server/actions/workout/ExerciseActions";
+import {
+  handleEndWorkout,
+  handleStartWorkout,
+} from "~/server/actions/workout/DayActions";
 
 interface ProgramState {
   program: Program | null;
@@ -31,6 +35,8 @@ interface ProgramState {
     newName: string,
     newRepeatOn: number[] | null,
   ) => void;
+  setStartWorkout: (userId: string, dayId: number) => void;
+  setEndWorkout: (userId: string, dayId: number) => void;
   dayExercise: null | DayExercise;
   setDayExercise: (dayId: number, dayExerciseId: number) => void;
   setDayExerciseInputs: (
@@ -96,6 +102,56 @@ export const useProgram = create<ProgramState>((set) => ({
 
       return {
         ...state,
+        program: {
+          ...state.program,
+          programDays: updatedProgramDays,
+        },
+      };
+    }),
+  setStartWorkout: (userId, dayId) =>
+    set((state) => {
+      if (!state.program || !state.day) return state;
+
+      const startedWorkout = new Date();
+
+      // Update programDays
+      const updatedProgramDays = state.program.programDays.map((day) =>
+        day.id === dayId ? { ...day, startedWorkout } : day,
+      );
+
+      handleStartWorkout(userId, dayId, startedWorkout);
+
+      return {
+        ...state,
+        day: {
+          ...state.day,
+          startedWorkout,
+        },
+        program: {
+          ...state.program,
+          programDays: updatedProgramDays,
+        },
+      };
+    }),
+  setEndWorkout: (userId, dayId) =>
+    set((state) => {
+      if (!state.program || !state.day) return state;
+
+      const endedWorkout = new Date();
+
+      // Update programDays
+      const updatedProgramDays = state.program.programDays.map((day) =>
+        day.id === dayId ? { ...day, endedWorkout } : day,
+      );
+
+      handleEndWorkout(userId, dayId, endedWorkout);
+
+      return {
+        ...state,
+        day: {
+          ...state.day,
+          endedWorkout,
+        },
         program: {
           ...state.program,
           programDays: updatedProgramDays,
