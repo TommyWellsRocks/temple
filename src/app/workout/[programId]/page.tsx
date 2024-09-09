@@ -2,9 +2,9 @@
 
 import { Navigation } from "~/components/ui/Navigation";
 import { Tabs } from "~/components/ui/tabs";
-import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
-import { GroupDays, GroupsInfo } from "~/components/workout/Program/DayList";
-import { ProgramForm } from "~/components/workout/Programs/ProgramForm";
+import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import { GroupDays, GroupsInfo } from "./_components/DayList";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm";
 import { useProgram } from "~/stores/ProgramStore";
 
 // * DAYS PAGE
@@ -29,7 +29,9 @@ export default function Days() {
           <EditButtonPopover
             title="Edit Exercise"
             description={`Remember to click save when you're done.`}
-            formComponent={<ProgramForm userId={userId} programInfo={program!} />}
+            formComponent={
+              <ProgramForm userId={userId} programInfo={program!} />
+            }
           />
         }
       />

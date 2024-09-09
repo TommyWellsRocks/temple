@@ -2,8 +2,8 @@ import Link from "next/link";
 import { useProgram } from "~/stores/ProgramStore";
 import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
 import { toTitleCase } from "~/utils/helpers";
-import { EditButtonPopover } from "../Common/EditButtonPopover";
-import { ExerciseForm } from "./ExerciseForm";
+import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
 
 export function DayExercisesList() {
   const dayExercises = useProgram((state) => state.day?.dayExercises);

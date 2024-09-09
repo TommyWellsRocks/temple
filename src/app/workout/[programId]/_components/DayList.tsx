@@ -4,10 +4,10 @@ import {
   CarouselItem,
 } from "~/components/ui/carousel";
 import { TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
-import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
-import { ActionCard } from "~/components/workout/Common/ActionCard";
-import { DayForm } from "~/components/workout/Program/DayForm";
+import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
+import { ActionCard } from "~/components/workout/ActionCard";
+import { DayForm } from "~/components/workout/forms/DayForm";
 import { useProgram } from "~/stores/ProgramStore";
 import { Minus, Plus } from "lucide-react";
 

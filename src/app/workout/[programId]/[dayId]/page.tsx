@@ -1,14 +1,14 @@
 "use client";
 
 import { setDay, useProgram } from "~/stores/ProgramStore";
-import { ActionButtons } from "~/components/workout/Day/ActionButtons";
-import { NavHeader } from "~/components/workout/Exercise/NavHeader";
-import { SectionHeader } from "~/components/workout/Common/SectionHeader";
+import { ActionButtons } from "./_components/ActionButtons";
+import { NavHeader } from "./_components/NavHeader";
+import { SectionHeader } from "~/components/workout/SectionHeader";
 import { getExercises } from "~/server/queries/exercises";
-import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
-import { DataTable } from "~/components/workout/Day/DataTable";
-import { FocusMusclesSlider } from "~/components/workout/Day/FocusMusclesSlider";
-import { DayExercisesList } from "~/components/workout/Day/DayExercisesList";
+import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
+import { DataTable } from "./_components/DataTable";
+import { FocusMusclesSlider } from "./_components/FocusMusclesSlider";
+import { DayExercisesList } from "./_components/DayExercisesList";
 
 // * DAY OVERVIEW PAGE
 

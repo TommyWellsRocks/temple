@@ -1,7 +1,7 @@
 import { getMyPrograms } from "~/server/queries/workouts";
-import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
-import { ProgramForm } from "~/components/workout/Programs/ProgramForm";
-import { ActionCard } from "~/components/workout/Common/ActionCard";
+import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm";
+import { ActionCard } from "~/components/workout/ActionCard";
 
 export async function ProgramsList({ userId }: { userId: string }) {
   const workoutPrograms = await getMyPrograms(userId);

@@ -2,15 +2,12 @@
 
 import { setDayExercise, useProgram } from "~/stores/ProgramStore";
 import { Navigation } from "~/components/ui/Navigation";
-import { SetInputs } from "~/components/workout/Exercise/SetInputs";
-import {
-  TabContents,
-  TabSelectors,
-} from "~/components/workout/Exercise/ExerciseTabs";
-import { ActionButtons } from "~/components/workout/Exercise/ActionButtons";
+import { SetInputs } from "./_components/SetInputs";
+import { TabContents, TabSelectors } from "./_components/ExerciseTabs";
+import { ActionButtons } from "./_components/ActionButtons";
 import { Tabs } from "~/components/ui/tabs";
-import { ExerciseForm } from "~/components/workout/Day/ExerciseForm";
-import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
+import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
+import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 
 // * EXERCISE PAGE
 

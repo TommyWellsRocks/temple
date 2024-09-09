@@ -1,6 +1,6 @@
 import { Navigation } from "~/components/ui/Navigation";
-import { EditButtonPopover } from "~/components/workout/Common/EditButtonPopover";
-import { DayForm } from "~/components/workout/Program/DayForm";
+import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import { DayForm } from "~/components/workout/forms/DayForm";
 import { useProgram } from "~/stores/ProgramStore";
 
 export function NavHeader() {

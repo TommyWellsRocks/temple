@@ -1,6 +1,6 @@
-import { AddButtonOverlay } from "~/components/workout/Common/AddButtonOverlay";
-import { SectionHeader } from "~/components/workout/Common/SectionHeader";
-import { ProgramForm } from "~/components/workout/Programs/ProgramForm";
+import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
+import { SectionHeader } from "~/components/workout/SectionHeader";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm";
 
 export function ProgramsHeader({ userId }: { userId: string }) {
   return (

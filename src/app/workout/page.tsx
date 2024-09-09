@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getWorkoutRedirect } from "~/server/queries/workouts";
 import { Navigation } from "~/components/ui/Navigation";
-import { ProgramsList } from "~/components/workout/Programs/ProgramsList";
-import { ProgramsHeader } from "~/components/workout/Programs/ProgramsHeader";
+import { ProgramsList } from "./_components/ProgramsList";
+import { ProgramsHeader } from "./_components/ProgramsHeader";
 
 // * PROGRAMS PAGE
 
