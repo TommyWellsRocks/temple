@@ -122,43 +122,49 @@ function MusclesTabContent() {
 }
 
 function HistoryTabContent() {
-  const sessions = useExHistory()!;
+  const sessions = useExHistory();
+  const hasHistory = sessions && sessions.length >= 1;
 
   return (
     <TabsContent value="history">
       <div className="flex max-h-96 rounded-xl bg-secondary px-3 py-2 text-sm">
-        <ScrollArea className="w-full">
-          <div className="flex flex-col gap-y-4">
-            {sessions.map((session) => (
-              <div key={session.id} className="flex flex-col gap-y-1">
-                <div className="mr-2 flex items-center justify-between">
-                  <span className="text-lg font-semibold">
-                    {session.updatedAt.toDateString()}
-                  </span>
-                  <span className="rounded-xl bg-muted-foreground px-2 text-muted">
-                    Completed
-                  </span>
-                </div>
-                <div className="ml-2 flex flex-col gap-y-0.5 text-muted-foreground">
-                  {session.reps.map((repCount, index) => (
-                    <span key={index}>
-                      {index + 1} - {repCount} Reps x {session.weight[index]}{" "}
-                      lbs
+        {hasHistory ? (
+          <ScrollArea className="w-full">
+            <div className="flex flex-col gap-y-4">
+              {sessions.map((session) => (
+                <div key={session.id} className="flex flex-col gap-y-1">
+                  <div className="mr-2 flex items-center justify-between">
+                    <span className="text-lg font-semibold">
+                      {session.updatedAt.toDateString()}
                     </span>
-                  ))}
+                    <span className="rounded-xl bg-muted-foreground px-2 text-muted">
+                      Completed
+                    </span>
+                  </div>
+                  <div className="ml-2 flex flex-col gap-y-0.5 text-muted-foreground">
+                    {session.reps.map((repCount, index) => (
+                      <span key={index}>
+                        {index + 1} - {repCount} Reps x {session.weight[index]}{" "}
+                        lbs
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </ScrollArea>
+        ) : (
+          <div className="flex w-full flex-col items-center">
+            <span>No history for this exercise {":("}</span>
+            <span>Make history now 🏆</span>
           </div>
-        </ScrollArea>
+        )}
       </div>
     </TabsContent>
   );
 }
 
 export function ExerciseTabs() {
-  const sessions = useExHistory()!;
-
   return (
     <section>
       <Tabs defaultValue="notes">
@@ -167,16 +173,14 @@ export function ExerciseTabs() {
             <TabsTrigger value="notes">Notes</TabsTrigger>
             <TabsTrigger value="info">Info</TabsTrigger>
             <TabsTrigger value="muscles">Muscles</TabsTrigger>
-            {sessions ? (
-              <TabsTrigger value="history">History</TabsTrigger>
-            ) : null}
+            <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
         </div>
 
         <NotesTabContent />
         <InfoTabContent />
         <MusclesTabContent />
-        {sessions ? <HistoryTabContent /> : null}
+        <HistoryTabContent />
       </Tabs>
     </section>
   );
