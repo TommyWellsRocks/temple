@@ -179,7 +179,6 @@ export const useProgram = create<ProgramState>((set) => ({
       ) {
         if (label === "Reps") {
           dayEx.reps[index] = value;
-          console.log(dayEx.reps);
         } else if (label === "Weight") {
           for (let i = index; i < dayEx.weight.length; i++) {
             dayEx.weight[i] = value;

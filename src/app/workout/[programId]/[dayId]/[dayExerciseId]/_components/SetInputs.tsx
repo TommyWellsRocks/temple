@@ -37,12 +37,7 @@ function InputArea({
       onBlur={(e) => {
         // Input Actions
         let newValue = e.target.valueAsNumber;
-        if (
-          isNaN(newValue) ||
-          newValue < 0 ||
-          newValue > 999 ||
-          (label === "Reps" && newValue > 20)
-        ) {
+        if (isNaN(newValue) || newValue < 0 || newValue > 999) {
           newValue = value;
           e.target.value = String(newValue);
         }
