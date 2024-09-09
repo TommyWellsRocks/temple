@@ -4,7 +4,6 @@ import { setDay, useProgram } from "~/hooks/workout/useProgram";
 import { ActionButtons } from "./_components/ActionButtons";
 import { NavHeader } from "./_components/NavHeader";
 import { SectionHeader } from "~/components/workout/SectionHeader";
-import { getExercises } from "~/server/queries/exercises";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { DataTable } from "./_components/DataTable";
 import { FocusMusclesSlider } from "./_components/FocusMusclesSlider";
@@ -18,8 +17,6 @@ export default function DayOverview({ params }: { params: { dayId: string } }) {
     (state) => state.day?.dayExercises.length,
   );
   if (!dayExercisesCount) return;
-
-  // const allExercises = await getExercises(programDay.userId);
 
   return (
     <>
@@ -36,13 +33,11 @@ export default function DayOverview({ params }: { params: { dayId: string } }) {
           <SectionHeader
             title={`${dayExercisesCount} ${dayExercisesCount > 1 ? "Exercises" : "Exercise"}`}
           />
-          {/* <AddButtonOverlay
+          <AddButtonOverlay
             title="Add Exercise"
             description="Add an exercise to your workout. Click add when you're done."
-            formComponent={
-              <DataTable programDay={programDay} exercises={allExercises} />
-            }
-          /> */}
+            formComponent={<DataTable />}
+          />
         </div>
 
         <DayExercisesList />

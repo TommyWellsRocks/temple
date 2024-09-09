@@ -1,8 +1,10 @@
 import { auth } from "~/server/auth";
 import { SessionProvider } from "next-auth/react";
 import { getMyProgram } from "~/server/queries/workouts";
+import { getExercises } from "~/server/queries/exercises";
 import { SetProgram } from "~/hooks/workout/useProgram";
 import { redirect } from "next/navigation";
+import { MyExercisesProvider } from "~/hooks/workout/useExercises";
 
 export default async function ProgramLayout({
   children,
@@ -16,11 +18,16 @@ export default async function ProgramLayout({
 
   const program = await getMyProgram(session.user.id, Number(params.programId));
   if (!program) return redirect("/workout");
+  const exercises = await getExercises(session.user.id);
 
   return (
     <>
       <SetProgram program={program} />
-      <SessionProvider session={session}>{children}</SessionProvider>
+      <SessionProvider session={session}>
+        <MyExercisesProvider exercises={exercises}>
+          {children}
+        </MyExercisesProvider>
+      </SessionProvider>
     </>
   );
 }

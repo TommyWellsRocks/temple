@@ -31,7 +31,8 @@ import {
   handleAddExercise,
   handleDeleteExercise,
 } from "~/server/actions/workout/DayActions";
-import { ProgramDay } from "~/server/types";
+import { useProgram } from "~/hooks/workout/useProgram";
+import { useMyExercises } from "~/hooks/workout/useExercises";
 
 export type Exercise = {
   id: number;
@@ -41,15 +42,7 @@ export type Exercise = {
   }[];
 };
 
-export function DataTable({
-  programDay,
-  exercises,
-}: {
-  programDay: ProgramDay;
-  exercises: Exercise[];
-}) {
-  if (!programDay) return;
-  const dayExercisesIds = programDay.dayExercises.map((ex) => ex.info.id);
+export function DataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -57,6 +50,14 @@ export function DataTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const dayExercisesIds = useProgram((state) =>
+    state.day?.dayExercises.map((ex) => ex.exerciseId),
+  )!;
+  const programDay = useProgram((state) => state.day);
+  if (!dayExercisesIds || !programDay) return;
+  const exercises = useMyExercises();
+  if (!exercises) return;
 
   const columns: ColumnDef<Exercise>[] = [
     {
