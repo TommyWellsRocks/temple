@@ -71,9 +71,9 @@ export function ProgramForm({ programInfo }: { programInfo?: Program }) {
       (1000 * 3600 * 24);
     const differenceWeeks = differenceDays / 7;
     return (
-      <div>
+      <span>
         {differenceDays.toFixed()} Days | ~ {differenceWeeks.toFixed()} Weeks
-      </div>
+      </span>
     );
   }
 
