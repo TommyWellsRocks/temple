@@ -38,16 +38,12 @@ import {
   handleCreateProgram,
   handleDeleteProgram,
 } from "~/server/actions/workout/ProgramsActions";
+import { useUserId } from "~/hooks/useUserId";
 
 const PROGRAM_ACTIVE_DAYS = 45;
 
-export function ProgramForm({
-  userId,
-  programInfo,
-}: {
-  userId: string;
-  programInfo?: Program;
-}) {
+export function ProgramForm({ programInfo }: { programInfo?: Program }) {
+  const userId = useUserId()!;
   const today = new Date();
 
   const formSchema = z.object({
@@ -208,9 +204,7 @@ export function ProgramForm({
               <Button
                 variant="destructive"
                 type="button"
-                onClick={() =>
-                  handleDeleteProgram(programInfo.userId, programInfo.id)
-                }
+                onClick={() => handleDeleteProgram(userId, programInfo.id)}
               >
                 Delete
               </Button>
