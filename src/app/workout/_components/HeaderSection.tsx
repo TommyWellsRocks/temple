@@ -2,7 +2,7 @@ import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { SectionHeader } from "~/components/workout/SectionHeader";
 import { ProgramForm } from "~/components/workout/forms/ProgramForm";
 
-export function ProgramsHeader({ userId }: { userId: string }) {
+export function HeaderSection({ userId }: { userId: string }) {
   return (
     <section className="flex items-center justify-between">
       <SectionHeader title="Your Programs" />

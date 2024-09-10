@@ -75,24 +75,24 @@ export async function getWorkoutRedirect(userId: string) {
   if (!finalGroupScheduledDay) return `workout/${activeProgram.id}`;
 
   // If Complete, Start New Group And Return Day
-  const dayComplete = finalGroupScheduledDay.dayExercises.find(
-    (ex) => !ex.reps.includes(0),
-  );
-  if (dayComplete) {
-    const newGroupId = (await createDayGroup(userId, activeProgram.id))[0]!
-      .newGroupId;
-    const groupDays = (await db.query.workoutProgramDayGroups.findFirst({
-      columns: {},
-      where: (model, { eq }) => eq(model.id, newGroupId),
-      with: {
-        groupDays: { columns: { id: true, repeatOn: true } },
-      },
-    }))!.groupDays;
-    const newGroupDayId = groupDays.find((day) =>
-      day.repeatOn?.includes(todayDay),
-    )!.id;
-    return `/workout/${activeProgram.id}/${newGroupDayId}`;
-  }
+  // const dayComplete = finalGroupScheduledDay.dayExercises.find(
+  //   (ex) => !ex.reps.includes(0),
+  // );
+  // if (dayComplete) {
+  //   const newGroupId = (await createDayGroup(userId, activeProgram.id))[0]!
+  //     .newGroupId;
+  //   const groupDays = (await db.query.workoutProgramDayGroups.findFirst({
+  //     columns: {},
+  //     where: (model, { eq }) => eq(model.id, newGroupId),
+  //     with: {
+  //       groupDays: { columns: { id: true, repeatOn: true } },
+  //     },
+  //   }))!.groupDays;
+  //   const newGroupDayId = groupDays.find((day) =>
+  //     day.repeatOn?.includes(todayDay),
+  //   )!.id;
+  //   return `/workout/${activeProgram.id}/${newGroupDayId}`;
+  // }
 
   // Return Day
   return `/workout/${activeProgram.id}/${finalGroupScheduledDay.id}`;
