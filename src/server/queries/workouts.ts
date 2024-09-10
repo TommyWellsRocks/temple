@@ -104,17 +104,6 @@ export async function getMyPrograms(userId: string) {
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.createdAt),
     columns: { createdAt: false, updatedAt: false },
-    with: {
-      groups: {
-        columns: { id: true },
-        with: {
-          groupDays: {
-            columns: { name: true },
-            with: { dayExercises: { columns: { reps: true } } },
-          },
-        },
-      },
-    },
   });
 }
 
