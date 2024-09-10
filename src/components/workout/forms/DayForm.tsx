@@ -56,7 +56,7 @@ export function DayForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: dayInfo ? dayInfo.name : undefined,
+      name: dayInfo ? dayInfo.name : "",
       repeatOn: dayInfo?.repeatOn != null ? dayInfo.repeatOn : [1],
     },
   });
