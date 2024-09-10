@@ -6,8 +6,8 @@ import { NavHeader } from "./_components/NavHeader";
 import { SectionHeader } from "~/components/workout/SectionHeader";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { DataTable } from "./_components/DataTable";
-import { FocusMusclesSlider } from "./_components/FocusMusclesSlider";
 import { DayExercisesList } from "./_components/DayExercisesList";
+import { MuscleSection } from "./_components/MuscleSection/MuscleSection";
 
 // * DAY OVERVIEW PAGE
 
@@ -22,11 +22,7 @@ export default function DayOverview({ params }: { params: { dayId: string } }) {
     <>
       <NavHeader />
 
-      <section className="flex flex-col gap-y-2">
-        <SectionHeader title="Today's Focus" />
-
-        <FocusMusclesSlider />
-      </section>
+      <MuscleSection />
 
       <section className="flex flex-col gap-y-2">
         <div className="flex justify-between">
