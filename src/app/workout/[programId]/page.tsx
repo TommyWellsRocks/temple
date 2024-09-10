@@ -27,7 +27,7 @@ export default function Days() {
         heading={programName}
         editButton={
           <EditButtonPopover
-            title="Edit Exercise"
+            title="Edit Program"
             description={`Remember to click save when you're done.`}
             formComponent={
               <ProgramForm userId={userId} programInfo={program!} />
