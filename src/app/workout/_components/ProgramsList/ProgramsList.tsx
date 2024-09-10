@@ -1,7 +1,7 @@
 import { useMyPrograms } from "~/hooks/workout/useMyPrograms";
 import { ListItem } from "./ListItem";
 
-export async function ProgramsList() {
+export function ProgramsList() {
   const today = new Date();
   const workoutPrograms = useMyPrograms()!;
 
