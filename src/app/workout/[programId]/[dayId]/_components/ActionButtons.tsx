@@ -51,9 +51,9 @@ export function ActionButtons() {
       {showEndButton ? (
         <Drawer nested>
           <DrawerTrigger>
-            <Button className="flex gap-1 border-2 border-primary bg-white text-black">
+            <div className="flex items-center justify-center gap-x-1 rounded-md border-2 border-primary bg-white px-4 py-1.5 text-sm text-black">
               <Flag width={15} /> Finish Workout
-            </Button>
+            </div>
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
@@ -61,16 +61,18 @@ export function ActionButtons() {
             </DrawerHeader>
             <DrawerFooter>
               <DrawerClose>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button className="w-full bg-white text-black">Resume</Button>
-                  <Button
-                    className="w-full"
+                <div className="grid h-10 grid-cols-2 gap-2">
+                  <div className="flex w-full items-center justify-center rounded-md bg-white text-sm text-black">
+                    Resume
+                  </div>
+                  <div
+                    className="flex w-full items-center justify-center rounded-md bg-primary text-sm"
                     onClick={() => {
                       setEndWorkout(userId, dayId);
                     }}
                   >
                     Log Workout
-                  </Button>
+                  </div>
                 </div>
               </DrawerClose>
             </DrawerFooter>
