@@ -13,13 +13,14 @@ export async function handleCreateProgram(
   startDate: Date,
   endDate: Date,
 ) {
-  await createWorkoutProgram(
+  const newGroupId = await createWorkoutProgram(
     userId,
     name,
     startDate,
     endDate,
   );
   revalidatePath("/workout");
+  return newGroupId;
 }
 
 export async function handleEditProgram(
@@ -29,13 +30,7 @@ export async function handleEditProgram(
   startDate: Date,
   endDate: Date,
 ) {
-  await editWorkoutProgram(
-    userId,
-    programId,
-    name,
-    startDate,
-    endDate,
-  );
+  await editWorkoutProgram(userId, programId, name, startDate, endDate);
   revalidatePath("/workout");
 }
 

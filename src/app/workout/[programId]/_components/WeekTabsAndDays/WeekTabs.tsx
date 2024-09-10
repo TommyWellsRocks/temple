@@ -8,10 +8,11 @@ import { useProgram } from "~/hooks/workout/useProgram";
 
 export function WeekTabs() {
   const weeks = useProgram((state) => state.programGroups)!;
+  const latestWeek = weeks.length - 1
 
   return (
     <TabsList>
-      <Carousel opts={{ startIndex: weeks.length - 1, dragFree: true }}>
+      <Carousel opts={{ startIndex: latestWeek, dragFree: true }}>
         <CarouselContent className="w-[240px] sm:w-[390px]">
           {weeks.map((week, index) => (
             <CarouselItem key={week.id}>

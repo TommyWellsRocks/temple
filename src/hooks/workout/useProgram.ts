@@ -54,9 +54,10 @@ export const useProgram = create<ProgramState>((set) => ({
   setProgram: (program) => set({ program }),
   setProgramGroups: (program) => {
     const groupObjects: { id: number; groupDays: ProgramDay[] }[] = []; // Groups[groupDays, id]
-    new Set(program?.programDays.map((day) => day.groupId)).forEach((groupId) =>
+    new Set(program?.groups.map((group) => group.id)).forEach((groupId) =>
       groupObjects.push({ id: groupId, groupDays: [] }),
     );
+
     program?.programDays.forEach((day) =>
       groupObjects
         .find((group) => group.id === day.groupId)

@@ -122,7 +122,8 @@ export async function createWorkoutProgram(
       endDate,
     })
     .returning({ id: workoutPrograms.id });
-  await createDayGroup(userId, newProgramId[0]!.id);
+  const newGroup = await createDayGroup(userId, newProgramId[0]!.id);
+  return newGroup[0]?.newGroupId;
 }
 
 export async function editWorkoutProgram(
@@ -160,6 +161,7 @@ export async function getMyProgram(userId: string, programId: number) {
     where: (model, { and, eq }) =>
       and(eq(model.userId, userId), eq(model.id, programId)),
     with: {
+      groups: { columns: { id: true } },
       programDays: {
         columns: { createdAt: false },
         with: {
