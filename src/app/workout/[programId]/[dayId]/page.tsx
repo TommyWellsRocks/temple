@@ -16,7 +16,7 @@ export default function DayOverview({ params }: { params: { dayId: string } }) {
   const dayExercisesCount = useProgram(
     (state) => state.day?.dayExercises.length,
   );
-  if (!dayExercisesCount) return;
+  if (dayExercisesCount === undefined) return;
 
   return (
     <>
