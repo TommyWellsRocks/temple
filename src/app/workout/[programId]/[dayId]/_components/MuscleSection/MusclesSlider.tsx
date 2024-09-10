@@ -6,7 +6,7 @@ import {
 import { useProgram } from "~/hooks/workout/useProgram";
 import { getMuscleCount } from "./getMuscleCount";
 
-export function FocusMusclesSlider() {
+export function MuscleSlider() {
   const dayExercises = useProgram((state) => state.day?.dayExercises);
   if (!dayExercises) return;
 

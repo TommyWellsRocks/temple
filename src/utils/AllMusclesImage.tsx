@@ -47,7 +47,7 @@ export const muscles: { [key: string]: StaticImport } = {
 
 // For now, abs category is Obliques, Lower and Upper Abs
 
-export function ExerciseMuscleImage({
+export function FullMusclesImage({
   primaryMuscle,
   secondaryMuscles,
 }: {

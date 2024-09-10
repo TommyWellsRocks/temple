@@ -8,7 +8,7 @@ import YouTube from "public/content/images/workout/youtube.svg";
 import Google from "public/content/images/workout/google.png";
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
 import { useProgram } from "~/hooks/workout/useProgram";
-import { ExerciseMuscleImage } from "~/utils/AllMusclesImage";
+import { FullMusclesImage } from "~/utils/AllMusclesImage";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useExHistory } from "~/hooks/workout/useExerciseHistory";
 
@@ -94,7 +94,7 @@ function MusclesTabContent() {
     <TabsContent value="muscles">
       <div className="flex flex-col items-center gap-y-4">
         <div className="w-[200px]">
-          <ExerciseMuscleImage
+          <FullMusclesImage
             primaryMuscle={dayEx.info.primaryMuscle}
             secondaryMuscles={dayEx.info.secondaryMuscles}
           />
