@@ -57,7 +57,7 @@ export function ProgramForm({ programInfo }: { programInfo?: Program }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: programInfo ? programInfo.name : undefined,
+      name: programInfo ? programInfo.name : "",
       start: programInfo ? addDays(new Date(programInfo.startDate), 1) : today,
       end: programInfo
         ? addDays(new Date(programInfo.endDate), 1)
