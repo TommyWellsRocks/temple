@@ -4,7 +4,7 @@ import { setDayExercise } from "~/hooks/workout/useProgram";
 
 import { HeaderNav } from "./_components/HeaderNav";
 import { Sets } from "./_components/Sets/Sets";
-import { ExerciseTabs } from "./_components/ExerciseTabs";
+import { ExerciseTabs } from "./_components/ExerciseTabs/ExerciseTabs";
 import { ActionButtons } from "./_components/ActionButtons";
 
 // * EXERCISE PAGE
