@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useFormSetup, formSchema } from "./useFormSetup";
 
+import { useState } from "react";
 import { z } from "zod";
 import {
   handleEditProgram,
@@ -15,6 +16,9 @@ import { DateField } from "./DateField";
 import { FormButtons } from "./FormButtons";
 
 import type { WorkoutPrograms } from "~/server/types";
+import { addDays } from "date-fns";
+
+const PROGRAM_ACTIVE_DAYS = 45;
 
 export function ProgramForm({
   programInfo,
@@ -25,7 +29,11 @@ export function ProgramForm({
   if (!userId) return;
 
   const today = new Date();
-  const form = useFormSetup(programInfo);
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(
+    addDays(startDate, PROGRAM_ACTIVE_DAYS),
+  );
+  const form = useFormSetup(startDate, endDate, programInfo);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const startDate = new Date(values.start);
@@ -44,10 +52,14 @@ export function ProgramForm({
       : handleCreateProgram(userId, values.name, startDate, endDate);
   };
 
-  function DatesDifference() {
-    const differenceDays =
-      (form.getValues().end?.getTime() - form.getValues().start?.getTime()) /
-      (1000 * 3600 * 24);
+  function DatesDifference({
+    endDateTime,
+    startDateTime,
+  }: {
+    endDateTime: number;
+    startDateTime: number;
+  }) {
+    const differenceDays = (endDateTime - startDateTime) / (1000 * 3600 * 24);
     const differenceWeeks = differenceDays / 7;
     return (
       <span>
@@ -71,8 +83,9 @@ export function ProgramForm({
           name="start"
           fieldLabel="Program Start Date"
           dateLabel="Start Date"
-          fromDate={today}
-          toDate={form.getValues().end || undefined}
+          fromDate={startDate}
+          toDate={endDate}
+          setter={setStartDate}
         />
 
         <DateField
@@ -80,11 +93,15 @@ export function ProgramForm({
           name="end"
           fieldLabel="Program End Date"
           dateLabel="End Date"
-          fromDate={form.getValues().start || today}
+          fromDate={startDate}
+          setter={setEndDate}
         />
 
         <FormDescription className="text-center">
-          <DatesDifference />
+          <DatesDifference
+            startDateTime={startDate.getTime()}
+            endDateTime={endDate.getTime()}
+          />
         </FormDescription>
 
         <FormButtons userId={userId} programInfo={programInfo} />

@@ -24,6 +24,7 @@ export function DateField({
   dateLabel,
   fromDate,
   toDate,
+  setter,
 }: {
   control: any;
   name: string;
@@ -31,6 +32,7 @@ export function DateField({
   dateLabel: string;
   fromDate: Date;
   toDate?: Date;
+  setter: Function;
 }) {
   return (
     <FormField
@@ -51,7 +53,7 @@ export function DateField({
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {field.value ? (
-                    format(field.value, "yyyy-MM-dd")
+                    format(field.value, "EEE, MMM d, yyyy")
                   ) : (
                     <span>{dateLabel}</span>
                   )}
@@ -62,7 +64,10 @@ export function DateField({
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                onSelect={(e) => {
+                  field.onChange(e)
+                  setter(e)
+                }}
                 fromDate={fromDate}
                 toDate={toDate}
                 initialFocus
