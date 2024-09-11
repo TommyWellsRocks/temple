@@ -5,7 +5,7 @@ import { setDay } from "~/hooks/workout/useProgram";
 import { NavHeader } from "./_components/NavHeader";
 import { MuscleSection } from "./_components/MuscleSection/MuscleSection";
 import { ExercisesSection } from "./_components/ExercisesSection/ExercisesSection";
-import { ActionButtons } from "./_components/ActionButtons";
+import { ActionButtons } from "./_components/ActionButtons/ActionButtons";
 
 // * DAY OVERVIEW PAGE
 
