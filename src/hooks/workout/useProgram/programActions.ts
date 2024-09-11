@@ -42,7 +42,6 @@ export function programActions(set: any) {
   };
 }
 
-
 export function SetProgram({ program }: { program: Program }) {
   const setProgram = useProgram.getState().setProgram;
   const setProgramGroups = useProgram.getState().setProgramGroups;

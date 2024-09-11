@@ -1,6 +1,6 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getUserSettings } from "~/server/queries/settings";
+import { getUserSettings } from "~/server/db/queries/settings/settings";
 import { Navigation } from "~/components/ui/Navigation";
 import {
   DarkModeSwitch,
@@ -8,7 +8,7 @@ import {
   WeightPoundsSwitch,
 } from "~/components/settings/Switches";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 function SettingsItem({
   label,

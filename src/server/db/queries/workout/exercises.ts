@@ -1,10 +1,10 @@
 import "server-only";
 
 import { db } from "~/server/db";
-import { exercise_notes, exercises } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
+import { exercise_notes } from "~/server/db/schema";
 
-export async function getExercises(userId: string) {
+export async function getUserExercises(userId: string) {
   return await db.query.exercises.findMany({
     columns: { id: true, name: true },
     with: {
@@ -39,7 +39,7 @@ export async function editUserExerciseName(
       });
 }
 
-export async function editExerciseNote(
+export async function editUserExerciseNote(
   userId: string,
   exerciseId: number,
   noteValue: string,
@@ -61,18 +61,4 @@ export async function editExerciseNote(
         exerciseId,
         notes: noteValue,
       });
-}
-
-// ! ADMIN
-export async function insertExercises(
-  formattedData: {
-    id: number | undefined;
-    name: string;
-    equipment: string[];
-    primaryMuscle: string;
-    secondaryMuscles: string[];
-    video: undefined;
-  }[],
-) {
-  await db.insert(exercises).values(formattedData);
 }

@@ -5,7 +5,7 @@ import googleIconURL from "public/content/images/auth/google-icon.svg";
 import Image from "next/image";
 import { AuthError } from "next-auth";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 const authIcons: { name: string; icon: string }[] = [
   { name: "Google", icon: googleIconURL as string },

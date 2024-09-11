@@ -19,7 +19,7 @@ export function ExerciseItem({ exercise }: { exercise: DayExercise }) {
         <ExerciseItemText exercise={exercise} />
       </Link>
 
-      <ExerciseEditButton exercise={exercise}/>
+      <ExerciseEditButton exercise={exercise} />
     </div>
   );
 }

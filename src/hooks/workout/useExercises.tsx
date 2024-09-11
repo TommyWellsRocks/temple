@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { createContext, useContext } from "react";
 import type { Exercises } from "~/server/types";
@@ -12,7 +12,9 @@ export function MyExercisesProvider({
   children: React.ReactNode;
   exercises: Exercises;
 }) {
-  return <MyExercises.Provider value={exercises}>{children}</MyExercises.Provider>;
+  return (
+    <MyExercises.Provider value={exercises}>{children}</MyExercises.Provider>
+  );
 }
 
 export const useMyExercises = () => useContext(MyExercises);

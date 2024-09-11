@@ -1,7 +1,10 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getExercises } from "~/server/queries/exercises";
-import { getMyPrograms, getWorkoutRedirect } from "~/server/queries/workouts";
+import { getUserExercises } from "~/server/db/queries/workout/exercises";
+import {
+  getMyPrograms,
+  // getWorkoutRedirect,
+} from "~/server/db/queries/workout/program";
 
 import { SessionProvider } from "next-auth/react";
 import { MyProgramsProvider } from "~/hooks/workout/useMyPrograms";
@@ -15,7 +18,7 @@ export default async function WorkoutLayout({
   const session = await auth();
   if (!session?.user?.id) return redirect("/workout");
   const userId = session.user.id;
-  const exercises = await getExercises(userId);
+  const exercises = await getUserExercises(userId);
 
   const workoutPrograms = await getMyPrograms(userId);
 

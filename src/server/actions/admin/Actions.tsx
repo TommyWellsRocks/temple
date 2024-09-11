@@ -1,6 +1,6 @@
 "use server";
 
-import { insertExercises } from "~/server/queries/exercises";
+import { insertExercises } from "~/server/db/queries/admin/admin";
 
 export async function handleInsertExercises(
   formattedData: {

@@ -1,5 +1,5 @@
 import { auth } from "~/server/auth";
-import { getMyProgram } from "~/server/queries/workouts";
+import { getMyProgram } from "~/server/db/queries/workout/program";
 import { SetProgram } from "~/hooks/workout/useProgram/programActions";
 import { redirect } from "next/navigation";
 

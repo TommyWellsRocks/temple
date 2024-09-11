@@ -1,6 +1,6 @@
 "use server";
 
-import { toggleRedirectWorkout } from "~/server/queries/settings";
+import { toggleRedirectWorkout } from "~/server/db/queries/settings/settings";
 
 export async function handleToggleRedirectWorkout(
   userId: string,

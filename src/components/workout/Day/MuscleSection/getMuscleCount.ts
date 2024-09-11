@@ -17,5 +17,7 @@ export function getMuscleCount(dayExercises: DayExercise[]) {
       });
     }
   });
-  return Object.entries(muscleCount).sort(([_, countA], [__, countB]) => countB - countA)
+  return Object.entries(muscleCount).sort(
+    ([_, countA], [__, countB]) => countB - countA,
+  );
 }

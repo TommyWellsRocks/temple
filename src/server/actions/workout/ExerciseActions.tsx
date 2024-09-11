@@ -1,11 +1,11 @@
 "use server";
 
-import { editExerciseNote } from "~/server/queries/exercises";
 import {
   updateDayExerciseInput,
   updateDayExerciseSets,
   updateLoggedSets,
-} from "~/server/queries/workouts";
+} from "~/server/db/queries/workout/dayExercises";
+import { editUserExerciseNote } from "~/server/db/queries/workout/exercises";
 
 export async function handleExerciseVolumeInput(
   dayExerciseId: number,
@@ -38,7 +38,7 @@ export async function handleExerciseNoteInput(
   noteValue: string,
   noteId?: number,
 ) {
-  await editExerciseNote(userId, exerciseId, noteValue, noteId);
+  await editUserExerciseNote(userId, exerciseId, noteValue, noteId);
 }
 
 export async function handleUpdateLoggedSets(

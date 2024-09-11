@@ -1,13 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { editUserExerciseName } from "~/server/queries/exercises";
+import { endWorkout, startWorkout } from "~/server/db/queries/workout/day";
 import {
   addDayExercise,
   deleteDayExercise,
-  endWorkout,
-  startWorkout,
-} from "~/server/queries/workouts";
+} from "~/server/db/queries/workout/dayExercises";
+import { editUserExerciseName } from "~/server/db/queries/workout/exercises";
 
 export async function handleAddExercise(
   userId: string,

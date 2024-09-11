@@ -12,10 +12,7 @@ export function ExerciseEditButton({ exercise }: { exercise: DayExercise }) {
         title="Edit Exercise"
         description={`Remember to click save when you're done.`}
         formComponent={
-          <ExerciseForm
-            programId={exercise.programId}
-            dayExercise={exercise}
-          />
+          <ExerciseForm programId={exercise.programId} dayExercise={exercise} />
         }
       />
     </div>

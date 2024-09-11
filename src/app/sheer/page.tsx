@@ -2,11 +2,14 @@ import { redirect } from "next/navigation";
 import { Navigation } from "~/components/ui/Navigation";
 import { isAfter7PM } from "~/utils/helpers";
 import { auth } from "~/server/auth";
-import { getTodaysResponse, getWinStreak } from "~/server/queries/sheer";
+import {
+  getTodaysResponse,
+  getWinStreak,
+} from "~/server/db/queries/sheer/sheer";
 import { ResponseButtons } from "~/components/sheer/ResponseButtons";
 import { ResponseFeedBack } from "~/components/sheer/ResponseFeedback";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function Sheer() {
   const session = await auth();

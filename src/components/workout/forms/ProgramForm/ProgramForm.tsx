@@ -17,7 +17,7 @@ import { FormButtons } from "./FormButtons";
 import type { Program } from "~/server/types";
 
 export function ProgramForm({ programInfo }: { programInfo?: Program }) {
-  const userId = useSession().data?.user?.id
+  const userId = useSession().data?.user?.id;
   if (!userId) return;
 
   const today = new Date();

@@ -2,7 +2,7 @@ import { Button } from "~/components/ui/button";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "~/server/auth";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function SignIn() {
   const session = await auth();

@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import {
   createWorkoutProgram,
-  editWorkoutProgram,
   deleteWorkoutProgram,
-} from "~/server/queries/workouts";
+  editWorkoutProgram,
+} from "~/server/db/queries/workout/program";
 
 export async function handleCreateProgram(
   userId: string,

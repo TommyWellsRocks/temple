@@ -17,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} m-3 dark`}>
+    <html lang="en" className={`${GeistSans.variable} dark m-3`}>
       <body className="flex flex-col gap-y-4 text-left text-xl font-medium">
         {children}
         <Analytics />

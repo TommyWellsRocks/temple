@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import {
   createProgramDay,
-  editProgramDay,
   deleteProgramDay,
+  editProgramDay,
+} from "~/server/db/queries/workout/day";
+import {
+  addPrevDaysToNewGroup,
   createDayGroup,
   deleteDayGroup,
-  addPrevDaysToNewGroup,
-} from "~/server/queries/workouts";
+} from "~/server/db/queries/workout/groups";
 
 export async function handleCreateDay(
   userId: string,

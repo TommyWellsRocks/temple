@@ -4,7 +4,7 @@ import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
 export function HistoryTab() {
-  return <TabsTrigger value="history">History</TabsTrigger>
+  return <TabsTrigger value="history">History</TabsTrigger>;
 }
 
 export function HistoryTabContent() {
