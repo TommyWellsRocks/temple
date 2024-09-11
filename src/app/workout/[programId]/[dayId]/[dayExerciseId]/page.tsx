@@ -1,10 +1,11 @@
 "use client";
 
 import { setDayExercise } from "~/hooks/workout/useProgram";
-import { SetInputs } from "./_components/SetInputs";
+
+import { HeaderNav } from "./_components/HeaderNav";
+import { Sets } from "./_components/Sets/Sets";
 import { ExerciseTabs } from "./_components/ExerciseTabs";
 import { ActionButtons } from "./_components/ActionButtons";
-import { HeaderNav } from "./_components/HeaderNav";
 
 // * EXERCISE PAGE
 
@@ -21,7 +22,7 @@ export default function Exercise({
 
       <div />
 
-      <SetInputs />
+      <Sets />
 
       <ExerciseTabs />
 
