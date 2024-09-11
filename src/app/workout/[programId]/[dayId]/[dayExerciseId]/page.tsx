@@ -1,12 +1,10 @@
 "use client";
 
-import { setDayExercise, useProgram } from "~/hooks/workout/useProgram";
-import { Navigation } from "~/components/ui/Navigation";
+import { setDayExercise } from "~/hooks/workout/useProgram";
 import { SetInputs } from "./_components/SetInputs";
 import { ExerciseTabs } from "./_components/ExerciseTabs";
 import { ActionButtons } from "./_components/ActionButtons";
-import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
-import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import { HeaderNav } from "./_components/HeaderNav";
 
 // * EXERCISE PAGE
 
@@ -16,28 +14,10 @@ export default function Exercise({
   params: { programId: string; dayExerciseId: string; dayId: string };
 }) {
   setDayExercise(Number(params.dayId), Number(params.dayExerciseId));
-  const dayExercise = useProgram((state) => state.dayExercise);
-  if (!dayExercise) return;
 
   return (
     <>
-      <Navigation
-        backURL={`/workout/${Number(params.programId)}/${params.dayId}`}
-        heading={`${dayExercise.notes?.name ? dayExercise.notes.name : dayExercise.info.name}`}
-        editButton={
-          <EditButtonPopover
-            title="Edit Exercise"
-            description={`Remember to click save when you're done.`}
-            formComponent={
-              <ExerciseForm
-                userId={dayExercise.userId}
-                programId={dayExercise.programId}
-                dayExercise={dayExercise}
-              />
-            }
-          />
-        }
-      />
+      <HeaderNav />
 
       <div />
 
