@@ -4,7 +4,7 @@ import { WeekTabDays } from "./WeekTabDays";
 import { EditWeeksButton } from "./EditWeeksButton";
 import { WeekTabs } from "./WeekTabs";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
-import { DayForm } from "~/components/workout/forms/DayForm";
+import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
 
 export function WeekTabsAndDays() {
   const programGroups = useProgram((state) => state.programGroups);

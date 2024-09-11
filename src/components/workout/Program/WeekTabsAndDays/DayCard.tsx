@@ -2,7 +2,7 @@ import { useProgram } from "~/hooks/workout/useProgram";
 
 import { ActionCard } from "~/components/workout/ActionCard";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { DayForm } from "~/components/workout/forms/DayForm";
+import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
 
 export function DayCard({ dayId }: { dayId: number }) {
   const day = useProgram((state) =>
