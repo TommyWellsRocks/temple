@@ -1,6 +1,6 @@
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { SectionHeader } from "~/components/workout/SectionHeader";
-import { ProgramForm } from "~/components/workout/forms/ProgramForm";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm/ProgramForm";
 
 export function HeaderSection() {
   return (

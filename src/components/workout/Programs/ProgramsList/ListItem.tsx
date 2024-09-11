@@ -1,5 +1,5 @@
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { ProgramForm } from "~/components/workout/forms/ProgramForm";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm/ProgramForm";
 import { ActionCard } from "~/components/workout/ActionCard";
 import type { WorkoutPrograms } from "~/server/types";
 

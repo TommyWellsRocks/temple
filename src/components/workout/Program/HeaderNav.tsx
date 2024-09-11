@@ -1,6 +1,6 @@
 import { Navigation } from "~/components/ui/Navigation";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { ProgramForm } from "~/components/workout/forms/ProgramForm";
+import { ProgramForm } from "~/components/workout/forms/ProgramForm/ProgramForm";
 import { useProgram } from "~/hooks/workout/useProgram";
 
 export function HeaderNav() {
