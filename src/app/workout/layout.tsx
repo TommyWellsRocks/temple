@@ -4,7 +4,6 @@ import { getExercises } from "~/server/queries/exercises";
 import { getMyPrograms, getWorkoutRedirect } from "~/server/queries/workouts";
 
 import { SessionProvider } from "next-auth/react";
-import { UserIdProvider } from "~/hooks/useUserId";
 import { MyProgramsProvider } from "~/hooks/workout/useMyPrograms";
 import { MyExercisesProvider } from "~/hooks/workout/useExercises";
 
@@ -25,13 +24,11 @@ export default async function WorkoutLayout({
 
   return (
     <SessionProvider session={session}>
-      <UserIdProvider userId={userId}>
-        <MyProgramsProvider workoutPrograms={workoutPrograms}>
-          <MyExercisesProvider exercises={exercises}>
-            {children}
-          </MyExercisesProvider>
-        </MyProgramsProvider>
-      </UserIdProvider>
+      <MyProgramsProvider workoutPrograms={workoutPrograms}>
+        <MyExercisesProvider exercises={exercises}>
+          {children}
+        </MyExercisesProvider>
+      </MyProgramsProvider>
     </SessionProvider>
   );
 }
