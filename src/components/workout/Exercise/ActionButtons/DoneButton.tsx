@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import Link from "next/link";
 import { Button } from "~/components/ui/button";

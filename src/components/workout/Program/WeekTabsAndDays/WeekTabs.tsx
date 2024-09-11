@@ -4,11 +4,11 @@ import {
   CarouselItem,
 } from "~/components/ui/carousel";
 import { TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 export function WeekTabs() {
   const weeks = useProgram((state) => state.programGroups)!;
-  const latestWeek = weeks.length - 1
+  const latestWeek = weeks.length - 1;
 
   return (
     <TabsList>

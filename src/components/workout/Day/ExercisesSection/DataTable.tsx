@@ -31,7 +31,7 @@ import {
   handleAddExercise,
   handleDeleteExercise,
 } from "~/server/actions/workout/DayActions";
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useMyExercises } from "~/hooks/workout/useExercises";
 
 export type Exercise = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { setDay } from "~/hooks/workout/useProgram";
+import { setDay } from "~/hooks/workout/useProgram/dayActions";
 
 import { NavHeader } from "~/components/workout/Day/NavHeader";
 import { MuscleSection } from "~/components/workout/Day/MuscleSection/MuscleSection";

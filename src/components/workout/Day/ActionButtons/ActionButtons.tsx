@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { StartWorkoutButton } from "./StartWorkoutButton";
 import { EndWorkoutDrawer } from "./EndWorkoutDrawer";

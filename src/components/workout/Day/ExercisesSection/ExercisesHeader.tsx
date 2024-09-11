@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { SectionHeader } from "~/components/workout/SectionHeader";

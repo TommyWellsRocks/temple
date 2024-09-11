@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { Navigation } from "~/components/ui/Navigation";
 import { ExerciseForm } from "~/components/workout/forms/ExerciseForm/ExerciseForm";

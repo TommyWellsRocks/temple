@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { ActionCard } from "~/components/workout/ActionCard";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";

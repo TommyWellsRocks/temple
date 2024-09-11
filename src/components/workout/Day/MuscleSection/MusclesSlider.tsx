@@ -3,7 +3,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "~/components/ui/carousel";
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { getMuscleCount } from "./getMuscleCount";
 
 export function MuscleSlider() {

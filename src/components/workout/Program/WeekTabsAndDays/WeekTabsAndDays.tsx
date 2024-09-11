@@ -1,5 +1,5 @@
 import { Tabs } from "~/components/ui/tabs";
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { WeekTabDays } from "./WeekTabDays";
 import { EditWeeksButton } from "./EditWeeksButton";
 import { WeekTabs } from "./WeekTabs";

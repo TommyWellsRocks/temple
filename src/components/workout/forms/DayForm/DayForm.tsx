@@ -1,6 +1,6 @@
 "use client";
 
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { z } from "zod";
 import { useFormSetup, formSchema } from "./useFormSetup";

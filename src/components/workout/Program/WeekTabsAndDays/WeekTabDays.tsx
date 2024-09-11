@@ -1,5 +1,5 @@
 import { TabsContent } from "~/components/ui/tabs";
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { DaysList } from "./DaysList";
 
 export function WeekTabDays() {

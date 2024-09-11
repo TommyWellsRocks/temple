@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 export function LogWorkoutButton() {
   const setEndWorkout = useProgram.getState().setEndWorkout;

@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { FullMusclesImage } from "~/utils/AllMusclesImage";

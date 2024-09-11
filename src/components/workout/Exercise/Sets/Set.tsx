@@ -1,4 +1,4 @@
-import { useProgram } from "~/hooks/workout/useProgram";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { SetInput } from "./SetInput";
