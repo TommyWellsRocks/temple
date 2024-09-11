@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "~/components/ui/button";
 import { Flag, Zap } from "lucide-react";
 import {
