@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useProgram, type ProgramState } from "./useProgram";
 import type { Program, ProgramDay } from "~/server/types";
 
-export function programActions(set: any) {
+export function programActions(set: (partial: ProgramState | Partial<ProgramState> | ((state: ProgramState) => ProgramState | Partial<ProgramState>), replace?: boolean | undefined) => void) {
   return {
     program: null,
     programGroups: null,
@@ -29,7 +29,7 @@ export function programActions(set: any) {
       newStartDate: Date,
       newEndDate: Date,
     ) =>
-      set((state: ProgramState) => {
+      set((state) => {
         if (!state.program) return state;
         return {
           ...state,

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   handleExerciseSetsChange,
@@ -9,11 +9,19 @@ import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
 
-export function exerciseActions(set: any) {
+export function exerciseActions(
+  set: (
+    partial:
+      | ProgramState
+      | Partial<ProgramState>
+      | ((state: ProgramState) => ProgramState | Partial<ProgramState>),
+    replace?: boolean | undefined,
+  ) => void,
+) {
   return {
     dayExercise: null,
     setDayExercise: (dayId: number, dayExerciseId: number) => {
-      set((state: ProgramState) => {
+      set((state) => {
         const dayEx = state.program?.programDays
           .find((day) => day.id === dayId)
           ?.dayExercises.find((ex) => ex.id === dayExerciseId);
@@ -25,7 +33,7 @@ export function exerciseActions(set: any) {
       index: number,
       value: number,
     ) =>
-      set((state: ProgramState) => {
+      set((state) => {
         const dayEx = state.dayExercise;
         if (!dayEx) return state;
 
@@ -54,7 +62,7 @@ export function exerciseActions(set: any) {
         } else return state;
       }),
     setDayExerciseSets: (method: "Add" | "Delete") =>
-      set((state: ProgramState) => {
+      set((state) => {
         const dayEx = state.dayExercise;
         if (!dayEx) return state;
 
@@ -83,7 +91,7 @@ export function exerciseActions(set: any) {
         };
       }),
     setDayExerciseLoggedSet: (loggedSetsCount: number) =>
-      set((state: ProgramState) => {
+      set((state) => {
         const dayEx = state.dayExercise;
         if (!dayEx) return state;
 

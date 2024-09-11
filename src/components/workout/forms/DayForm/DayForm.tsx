@@ -27,9 +27,9 @@ export function DayForm({
     state.program?.userId,
     state.program?.id,
   ]);
-  if (!userId || !programId) return;
-
+  
   const form = useFormSetup(dayInfo);
+  if (!userId || !programId) return;
 
   const handleSubmit = (values: z.infer<typeof formSchema>, dayId?: number) => {
     const newRepeatOn = values.repeatOn ?? null;

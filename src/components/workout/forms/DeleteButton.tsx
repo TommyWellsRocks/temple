@@ -1,6 +1,6 @@
 import { Button } from "~/components/ui/button";
 
-export function DeleteButton({ onClick }: { onClick: Function }) {
+export function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       className="mr-auto"

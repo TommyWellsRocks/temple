@@ -39,12 +39,12 @@ export function RepeatOnField({ control }: { control: any }) {
                     >
                       <FormControl>
                         <Checkbox
-                          checked={field.value?.includes(day.id)}
+                          checked={(field.value as number[])?.includes(day.id)}
                           onCheckedChange={(checked) =>
                             field.onChange(
                               checked
                                 ? [...field.value!, day.id]
-                                : field.value?.filter(
+                                : (field.value as number[])?.filter(
                                     (value: number) => value !== day.id,
                                   ),
                             )

@@ -32,7 +32,7 @@ export function DateField({
   dateLabel: string;
   fromDate: Date;
   toDate?: Date;
-  setter: Function;
+  setter: React.Dispatch<React.SetStateAction<Date>>;
 }) {
   return (
     <FormField
@@ -65,8 +65,8 @@ export function DateField({
                 mode="single"
                 selected={field.value}
                 onSelect={(e) => {
-                  field.onChange(e)
-                  setter(e)
+                  field.onChange(e);
+                  setter((prevDate) => e || prevDate);
                 }}
                 fromDate={fromDate}
                 toDate={toDate}

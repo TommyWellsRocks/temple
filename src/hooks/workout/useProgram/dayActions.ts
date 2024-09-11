@@ -8,11 +8,11 @@ import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
 
-export function dayActions(set: any) {
+export function dayActions(set: (partial: ProgramState | Partial<ProgramState> | ((state: ProgramState) => ProgramState | Partial<ProgramState>), replace?: boolean | undefined) => void) {
   return {
     day: null,
     setDay: (dayId: number) =>
-      set((state: ProgramState) => {
+      set((state) => {
         const day = state.program?.programDays.find((day) => day.id === dayId);
 
         return {
@@ -25,7 +25,7 @@ export function dayActions(set: any) {
       newName: string,
       newRepeatOn: number[] | null,
     ) =>
-      set((state: ProgramState) => {
+      set((state) => {
         if (!state.program) return state;
 
         // Update programDays
@@ -44,7 +44,7 @@ export function dayActions(set: any) {
         };
       }),
     setStartWorkout: (userId: string, dayId: number) =>
-      set((state: ProgramState) => {
+      set((state) => {
         if (!state.program || !state.day) return state;
 
         const startedWorkout = new Date();
@@ -69,7 +69,7 @@ export function dayActions(set: any) {
         };
       }),
     setEndWorkout: (userId: string, dayId: number) =>
-      set((state: ProgramState) => {
+      set((state) => {
         if (!state.program || !state.day) return state;
 
         const endedWorkout = new Date();
