@@ -5,14 +5,14 @@ import { CreateButton } from "../CreateButton";
 import { DeleteButton } from "../DeleteButton";
 import { SaveButton } from "../SaveButton";
 
-import type { Program } from "~/server/types";
+import type { WorkoutPrograms } from "~/server/types";
 
 export function FormButtons({
   userId,
   programInfo,
 }: {
   userId: string;
-  programInfo: Program;
+  programInfo?: WorkoutPrograms[0];
 }) {
   return (
     <DialogFooter>

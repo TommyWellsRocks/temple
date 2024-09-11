@@ -2,17 +2,15 @@ import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { ProgramForm } from "~/components/workout/forms/ProgramForm/ProgramForm";
 import { ActionCard } from "~/components/workout/ActionCard";
 
-import type { Program } from "~/server/types";
+import type { WorkoutPrograms } from "~/server/types";
 
 export function ListItem({
   isDark,
   program,
 }: {
   isDark: boolean;
-  program: Program;
+  program: WorkoutPrograms[0];
 }) {
-  if (!program) return;
-
   return (
     <ActionCard
       title={program.name}

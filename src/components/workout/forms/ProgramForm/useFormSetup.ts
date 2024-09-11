@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 
 import { z } from "zod";
+import { addDays } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type { Program } from "~/server/types";
-import { addDays } from "date-fns";
+import type { WorkoutPrograms } from "~/server/types";
 
 const PROGRAM_ACTIVE_DAYS = 45;
 
@@ -16,7 +16,7 @@ export const formSchema = z.object({
   end: z.date(),
 });
 
-export function useFormSetup(programInfo: Program) {
+export function useFormSetup(programInfo?: WorkoutPrograms[0]) {
   const today = new Date();
   return useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

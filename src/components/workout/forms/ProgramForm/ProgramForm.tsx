@@ -14,9 +14,13 @@ import { NameField } from "../NameField";
 import { DateField } from "./DateField";
 import { FormButtons } from "./FormButtons";
 
-import type { Program } from "~/server/types";
+import type { WorkoutPrograms } from "~/server/types";
 
-export function ProgramForm({ programInfo }: { programInfo?: Program }) {
+export function ProgramForm({
+  programInfo,
+}: {
+  programInfo?: WorkoutPrograms[0];
+}) {
   const userId = useSession().data?.user?.id;
   if (!userId) return;
 
