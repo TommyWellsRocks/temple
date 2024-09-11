@@ -1,7 +1,7 @@
 import type { DayExercise } from "~/server/types";
 
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
+import { ExerciseForm } from "~/components/workout/forms/ExerciseForm/ExerciseForm";
 
 export function ExerciseEditButton({ exercise }: { exercise: DayExercise }) {
   if (!exercise) return;
@@ -13,7 +13,6 @@ export function ExerciseEditButton({ exercise }: { exercise: DayExercise }) {
         description={`Remember to click save when you're done.`}
         formComponent={
           <ExerciseForm
-            userId={exercise.userId}
             programId={exercise.programId}
             dayExercise={exercise}
           />

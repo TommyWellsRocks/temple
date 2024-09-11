@@ -1,7 +1,7 @@
 import { useProgram } from "~/hooks/workout/useProgram";
 
 import { Navigation } from "~/components/ui/Navigation";
-import { ExerciseForm } from "~/components/workout/forms/ExerciseForm";
+import { ExerciseForm } from "~/components/workout/forms/ExerciseForm/ExerciseForm";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 
 export function HeaderNav() {
@@ -18,7 +18,6 @@ export function HeaderNav() {
           description={`Remember to click save when you're done.`}
           formComponent={
             <ExerciseForm
-              userId={dayExercise.userId}
               programId={dayExercise.programId}
               dayExercise={dayExercise}
             />
