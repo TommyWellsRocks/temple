@@ -54,14 +54,6 @@ export function FullMusclesImage({
   primaryMuscle: string | null;
   secondaryMuscles: string[] | null;
 }) {
-  if (!primaryMuscle)
-    return (
-      <Image
-        alt="Muscle Image"
-        src={Base}
-        className={`rounded-lg border border-primary bg-black p-0.5`}
-      />
-    );
   return (
     <div className="relative">
       <Image
@@ -69,14 +61,17 @@ export function FullMusclesImage({
         src={Base}
         className={`rounded-lg border border-primary bg-black p-0.5`}
       />
-      <Image
-        alt="Primary Muscle"
-        src={muscles[primaryMuscle]!}
-        className={`absolute top-0 rounded-lg p-0.5 `}
-        style={{
-          filter: "invert(50%) sepia(100%) saturate(1000%) hue-rotate(290deg)",
-        }}
-      />
+      {primaryMuscle ? (
+        <Image
+          alt="Primary Muscle"
+          src={muscles[primaryMuscle]!}
+          className={`absolute top-0 rounded-lg p-0.5 `}
+          style={{
+            filter:
+              "invert(50%) sepia(100%) saturate(1000%) hue-rotate(290deg)",
+          }}
+        />
+      ) : null}
       {secondaryMuscles?.map((secondary) => {
         return (
           <Image

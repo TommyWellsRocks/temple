@@ -1,6 +1,6 @@
 import type { DayExercise } from "~/server/types";
 
-import { FullMusclesImage } from "~/utils/AllMusclesImage";
+import { FullMusclesImage } from "~/components/workout/AllMusclesImage";
 
 export function ExerciseMusclesImage({ exercise }: { exercise: DayExercise }) {
   if (!exercise) return;
