@@ -1,7 +1,7 @@
 "use client";
 
-import { HeaderNav } from "./_components/HeaderNav";
-import { WeekTabsAndDays } from "./_components/WeekTabsAndDays/WeekTabsAndDays";
+import { HeaderNav } from "~/components/workout/Program/HeaderNav";
+import { WeekTabsAndDays } from "~/components/workout/Program/WeekTabsAndDays/WeekTabsAndDays";
 
 // * DAYS PAGE
 

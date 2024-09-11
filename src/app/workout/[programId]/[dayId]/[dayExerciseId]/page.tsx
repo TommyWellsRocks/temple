@@ -2,10 +2,10 @@
 
 import { setDayExercise } from "~/hooks/workout/useProgram";
 
-import { HeaderNav } from "./_components/HeaderNav";
-import { Sets } from "./_components/Sets/Sets";
-import { ExerciseTabs } from "./_components/ExerciseTabs/ExerciseTabs";
-import { ActionButtons } from "./_components/ActionButtons/ActionButtons";
+import { HeaderNav } from "~/components/workout/Exercise/HeaderNav";
+import { Sets } from "~/components/workout/Exercise/Sets/Sets";
+import { ExerciseTabs } from "~/components/workout/Exercise/ExerciseTabs/ExerciseTabs";
+import { ActionButtons } from "~/components/workout/Exercise/ActionButtons/ActionButtons";
 
 // * EXERCISE PAGE
 

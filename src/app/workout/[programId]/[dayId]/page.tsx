@@ -2,10 +2,10 @@
 
 import { setDay } from "~/hooks/workout/useProgram";
 
-import { NavHeader } from "./_components/NavHeader";
-import { MuscleSection } from "./_components/MuscleSection/MuscleSection";
-import { ExercisesSection } from "./_components/ExercisesSection/ExercisesSection";
-import { ActionButtons } from "./_components/ActionButtons/ActionButtons";
+import { NavHeader } from "~/components/workout/Day/NavHeader";
+import { MuscleSection } from "~/components/workout/Day/MuscleSection/MuscleSection";
+import { ExercisesSection } from "~/components/workout/Day/ExercisesSection/ExercisesSection";
+import { ActionButtons } from "~/components/workout/Day/ActionButtons/ActionButtons";
 
 // * DAY OVERVIEW PAGE
 
