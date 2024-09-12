@@ -1,4 +1,6 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+
+import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActions";
 import { isFloat } from "~/utils/helpers";
 
 function handleOnInput(
@@ -23,7 +25,9 @@ function handleOnBlur(
   label: "Reps" | "Weight",
   index: number,
 ) {
+  const dayEx = useProgram((state) => state.dayExercise);
   const handleInputChange = useProgram.getState().setDayExerciseInputs;
+  if (!dayEx) return;
 
   // Input Actions
   let newValue = e.target.valueAsNumber;
@@ -39,6 +43,7 @@ function handleOnBlur(
 
   // Update State
   handleInputChange(label, index, newValue);
+  handleExerciseVolumeInput(dayEx.id, dayEx.userId, dayEx.reps, dayEx.weight);
 }
 
 export function SetInput({

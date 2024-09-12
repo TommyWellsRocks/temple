@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  handleExerciseVolumeInput,
-  handleUpdateLoggedSets,
-} from "~/server/actions/workout/ExerciseActions";
+import { handleUpdateLoggedSets } from "~/server/actions/workout/ExerciseActions";
 import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
@@ -47,12 +44,6 @@ export function exerciseActions(
               dayEx.weight[i] = value;
             }
           }
-          handleExerciseVolumeInput(
-            dayEx.id,
-            dayEx.userId,
-            dayEx.reps,
-            dayEx.weight,
-          );
 
           return {
             ...state,
