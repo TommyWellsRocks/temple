@@ -20,7 +20,7 @@ export function dayActions(
     setDay: (dayId: number) =>
       set((state) => {
         if (!state.program) return state;
-        const day = state.program.programDays.find((day) => day.id === dayId);
+        const day = state.program.programDays.find((programDay) => programDay.id === dayId);
         return {
           ...state,
           day,
