@@ -1,14 +1,18 @@
-"use client"
+"use client";
 
-import {
-  handleEndWorkout,
-  handleStartWorkout,
-} from "~/server/actions/workout/DayActions";
 import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
 
-export function dayActions(set: (partial: ProgramState | Partial<ProgramState> | ((state: ProgramState) => ProgramState | Partial<ProgramState>), replace?: boolean | undefined) => void) {
+export function dayActions(
+  set: (
+    partial:
+      | ProgramState
+      | Partial<ProgramState>
+      | ((state: ProgramState) => ProgramState | Partial<ProgramState>),
+    replace?: boolean | undefined,
+  ) => void,
+) {
   return {
     day: null,
     setDay: (dayId: number) =>
@@ -43,18 +47,14 @@ export function dayActions(set: (partial: ProgramState | Partial<ProgramState> |
           },
         };
       }),
-    setStartWorkout: (userId: string, dayId: number) =>
+    setStartWorkout: (dayId: number, startedWorkout: Date) =>
       set((state) => {
         if (!state.program || !state.day) return state;
-
-        const startedWorkout = new Date();
 
         // Update programDays
         const updatedProgramDays = state.program.programDays.map((day) =>
           day.id === dayId ? { ...day, startedWorkout } : day,
         );
-
-        handleStartWorkout(userId, dayId, startedWorkout);
 
         return {
           ...state,
@@ -68,18 +68,14 @@ export function dayActions(set: (partial: ProgramState | Partial<ProgramState> |
           },
         };
       }),
-    setEndWorkout: (userId: string, dayId: number) =>
+    setEndWorkout: (dayId: number, endedWorkout: Date) =>
       set((state) => {
         if (!state.program || !state.day) return state;
-
-        const endedWorkout = new Date();
 
         // Update programDays
         const updatedProgramDays = state.program.programDays.map((day) =>
           day.id === dayId ? { ...day, endedWorkout } : day,
         );
-
-        handleEndWorkout(userId, dayId, endedWorkout);
 
         return {
           ...state,

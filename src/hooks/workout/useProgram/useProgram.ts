@@ -29,8 +29,8 @@ export interface ProgramState {
     newName: string,
     newRepeatOn: number[] | null,
   ) => void;
-  setStartWorkout: (userId: string, dayId: number) => void;
-  setEndWorkout: (userId: string, dayId: number) => void;
+  setStartWorkout: (dayId: number, startedWorkout: Date) => void;
+  setEndWorkout: (dayId: number, endedWorkout: Date) => void;
   dayExercise: null | DayExercise;
   setDayExercise: (dayId: number, dayExerciseId: number) => void;
   setDayExerciseInputs: (

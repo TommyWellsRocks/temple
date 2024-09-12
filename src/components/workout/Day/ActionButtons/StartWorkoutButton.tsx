@@ -1,5 +1,7 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
+import { handleStartWorkout } from "~/server/actions/workout/DayActions";
+
 import { Button } from "~/components/ui/button";
 import { Zap } from "lucide-react";
 
@@ -16,7 +18,9 @@ export function StartWorkoutButton() {
     <Button
       className="flex gap-1"
       onClick={() => {
-        setStartWorkout(userId, dayId);
+        const startedWorkout = new Date();
+        setStartWorkout(dayId, startedWorkout);
+        handleStartWorkout(userId, dayId, startedWorkout);
       }}
     >
       <Zap width={15} /> Start Workout
