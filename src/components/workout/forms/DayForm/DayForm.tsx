@@ -27,17 +27,25 @@ export function DayForm({
     state.program?.userId,
     state.program?.id,
   ]);
-  
+
   const form = useFormSetup(dayInfo);
   if (!userId || !programId) return;
 
-  const handleSubmit = (values: z.infer<typeof formSchema>, dayId?: number) => {
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newRepeatOn = values.repeatOn ?? null;
 
-    if (dayId) {
-      const setDayDetails = useProgram.getState().setDayDetails;
-      setDayDetails(dayId, values.name, newRepeatOn);
-      handleEditProgramDay(userId, programId, dayId, values.name, newRepeatOn);
+    if (dayInfo) {
+      const setDayDetails = useProgram.getState().updateDay;
+      dayInfo.name = values.name;
+      dayInfo.repeatOn = newRepeatOn;
+      setDayDetails(dayInfo);
+      handleEditProgramDay(
+        userId,
+        programId,
+        dayInfo.id,
+        values.name,
+        newRepeatOn,
+      );
     } else {
       handleCreateDay(userId, programId, groupId, values.name, newRepeatOn);
     }
@@ -47,7 +55,7 @@ export function DayForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) =>
-          handleSubmit(values, dayInfo ? dayInfo.id : undefined),
+          handleSubmit(values),
         )}
         className="mx-auto flex w-[260px] flex-col gap-4"
       >

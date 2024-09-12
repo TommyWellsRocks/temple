@@ -3,21 +3,19 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { handleEndWorkout } from "~/server/actions/workout/DayActions";
 
 export function LogWorkoutButton() {
-  const setEndWorkout = useProgram.getState().setEndWorkout;
-  const [userId, dayId] = useProgram((state) => [
-    state.day?.userId,
-    state.day?.id,
-  ]);
+  const setEndWorkout = useProgram.getState().updateDay;
+  const day = useProgram((state) => state.day);
 
-  if (!userId || !dayId) return;
+  if (!day) return;
 
   return (
     <div
       className="flex w-full items-center justify-center rounded-md bg-primary text-sm"
       onClick={() => {
         const endedWorkout = new Date();
-        setEndWorkout(dayId, endedWorkout);
-        handleEndWorkout(userId, dayId, endedWorkout);
+        day.endedWorkout = endedWorkout;
+        setEndWorkout(day);
+        handleEndWorkout(day.userId, day.id, endedWorkout);
       }}
     >
       Log Workout

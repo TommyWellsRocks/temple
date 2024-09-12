@@ -23,13 +23,7 @@ export interface ProgramState {
   // Day
   day: null | ProgramDay;
   setDay: (dayId: number) => void;
-  setDayDetails: (
-    dayId: number,
-    newName: string,
-    newRepeatOn: number[] | null,
-  ) => void;
-  setStartWorkout: (dayId: number, startedWorkout: Date) => void;
-  setEndWorkout: (dayId: number, endedWorkout: Date) => void;
+  updateDay: (day: ProgramDay) => void;
 
   // Exercise
   dayExercise: null | DayExercise;

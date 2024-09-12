@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
+import { ProgramDay } from "~/server/types";
 
 export function dayActions(
   set: (
@@ -26,30 +27,17 @@ export function dayActions(
         };
       }),
 
-    setDayDetails: (
-      dayId: number,
-      newName: string,
-      newRepeatOn: number[] | null,
-    ) =>
+    updateDay: (day: ProgramDay) =>
       set((state) => {
-        if (!state.program) return state;
+        if (!day || !state.program) return state;
 
         // Update Parent
-        const updatedProgramDays = state.program.programDays.map((day) =>
-          day.id === dayId
-            ? { ...day, name: newName, repeatOn: newRepeatOn }
-            : day,
+        const updatedProgramDays = state.program.programDays.map(
+          (programDay) => (programDay.id === day.id ? day : programDay),
         );
 
         // Update Child
-        const updatedDay =
-          state.day && state.day.id === dayId
-            ? {
-                ...state.day,
-                name: newName,
-                repeatOn: newRepeatOn,
-              }
-            : state.day;
+        const updatedDay = state.day?.id === day.id ? day : state.day;
 
         return {
           ...state,
@@ -58,62 +46,6 @@ export function dayActions(
             programDays: updatedProgramDays,
           },
           day: updatedDay,
-        };
-      }),
-
-    setStartWorkout: (dayId: number, startedWorkout: Date) =>
-      set((state) => {
-        if (!state.program) return state;
-
-        // Update Parent
-        const updatedProgramDays = state.program.programDays.map((day) =>
-          day.id === dayId ? { ...day, startedWorkout } : day,
-        );
-
-        // Update Child
-        const updatedDay =
-          state.day && state.day.id === dayId
-            ? {
-                ...state.day,
-                startedWorkout,
-              }
-            : state.day;
-
-        return {
-          ...state,
-          day: updatedDay,
-          program: {
-            ...state.program,
-            programDays: updatedProgramDays,
-          },
-        };
-      }),
-
-    setEndWorkout: (dayId: number, endedWorkout: Date) =>
-      set((state) => {
-        if (!state.program) return state;
-
-        // Update Parent
-        const updatedProgramDays = state.program.programDays.map((day) =>
-          day.id === dayId ? { ...day, endedWorkout } : day,
-        );
-
-        // Update Child
-        const updatedDay =
-          state.day && state.day.id === dayId
-            ? {
-                ...state.day,
-                endedWorkout,
-              }
-            : state.day;
-
-        return {
-          ...state,
-          day: updatedDay,
-          program: {
-            ...state.program,
-            programDays: updatedProgramDays,
-          },
         };
       }),
   };

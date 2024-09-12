@@ -6,21 +6,19 @@ import { Button } from "~/components/ui/button";
 import { Zap } from "lucide-react";
 
 export function StartWorkoutButton() {
-  const setStartWorkout = useProgram.getState().setStartWorkout;
-  const [userId, dayId] = useProgram((state) => [
-    state.day?.userId,
-    state.day?.id,
-  ]);
+  const setStartWorkout = useProgram.getState().updateDay;
+  const day = useProgram((state) => state.day);
 
-  if (!userId || !dayId) return;
+  if (!day) return;
 
   return (
     <Button
       className="flex gap-1"
       onClick={() => {
         const startedWorkout = new Date();
-        setStartWorkout(dayId, startedWorkout);
-        handleStartWorkout(userId, dayId, startedWorkout);
+        day.startedWorkout = startedWorkout;
+        setStartWorkout(day);
+        handleStartWorkout(day.userId, day.id, startedWorkout);
       }}
     >
       <Zap width={15} /> Start Workout
