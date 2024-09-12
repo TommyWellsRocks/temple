@@ -23,6 +23,7 @@ export async function getExerciseHistory(
         eq(model.exerciseId, exerciseId),
         ne(model.dayId, dayId),
         eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
+        lt(model.updatedAt, new Date()),
       ),
     orderBy: (model, { desc }) => desc(model.updatedAt),
   });
