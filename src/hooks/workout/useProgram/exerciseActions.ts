@@ -1,6 +1,5 @@
 "use client";
 
-import { handleUpdateLoggedSets } from "~/server/actions/workout/ExerciseActions";
 import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
@@ -78,8 +77,6 @@ export function exerciseActions(
         if (!dayEx) return state;
 
         dayEx.loggedSetsCount = loggedSetsCount;
-
-        handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
 
         return {
           ...state,
