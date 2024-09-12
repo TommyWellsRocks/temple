@@ -3,7 +3,7 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { DaysList } from "./DaysList";
 
 export function WeekTabDays() {
-  const groups = useProgram((state) => state.programGroups);
+  const groups = useProgram((state) => state.program?.groups);
   if (!groups) return;
   // const todaysDay = new Date().getDay();
 

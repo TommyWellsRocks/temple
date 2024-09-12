@@ -7,7 +7,7 @@ import { TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 export function WeekTabs() {
-  const weeks = useProgram((state) => state.programGroups)!;
+  const weeks = useProgram((state) => state.program?.groups)!;
   const latestWeek = weeks.length - 1;
 
   return (

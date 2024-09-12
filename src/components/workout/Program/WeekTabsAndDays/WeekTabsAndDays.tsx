@@ -7,7 +7,7 @@ import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
 
 export function WeekTabsAndDays() {
-  const programGroups = useProgram((state) => state.programGroups);
+  const programGroups = useProgram((state) => state.program?.groups);
   if (!programGroups) return;
   const lastGroupId = programGroups[programGroups.length - 1]!.id;
 
