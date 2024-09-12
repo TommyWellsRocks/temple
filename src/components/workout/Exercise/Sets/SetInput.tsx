@@ -3,6 +3,8 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActions";
 import { isFloat } from "~/utils/helpers";
 
+import type { DayExercise } from "~/server/types";
+
 function handleOnInput(
   e: React.FormEvent<HTMLInputElement>,
   label: "Reps" | "Weight",
@@ -24,9 +26,9 @@ function handleOnBlur(
   value: number,
   label: "Reps" | "Weight",
   index: number,
+  dayEx: DayExercise,
 ) {
-  const dayEx = useProgram((state) => state.dayExercise);
-  const handleInputChange = useProgram.getState().setDayExerciseInputs;
+  const handleInputChange = useProgram.getState().updateDayExercise;
   if (!dayEx) return;
 
   // Input Actions
@@ -41,9 +43,21 @@ function handleOnBlur(
     e.target.value = String(newValue);
   }
 
-  // Update State
-  handleInputChange(label, index, newValue);
-  handleExerciseVolumeInput(dayEx.id, dayEx.userId, dayEx.reps, dayEx.weight);
+  if (
+    (label === "Reps" && dayEx?.reps[index] !== newValue) ||
+    (label === "Weight" && dayEx?.weight[index] !== newValue)
+  ) {
+    if (label === "Reps") {
+      dayEx.reps[index] = newValue;
+    } else if (label === "Weight") {
+      for (let i = index; i < dayEx.weight.length; i++) {
+        dayEx.weight[i] = newValue;
+      }
+    }
+    // Update State
+    handleInputChange(dayEx);
+    handleExerciseVolumeInput(dayEx.id, dayEx.userId, dayEx.reps, dayEx.weight);
+  }
 }
 
 export function SetInput({
@@ -55,6 +69,9 @@ export function SetInput({
   value: number;
   label: "Reps" | "Weight";
 }) {
+  const dayEx = useProgram((state) => state.dayExercise);
+  if (!dayEx) return;
+
   return (
     <input
       id={`${crypto.randomUUID()}-${label}`}
@@ -64,7 +81,7 @@ export function SetInput({
       defaultValue={value}
       onInput={(e) => handleOnInput(e, label, value)}
       onFocus={(e) => handleOnFocus(e)}
-      onBlur={(e) => handleOnBlur(e, value, label, index)}
+      onBlur={(e) => handleOnBlur(e, value, label, index, dayEx)}
     />
   );
 }

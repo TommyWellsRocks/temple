@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { useProgram, type ProgramState } from "./useProgram";
+import { DayExercise } from "~/server/types";
 
 export function exerciseActions(
   set: (
@@ -15,72 +16,61 @@ export function exerciseActions(
 ) {
   return {
     dayExercise: null,
+
     setDayExercise: (dayId: number, dayExerciseId: number) => {
       set((state) => {
-        const dayEx = state.program?.programDays
-          .find((day) => day.id === dayId)
-          ?.dayExercises.find((ex) => ex.id === dayExerciseId);
-        return { ...state, dayExercise: dayEx };
+        if (!state.program) return state;
+
+        const day = state.program.programDays.find((day) => day.id === dayId);
+
+        if (!day) return state;
+
+        const dayExercise = day.dayExercises.find(
+          (ex) => ex.id === dayExerciseId,
+        );
+
+        return { ...state, dayExercise };
       });
     },
-    setDayExerciseInputs: (
-      label: "Reps" | "Weight",
-      index: number,
-      value: number,
-    ) =>
-      set((state) => {
-        const dayEx = state.dayExercise;
-        if (!dayEx) return state;
 
-        if (
-          (label === "Reps" && dayEx?.reps[index] !== value) ||
-          (label === "Weight" && dayEx?.weight[index] !== value)
-        ) {
-          if (label === "Reps") {
-            dayEx.reps[index] = value;
-          } else if (label === "Weight") {
-            for (let i = index; i < dayEx.weight.length; i++) {
-              dayEx.weight[i] = value;
+    updateDayExercise: (dayEx: DayExercise) =>
+      set((state) => {
+        if (!dayEx || !state.program) return state;
+
+        // Update Parent (Program)
+        const updatedProgramDays = state.program.programDays.map((day) =>
+          day.id === dayEx.dayId
+            ? {
+                ...day,
+                dayExercises: day.dayExercises.map((ex) =>
+                  ex.id === dayEx.id ? dayEx : ex,
+                ),
+              }
+            : day,
+        );
+
+        // Update Parent (Day)
+        const updatedDay = state.day
+          ? {
+              ...state.day,
+              dayExercises: state.day.dayExercises.map((ex) =>
+                ex.id === dayEx.id ? dayEx : ex,
+              ),
             }
-          }
+          : state.day;
 
-          return {
-            ...state,
-            dayExercise: dayEx,
-          };
-        } else return state;
-      }),
-    setDayExerciseSets: (method: "Add" | "Delete") =>
-      set((state) => {
-        const dayEx = state.dayExercise;
-        if (!dayEx) return state;
-
-        if (method === "Add") {
-          dayEx.reps.push(0);
-          dayEx.weight.push(dayEx.weight[dayEx.weight.length - 1] || 0);
-        } else {
-          dayEx.reps.pop();
-          dayEx.weight.pop();
-          if (dayEx.loggedSetsCount > dayEx.reps.length) {
-            dayEx.loggedSetsCount--;
-          }
-        }
+        // Update Child (DayExercise)
+        const updatedDayExercise =
+          state.dayExercise?.id === dayEx.id ? dayEx : state.dayExercise;
 
         return {
           ...state,
-          dayExercise: dayEx,
-        };
-      }),
-    setDayExerciseLoggedSet: (loggedSetsCount: number) =>
-      set((state) => {
-        const dayEx = state.dayExercise;
-        if (!dayEx) return state;
-
-        dayEx.loggedSetsCount = loggedSetsCount;
-
-        return {
-          ...state,
-          dayExercise: dayEx,
+          program: {
+            ...state.program,
+            programDays: updatedProgramDays,
+          },
+          day: updatedDay,
+          dayExercise: updatedDayExercise,
         };
       }),
   };

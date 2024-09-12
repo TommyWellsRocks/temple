@@ -19,6 +19,7 @@ export interface ProgramState {
     newStartDate: Date,
     newEndDate: Date,
   ) => void;
+
   // Day
   day: null | ProgramDay;
   setDay: (dayId: number) => void;
@@ -29,16 +30,11 @@ export interface ProgramState {
   ) => void;
   setStartWorkout: (dayId: number, startedWorkout: Date) => void;
   setEndWorkout: (dayId: number, endedWorkout: Date) => void;
+
   // Exercise
   dayExercise: null | DayExercise;
   setDayExercise: (dayId: number, dayExerciseId: number) => void;
-  setDayExerciseInputs: (
-    label: "Reps" | "Weight",
-    index: number,
-    value: number,
-  ) => void;
-  setDayExerciseSets: (method: "Add" | "Delete") => void;
-  setDayExerciseLoggedSet: (loggedSetsCount: number) => void;
+  updateDayExercise: (dayEx: DayExercise) => void;
 }
 
 export const useProgram = create<ProgramState>((set) => ({

@@ -7,7 +7,7 @@ import { CheckCheck } from "lucide-react";
 
 export function LogSetsButtons() {
   const dayEx = useProgram((state) => state.dayExercise);
-  const setLoggedSets = useProgram().setDayExerciseLoggedSet;
+  const setLoggedSets = useProgram().updateDayExercise;
   if (!dayEx) return;
 
   return (
@@ -16,7 +16,8 @@ export function LogSetsButtons() {
       <Button
         className="w-full"
         onClick={() => {
-          setLoggedSets(dayEx.loggedSetsCount + 1);
+          dayEx.loggedSetsCount++;
+          setLoggedSets(dayEx);
           handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
         }}
       >
@@ -27,7 +28,8 @@ export function LogSetsButtons() {
         className="rounded-full px-2"
         variant={"outline"}
         onClick={() => {
-          setLoggedSets(dayEx.reps.length);
+          dayEx.loggedSetsCount = dayEx.reps.length;
+          setLoggedSets(dayEx);
           handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
         }}
       >

@@ -6,7 +6,7 @@ import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { Minus, Plus } from "lucide-react";
 
 export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
-  const setDayExSets = useProgram().setDayExerciseSets;
+  const setDayExSets = useProgram().updateDayExercise;
   const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return;
 
@@ -17,7 +17,18 @@ export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
         clipPath: clipPathParallelogram,
       }}
       onClick={() => {
-        setDayExSets(method);
+        if (method === "Add") {
+          dayEx.reps.push(0);
+          dayEx.weight.push(dayEx.weight[dayEx.weight.length - 1] || 0);
+        } else {
+          dayEx.reps.pop();
+          dayEx.weight.pop();
+          if (dayEx.loggedSetsCount > dayEx.reps.length) {
+            dayEx.loggedSetsCount--;
+          }
+        }
+
+        setDayExSets(dayEx);
         handleExerciseSetsChange(
           dayEx.id,
           dayEx.userId,
