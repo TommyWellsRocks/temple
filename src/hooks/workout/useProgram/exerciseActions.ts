@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  handleExerciseSetsChange,
   handleExerciseVolumeInput,
   handleUpdateLoggedSets,
 } from "~/server/actions/workout/ExerciseActions";
@@ -76,14 +75,6 @@ export function exerciseActions(
             dayEx.loggedSetsCount--;
           }
         }
-
-        handleExerciseSetsChange(
-          dayEx.id,
-          dayEx.userId,
-          dayEx.reps,
-          dayEx.weight,
-          dayEx.loggedSetsCount,
-        );
 
         return {
           ...state,

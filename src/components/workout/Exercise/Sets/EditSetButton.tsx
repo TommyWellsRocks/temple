@@ -1,10 +1,14 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
+import { handleExerciseSetsChange } from "~/server/actions/workout/ExerciseActions";
+
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { Minus, Plus } from "lucide-react";
 
 export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
   const setDayExSets = useProgram().setDayExerciseSets;
+  const dayEx = useProgram((state) => state.dayExercise);
+  if (!dayEx) return;
 
   return (
     <button
@@ -14,6 +18,13 @@ export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
       }}
       onClick={() => {
         setDayExSets(method);
+        handleExerciseSetsChange(
+          dayEx.id,
+          dayEx.userId,
+          dayEx.reps,
+          dayEx.weight,
+          dayEx.loggedSetsCount,
+        );
       }}
     >
       {method === "Add" ? <Plus /> : <Minus />}
