@@ -1,6 +1,6 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getUserExercises } from "~/server/db/queries/workout/exercises";
+import { getExercisesForUser } from "~/server/db/queries/workout/exercises";
 import {
   getMyPrograms,
   // getWorkoutRedirect,
@@ -18,7 +18,7 @@ export default async function WorkoutLayout({
   const session = await auth();
   if (!session?.user?.id) return redirect("/workout");
   const userId = session.user.id;
-  const exercises = await getUserExercises(userId);
+  const exercises = await getExercisesForUser(userId);
 
   const workoutPrograms = await getMyPrograms(userId);
 

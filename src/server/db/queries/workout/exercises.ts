@@ -2,18 +2,52 @@ import "server-only";
 
 import { db } from "~/server/db";
 import { and, eq } from "drizzle-orm";
-import { exercise_notes } from "~/server/db/schema";
+import { exercise_notes, exercises } from "~/server/db/schema";
 
-export async function getUserExercises(userId: string) {
+export async function getExercisesForUser(userId: string) {
   return await db.query.exercises.findMany({
+    where: (model, { or, eq, isNull }) =>
+      or(eq(model.userId, userId), isNull(model.userId)),
     columns: { id: true, name: true },
     with: {
       notes: {
-        columns: { name: true },
         where: (model, { eq }) => eq(model.userId, userId),
+        columns: { name: true },
       },
     },
   });
+}
+
+export async function createUserExercise(
+  userId: string,
+  name: string,
+  equipment: string[] | null,
+  primaryMuscle: string | null,
+  secondaryMuscles: string[] | null,
+) {
+  await db
+    .insert(exercises)
+    .values({ userId, name, equipment, primaryMuscle, secondaryMuscles });
+}
+
+export async function editUserExercise(
+  userId: string,
+  exerciseId: number,
+  name: string,
+  equipment: string[] | null,
+  primaryMuscle: string | null,
+  secondaryMuscles: string[] | null,
+) {
+  await db
+    .update(exercises)
+    .set({ name, equipment, primaryMuscle, secondaryMuscles })
+    .where(and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)));
+}
+
+export async function deleteUserExercise(userId: string, exerciseId: number) {
+  await db
+    .delete(exercises)
+    .where(and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)));
 }
 
 export async function editUserExerciseName(

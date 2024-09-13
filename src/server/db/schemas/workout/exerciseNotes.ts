@@ -17,9 +17,9 @@ export const exercise_notes = createTable(
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    exerciseId: integer("exercise_id")
-      .notNull()
-      .references(() => exercises.id, { onDelete: "cascade" }),
+    exerciseId: integer("exercise_id").references(() => exercises.id, {
+      onDelete: "cascade",
+    }),
     name: varchar("name"),
     notes: varchar("notes"),
     createdAt: timestamp("created_at", { withTimezone: true })

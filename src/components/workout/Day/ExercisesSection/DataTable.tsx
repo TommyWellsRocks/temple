@@ -33,14 +33,10 @@ import {
 } from "~/server/actions/workout/DayActions";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useMyExercises } from "~/hooks/workout/useExercises";
+import { AddButtonOverlay } from "../../AddButtonOverlay";
+import { UserExerciseForm } from "../../forms/UserExerciseForm/UserExerciseForm";
 
-export type Exercise = {
-  id: number;
-  name: string;
-  notes: {
-    name: string | null;
-  }[];
-};
+import type { Exercises } from "~/server/types";
 
 export function DataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -59,7 +55,7 @@ export function DataTable() {
   const exercises = useMyExercises();
   if (!exercises) return;
 
-  const columns: ColumnDef<Exercise>[] = [
+  const columns: ColumnDef<Exercises[0]>[] = [
     {
       id: "select",
       cell: ({ row }) => (
@@ -197,7 +193,16 @@ export function DataTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No results.
+                  <div className="flex flex-col gap-y-2">
+                    <span>Are we missing your exercise?</span>
+                    <span>Well 💩</span>
+                    <span>Create it!</span>
+                    <AddButtonOverlay
+                      title="Custom Exercise"
+                      description="Create Your Own Exercise."
+                      formComponent={<UserExerciseForm />}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             )}

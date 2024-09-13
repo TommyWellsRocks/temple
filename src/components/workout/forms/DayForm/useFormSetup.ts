@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { ProgramDay } from "~/server/types";
 
 export const formSchema = z.object({
-  name: z.string().max(20, {
-    message: "Day name must be less than 20 characters.",
+  name: z.string().max(30, {
+    message: "Day name must be less than 30 characters.",
   }),
   repeatOn: z.array(z.number()).optional(),
 });

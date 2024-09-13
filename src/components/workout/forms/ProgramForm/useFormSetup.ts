@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { WorkoutPrograms } from "~/server/types";
 
 export const formSchema = z.object({
-  name: z.string().max(20, {
-    message: "Program name must be less than 20 characters.",
+  name: z.string().max(30, {
+    message: "Program name must be less than 30 characters.",
   }),
   start: z.date(),
   end: z.date(),

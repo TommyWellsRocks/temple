@@ -1,12 +1,15 @@
 import { createTable } from "../helper";
 import { relations } from "drizzle-orm";
 import { index, varchar, serial } from "drizzle-orm/pg-core";
-import { exercise_notes } from "~/server/db/schema";
+import { exercise_notes, users } from "~/server/db/schema";
 
 export const exercises = createTable(
   "exercises",
   {
     id: serial("id").primaryKey(),
+    userId: varchar("user_id").references(() => users.id, {
+      onDelete: "cascade",
+    }),
     name: varchar("name", { length: 256 }).unique().notNull(),
     equipment: varchar("equipment").array(),
     primaryMuscle: varchar("primary_muscle"),
