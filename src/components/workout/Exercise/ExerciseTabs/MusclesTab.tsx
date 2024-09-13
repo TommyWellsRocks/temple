@@ -3,6 +3,8 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { FullMusclesImage } from "~/components/workout/AllMusclesImage";
 
+import type { TitleCaseMuscle } from "doNotChangeMe";
+
 export function MusclesTab() {
   return <TabsTrigger value="muscles">Muscles</TabsTrigger>;
 }
@@ -16,8 +18,8 @@ export function MusclesTabContent() {
       <div className="flex flex-col items-center gap-y-4">
         <div className="w-[200px]">
           <FullMusclesImage
-            primaryMuscle={dayEx.info.primaryMuscle}
-            secondaryMuscles={dayEx.info.secondaryMuscles}
+            primaryMuscle={dayEx.info.primaryMuscle as TitleCaseMuscle | null}
+            secondaryMuscles={dayEx.info.secondaryMuscles as TitleCaseMuscle[] | null}
           />
         </div>
         <div className="flex flex-col gap-y-2 text-center text-base">

@@ -4,12 +4,14 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { handleInsertExercises } from "~/server/actions/admin/Actions";
 
+import type { TitleCaseMuscle } from "doNotChangeMe";
+
 interface ExerciseFormat {
   id: number | null;
   name: string;
   equipment: string[];
-  primaryMuscle: string;
-  secondaryMuscles: string[];
+  primaryMuscle: TitleCaseMuscle;
+  secondaryMuscles: TitleCaseMuscle[];
   video: undefined;
 }
 
