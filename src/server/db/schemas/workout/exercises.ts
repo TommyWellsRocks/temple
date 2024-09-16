@@ -10,7 +10,7 @@ export const exercises = createTable(
     userId: varchar("user_id").references(() => users.id, {
       onDelete: "cascade",
     }),
-    name: varchar("name", { length: 256 }).unique().notNull(),
+    name: varchar("name", { length: 256 }).notNull(),
     equipment: varchar("equipment").array(),
     primaryMuscle: varchar("primary_muscle"),
     secondaryMuscles: varchar("secondary_muscles").array(),
