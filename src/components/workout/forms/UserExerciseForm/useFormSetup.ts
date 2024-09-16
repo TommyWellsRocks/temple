@@ -48,5 +48,11 @@ export const formSchema = z.object({
 export function useFormSetup() {
   return useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      equipment: undefined,
+      primaryMuscle: undefined,
+      secondaryMuscles: undefined,
+    },
   });
 }
