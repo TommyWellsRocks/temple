@@ -3,13 +3,13 @@ import "server-only";
 import { db } from "~/server/db";
 import { exercises } from "~/server/db/schema";
 
-import type { TitleCaseMuscle } from "doNotChangeMe";
+import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
 
 export async function insertExercises(
   formattedData: {
     id: number | undefined;
     name: string;
-    equipment: string[];
+    equipment: TitleCaseEquipment[];
     primaryMuscle: TitleCaseMuscle;
     secondaryMuscles: TitleCaseMuscle[];
     video: undefined;

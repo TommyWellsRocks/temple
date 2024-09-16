@@ -4,6 +4,8 @@ import { db } from "~/server/db";
 import { and, eq } from "drizzle-orm";
 import { exercise_notes, exercises } from "~/server/db/schema";
 
+import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
+
 export async function getExercisesForUser(userId: string) {
   return await db.query.exercises.findMany({
     where: (model, { or, eq, isNull }) =>
@@ -21,9 +23,9 @@ export async function getExercisesForUser(userId: string) {
 export async function createUserExercise(
   userId: string,
   name: string,
-  equipment: string[] | null,
-  primaryMuscle: string | null,
-  secondaryMuscles: string[] | null,
+  equipment: TitleCaseEquipment[] | null,
+  primaryMuscle: TitleCaseMuscle | null,
+  secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
   await db
     .insert(exercises)
@@ -34,9 +36,9 @@ export async function editUserExercise(
   userId: string,
   exerciseId: number,
   name: string,
-  equipment: string[] | null,
-  primaryMuscle: string | null,
-  secondaryMuscles: string[] | null,
+  equipment: TitleCaseEquipment[] | null,
+  primaryMuscle: TitleCaseMuscle | null,
+  secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
   await db
     .update(exercises)

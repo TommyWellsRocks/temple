@@ -7,12 +7,14 @@ import {
   editUserExercise,
 } from "~/server/db/queries/workout/exercises";
 
+import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
+
 export async function handleCreateUserExercise(
   userId: string,
   name: string,
-  equipment: string[] | null,
-  primaryMuscle: string | null,
-  secondaryMuscles: string[] | null,
+  equipment: TitleCaseEquipment[] | null,
+  primaryMuscle: TitleCaseMuscle | null,
+  secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
   await createUserExercise(
     userId,
@@ -36,9 +38,9 @@ export async function handleEditUserExercise(
   userId: string,
   exerciseId: number,
   name: string,
-  equipment: string[] | null,
-  primaryMuscle: string | null,
-  secondaryMuscles: string[] | null,
+  equipment: TitleCaseEquipment[] | null,
+  primaryMuscle: TitleCaseMuscle | null,
+  secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
   editUserExercise(
     userId,
