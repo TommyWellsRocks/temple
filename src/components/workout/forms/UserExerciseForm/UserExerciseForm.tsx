@@ -9,24 +9,34 @@ import {
   handleCreateUserExercise,
   handleEditUserExercise,
 } from "~/server/actions/workout/UserExerciseActions";
+import { equipment, muscles } from "doNotChangeMe";
 
 import { Form } from "~/components/ui/form";
 import { NameField } from "../NameField";
-import { GenericField } from "../GenericField";
 import { FormButtons } from "./FormButtons";
+import { SelectField } from "../SelectField";
 
 export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
   const userId = useSession().data?.user?.id;
   const exercise = useMyExercises()?.find((ex) => ex.id === exerciseId);
-  if (!userId) return;
-
   const form = useFormSetup();
 
+  if (!userId) return;
+
+  const equipmentOptions = Object.values(equipment).map((eq) => ({
+    label: eq,
+    value: eq,
+  }));
+  const muscleOptions = Object.values(muscles).map((muscle) => ({
+    label: muscle,
+    value: muscle,
+  }));
+
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    const equipment = values.equipment ? values.equipment : null;
     const primaryMuscle = values.primaryMuscle ? values.primaryMuscle : null;
-    const equipment = values.equipment ? values.equipment.split(",") : null;
     const secondaryMuscles = values.secondaryMuscles
-      ? values.secondaryMuscles.split(",")
+      ? values.secondaryMuscles
       : null;
     if (exercise) {
       handleEditUserExercise(
@@ -54,30 +64,37 @@ export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
         onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) =>
           handleSubmit(values),
         )}
-        className="mx-auto flex w-[260px] flex-col gap-4"
+        className="flex flex-col gap-4"
       >
         <NameField
           control={form.control}
           placeholder={exercise?.name || "Seated Preacher Curl"}
         />
 
-        <GenericField
+        <SelectField
           control={form.control}
           name="equipment"
           label="Equipment"
-          placeholder="Dumbbells, Barbell"
+          placeholder="Select equipment"
+          items={equipmentOptions}
+          isMulti
         />
-        <GenericField
+
+        <SelectField
           control={form.control}
           name="primaryMuscle"
           label="Primary Muscle"
-          placeholder="Biceps"
+          placeholder="Select muscle"
+          items={muscleOptions}
         />
-        <GenericField
+
+        <SelectField
           control={form.control}
           name="secondaryMuscles"
           label="Secondary Muscles"
-          placeholder="None"
+          placeholder="Select muscle(s)"
+          items={muscleOptions}
+          isMulti
         />
 
         <FormButtons userId={userId} exercise={exercise} />

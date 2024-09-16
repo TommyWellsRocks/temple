@@ -51,9 +51,8 @@ export function DataTable() {
     state.day?.dayExercises.map((ex) => ex.exerciseId),
   )!;
   const programDay = useProgram((state) => state.day);
-  if (!dayExercisesIds || !programDay) return;
   const exercises = useMyExercises();
-  if (!exercises) return;
+  if (!dayExercisesIds || !programDay || !exercises) return;
 
   const columns: ColumnDef<Exercises[0]>[] = [
     {
@@ -150,7 +149,6 @@ export function DataTable() {
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
         />
       </div>
       <div className="rounded-md border">
