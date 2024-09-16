@@ -9,7 +9,12 @@ import {
   handleCreateUserExercise,
   handleEditUserExercise,
 } from "~/server/actions/workout/UserExerciseActions";
-import { equipment, muscles, TitleCaseMuscle } from "doNotChangeMe";
+import {
+  equipment,
+  muscles,
+  TitleCaseEquipment,
+  TitleCaseMuscle,
+} from "doNotChangeMe";
 
 import { Form } from "~/components/ui/form";
 import { NameField } from "../NameField";
@@ -33,7 +38,9 @@ export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
   }));
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    const equipment = values.equipment ? values.equipment : null;
+    const equipment = values.equipment
+      ? (values.equipment as TitleCaseEquipment[])
+      : null;
     const primaryMuscle = values.primaryMuscle
       ? (values.primaryMuscle as TitleCaseMuscle)
       : null;
