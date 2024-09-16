@@ -48,7 +48,9 @@ function handleOnBlur(
     (label === "Weight" && dayEx?.weight[index] !== newValue)
   ) {
     if (label === "Reps") {
-      dayEx.reps[index] = newValue;
+      for (let i = index; i < dayEx.reps.length; i++) {
+        dayEx.reps[i] = newValue;
+      }
     } else if (label === "Weight") {
       for (let i = index; i < dayEx.weight.length; i++) {
         dayEx.weight[i] = newValue;
