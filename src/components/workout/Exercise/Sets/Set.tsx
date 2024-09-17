@@ -57,7 +57,7 @@ export function Set({ index }: { index: number }) {
             .sort((a, b) => Number(b[0]) - Number(a[0]))
             .map(([weight, count]) =>
               count ? (
-                <span>
+                <span key={weight}>
                   ({count}) {weight}lb
                 </span>
               ) : null,
