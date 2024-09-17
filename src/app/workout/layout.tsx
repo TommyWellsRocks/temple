@@ -16,10 +16,9 @@ export default async function WorkoutLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  if (!session?.user?.id) return redirect("/workout");
+  if (!session?.user?.id) return redirect(`/signin?return=${encodeURIComponent("/workout")}`);
   const userId = session.user.id;
   const exercises = await getExercisesForUser(userId);
-
   const workoutPrograms = await getMyPrograms(userId);
 
   // const workoutRedirect = await getWorkoutRedirect(userId);
