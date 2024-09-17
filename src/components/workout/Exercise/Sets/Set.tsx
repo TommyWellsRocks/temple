@@ -2,6 +2,9 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { SetInput } from "./SetInput";
+import { getPlatesFromWeight } from "~/utils/helpers";
+
+import type { TitleCaseEquipment } from "doNotChangeMe";
 
 export function Set({ index }: { index: number }) {
   const dayEx = useProgram((state) => state.dayExercise);
@@ -11,6 +14,10 @@ export function Set({ index }: { index: number }) {
   const weightCount = dayEx.weight[index]!;
   const isLogged = dayEx.loggedSetsCount > index;
   const isActiveSet = index === dayEx.loggedSetsCount;
+
+  const isBarbellExercise = (
+    dayEx.info.equipment as TitleCaseEquipment[] | null
+  )?.includes("Barbells");
 
   return (
     <div className="flex flex-col items-end" key={crypto.randomUUID()}>
@@ -44,6 +51,19 @@ export function Set({ index }: { index: number }) {
         />
         <span className="text-base">Pounds</span>
       </div>
+      {isBarbellExercise ? (
+        <span className="flex gap-x-2 text-sm">
+          {Object.entries(getPlatesFromWeight(weightCount))
+            .sort((a, b) => Number(b[0]) - Number(a[0]))
+            .map(([weight, count]) =>
+              count ? (
+                <span>
+                  ({count}) {weight}lb
+                </span>
+              ) : null,
+            )}
+        </span>
+      ) : null}
     </div>
   );
 }

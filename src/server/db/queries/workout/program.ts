@@ -42,6 +42,7 @@ export async function getMyProgram(userId: string, programId: number) {
                   id: true,
                   name: true,
                   video: true,
+                  equipment: true,
                   primaryMuscle: true,
                   secondaryMuscles: true,
                 },

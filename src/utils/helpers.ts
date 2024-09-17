@@ -16,3 +16,27 @@ export function isAfter7PM(date: Date) {
 export function isFloat(n: any) {
   return typeof n === "number" && !isNaN(n) && n % 1 !== 0;
 }
+
+export function getPlatesFromWeight(n: number) {
+  // Given a weight, break down from 45/25/10/5 lb weights
+  // 12 = [2x]5 + 2lbs
+  let rem = n;
+
+  const platesWeights = [45, 35, 25, 10, 5, 2.5].sort((a, b) => b - a);
+
+  const plates = platesWeights.reduce(
+    (obj: { [key: number]: number }, plate) => {
+      obj[plate] = 0;
+      return obj;
+    },
+    {},
+  );
+
+  platesWeights.forEach((plate) => {
+    while (rem >= plate) {
+      rem -= plate;
+      plates[plate]!++;
+    }
+  });
+  return plates;
+}
