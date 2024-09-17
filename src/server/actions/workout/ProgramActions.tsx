@@ -20,6 +20,7 @@ export async function handleCreateDay(
   repeatOn: number[] | null,
 ) {
   await createProgramDay(userId, programId, groupId, name, repeatOn);
+  revalidatePath("/workout");
 }
 
 export async function handleEditProgramDay(
