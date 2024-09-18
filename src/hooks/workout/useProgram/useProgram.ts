@@ -1,9 +1,9 @@
 "use client";
 
 import { create } from "zustand";
-import { programActions } from "./programActions";
-import { dayActions } from "./dayActions";
-import { exerciseActions } from "./exerciseActions";
+import { programActions } from "./actions/programActions";
+import { dayActions } from "./actions/dayActions";
+import { exerciseActions } from "./actions/exerciseActions";
 
 import type { Program, ProgramDay, DayExercise } from "~/server/types";
 

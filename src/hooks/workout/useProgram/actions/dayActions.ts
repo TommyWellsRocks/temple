@@ -2,25 +2,31 @@
 
 import { useEffect } from "react";
 
-import { useProgram, type ProgramState } from "./useProgram";
+import { useProgram, type ProgramState } from "../useProgram";
 import { ProgramDay } from "~/server/types";
 
-export function dayActions(
-  set: (
+export function dayActions(set: {
+  (
     partial:
       | ProgramState
       | Partial<ProgramState>
       | ((state: ProgramState) => ProgramState | Partial<ProgramState>),
-    replace?: boolean | undefined,
-  ) => void,
-) {
+    replace?: false | undefined,
+  ): void;
+  (
+    state: ProgramState | ((state: ProgramState) => ProgramState),
+    replace: true,
+  ): void;
+}) {
   return {
     day: null,
 
     setDay: (dayId: number) =>
       set((state) => {
         if (!state.program) return state;
-        const day = state.program.programDays.find((programDay) => programDay.id === dayId);
+        const day = state.program.programDays.find(
+          (programDay) => programDay.id === dayId,
+        );
         return {
           ...state,
           day,

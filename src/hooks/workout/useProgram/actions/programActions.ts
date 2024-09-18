@@ -2,18 +2,22 @@
 
 import { useEffect } from "react";
 
-import { useProgram, type ProgramState } from "./useProgram";
+import { useProgram, type ProgramState } from "../useProgram";
 import type { Program } from "~/server/types";
 
-export function programActions(
-  set: (
+export function programActions(set: {
+  (
     partial:
       | ProgramState
       | Partial<ProgramState>
       | ((state: ProgramState) => ProgramState | Partial<ProgramState>),
-    replace?: boolean | undefined,
-  ) => void,
-) {
+    replace?: false | undefined,
+  ): void;
+  (
+    state: ProgramState | ((state: ProgramState) => ProgramState),
+    replace: true,
+  ): void;
+}) {
   return {
     program: null,
 
