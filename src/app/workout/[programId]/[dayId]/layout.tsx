@@ -1,0 +1,14 @@
+"use client";
+
+import { setDay } from "~/hooks/workout/useProgram/dayActions";
+
+export default function DayLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { dayId: string };
+}) {
+  setDay(Number(params.dayId));
+  return <>{children}</>;
+}

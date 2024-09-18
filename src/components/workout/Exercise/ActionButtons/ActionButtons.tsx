@@ -11,8 +11,8 @@ export function ActionButtons() {
     state.day?.endedWorkout,
   ]);
 
-  if (!dayEx) return <Loading />;
-  if (startedWorkout === undefined || endedWorkout === undefined) return;
+  if (!dayEx || startedWorkout === undefined || endedWorkout === undefined)
+    return <Loading />;
 
   const dayNotStarted = startedWorkout === null && endedWorkout === null;
   const dayIsDone = startedWorkout !== null && endedWorkout !== null;
