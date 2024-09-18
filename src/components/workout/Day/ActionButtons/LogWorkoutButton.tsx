@@ -1,3 +1,4 @@
+import Loading from "~/app/loading";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { handleEndWorkout } from "~/server/actions/workout/DayActions";
@@ -6,7 +7,7 @@ export function LogWorkoutButton() {
   const setEndWorkout = useProgram.getState().updateDay;
   const day = useProgram((state) => state.day);
 
-  if (!day) return;
+  if (!day) return <Loading />;
 
   return (
     <div

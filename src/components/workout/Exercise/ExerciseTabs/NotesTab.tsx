@@ -4,6 +4,7 @@ import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 
 import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
+import Loading from "~/app/loading";
 
 export function NotesTab() {
   return <TabsTrigger value="notes">Notes</TabsTrigger>;
@@ -11,7 +12,7 @@ export function NotesTab() {
 
 export function NotesTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   let defaultValue =
     dayEx.notes?.notes ||

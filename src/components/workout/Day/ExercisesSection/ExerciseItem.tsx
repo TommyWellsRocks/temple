@@ -4,9 +4,10 @@ import { ExerciseMusclesImage } from "./ExerciseMuscleImage";
 import type { DayExercise } from "~/server/types";
 import { ExerciseItemText } from "./ExerciseItemText";
 import { ExerciseEditButton } from "./ExerciseEditButton";
+import Loading from "~/app/loading";
 
 export function ExerciseItem({ exercise }: { exercise: DayExercise }) {
-  if (!exercise) return;
+  if (!exercise) return <Loading />;
 
   return (
     <div className="relative flex items-center" key={exercise.id}>

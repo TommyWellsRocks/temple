@@ -4,11 +4,12 @@ import { handleUpdateLoggedSets } from "~/server/actions/workout/ExerciseActions
 
 import { Button } from "~/components/ui/button";
 import { CheckCheck } from "lucide-react";
+import Loading from "~/app/loading";
 
 export function LogSetsButtons() {
   const dayEx = useProgram((state) => state.dayExercise);
   const setLoggedSets = useProgram().updateDayExercise;
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   return (
     <>

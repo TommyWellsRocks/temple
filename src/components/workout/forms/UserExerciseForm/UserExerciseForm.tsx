@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useMyExercises } from "~/hooks/workout/useExercises";
 import { formSchema, useFormSetup } from "./useFormSetup";
 
@@ -20,13 +20,14 @@ import { Form } from "~/components/ui/form";
 import { NameField } from "../NameField";
 import { FormButtons } from "./FormButtons";
 import { SelectField } from "../SelectField";
+import Loading from "~/app/loading";
 
 export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
-  const userId = useSession().data?.user?.id;
+  const userId = useProgram((state) => state.program?.userId);
   const exercise = useMyExercises()?.find((ex) => ex.id === exerciseId);
   const form = useFormSetup();
 
-  if (!userId) return;
+  if (!userId) return <Loading />;
 
   const equipmentOptions = Object.values(equipment).map((eq) => ({
     label: eq,

@@ -3,12 +3,13 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { ActionCard } from "~/components/workout/ActionCard";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
+import Loading from "~/app/loading";
 
 export function DayCard({ dayId }: { dayId: number }) {
   const day = useProgram((state) =>
     state.program?.programDays.find((day) => day.id === dayId),
   );
-  if (!day) return;
+  if (!day) return <Loading />;
 
   const isDone = day.startedWorkout !== null && day.endedWorkout !== null;
   // Not done and do date isn't today

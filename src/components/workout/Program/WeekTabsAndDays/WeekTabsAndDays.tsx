@@ -5,10 +5,11 @@ import { EditWeeksButton } from "./EditWeeksButton";
 import { WeekTabs } from "./WeekTabs";
 import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
+import Loading from "~/app/loading";
 
 export function WeekTabsAndDays() {
   const programGroups = useProgram((state) => state.program?.groups);
-  if (!programGroups) return;
+  if (!programGroups) return <Loading />;
   const lastGroupId = programGroups[programGroups.length - 1]!.id;
 
   return (

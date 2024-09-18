@@ -1,11 +1,12 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { DayCard } from "./DayCard";
+import Loading from "~/app/loading";
 
 export function DaysList({ groupId }: { groupId: number }) {
   const groupDays = useProgram((state) =>
     state.program?.programDays.filter((day) => day.groupId === groupId),
   );
-  if (!groupDays) return;
+  if (!groupDays) return <Loading />;
 
   return (
     <>

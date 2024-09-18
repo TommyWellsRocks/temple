@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { formSchema, useFormSetup } from "./useFormSetup";
 
 import { z } from "zod";
@@ -11,6 +11,7 @@ import { FormButtons } from "./FormButtons";
 import { NameField } from "../NameField";
 
 import type { DayExercise } from "~/server/types";
+import Loading from "~/app/loading";
 
 export function ExerciseForm({
   programId,
@@ -19,10 +20,9 @@ export function ExerciseForm({
   programId: number;
   dayExercise: DayExercise;
 }) {
-  const userId = useSession().data?.user?.id;
-  if (!dayExercise || !userId) return;
-
+  const userId = useProgram((state) => state.program?.userId);
   const form = useFormSetup();
+  if (!dayExercise || !userId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     handleEditExerciseName(

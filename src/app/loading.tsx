@@ -19,9 +19,11 @@ function LoadingSpinnerSVG() {
   );
 }
 
-export default function Loading() {
+export default function Loading({ isFullScreen }: { isFullScreen?: boolean }) {
   return (
-    <main className="flex h-full min-h-svh flex-col items-center">
+    <main
+      className={`flex ${isFullScreen ? "h-full min-h-svh" : ""} flex-col items-center`}
+    >
       <div className="my-auto flex items-center gap-2">
         <LoadingSpinnerSVG /> Loading
       </div>

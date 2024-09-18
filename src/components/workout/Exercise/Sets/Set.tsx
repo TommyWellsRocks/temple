@@ -5,10 +5,11 @@ import { SetInput } from "./SetInput";
 import { getPlatesFromWeight } from "~/utils/helpers";
 
 import type { TitleCaseEquipment } from "doNotChangeMe";
+import Loading from "~/app/loading";
 
 export function Set({ index }: { index: number }) {
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   const repCount = dayEx.reps[index]!;
   const weightCount = dayEx.weight[index]!;

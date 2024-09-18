@@ -4,6 +4,7 @@ import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActi
 import { isFloat } from "~/utils/helpers";
 
 import type { DayExercise } from "~/server/types";
+import Loading from "~/app/loading";
 
 function handleOnInput(
   e: React.FormEvent<HTMLInputElement>,
@@ -29,7 +30,7 @@ function handleOnBlur(
   dayEx: DayExercise,
 ) {
   const handleInputChange = useProgram.getState().updateDayExercise;
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   // Input Actions
   let newValue = e.target.valueAsNumber;
@@ -74,7 +75,7 @@ export function SetInput({
   label: "Reps" | "Weight";
 }) {
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   return (
     <input

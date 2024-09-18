@@ -4,12 +4,13 @@ import { handleStartWorkout } from "~/server/actions/workout/DayActions";
 
 import { Button } from "~/components/ui/button";
 import { Zap } from "lucide-react";
+import Loading from "~/app/loading";
 
 export function StartWorkoutButton() {
   const setStartWorkout = useProgram.getState().updateDay;
   const day = useProgram((state) => state.day);
 
-  if (!day) return;
+  if (!day) return <Loading />;
 
   return (
     <Button

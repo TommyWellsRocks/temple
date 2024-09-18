@@ -4,11 +4,12 @@ import { handleExerciseSetsChange } from "~/server/actions/workout/ExerciseActio
 
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { Minus, Plus } from "lucide-react";
+import Loading from "~/app/loading";
 
 export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
   const setDayExSets = useProgram().updateDayExercise;
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   return (
     <button

@@ -1,9 +1,10 @@
+import Loading from "~/app/loading";
 import type { DayExercise } from "~/server/types";
 
 import { toTitleCase } from "~/utils/helpers";
 
 export function ExerciseItemText({ exercise }: { exercise: DayExercise }) {
-  if (!exercise) return;
+  if (!exercise) return <Loading />;
 
   const isDone = exercise.reps.length === exercise.loggedSetsCount;
   const maxReps = Math.max(...exercise.reps);

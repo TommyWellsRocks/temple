@@ -5,10 +5,11 @@ import {
 } from "~/components/ui/carousel";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { getMuscleCount } from "./getMuscleCount";
+import Loading from "~/app/loading";
 
 export function MuscleSlider() {
   const dayExercises = useProgram((state) => state.day?.dayExercises);
-  if (!dayExercises) return;
+  if (!dayExercises) return <Loading />;
 
   const muscleCount = getMuscleCount(dayExercises);
 

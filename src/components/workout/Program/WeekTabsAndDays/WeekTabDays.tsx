@@ -1,10 +1,11 @@
 import { TabsContent } from "~/components/ui/tabs";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { DaysList } from "./DaysList";
+import Loading from "~/app/loading";
 
 export function WeekTabDays() {
   const groups = useProgram((state) => state.program?.groups);
-  if (!groups) return;
+  if (!groups) return <Loading />;
   // const todaysDay = new Date().getDay();
 
   return (

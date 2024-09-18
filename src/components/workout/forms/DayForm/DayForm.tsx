@@ -15,6 +15,7 @@ import { RepeatOnField } from "./RepeatOnField";
 import { FormButtons } from "./FormButtons";
 
 import type { ProgramDay } from "~/server/types";
+import Loading from "~/app/loading";
 
 export function DayForm({
   groupId,
@@ -29,7 +30,7 @@ export function DayForm({
   ]);
 
   const form = useFormSetup(dayInfo);
-  if (!userId || !programId) return;
+  if (!userId || !programId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newRepeatOn = values.repeatOn ?? null;

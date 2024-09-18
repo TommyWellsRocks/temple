@@ -3,10 +3,11 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { Navigation } from "~/components/ui/Navigation";
 import { ExerciseForm } from "~/components/workout/forms/ExerciseForm/ExerciseForm";
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
+import Loading from "~/app/loading";
 
 export function HeaderNav() {
   const dayExercise = useProgram((state) => state.dayExercise);
-  if (!dayExercise) return;
+  if (!dayExercise) return <Loading />;
 
   return (
     <Navigation

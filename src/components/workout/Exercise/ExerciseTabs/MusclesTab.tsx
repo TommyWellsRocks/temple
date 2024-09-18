@@ -4,6 +4,7 @@ import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { FullMusclesImage } from "~/components/workout/AllMusclesImage";
 
 import type { TitleCaseMuscle } from "doNotChangeMe";
+import Loading from "~/app/loading";
 
 export function MusclesTab() {
   return <TabsTrigger value="muscles">Muscles</TabsTrigger>;
@@ -11,7 +12,7 @@ export function MusclesTab() {
 
 export function MusclesTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   return (
     <TabsContent value="muscles">

@@ -2,6 +2,7 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { DoneButton } from "./DoneButton";
 import { LogSetsButtons } from "./LogSetsButtons";
+import Loading from "~/app/loading";
 
 export function ActionButtons() {
   const [dayEx, startedWorkout, endedWorkout] = useProgram((state) => [
@@ -10,8 +11,8 @@ export function ActionButtons() {
     state.day?.endedWorkout,
   ]);
 
-  if (!dayEx || startedWorkout === undefined || endedWorkout === undefined)
-    return;
+  if (!dayEx) return <Loading />;
+  if (startedWorkout === undefined || endedWorkout === undefined) return;
 
   const dayNotStarted = startedWorkout === null && endedWorkout === null;
   const dayIsDone = startedWorkout !== null && endedWorkout !== null;

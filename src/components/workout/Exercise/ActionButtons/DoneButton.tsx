@@ -3,10 +3,11 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import Loading from "~/app/loading";
 
 export function DoneButton() {
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   return (
     <Link

@@ -37,6 +37,7 @@ import { AddButtonOverlay } from "../../AddButtonOverlay";
 import { UserExerciseForm } from "../../forms/UserExerciseForm/UserExerciseForm";
 
 import type { Exercises } from "~/server/types";
+import Loading from "~/app/loading";
 
 export function DataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -52,7 +53,7 @@ export function DataTable() {
   )!;
   const programDay = useProgram((state) => state.day);
   const exercises = useMyExercises();
-  if (!dayExercisesIds || !programDay || !exercises) return;
+  if (!dayExercisesIds || !programDay || !exercises) return <Loading />;
 
   const columns: ColumnDef<Exercises[0]>[] = [
     {

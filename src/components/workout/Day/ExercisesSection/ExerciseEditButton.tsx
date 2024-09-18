@@ -2,9 +2,10 @@ import type { DayExercise } from "~/server/types";
 
 import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
 import { ExerciseForm } from "~/components/workout/forms/ExerciseForm/ExerciseForm";
+import Loading from "~/app/loading";
 
 export function ExerciseEditButton({ exercise }: { exercise: DayExercise }) {
-  if (!exercise) return;
+  if (!exercise) return <Loading />;
 
   return (
     <div className="absolute right-1 mx-2 pb-1">

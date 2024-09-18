@@ -6,6 +6,7 @@ import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 
 import YouTube from "public/content/images/workout/youtube.svg";
 import Google from "public/content/images/workout/google.png";
+import Loading from "~/app/loading";
 
 export function InfoTab() {
   return <TabsTrigger value="info">Info</TabsTrigger>;
@@ -13,7 +14,7 @@ export function InfoTab() {
 
 export function InfoTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
-  if (!dayEx) return;
+  if (!dayEx) return <Loading />;
 
   const searches = [
     {

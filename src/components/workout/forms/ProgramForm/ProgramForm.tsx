@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useFormSetup, formSchema } from "./useFormSetup";
 
 import { useState } from "react";
@@ -17,6 +17,7 @@ import { FormButtons } from "./FormButtons";
 
 import type { WorkoutPrograms } from "~/server/types";
 import { addDays } from "date-fns";
+import Loading from "~/app/loading";
 
 const PROGRAM_ACTIVE_DAYS = 45;
 
@@ -25,8 +26,7 @@ export function ProgramForm({
 }: {
   programInfo?: WorkoutPrograms[0];
 }) {
-  const userId = useSession().data?.user?.id;
-  if (!userId) return;
+  const userId = useProgram((state) => state.program?.userId);
 
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
@@ -34,6 +34,7 @@ export function ProgramForm({
     addDays(startDate, PROGRAM_ACTIVE_DAYS),
   );
   const form = useFormSetup(startDate, endDate, programInfo);
+  if (!userId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const startDate = new Date(values.start);
