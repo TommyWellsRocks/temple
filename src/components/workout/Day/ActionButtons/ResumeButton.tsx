@@ -1,7 +1,9 @@
+import { Button } from "~/components/ui/button";
+
 export function ResumeButton() {
   return (
-    <div className="flex w-full items-center justify-center rounded-md bg-white text-sm text-black">
+    <Button variant="secondary" className="bg-white text-black">
       Resume
-    </div>
+    </Button>
   );
 }

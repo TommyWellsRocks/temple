@@ -1,5 +1,7 @@
-import Loading from "~/app/loading";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+
+import Loading from "~/app/loading";
+import { Button } from "~/components/ui/button";
 
 import { handleEndWorkout } from "~/server/actions/workout/DayActions";
 
@@ -10,7 +12,7 @@ export function LogWorkoutButton() {
   if (!day) return <Loading />;
 
   return (
-    <div
+    <Button
       className="flex w-full items-center justify-center rounded-md bg-primary text-sm"
       onClick={() => {
         const endedWorkout = new Date();
@@ -20,6 +22,6 @@ export function LogWorkoutButton() {
       }}
     >
       Log Workout
-    </div>
+    </Button>
   );
 }

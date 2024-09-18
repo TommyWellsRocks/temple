@@ -24,7 +24,7 @@ export function EndWorkoutDrawer() {
           <DrawerTitle>Ready to log your workout?</DrawerTitle>
         </DrawerHeader>
         <DrawerFooter>
-          <DrawerClose>
+          <DrawerClose asChild>
             <div className="grid h-10 grid-cols-2 gap-2">
               <ResumeButton />
               <LogWorkoutButton />
