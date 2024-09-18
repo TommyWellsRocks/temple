@@ -20,7 +20,7 @@ next-env.d.ts
 
 # production
 /build
-/Exercises
+/private
 
 # misc
 .DS_Store
