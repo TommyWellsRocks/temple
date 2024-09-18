@@ -11,10 +11,8 @@ export default async function ProgramLayout({
   params: { programId: string };
 }) {
   const session = await auth();
-  const program = await getMyProgram(
-    session!.user!.id!,
-    Number(params.programId),
-  );
+  if (!session?.user?.id) return redirect("/signing");
+  const program = await getMyProgram(session.user.id, Number(params.programId));
   if (!program) return redirect("/workout");
 
   return (
