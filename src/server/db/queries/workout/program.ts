@@ -36,7 +36,6 @@ export async function getMyProgram(userId: string, programId: number) {
               loggedSetsCount: true,
             },
             with: {
-              day: { columns: { startedWorkout: true, endedWorkout: true } },
               info: {
                 columns: {
                   id: true,

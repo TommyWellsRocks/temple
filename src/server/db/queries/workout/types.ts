@@ -20,7 +20,6 @@ export async function dayFromProgram() {
           loggedSetsCount: true,
         },
         with: {
-          day: { columns: { startedWorkout: true, endedWorkout: true } },
           info: {
             columns: {
               id: true,
@@ -52,7 +51,6 @@ export async function dayExerciseFromProgram() {
       loggedSetsCount: true,
     },
     with: {
-      day: { columns: { startedWorkout: true, endedWorkout: true } },
       info: {
         columns: {
           id: true,
