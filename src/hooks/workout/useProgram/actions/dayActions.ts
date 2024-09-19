@@ -7,6 +7,7 @@ import { genRandomInt } from "~/utils/helpers";
 
 import {
   handleCreateDay,
+  handleDeleteDay,
   handleGetProgramDay,
   handleUpdateDay,
 } from "~/server/actions/workout/ProgramActions";
@@ -164,6 +165,50 @@ export function dayActions(
       // Actual Update
       try {
         await handleUpdateDay(userId, programId, dayId, newName, newRepeatOn);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+        }));
+      }
+    },
+
+    deleteDay: async (userId: string, programId: number, dayId: number) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      if (!fallbackProgram) return;
+      const fallbackDay = fallbackProgram.programDays.find(
+        (day) => day.id === dayId,
+      );
+      if (!fallbackDay) return;
+
+      // Optimistic Update
+      const badEggIndex = fallbackProgram.programDays.findIndex(
+        (day) => day.id === dayId,
+      );
+      const optimisticProgramDays = [...fallbackProgram.programDays];
+      optimisticProgramDays.splice(badEggIndex, 1);
+      const optimisticProgram = {
+        ...fallbackProgram,
+        programDays: optimisticProgramDays,
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+      }));
+
+      // Actual Update
+      try {
+        await handleDeleteDay(userId, programId, dayId);
       } catch (error) {
         // Else Fallback Update
         console.error(error);

@@ -53,6 +53,7 @@ export interface ProgramState {
     newName: string,
     newRepeatOn: number[] | null,
   ) => void;
+  deleteDay: (userId: string, programId: number, dayId: number) => void;
 
   // Exercise
   dayExercise: null | DayExercise;

@@ -37,13 +37,12 @@ export async function handleUpdateDay(
   await editProgramDay(userId, programId, dayId, newName, newRepeatOn);
 }
 
-export async function handleDeleteProgramDay(
+export async function handleDeleteDay(
   userId: string,
   programId: number,
   dayId: number,
 ) {
   await deleteProgramDay(userId, programId, dayId);
-  revalidatePath("/workout");
 }
 
 export async function handleCreateDayGroup(userId: string, programId: number) {
