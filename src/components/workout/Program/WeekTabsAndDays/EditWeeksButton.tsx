@@ -1,16 +1,14 @@
 import { useUser } from "~/hooks/common/useUser";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import {
-  handleCreateDayGroup,
-  handleDeleteDayGroup,
-} from "~/server/actions/workout/ProgramActions";
+import { handleDeleteDayGroup } from "~/server/actions/workout/ProgramActions";
 import { Minus, Plus } from "lucide-react";
 import Loading from "~/app/loading";
 
 export function EditWeeksButton({ groupId }: { groupId?: number }) {
   const userId = useUser((state) => state.userId);
   const programId = useProgram((state) => state.program?.id);
+  const createWeekWithDays = useProgram.getState().createWeekWithDays;
   if (!userId || !programId) return <Loading />;
 
   return (
@@ -19,11 +17,11 @@ export function EditWeeksButton({ groupId }: { groupId?: number }) {
       onClick={() => {
         if (groupId) {
           const shouldDelete = confirm(
-            "Are you sure you want to remove latest sprint? ",
+            "Are you sure you want to remove latest week? ",
           );
           if (shouldDelete) handleDeleteDayGroup(userId, programId, groupId);
         } else {
-          handleCreateDayGroup(userId, programId);
+          createWeekWithDays(userId, programId);
         }
       }}
     >

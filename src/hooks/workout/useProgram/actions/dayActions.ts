@@ -7,8 +7,10 @@ import { genRandomInt } from "~/utils/helpers";
 
 import {
   handleCreateDay,
+  handleCreateWeekWithDays,
   handleDeleteDay,
   handleGetProgramDay,
+  handleGetWeekWithDays,
   handleUpdateDay,
 } from "~/server/actions/workout/ProgramActions";
 
@@ -209,6 +211,75 @@ export function dayActions(
       // Actual Update
       try {
         await handleDeleteDay(userId, programId, dayId);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+        }));
+      }
+    },
+
+    createWeekWithDays: async (userId: string, programId: number) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      if (!fallbackProgram) return;
+
+      // Optimistic Update
+      const existingIds = fallbackProgram.programDays.map((day) => day.id);
+      let fakeId = genRandomInt();
+      while (existingIds.includes(fakeId)) {
+        fakeId = genRandomInt();
+      }
+
+      const fakeGroup = { id: fakeId };
+      const optimisticProgramGroups = [...fallbackProgram.groups, fakeGroup];
+
+      const optimisticProgram = {
+        ...fallbackProgram,
+        groups: optimisticProgramGroups,
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+      }));
+
+      // Actual Update
+      try {
+        const realGroupId = await handleCreateWeekWithDays(userId, programId);
+        if (!realGroupId) throw "No realGroupId error";
+
+        const realGroup = await handleGetWeekWithDays(userId, realGroupId);
+        if (!realGroup) throw "No realGroup error";
+
+        const actualProgram = {
+          ...optimisticProgram,
+          groups: optimisticProgram.groups.map((group) =>
+            group.id === fakeId ? { id: realGroupId } : group,
+          ),
+          programDays: [
+            ...optimisticProgram.programDays,
+            ...realGroup.groupDays,
+          ],
+        };
+
+        const actualPrograms = optimisticPrograms.map((program) =>
+          program.id === programId ? actualProgram : program,
+        );
+
+        set((state) => ({
+          ...state,
+          programs: actualPrograms,
+          program: actualProgram,
+        }));
       } catch (error) {
         // Else Fallback Update
         console.error(error);

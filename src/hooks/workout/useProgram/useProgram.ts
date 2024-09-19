@@ -54,6 +54,7 @@ export interface ProgramState {
     newRepeatOn: number[] | null,
   ) => void;
   deleteDay: (userId: string, programId: number, dayId: number) => void;
+  createWeekWithDays: (userId: string, programId: number) => void;
 
   // Exercise
   dayExercise: null | DayExercise;

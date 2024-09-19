@@ -9,11 +9,54 @@ import {
 } from "~/server/db/schema";
 import { getMyProgram } from "./program";
 
+export async function getWeekWithDays(userId: string, groupId: number) {
+  return await db.query.workoutProgramDayGroups.findFirst({
+    where: (model, { and, eq }) =>
+      and(eq(model.userId, userId), eq(model.id, groupId)),
+    columns: { id: true },
+    with: {
+      groupDays: {
+        columns: { createdAt: false },
+        with: {
+          group: { columns: { id: true } },
+          dayExercises: {
+            columns: {
+              id: true,
+              userId: true,
+              programId: true,
+              dayId: true,
+              reps: true,
+              weight: true,
+              updatedAt: true,
+              exerciseId: true,
+              loggedSetsCount: true,
+            },
+            with: {
+              info: {
+                columns: {
+                  id: true,
+                  name: true,
+                  video: true,
+                  equipment: true,
+                  primaryMuscle: true,
+                  secondaryMuscles: true,
+                },
+              },
+              notes: { columns: { id: true, name: true, notes: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
 export async function createDayGroup(userId: string, programId: number) {
-  return await db
+  const newGroup = await db
     .insert(workoutProgramDayGroups)
     .values({ userId, programId })
-    .returning({ newGroupId: workoutProgramDayGroups.id });
+    .returning({ id: workoutProgramDayGroups.id });
+  return newGroup[0]!;
 }
 
 export async function addPrevDaysToNewGroup(

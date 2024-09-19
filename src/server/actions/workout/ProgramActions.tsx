@@ -11,6 +11,7 @@ import {
   addPrevDaysToNewGroup,
   createDayGroup,
   deleteDayGroup,
+  getWeekWithDays,
 } from "~/server/db/queries/workout/groups";
 
 export async function handleGetProgramDay(userId: string, dayId: number) {
@@ -45,10 +46,17 @@ export async function handleDeleteDay(
   await deleteProgramDay(userId, programId, dayId);
 }
 
-export async function handleCreateDayGroup(userId: string, programId: number) {
-  const newGroupId = await createDayGroup(userId, programId);
-  await addPrevDaysToNewGroup(userId, programId, newGroupId[0]!.newGroupId);
-  revalidatePath("/workout");
+export async function handleGetWeekWithDays(userId: string, groupId: number) {
+  return await getWeekWithDays(userId, groupId);
+}
+
+export async function handleCreateWeekWithDays(
+  userId: string,
+  programId: number,
+) {
+  const { id: newGroupId } = await createDayGroup(userId, programId);
+  await addPrevDaysToNewGroup(userId, programId, newGroupId);
+  return newGroupId;
 }
 
 export async function handleDeleteDayGroup(
