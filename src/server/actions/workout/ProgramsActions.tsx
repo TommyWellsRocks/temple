@@ -21,7 +21,7 @@ export async function handleGetProgram(userId: string, programId: number) {
   return await getMyProgram(userId, programId);
 }
 
-export async function handleEditProgram(
+export async function handleUpdateProgram(
   userId: string,
   programId: number,
   name: string,
@@ -29,7 +29,6 @@ export async function handleEditProgram(
   endDate: Date,
 ) {
   await editWorkoutProgram(userId, programId, name, startDate, endDate);
-  revalidatePath("/workout");
 }
 
 export async function handleDeleteProgram(userId: string, programId: number) {

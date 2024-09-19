@@ -26,6 +26,13 @@ export interface ProgramState {
     startDate: Date,
     endDate: Date,
   ) => void;
+  updateProgram: (
+    userId: string,
+    programId: number,
+    name: string,
+    startDate: Date,
+    endDate: Date,
+  ) => void;
 
   // Program
   program: Program | null;

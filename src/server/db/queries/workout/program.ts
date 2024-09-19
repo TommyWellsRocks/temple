@@ -44,7 +44,7 @@ export async function getMyPrograms(userId: string) {
       },
     },
     columns: {
-      updatedAt: false,
+      createdAt: false,
     },
   });
   return program;
@@ -90,7 +90,7 @@ export async function getMyProgram(userId: string, programId: number) {
       },
     },
     columns: {
-      updatedAt: false,
+      createdAt: false,
     },
   });
   return program;

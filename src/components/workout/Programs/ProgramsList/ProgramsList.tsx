@@ -9,7 +9,7 @@ export function ProgramsList() {
   return (
     <section className="flex flex-col gap-4">
       {workoutPrograms
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
         .map((program) => {
           const isActiveProgram =
             program.startDate <= today && program.endDate >= today;

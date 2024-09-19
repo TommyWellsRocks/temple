@@ -5,7 +5,6 @@ import { useFormSetup, formSchema } from "./useFormSetup";
 
 import { useState } from "react";
 import { z } from "zod";
-import { handleEditProgram } from "~/server/actions/workout/ProgramsActions";
 
 import { Form, FormDescription } from "~/components/ui/form";
 import { NameField } from "../NameField";
@@ -26,6 +25,7 @@ export function ProgramForm({
 }) {
   const userId = useUser((state) => state.userId);
   const createProgram = useProgram().createProgram;
+  const updateProgram = useProgram().updateProgram;
 
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
@@ -42,13 +42,7 @@ export function ProgramForm({
     endDate.setHours(0, 0, 0, 0);
 
     if (programInfo) {
-      handleEditProgram(
-        userId,
-        programInfo.id,
-        values.name,
-        startDate,
-        endDate,
-      );
+      updateProgram(userId, programInfo.id, values.name, startDate, endDate);
     } else {
       createProgram(values.name, userId, startDate, endDate);
     }

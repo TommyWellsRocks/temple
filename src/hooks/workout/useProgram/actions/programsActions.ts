@@ -7,6 +7,7 @@ import { genRandomInt } from "~/utils/helpers";
 import {
   handleCreateProgram,
   handleGetProgram,
+  handleUpdateProgram,
 } from "~/server/actions/workout/ProgramsActions";
 
 import type { WorkoutPrograms } from "~/server/types";
@@ -78,6 +79,40 @@ export function programsActions(
           ...state,
           programs: actualPrograms,
         }));
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+        }));
+      }
+    },
+
+    updateProgram: async (
+      userId: string,
+      programId: number,
+      name: string,
+      startDate: Date,
+      endDate: Date,
+    ) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+
+      // Optimistic Update
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId
+          ? { ...program, name, startDate, endDate, updatedAt: new Date() }
+          : program,
+      );
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+      }));
+
+      // Actual Update
+      try {
+        handleUpdateProgram(userId, programId, name, startDate, endDate);
       } catch (error) {
         // Else Fallback Update
         console.error(error);
