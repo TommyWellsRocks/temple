@@ -55,6 +55,7 @@ export interface ProgramState {
   ) => void;
   deleteDay: (userId: string, programId: number, dayId: number) => void;
   createWeekWithDays: (userId: string, programId: number) => void;
+  deleteWeek: (userId: string, programId: number, groupId: number) => void;
 
   // Exercise
   dayExercise: null | DayExercise;

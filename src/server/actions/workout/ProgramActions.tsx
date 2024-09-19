@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import {
   createProgramDay,
   deleteProgramDay,
@@ -59,11 +58,10 @@ export async function handleCreateWeekWithDays(
   return newGroupId;
 }
 
-export async function handleDeleteDayGroup(
+export async function handleDeleteWeek(
   userId: string,
   programId: number,
   groupId: number,
 ) {
   await deleteDayGroup(userId, programId, groupId);
-  revalidatePath("/workout");
 }

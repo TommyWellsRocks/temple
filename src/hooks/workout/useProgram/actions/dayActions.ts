@@ -9,6 +9,7 @@ import {
   handleCreateDay,
   handleCreateWeekWithDays,
   handleDeleteDay,
+  handleDeleteWeek,
   handleGetProgramDay,
   handleGetWeekWithDays,
   handleUpdateDay,
@@ -280,6 +281,52 @@ export function dayActions(
           programs: actualPrograms,
           program: actualProgram,
         }));
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+        }));
+      }
+    },
+
+    deleteWeek: async (userId: string, programId: number, groupId: number) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      if (!fallbackProgram) return;
+
+      // Optimistic Update
+      const badEggIndexGroup = fallbackProgram.groups.findIndex(
+        (group) => group.id === groupId,
+      );
+      const optimisticGroups = [...fallbackProgram.groups];
+      optimisticGroups.splice(badEggIndexGroup, 1);
+
+      const optimisticProgramDays = fallbackProgram.programDays.filter(
+        (day) => day.groupId !== groupId,
+      );
+
+      const optimisticProgram = {
+        ...fallbackProgram,
+        groups: optimisticGroups,
+        programDays: optimisticProgramDays,
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+      }));
+
+      // Actual Update
+      try {
+        await handleDeleteWeek(userId, programId, groupId);
       } catch (error) {
         // Else Fallback Update
         console.error(error);
