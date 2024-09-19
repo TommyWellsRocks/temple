@@ -82,11 +82,9 @@ export function programsActions(
         if (!realId) throw "No realId error";
         const realProgram = await handleGetProgram(userId, realId);
         if (!realProgram) throw "No realProgram error";
-        const actualPrograms = [
-          ...optimisticPrograms.map((program) =>
-            program.id === fakeId ? realProgram : program,
-          ),
-        ];
+        const actualPrograms = optimisticPrograms.map((program) =>
+          program.id === fakeId ? realProgram : program,
+        );
         set((state) => ({
           ...state,
           programs: actualPrograms,

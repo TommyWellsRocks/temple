@@ -5,10 +5,7 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useFormSetup, formSchema } from "./useFormSetup";
 
 import { z } from "zod";
-import {
-  handleCreateDay,
-  handleEditProgramDay,
-} from "~/server/actions/workout/ProgramActions";
+import { handleEditProgramDay } from "~/server/actions/workout/ProgramActions";
 
 import { Form } from "~/components/ui/form";
 import { NameField } from "../NameField";
@@ -27,6 +24,7 @@ export function DayForm({
 }) {
   const userId = useUser((state) => state.userId);
   const programId = useProgram((state) => state.program?.id);
+  const createDay = useProgram.getState().createDay;
   const form = useFormSetup(dayInfo);
 
   if (!userId || !programId) return <Loading />;
@@ -47,7 +45,7 @@ export function DayForm({
         newRepeatOn,
       );
     } else {
-      handleCreateDay(userId, programId, groupId, values.name, newRepeatOn);
+      createDay(userId, programId, groupId, values.name, newRepeatOn);
     }
   };
 

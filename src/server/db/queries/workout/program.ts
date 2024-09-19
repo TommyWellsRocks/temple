@@ -110,7 +110,7 @@ export async function createWorkoutProgram(
       startDate,
       endDate,
     })
-    .returning();
+    .returning({ id: workoutPrograms.id });
   await createDayGroup(userId, newProgram[0]!.id);
   return { id: newProgram[0]!.id };
 }

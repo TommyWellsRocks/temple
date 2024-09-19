@@ -5,12 +5,17 @@ import {
   createProgramDay,
   deleteProgramDay,
   editProgramDay,
+  getProgramDay,
 } from "~/server/db/queries/workout/day";
 import {
   addPrevDaysToNewGroup,
   createDayGroup,
   deleteDayGroup,
 } from "~/server/db/queries/workout/groups";
+
+export async function handleGetProgramDay(userId: string, dayId: number) {
+  return await getProgramDay(userId, dayId);
+}
 
 export async function handleCreateDay(
   userId: string,
@@ -19,8 +24,7 @@ export async function handleCreateDay(
   name: string,
   repeatOn: number[] | null,
 ) {
-  await createProgramDay(userId, programId, groupId, name, repeatOn);
-  revalidatePath("/workout");
+  return await createProgramDay(userId, programId, groupId, name, repeatOn);
 }
 
 export async function handleEditProgramDay(
