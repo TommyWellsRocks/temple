@@ -24,7 +24,6 @@ export function programsActions(
 ) {
   return {
     programs: [],
-    programPending: false,
 
     setPrograms: (programs: WorkoutPrograms) =>
       set((state) => ({ ...state, programs })),
@@ -47,7 +46,6 @@ export function programsActions(
       ];
       set((state) => ({
         ...state,
-        programPending: true,
         programs: optimisticPrograms,
       }));
 
@@ -63,7 +61,11 @@ export function programsActions(
         const actualPrograms = [
           ...optimisticPrograms.map((program) => {
             if (program.id === fakeId) {
-              return { ...program, id: realProgram.id, createdAt: realProgram.createdAt };
+              return {
+                ...program,
+                id: realProgram.id,
+                createdAt: realProgram.createdAt,
+              };
             } else {
               return program;
             }
@@ -71,7 +73,6 @@ export function programsActions(
         ];
         set((state) => ({
           ...state,
-          programPending: false,
           programs: actualPrograms,
         }));
       } catch (error) {
@@ -79,7 +80,6 @@ export function programsActions(
         console.error(error);
         set((state) => ({
           ...state,
-          programPending: false,
           programs: fallbackPrograms,
         }));
       }

@@ -19,7 +19,6 @@ import type {
 export interface ProgramState {
   // Programs
   programs: WorkoutPrograms | [];
-  programPending: boolean;
   setPrograms: (programs: WorkoutPrograms) => void;
   createProgram: (
     name: string,
