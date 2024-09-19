@@ -1,6 +1,6 @@
 "use client";
 
-import { setProgram } from "~/hooks/workout/useProgram/actions/programsActions";
+import { setProgram } from "~/hooks/workout/useProgram/actions/programActions";
 
 export default function ProgramLayout({
   children,

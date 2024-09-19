@@ -1,8 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { programsActions } from "./actions/programsActions";
-import { programActions } from "./actions/programActions";
+import { programsActions } from "./actions/programActions";
 import { dayActions } from "./actions/dayActions";
 import { exerciseActions } from "./actions/exerciseActions";
 
@@ -19,7 +18,9 @@ import type {
 export interface ProgramState {
   // Programs
   programs: WorkoutPrograms | [];
+  program: Program | null;
   setPrograms: (programs: WorkoutPrograms) => void;
+  setProgram: (programId: number) => void;
   createProgram: (
     name: string,
     userId: string,
@@ -35,10 +36,6 @@ export interface ProgramState {
   ) => void;
   deleteProgram: (userId: string, programId: number) => void;
 
-  // Program
-  program: Program | null;
-  setProgram: (programId: number) => void;
-
   // Day
   day: null | ProgramDay;
   setDay: (dayId: number) => void;
@@ -52,8 +49,6 @@ export interface ProgramState {
 
 export const useProgram = create<ProgramState>((set, get) => ({
   ...programsActions(set, get),
-  // Program
-  ...programActions(set, get),
   // Days
   ...dayActions(set, get),
   // Exercise
