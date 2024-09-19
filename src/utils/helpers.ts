@@ -1,5 +1,9 @@
 import { isAfter, setHours, setMinutes, setSeconds } from "date-fns";
 
+export function genRandomInt() {
+  return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + 1;
+}
+
 export function toTitleCase(string: string) {
   return string
     .toLowerCase()
