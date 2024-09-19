@@ -46,9 +46,13 @@ export interface ProgramState {
     name: string,
     repeatOn: number[] | null,
   ) => void;
-
-  // V DEAD TO ME V
-  updateDay: (day: ProgramDay) => void;
+  updateDay: (
+    userId: string,
+    programId: number,
+    dayId: number,
+    newName: string,
+    newRepeatOn: number[] | null,
+  ) => void;
 
   // Exercise
   dayExercise: null | DayExercise;

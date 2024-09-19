@@ -11,7 +11,7 @@ export const formSchema = z.object({
   repeatOn: z.array(z.number()).optional(),
 });
 
-export function useFormSetup(dayInfo: ProgramDay) {
+export function useFormSetup(dayInfo?: ProgramDay) {
   return useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

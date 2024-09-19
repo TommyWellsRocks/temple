@@ -7,7 +7,7 @@ import { CreateButton } from "../CreateButton";
 import { DeleteButton } from "../DeleteButton";
 import { SaveButton } from "../SaveButton";
 
-export function FormButtons({ dayInfo }: { dayInfo: ProgramDay }) {
+export function FormButtons({ dayInfo }: { dayInfo?: ProgramDay }) {
   return (
     <DialogFooter>
       {!dayInfo ? (

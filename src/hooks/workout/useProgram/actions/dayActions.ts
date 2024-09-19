@@ -5,10 +5,10 @@ import { useProgram, type ProgramState } from "../useProgram";
 
 import { genRandomInt } from "~/utils/helpers";
 
-import type { ProgramDay } from "~/server/types";
 import {
   handleCreateDay,
   handleGetProgramDay,
+  handleUpdateDay,
 } from "~/server/actions/workout/ProgramActions";
 
 export function dayActions(
@@ -122,27 +122,58 @@ export function dayActions(
       }
     },
 
-    updateDay: (day: ProgramDay) =>
-      set((state) => {
-        if (!day || !state.program) return state;
+    updateDay: async (
+      userId: string,
+      programId: number,
+      dayId: number,
+      newName: string,
+      newRepeatOn: number[] | null,
+    ) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      if (!fallbackProgram) return;
+      const fallbackDay = fallbackProgram.programDays.find(
+        (day) => day.id === dayId,
+      );
+      if (!fallbackDay) return;
 
-        // Update Parent
-        const updatedProgramDays = state.program.programDays.map(
-          (programDay) => (programDay.id === day.id ? day : programDay),
-        );
+      // Optimistic Update
+      const optimisticDay = {
+        ...fallbackDay,
+        name: newName,
+        repeatOn: newRepeatOn,
+        updatedAt: new Date(),
+      };
+      const optimisticProgram = {
+        ...fallbackProgram,
+        programDays: fallbackProgram.programDays.map((day) =>
+          day.id === dayId ? optimisticDay : day,
+        ),
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
 
-        // Update Child
-        const updatedDay = state.day?.id === day.id ? day : state.day;
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+      }));
 
-        return {
+      // Actual Update
+      try {
+        await handleUpdateDay(userId, programId, dayId, newName, newRepeatOn);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
           ...state,
-          program: {
-            ...state.program,
-            programDays: updatedProgramDays,
-          },
-          day: updatedDay,
-        };
-      }),
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+        }));
+      }
+    },
   };
 }
 

@@ -27,14 +27,14 @@ export async function handleCreateDay(
   return await createProgramDay(userId, programId, groupId, name, repeatOn);
 }
 
-export async function handleEditProgramDay(
+export async function handleUpdateDay(
   userId: string,
   programId: number,
   dayId: number,
-  name: string,
-  repeatOn: number[] | null,
+  newName: string,
+  newRepeatOn: number[] | null,
 ) {
-  await editProgramDay(userId, programId, dayId, name, repeatOn);
+  await editProgramDay(userId, programId, dayId, newName, newRepeatOn);
 }
 
 export async function handleDeleteProgramDay(

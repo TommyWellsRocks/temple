@@ -5,7 +5,6 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useFormSetup, formSchema } from "./useFormSetup";
 
 import { z } from "zod";
-import { handleEditProgramDay } from "~/server/actions/workout/ProgramActions";
 
 import { Form } from "~/components/ui/form";
 import { NameField } from "../NameField";
@@ -25,27 +24,19 @@ export function DayForm({
   const userId = useUser((state) => state.userId);
   const programId = useProgram((state) => state.program?.id);
   const createDay = useProgram.getState().createDay;
+  const updateDay = useProgram.getState().updateDay;
   const form = useFormSetup(dayInfo);
 
   if (!userId || !programId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    const newName = values.name;
     const newRepeatOn = values.repeatOn ?? null;
 
     if (dayInfo) {
-      const setDayDetails = useProgram.getState().updateDay;
-      dayInfo.name = values.name;
-      dayInfo.repeatOn = newRepeatOn;
-      setDayDetails(dayInfo);
-      handleEditProgramDay(
-        userId,
-        programId,
-        dayInfo.id,
-        values.name,
-        newRepeatOn,
-      );
+      updateDay(userId, programId, dayInfo.id, newName, newRepeatOn);
     } else {
-      createDay(userId, programId, groupId, values.name, newRepeatOn);
+      createDay(userId, programId, groupId, newName, newRepeatOn);
     }
   };
 
