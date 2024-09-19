@@ -1,4 +1,4 @@
-import { handleDeleteProgram } from "~/server/actions/workout/ProgramsActions";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
 import { DialogFooter } from "~/components/ui/dialog";
 import { CreateButton } from "../CreateButton";
@@ -14,15 +14,15 @@ export function FormButtons({
   userId: string;
   programInfo?: WorkoutPrograms[0];
 }) {
+  const deleteProgram = useProgram.getState().deleteProgram;
+
   return (
     <DialogFooter>
       {!programInfo ? (
         <CreateButton />
       ) : (
         <div className="flex justify-between">
-          <DeleteButton
-            onClick={() => handleDeleteProgram(userId, programInfo.id)}
-          />
+          <DeleteButton onClick={() => deleteProgram(userId, programInfo.id)} />
           <SaveButton />
         </div>
       )}

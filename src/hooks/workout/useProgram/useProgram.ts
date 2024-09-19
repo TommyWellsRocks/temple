@@ -33,15 +33,11 @@ export interface ProgramState {
     startDate: Date,
     endDate: Date,
   ) => void;
+  deleteProgram: (userId: string, programId: number) => void;
 
   // Program
   program: Program | null;
   setProgram: (programId: number) => void;
-  setProgramDetails: (
-    newName: string,
-    newStartDate: Date,
-    newEndDate: Date,
-  ) => void;
 
   // Day
   day: null | ProgramDay;

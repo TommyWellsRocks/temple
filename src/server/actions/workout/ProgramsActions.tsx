@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import {
   createWorkoutProgram,
   deleteWorkoutProgram,
@@ -33,5 +32,4 @@ export async function handleUpdateProgram(
 
 export async function handleDeleteProgram(userId: string, programId: number) {
   await deleteWorkoutProgram(userId, programId);
-  revalidatePath("/workout");
 }

@@ -26,23 +26,5 @@ export function programActions(
         ...state,
         program: state.programs.find((program) => program.id === programId),
       })),
-
-    setProgramDetails: (
-      newName: string,
-      newStartDate: Date,
-      newEndDate: Date,
-    ) =>
-      set((state) => {
-        if (!state.program) return state;
-        return {
-          ...state,
-          program: {
-            ...state.program,
-            name: newName,
-            startDate: newStartDate,
-            endDate: newEndDate,
-          },
-        };
-      }),
   };
 }

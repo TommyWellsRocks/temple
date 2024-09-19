@@ -6,11 +6,12 @@ import { useProgram, type ProgramState } from "../useProgram";
 import { genRandomInt } from "~/utils/helpers";
 import {
   handleCreateProgram,
+  handleDeleteProgram,
   handleGetProgram,
   handleUpdateProgram,
 } from "~/server/actions/workout/ProgramsActions";
 
-import type { WorkoutPrograms } from "~/server/types";
+import type { Program, WorkoutPrograms } from "~/server/types";
 
 export function programsActions(
   set: {
@@ -49,11 +50,15 @@ export function programsActions(
       while (existingIds.includes(fakeId)) {
         fakeId = genRandomInt();
       }
-      const fakeDate = new Date();
-      const optimisticPrograms = [
-        ...fallbackPrograms,
-        { id: fakeId, createdAt: fakeDate, name, userId, startDate, endDate },
-      ] as WorkoutPrograms;
+      const optimisticPrograms = [...fallbackPrograms];
+      optimisticPrograms.push({
+        id: fakeId,
+        name,
+        userId,
+        startDate,
+        endDate,
+        updatedAt: new Date(),
+      } as Program); // ! Dangerous
       set((state) => ({
         ...state,
         programs: optimisticPrograms,
@@ -112,7 +117,35 @@ export function programsActions(
 
       // Actual Update
       try {
-        handleUpdateProgram(userId, programId, name, startDate, endDate);
+        await handleUpdateProgram(userId, programId, name, startDate, endDate);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+        }));
+      }
+    },
+
+    deleteProgram: async (userId: string, programId: number) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+
+      // Optimistic Update
+      const optimisticPrograms = [...fallbackPrograms];
+      const badEggIndex = optimisticPrograms.findIndex(
+        (program) => program.id === programId,
+      );
+      optimisticPrograms.splice(badEggIndex, 1);
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+      }));
+
+      // Actual Update
+      try {
+        await handleDeleteProgram(userId, programId);
       } catch (error) {
         // Else Fallback Update
         console.error(error);

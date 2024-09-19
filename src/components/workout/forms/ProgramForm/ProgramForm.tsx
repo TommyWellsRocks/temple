@@ -24,8 +24,8 @@ export function ProgramForm({
   programInfo?: WorkoutPrograms[0];
 }) {
   const userId = useUser((state) => state.userId);
-  const createProgram = useProgram().createProgram;
-  const updateProgram = useProgram().updateProgram;
+  const createProgram = useProgram.getState().createProgram;
+  const updateProgram = useProgram.getState().updateProgram;
 
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
