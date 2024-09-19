@@ -31,16 +31,9 @@ export function programsActions(
 ) {
   return {
     programs: [],
-    program: null,
 
     setPrograms: (programs: WorkoutPrograms) =>
       set((state) => ({ ...state, programs })),
-
-    setProgram: (programId: number) =>
-      set((state) => ({
-        ...state,
-        program: state.programs.find((program) => program.id === programId),
-      })),
 
     createProgram: async (
       name: string,
@@ -171,10 +164,4 @@ export function SetPrograms({ programs }: { programs: WorkoutPrograms }) {
   }, [programs, setPrograms]);
 
   return null;
-}
-
-export function setProgram(programId: number) {
-  const setProgram = useProgram.getState().setProgram;
-
-  useEffect(() => setProgram(programId), [programId]);
 }

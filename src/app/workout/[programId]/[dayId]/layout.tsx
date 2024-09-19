@@ -1,6 +1,6 @@
 "use client";
 
-import { setDay } from "~/hooks/workout/useProgram/actions/dayActions";
+import { setDay } from "~/hooks/workout/useProgram/actions/day";
 
 export default function DayLayout({
   children,

@@ -15,7 +15,7 @@ import {
   handleUpdateDay,
 } from "~/server/actions/workout/ProgramActions";
 
-export function dayActions(
+export function programActions(
   set: {
     (
       partial:
@@ -32,12 +32,12 @@ export function dayActions(
   get: () => ProgramState,
 ) {
   return {
-    day: null,
+    program: null,
 
-    setDay: (dayId: number) =>
+    setProgram: (programId: number) =>
       set((state) => ({
         ...state,
-        day: state.program?.programDays.find((day) => day.id === dayId),
+        program: state.programs.find((program) => program.id === programId),
       })),
 
     createDay: async (
@@ -340,8 +340,8 @@ export function dayActions(
   };
 }
 
-export function setDay(dayId: number) {
-  const setDay = useProgram.getState().setDay;
+export function setProgram(programId: number) {
+  const setProgram = useProgram.getState().setProgram;
 
-  useEffect(() => setDay(dayId), [dayId]);
+  useEffect(() => setProgram(programId), [programId]);
 }

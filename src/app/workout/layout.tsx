@@ -7,7 +7,7 @@ import {
 } from "~/server/db/queries/workout/program";
 
 import { MyExercisesProvider } from "~/hooks/workout/useExercises";
-import { SetPrograms } from "~/hooks/workout/useProgram/actions/programActions";
+import { SetPrograms } from "~/hooks/workout/useProgram/actions/programs";
 import { SetUser } from "~/hooks/common/useUser";
 
 export default async function WorkoutLayout({
