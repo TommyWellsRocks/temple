@@ -5,19 +5,22 @@ import { useEffect } from "react";
 import { useProgram, type ProgramState } from "../useProgram";
 import { DayExercise } from "~/server/types";
 
-export function exerciseActions(set: {
-  (
-    partial:
-      | ProgramState
-      | Partial<ProgramState>
-      | ((state: ProgramState) => ProgramState | Partial<ProgramState>),
-    replace?: false | undefined,
-  ): void;
-  (
-    state: ProgramState | ((state: ProgramState) => ProgramState),
-    replace: true,
-  ): void;
-}) {
+export function exerciseActions(
+  set: {
+    (
+      partial:
+        | ProgramState
+        | Partial<ProgramState>
+        | ((state: ProgramState) => ProgramState | Partial<ProgramState>),
+      replace?: false | undefined,
+    ): void;
+    (
+      state: ProgramState | ((state: ProgramState) => ProgramState),
+      replace: true,
+    ): void;
+  },
+  get: () => ProgramState,
+) {
   return {
     dayExercise: null,
 

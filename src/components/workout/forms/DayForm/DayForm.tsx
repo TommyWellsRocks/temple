@@ -1,9 +1,10 @@
 "use client";
 
+import { useUser } from "~/hooks/common/useUser";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+import { useFormSetup, formSchema } from "./useFormSetup";
 
 import { z } from "zod";
-import { useFormSetup, formSchema } from "./useFormSetup";
 import {
   handleCreateDay,
   handleEditProgramDay,
@@ -24,12 +25,10 @@ export function DayForm({
   groupId: number;
   dayInfo?: ProgramDay;
 }) {
-  const [userId, programId] = useProgram((state) => [
-    state.program?.userId,
-    state.program?.id,
-  ]);
-
+  const userId = useUser((state) => state.userId);
+  const programId = useProgram((state) => state.program?.id);
   const form = useFormSetup(dayInfo);
+
   if (!userId || !programId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {

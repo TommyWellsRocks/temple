@@ -5,10 +5,7 @@ import { useFormSetup, formSchema } from "./useFormSetup";
 
 import { useState } from "react";
 import { z } from "zod";
-import {
-  handleEditProgram,
-  handleCreateProgram,
-} from "~/server/actions/workout/ProgramsActions";
+import { handleEditProgram } from "~/server/actions/workout/ProgramsActions";
 
 import { Form, FormDescription } from "~/components/ui/form";
 import { NameField } from "../NameField";
@@ -18,6 +15,7 @@ import { FormButtons } from "./FormButtons";
 import type { WorkoutPrograms } from "~/server/types";
 import { addDays } from "date-fns";
 import Loading from "~/app/loading";
+import { useUser } from "~/hooks/common/useUser";
 
 const PROGRAM_ACTIVE_DAYS = 45;
 
@@ -26,7 +24,8 @@ export function ProgramForm({
 }: {
   programInfo?: WorkoutPrograms[0];
 }) {
-  const userId = useProgram((state) => state.program?.userId);
+  const userId = useUser((state) => state.userId);
+  const createProgram = useProgram().createProgram;
 
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
@@ -42,15 +41,17 @@ export function ProgramForm({
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(0, 0, 0, 0);
 
-    programInfo
-      ? handleEditProgram(
-          userId,
-          programInfo.id,
-          values.name,
-          startDate,
-          endDate,
-        )
-      : handleCreateProgram(userId, values.name, startDate, endDate);
+    if (programInfo) {
+      handleEditProgram(
+        userId,
+        programInfo.id,
+        values.name,
+        startDate,
+        endDate,
+      );
+    } else {
+      createProgram(values.name, userId, startDate, endDate);
+    }
   };
 
   function DatesDifference({

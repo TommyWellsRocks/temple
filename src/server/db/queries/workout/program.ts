@@ -9,7 +9,7 @@ export async function getMyPrograms(userId: string) {
   return await db.query.workoutPrograms.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
     orderBy: (model, { desc }) => desc(model.createdAt),
-    columns: { createdAt: false, updatedAt: false },
+    columns: { updatedAt: false },
   });
 }
 
@@ -69,7 +69,7 @@ export async function createWorkoutProgram(
   startDate: Date,
   endDate: Date,
 ) {
-  const newProgramId = await db
+  const newProgram = await db
     .insert(workoutPrograms)
     .values({
       userId,
@@ -77,9 +77,9 @@ export async function createWorkoutProgram(
       startDate,
       endDate,
     })
-    .returning({ id: workoutPrograms.id });
-  const newGroup = await createDayGroup(userId, newProgramId[0]!.id);
-  return newGroup[0]?.newGroupId;
+    .returning({ id: workoutPrograms.id, createdAt: workoutPrograms.createdAt });
+  const newGroup = await createDayGroup(userId, newProgram[0]!.id);
+  return {id: newProgram[0]!.id, createdAt: newProgram[0]!.createdAt};
 }
 
 export async function editWorkoutProgram(

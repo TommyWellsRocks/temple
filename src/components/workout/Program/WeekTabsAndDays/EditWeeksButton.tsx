@@ -1,4 +1,6 @@
+import { useUser } from "~/hooks/common/useUser";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+
 import {
   handleCreateDayGroup,
   handleDeleteDayGroup,
@@ -7,10 +9,8 @@ import { Minus, Plus } from "lucide-react";
 import Loading from "~/app/loading";
 
 export function EditWeeksButton({ groupId }: { groupId?: number }) {
-  const [userId, programId] = useProgram((state) => [
-    state.program?.userId,
-    state.program?.id,
-  ]);
+  const userId = useUser((state) => state.userId);
+  const programId = useProgram((state) => state.program?.id);
   if (!userId || !programId) return <Loading />;
 
   return (

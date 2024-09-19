@@ -1,6 +1,6 @@
 "use client";
 
-import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+import { useUser } from "~/hooks/common/useUser";
 import { formSchema, useFormSetup } from "./useFormSetup";
 
 import { z } from "zod";
@@ -20,7 +20,7 @@ export function ExerciseForm({
   programId: number;
   dayExercise: DayExercise;
 }) {
-  const userId = useProgram((state) => state.program?.userId);
+  const userId = useUser((state) => state.userId);
   const form = useFormSetup();
   if (!dayExercise || !userId) return <Loading />;
 

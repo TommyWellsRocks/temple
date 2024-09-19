@@ -1,16 +1,33 @@
 "use client";
 
 import { create } from "zustand";
+import { programsActions } from "./actions/programsActions";
 import { programActions } from "./actions/programActions";
 import { dayActions } from "./actions/dayActions";
 import { exerciseActions } from "./actions/exerciseActions";
 
-import type { Program, ProgramDay, DayExercise } from "~/server/types";
+import type {
+  Program,
+  ProgramDay,
+  DayExercise,
+  WorkoutPrograms,
+} from "~/server/types";
 
 // * NOTE: PROGRAM IS THE PARENT. DAY AND EXERCISE ARE COPIES OF ITEMS WITHIN PROGRAM. NOT REFERENCES.
 // * SO WHENEVER YOU UPDATE AN ITEM, UPDATE THE PARENT.
 
 export interface ProgramState {
+  // Programs
+  programs: WorkoutPrograms | [];
+  programPending: boolean;
+  setPrograms: (programs: WorkoutPrograms) => void;
+  createProgram: (
+    name: string,
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+  ) => void;
+
   // Program
   program: Program | null;
   setProgram: (program: Program) => void;
@@ -31,11 +48,12 @@ export interface ProgramState {
   updateDayExercise: (dayEx: DayExercise) => void;
 }
 
-export const useProgram = create<ProgramState>((set) => ({
+export const useProgram = create<ProgramState>((set, get) => ({
+  ...programsActions(set, get),
   // Program
-  ...programActions(set),
+  ...programActions(set, get),
   // Days
-  ...dayActions(set),
+  ...dayActions(set, get),
   // Exercise
-  ...exerciseActions(set),
+  ...exerciseActions(set, get),
 }));
