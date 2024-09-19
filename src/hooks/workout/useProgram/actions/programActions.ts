@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-
-import { useProgram, type ProgramState } from "../useProgram";
-import type { Program } from "~/server/types";
+import { type ProgramState } from "../useProgram";
 
 export function programActions(
   set: {
@@ -24,7 +21,11 @@ export function programActions(
   return {
     program: null,
 
-    setProgram: (program: Program) => set((state) => ({ ...state, program })),
+    setProgram: (programId: number) =>
+      set((state) => ({
+        ...state,
+        program: state.programs.find((program) => program.id === programId),
+      })),
 
     setProgramDetails: (
       newName: string,
@@ -44,14 +45,4 @@ export function programActions(
         };
       }),
   };
-}
-
-export function SetProgram({ program }: { program: Program }) {
-  const setProgram = useProgram.getState().setProgram;
-
-  useEffect(() => {
-    setProgram(program);
-  }, [program, setProgram]);
-
-  return null;
 }

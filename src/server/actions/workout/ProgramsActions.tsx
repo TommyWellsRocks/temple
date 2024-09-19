@@ -5,6 +5,7 @@ import {
   createWorkoutProgram,
   deleteWorkoutProgram,
   editWorkoutProgram,
+  getMyProgram,
 } from "~/server/db/queries/workout/program";
 
 export async function handleCreateProgram(
@@ -13,13 +14,11 @@ export async function handleCreateProgram(
   startDate: Date,
   endDate: Date,
 ) {
-  const newProgram = await createWorkoutProgram(
-    userId,
-    name,
-    startDate,
-    endDate,
-  );
-  return newProgram;
+  return await createWorkoutProgram(userId, name, startDate, endDate);
+}
+
+export async function handleGetProgram(userId: string, programId: number) {
+  return await getMyProgram(userId, programId);
 }
 
 export async function handleEditProgram(

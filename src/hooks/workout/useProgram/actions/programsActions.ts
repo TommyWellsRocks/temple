@@ -1,10 +1,15 @@
 "use client";
 
-import { handleCreateProgram } from "~/server/actions/workout/ProgramsActions";
-import { useProgram, type ProgramState } from "../useProgram";
-import type { WorkoutPrograms } from "~/server/types";
-import { genRandomInt } from "~/utils/helpers";
 import { useEffect } from "react";
+import { useProgram, type ProgramState } from "../useProgram";
+
+import { genRandomInt } from "~/utils/helpers";
+import {
+  handleCreateProgram,
+  handleGetProgram,
+} from "~/server/actions/workout/ProgramsActions";
+
+import type { WorkoutPrograms } from "~/server/types";
 
 export function programsActions(
   set: {
@@ -38,12 +43,16 @@ export function programsActions(
       const fallbackPrograms = get().programs;
 
       // Optimistic Update
-      const fakeId = genRandomInt();
+      const existingIds = fallbackPrograms.map((program) => program.id);
+      let fakeId = genRandomInt();
+      while (existingIds.includes(fakeId)) {
+        fakeId = genRandomInt();
+      }
       const fakeDate = new Date();
       const optimisticPrograms = [
         ...fallbackPrograms,
         { id: fakeId, createdAt: fakeDate, name, userId, startDate, endDate },
-      ];
+      ] as WorkoutPrograms;
       set((state) => ({
         ...state,
         programs: optimisticPrograms,
@@ -51,25 +60,19 @@ export function programsActions(
 
       // Actual Update
       try {
-        const realProgram = await handleCreateProgram(
+        const { id: realId } = await handleCreateProgram(
           userId,
           name,
           startDate,
           endDate,
         );
-        if (!realProgram) throw "No creation error";
+        if (!realId) throw "No realId error";
+        const realProgram = await handleGetProgram(userId, realId);
+        if (!realProgram) throw "No realProgram error";
         const actualPrograms = [
-          ...optimisticPrograms.map((program) => {
-            if (program.id === fakeId) {
-              return {
-                ...program,
-                id: realProgram.id,
-                createdAt: realProgram.createdAt,
-              };
-            } else {
-              return program;
-            }
-          }),
+          ...optimisticPrograms.map((program) =>
+            program.id === fakeId ? realProgram : program,
+          ),
         ];
         set((state) => ({
           ...state,
@@ -95,4 +98,10 @@ export function SetPrograms({ programs }: { programs: WorkoutPrograms }) {
   }, [programs, setPrograms]);
 
   return null;
+}
+
+export function setProgram(programId: number) {
+  const setProgram = useProgram.getState().setProgram;
+
+  useEffect(() => setProgram(programId), [programId]);
 }

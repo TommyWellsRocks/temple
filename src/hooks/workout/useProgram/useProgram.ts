@@ -29,7 +29,7 @@ export interface ProgramState {
 
   // Program
   program: Program | null;
-  setProgram: (program: Program) => void;
+  setProgram: (programId: number) => void;
   setProgramDetails: (
     newName: string,
     newStartDate: Date,
