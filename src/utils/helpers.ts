@@ -1,5 +1,13 @@
 import { isAfter, setHours, setMinutes, setSeconds } from "date-fns";
 
+export function getFakeId(existingIds: number[]) {
+  let fakeId = genRandomInt();
+  while (existingIds.includes(fakeId)) {
+    fakeId = genRandomInt();
+  }
+  return fakeId;
+}
+
 export function genRandomInt() {
   return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + 1;
 }

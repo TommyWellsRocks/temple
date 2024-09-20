@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useProgram, type ProgramState } from "../useProgram";
 
-import { genRandomInt } from "~/utils/helpers";
+import { genRandomInt, getFakeId } from "~/utils/helpers";
 
 import {
   handleCreateDay,
@@ -54,10 +54,7 @@ export function programActions(
 
       // Optimistic Update
       const existingIds = fallbackProgram.programDays.map((day) => day.id);
-      let fakeId = genRandomInt();
-      while (existingIds.includes(fakeId)) {
-        fakeId = genRandomInt();
-      }
+      const fakeId = getFakeId(existingIds);
       const optimisticDay = {
         id: fakeId,
         name,
@@ -231,11 +228,7 @@ export function programActions(
 
       // Optimistic Update
       const existingIds = fallbackProgram.programDays.map((day) => day.id);
-      let fakeId = genRandomInt();
-      while (existingIds.includes(fakeId)) {
-        fakeId = genRandomInt();
-      }
-
+      const fakeId = getFakeId(existingIds);
       const fakeGroup = { id: fakeId };
       const optimisticProgramGroups = [...fallbackProgram.groups, fakeGroup];
 

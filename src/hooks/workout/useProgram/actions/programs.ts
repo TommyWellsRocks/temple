@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useProgram, type ProgramState } from "../useProgram";
 
-import { genRandomInt } from "~/utils/helpers";
+import { getFakeId } from "~/utils/helpers";
 import {
   handleCreateProgram,
   handleDeleteProgram,
@@ -46,10 +46,7 @@ export function programsActions(
 
       // Optimistic Update
       const existingIds = fallbackPrograms.map((program) => program.id);
-      let fakeId = genRandomInt();
-      while (existingIds.includes(fakeId)) {
-        fakeId = genRandomInt();
-      }
+      const fakeId = getFakeId(existingIds);
       const optimisticPrograms = [...fallbackPrograms];
       optimisticPrograms.push({
         id: fakeId,

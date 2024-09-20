@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useProgram, type ProgramState } from "../useProgram";
 
-import { genRandomInt } from "~/utils/helpers";
+import { genRandomInt, getFakeId } from "~/utils/helpers";
 import {
   handleAddExercise,
   handleEditExerciseName,
@@ -56,10 +56,7 @@ export function dayActions(
 
       // Optimistic Update
       const existingIds = fallbackDay.dayExercises.map((ex) => ex.id);
-      let fakeId = genRandomInt();
-      while (existingIds.includes(fakeId)) {
-        fakeId = genRandomInt();
-      }
+      const fakeId = getFakeId(existingIds);
 
       const optimisticExercise = {
         id: fakeId,
