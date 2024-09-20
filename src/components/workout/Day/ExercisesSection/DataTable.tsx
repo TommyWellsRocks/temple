@@ -32,7 +32,7 @@ import {
   handleDeleteExercise,
 } from "~/server/actions/workout/DayActions";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
-import { useMyExercises } from "~/hooks/workout/useExercises";
+import { useExercises } from "~/hooks/workout/useExercises";
 import { AddButtonOverlay } from "../../AddButtonOverlay";
 import { UserExerciseForm } from "../../forms/UserExerciseForm/UserExerciseForm";
 
@@ -52,7 +52,7 @@ export function DataTable() {
     state.day?.dayExercises.map((ex) => ex.exerciseId),
   )!;
   const programDay = useProgram((state) => state.day);
-  const exercises = useMyExercises();
+  const exercises = useExercises((state) => state.exercises);
   if (!dayExercisesIds || !programDay || !exercises) return <Loading />;
 
   const columns: ColumnDef<Exercises[0]>[] = [

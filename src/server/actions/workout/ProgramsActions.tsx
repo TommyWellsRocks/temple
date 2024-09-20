@@ -7,6 +7,10 @@ import {
   getMyProgram,
 } from "~/server/db/queries/workout/program";
 
+export async function handleGetProgram(userId: string, programId: number) {
+  return await getMyProgram(userId, programId);
+}
+
 export async function handleCreateProgram(
   userId: string,
   name: string,
@@ -14,10 +18,6 @@ export async function handleCreateProgram(
   endDate: Date,
 ) {
   return await createWorkoutProgram(userId, name, startDate, endDate);
-}
-
-export async function handleGetProgram(userId: string, programId: number) {
-  return await getMyProgram(userId, programId);
 }
 
 export async function handleUpdateProgram(

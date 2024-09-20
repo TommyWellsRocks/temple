@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "~/hooks/common/useUser";
-import { useMyExercises } from "~/hooks/workout/useExercises";
+import { useExercises } from "~/hooks/workout/useExercises";
 import { formSchema, useFormSetup } from "./useFormSetup";
 
 import { z } from "zod";
@@ -24,7 +24,9 @@ import Loading from "~/app/loading";
 
 export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
   const userId = useUser((state) => state.userId);
-  const exercise = useMyExercises()?.find((ex) => ex.id === exerciseId);
+  const exercise = useExercises((state) => state.exercises).find(
+    (ex) => ex.id === exerciseId,
+  );
   const form = useFormSetup();
 
   if (!userId) return <Loading />;
