@@ -5,7 +5,6 @@ import { useExercises } from "~/hooks/workout/useExercises";
 import { formSchema, useFormSetup } from "./useFormSetup";
 
 import { z } from "zod";
-import { handleEditUserExercise } from "~/server/actions/workout/UserExerciseActions";
 import {
   equipment,
   muscles,
@@ -21,6 +20,7 @@ import Loading from "~/app/loading";
 
 export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
   const createUserExercise = useExercises.getState().createUserExercise;
+  const updateUserExercise = useExercises.getState().updateUserExercise;
   const userId = useUser((state) => state.userId);
   const exercise = useExercises((state) => state.exercises).find(
     (ex) => ex.id === exerciseId,
@@ -49,7 +49,7 @@ export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
       ? (values.secondaryMuscles as TitleCaseMuscle[])
       : null;
     if (exercise) {
-      handleEditUserExercise(
+      updateUserExercise(
         userId,
         exercise.id,
         values.name,

@@ -7,6 +7,7 @@ import { getFakeId } from "~/utils/helpers";
 import {
   handleCreateUserExercise,
   handleDeleteUserExercise,
+  handleEditUserExercise,
 } from "~/server/actions/workout/UserExerciseActions";
 
 import type { Exercises } from "~/server/types";
@@ -17,6 +18,14 @@ export interface exercisesState {
   setExercises: (exercises: Exercises) => void;
   createUserExercise: (
     userId: string,
+    name: string,
+    equipment: TitleCaseEquipment[] | null,
+    primaryMuscle: TitleCaseMuscle | null,
+    secondaryMuscles: TitleCaseMuscle[] | null,
+  ) => void;
+  updateUserExercise: (
+    userId: string,
+    exerciseId: number,
     name: string,
     equipment: TitleCaseEquipment[] | null,
     primaryMuscle: TitleCaseMuscle | null,
@@ -81,6 +90,59 @@ export const useExercises = create<exercisesState>((set, get) => ({
         ...state,
         exercises: actualExercises,
       }));
+    } catch (error) {
+      // Else Fallback Update
+      console.error(error);
+      set((state) => ({
+        ...state,
+        exercises: fallbackExercises,
+      }));
+    }
+  },
+
+  updateUserExercise: async (
+    userId,
+    exerciseId,
+    name,
+    equipment,
+    primaryMuscle,
+    secondaryMuscles,
+  ) => {
+    // Failsafe
+    const fallbackExercises = get().exercises;
+    const fallbackExercise = fallbackExercises.find(
+      (ex) => ex.id === exerciseId,
+    );
+    if (!fallbackExercise) return;
+
+    // Optimistic Update
+    const optimisticExercise = {
+      ...fallbackExercise,
+      notes: [
+        {
+          name,
+        },
+      ],
+    };
+    const optimisticExercises = fallbackExercises.map((ex) =>
+      ex.id === exerciseId ? optimisticExercise : ex,
+    );
+
+    set((state) => ({
+      ...state,
+      exercises: optimisticExercises,
+    }));
+
+    // Actual Update
+    try {
+      await handleEditUserExercise(
+        userId,
+        exerciseId,
+        name,
+        equipment,
+        primaryMuscle,
+        secondaryMuscles,
+      );
     } catch (error) {
       // Else Fallback Update
       console.error(error);

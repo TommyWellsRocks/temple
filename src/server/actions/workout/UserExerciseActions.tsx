@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import {
   createUserExercise,
   deleteUserExercise,
@@ -25,13 +24,6 @@ export async function handleCreateUserExercise(
   );
 }
 
-export async function handleDeleteUserExercise(
-  userId: string,
-  exerciseId: number,
-) {
-  await deleteUserExercise(userId, exerciseId);
-}
-
 export async function handleEditUserExercise(
   userId: string,
   exerciseId: number,
@@ -48,5 +40,11 @@ export async function handleEditUserExercise(
     primaryMuscle,
     secondaryMuscles,
   );
-  revalidatePath("/workout");
+}
+
+export async function handleDeleteUserExercise(
+  userId: string,
+  exerciseId: number,
+) {
+  await deleteUserExercise(userId, exerciseId);
 }
