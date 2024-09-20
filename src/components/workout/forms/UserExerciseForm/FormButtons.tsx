@@ -1,4 +1,4 @@
-import { handleDeleteUserExercise } from "~/server/actions/workout/UserExerciseActions";
+import { useExercises } from "~/hooks/workout/useExercises";
 
 import { DialogFooter } from "~/components/ui/dialog";
 import { CreateButton } from "../CreateButton";
@@ -14,6 +14,8 @@ export function FormButtons({
   userId: string;
   exercise?: Exercises[0];
 }) {
+  const deleteUserExercise = useExercises.getState().deleteUserExercise;
+
   return (
     <DialogFooter>
       {!exercise ? (
@@ -21,9 +23,7 @@ export function FormButtons({
       ) : (
         <div className="flex justify-between">
           <DeleteButton
-            onClick={() => {
-              handleDeleteUserExercise(userId, exercise.id);
-            }}
+            onClick={() => deleteUserExercise(userId, exercise.id)}
           />
           <SaveButton />
         </div>

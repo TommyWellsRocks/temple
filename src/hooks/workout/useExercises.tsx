@@ -4,10 +4,13 @@ import { useEffect } from "react";
 
 import { create } from "zustand";
 import { getFakeId } from "~/utils/helpers";
+import {
+  handleCreateUserExercise,
+  handleDeleteUserExercise,
+} from "~/server/actions/workout/UserExerciseActions";
 
 import type { Exercises } from "~/server/types";
 import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
-import { handleCreateUserExercise } from "~/server/actions/workout/UserExerciseActions";
 
 export interface exercisesState {
   exercises: Exercises;
@@ -19,6 +22,7 @@ export interface exercisesState {
     primaryMuscle: TitleCaseMuscle | null,
     secondaryMuscles: TitleCaseMuscle[] | null,
   ) => void;
+  deleteUserExercise: (userId: string, exerciseId: number) => void;
 }
 
 export const useExercises = create<exercisesState>((set, get) => ({
@@ -77,6 +81,35 @@ export const useExercises = create<exercisesState>((set, get) => ({
         ...state,
         exercises: actualExercises,
       }));
+    } catch (error) {
+      // Else Fallback Update
+      console.error(error);
+      set((state) => ({
+        ...state,
+        exercises: fallbackExercises,
+      }));
+    }
+  },
+
+  deleteUserExercise: async (userId, exerciseId) => {
+    // Failsafe
+    const fallbackExercises = get().exercises;
+
+    // Optimistic Update
+    const optimisticExercises = [...fallbackExercises];
+    const badEggIndex = optimisticExercises.findIndex(
+      (ex) => ex.id === exerciseId,
+    );
+    optimisticExercises.splice(badEggIndex, 1);
+
+    set((state) => ({
+      ...state,
+      exercises: optimisticExercises,
+    }));
+
+    // Actual Update
+    try {
+      await handleDeleteUserExercise(userId, exerciseId);
     } catch (error) {
       // Else Fallback Update
       console.error(error);

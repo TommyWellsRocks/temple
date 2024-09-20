@@ -30,7 +30,6 @@ export async function handleDeleteUserExercise(
   exerciseId: number,
 ) {
   await deleteUserExercise(userId, exerciseId);
-  revalidatePath("/workout");
 }
 
 export async function handleEditUserExercise(
