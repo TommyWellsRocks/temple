@@ -27,10 +27,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { toTitleCase } from "~/utils/helpers";
-import {
-  handleAddExercise,
-  handleDeleteExercise,
-} from "~/server/actions/workout/DayActions";
+import { handleDeleteExercise } from "~/server/actions/workout/DayActions";
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { useExercises } from "~/hooks/workout/useExercises";
 import { AddButtonOverlay } from "../../AddButtonOverlay";
@@ -52,6 +49,7 @@ export function DataTable() {
     state.day?.dayExercises.map((ex) => ex.exerciseId),
   )!;
   const programDay = useProgram((state) => state.day);
+  const addExercise = useProgram.getState().addExercise;
   const exercises = useExercises((state) => state.exercises);
   if (!dayExercisesIds || !programDay || !exercises) return <Loading />;
 
@@ -65,12 +63,13 @@ export function DataTable() {
             row.toggleSelected(!!isChecked);
 
             if (isChecked) {
-              handleAddExercise(
+              addExercise(
                 programDay.userId,
                 programDay.programId,
                 programDay.groupId,
                 programDay.id,
                 row.original.id,
+                exercises
               );
             } else {
               handleDeleteExercise(

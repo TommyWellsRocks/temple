@@ -11,6 +11,7 @@ import type {
   ProgramDay,
   DayExercise,
   WorkoutPrograms,
+  Exercises,
 } from "~/server/types";
 
 // * NOTE: PROGRAM IS THE PARENT. DAY AND EXERCISE ARE COPIES OF ITEMS WITHIN PROGRAM. NOT REFERENCES.
@@ -59,6 +60,14 @@ export interface ProgramState {
   // Day
   day: null | ProgramDay;
   setDay: (dayId: number) => void;
+  addExercise: (
+    userId: string,
+    programId: number,
+    groupId: number,
+    dayId: number,
+    exerciseId: number,
+    exercises: Exercises
+  ) => void;
 
   // Exercise
   dayExercise: null | DayExercise;

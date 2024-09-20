@@ -29,6 +29,37 @@ export async function getExerciseHistory(
   });
 }
 
+export async function getDayExercise(userId: string, dayExerciseId: number) {
+  return await db.query.workoutDayExercises.findFirst({
+    where: (model, { and, eq }) =>
+      and(eq(model.userId, userId), eq(model.id, dayExerciseId)),
+    columns: {
+      id: true,
+      userId: true,
+      programId: true,
+      dayId: true,
+      reps: true,
+      weight: true,
+      updatedAt: true,
+      exerciseId: true,
+      loggedSetsCount: true,
+    },
+    with: {
+      info: {
+        columns: {
+          id: true,
+          name: true,
+          video: true,
+          equipment: true,
+          primaryMuscle: true,
+          secondaryMuscles: true,
+        },
+      },
+      notes: { columns: { id: true, name: true, notes: true } },
+    },
+  });
+}
+
 export async function addDayExercise(
   userId: string,
   programId: number,
@@ -43,15 +74,19 @@ export async function addDayExercise(
     orderBy: (model, { desc }) => desc(model.updatedAt),
   });
 
-  await db.insert(workoutDayExercises).values({
-    userId,
-    programId,
-    groupId,
-    dayId,
-    exerciseId,
-    reps: last?.reps ?? [0, 0, 0, 0],
-    weight: last?.weight ?? [0, 0, 0, 0],
-  });
+  const newEx = await db
+    .insert(workoutDayExercises)
+    .values({
+      userId,
+      programId,
+      groupId,
+      dayId,
+      exerciseId,
+      reps: last?.reps ?? [0, 0, 0, 0],
+      weight: last?.weight ?? [0, 0, 0, 0],
+    })
+    .returning({ id: workoutDayExercises.id });
+  return newEx[0]!;
 }
 
 export async function deleteDayExercise(userId: string, dayExerciseId: number) {

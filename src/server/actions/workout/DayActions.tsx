@@ -5,8 +5,13 @@ import { endWorkout, startWorkout } from "~/server/db/queries/workout/day";
 import {
   addDayExercise,
   deleteDayExercise,
+  getDayExercise,
 } from "~/server/db/queries/workout/dayExercises";
 import { editUserExerciseName } from "~/server/db/queries/workout/exercises";
+
+export async function handleGetExercise(userId: string, dayExerciseId: number) {
+  return await getDayExercise(userId, dayExerciseId);
+}
 
 export async function handleAddExercise(
   userId: string,
@@ -15,8 +20,7 @@ export async function handleAddExercise(
   dayId: number,
   exerciseId: number,
 ) {
-  await addDayExercise(userId, programId, groupId, dayId, exerciseId);
-  revalidatePath(`/workout/${programId}`);
+  return await addDayExercise(userId, programId, groupId, dayId, exerciseId);
 }
 
 export async function handleEditExerciseName(
