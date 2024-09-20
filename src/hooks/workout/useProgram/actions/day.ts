@@ -14,7 +14,6 @@ import {
 } from "~/server/actions/workout/DayActions";
 
 import type { Exercises } from "~/server/types";
-import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
 
 export function dayActions(
   set: {
@@ -393,8 +392,10 @@ export function dayActions(
   };
 }
 
-export function setDay(dayId: number) {
+export function SetDay({ dayId }: { dayId: number }) {
   const setDay = useProgram.getState().setDay;
 
   useEffect(() => setDay(dayId), [dayId]);
+
+  return null;
 }
