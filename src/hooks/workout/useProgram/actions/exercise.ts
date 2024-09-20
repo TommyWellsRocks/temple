@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 
+import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActions";
 import { useProgram, type ProgramState } from "../useProgram";
-import { DayExercise } from "~/server/types";
+
+import type { DayExercise } from "~/server/types";
 
 export function exerciseActions(
   set: {
@@ -23,7 +25,6 @@ export function exerciseActions(
 ) {
   return {
     dayExercise: null,
-
     setDayExercise: (dayExerciseId: number) => {
       set((state) => ({
         ...state,
@@ -31,6 +32,67 @@ export function exerciseActions(
           (ex) => ex.id === dayExerciseId,
         ),
       }));
+    },
+
+    updateExerciseVolume: async (
+      programId: number,
+      dayId: number,
+      dayExerciseId: number,
+      userId: string,
+      reps: number[],
+      weight: number[],
+    ) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      const fallbackDay = get().day;
+      const fallbackExercise = get().dayExercise;
+      if (!fallbackProgram || !fallbackDay || !fallbackExercise) return;
+
+      // Optimistic Update
+      const optimisticExercise = {
+        ...fallbackExercise,
+        reps,
+        weight,
+      };
+      const optimisticDay = {
+        ...fallbackDay,
+        dayExercises: fallbackDay.dayExercises.map((ex) =>
+          ex.id === dayExerciseId ? optimisticExercise : ex,
+        ),
+      };
+      const optimisticProgram = {
+        ...fallbackProgram,
+        programDays: fallbackProgram.programDays.map((day) =>
+          day.id === dayId ? optimisticDay : day,
+        ),
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+        day: optimisticDay,
+        dayExercise: optimisticExercise,
+      }));
+
+      // Actual Update
+      try {
+        await handleExerciseVolumeInput(dayExerciseId, userId, reps, weight);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+          day: fallbackDay,
+          dayExercise: fallbackExercise,
+        }));
+      }
     },
 
     updateDayExercise: (dayEx: DayExercise) =>

@@ -1,6 +1,5 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import { handleExerciseVolumeInput } from "~/server/actions/workout/ExerciseActions";
 import { isFloat } from "~/utils/helpers";
 
 import type { DayExercise } from "~/server/types";
@@ -29,7 +28,7 @@ function handleOnBlur(
   index: number,
   dayEx: DayExercise,
 ) {
-  const handleInputChange = useProgram.getState().updateDayExercise;
+  const updateVolume = useProgram.getState().updateExerciseVolume;
   if (!dayEx) return <Loading />;
 
   // Input Actions
@@ -60,8 +59,14 @@ function handleOnBlur(
       }
     }
     // Update State
-    handleInputChange(dayEx);
-    handleExerciseVolumeInput(dayEx.id, dayEx.userId, dayEx.reps, dayEx.weight);
+    updateVolume(
+      dayEx.programId,
+      dayEx.dayId,
+      dayEx.id,
+      dayEx.userId,
+      dayEx.reps,
+      dayEx.weight,
+    );
   }
 }
 
