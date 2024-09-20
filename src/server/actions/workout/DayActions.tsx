@@ -41,15 +41,13 @@ export async function handleDeleteExercise(
 export async function handleStartWorkout(
   userId: string,
   dayId: number,
-  startedWorkout: Date,
 ) {
-  await startWorkout(userId, dayId, startedWorkout);
+  await startWorkout(userId, dayId);
 }
 
 export async function handleEndWorkout(
   userId: string,
   dayId: number,
-  endedWorkout: Date,
 ) {
-  await endWorkout(userId, dayId, endedWorkout);
+  await endWorkout(userId, dayId);
 }

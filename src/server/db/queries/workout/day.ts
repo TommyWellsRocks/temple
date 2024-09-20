@@ -90,14 +90,10 @@ export async function deleteProgramDay(
     );
 }
 
-export async function startWorkout(
-  userId: string,
-  dayId: number,
-  startedWorkout: Date,
-) {
+export async function startWorkout(userId: string, dayId: number) {
   await db
     .update(workoutProgramDays)
-    .set({ startedWorkout })
+    .set({ startedWorkout: new Date() })
     .where(
       and(
         eq(workoutProgramDays.userId, userId),
@@ -106,14 +102,10 @@ export async function startWorkout(
     );
 }
 
-export async function endWorkout(
-  userId: string,
-  dayId: number,
-  endedWorkout: Date,
-) {
+export async function endWorkout(userId: string, dayId: number) {
   await db
     .update(workoutProgramDays)
-    .set({ endedWorkout })
+    .set({ endedWorkout: new Date() })
     .where(
       and(
         eq(workoutProgramDays.userId, userId),

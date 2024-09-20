@@ -16,6 +16,7 @@ import type {
 
 // * NOTE: PROGRAM IS THE PARENT. DAY AND EXERCISE ARE COPIES OF ITEMS WITHIN PROGRAM. NOT REFERENCES.
 // * SO WHENEVER YOU UPDATE AN ITEM, UPDATE THE PARENT.
+// ! CURRENTLY EACH CATEGORY ONLY UPDATES ITSELF AND IT'S PARENT ONLY ie: deleteExercise won't work right if delete while on exercise
 
 export interface ProgramState {
   // Programs
@@ -82,6 +83,7 @@ export interface ProgramState {
     newName: string,
     noteId?: number,
   ) => void;
+  startWorkout: (userId: string, programId: number, dayId: number) => void;
 
   // Exercise
   dayExercise: null | DayExercise;
