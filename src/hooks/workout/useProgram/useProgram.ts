@@ -97,6 +97,15 @@ export interface ProgramState {
     reps: number[],
     weight: number[],
   ) => void;
+  updateExerciseSets: (
+    programId: number,
+    dayId: number,
+    dayExerciseId: number,
+    userId: string,
+    reps: number[],
+    weight: number[],
+    loggedSetsCount: number,
+  ) => void;
   updateDayExercise: (dayEx: DayExercise) => void;
 }
 

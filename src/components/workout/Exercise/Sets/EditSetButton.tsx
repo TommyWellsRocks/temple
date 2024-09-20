@@ -1,13 +1,11 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import { handleExerciseSetsChange } from "~/server/actions/workout/ExerciseActions";
-
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { Minus, Plus } from "lucide-react";
 import Loading from "~/app/loading";
 
 export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
-  const setDayExSets = useProgram().updateDayExercise;
+  const updateExerciseSets = useProgram.getState().updateExerciseSets;
   const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return <Loading />;
 
@@ -29,8 +27,9 @@ export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
           }
         }
 
-        setDayExSets(dayEx);
-        handleExerciseSetsChange(
+        updateExerciseSets(
+          dayEx.programId,
+          dayEx.dayId,
           dayEx.id,
           dayEx.userId,
           dayEx.reps,
