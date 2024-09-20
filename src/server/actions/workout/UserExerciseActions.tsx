@@ -16,14 +16,13 @@ export async function handleCreateUserExercise(
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
-  await createUserExercise(
+  return await createUserExercise(
     userId,
     name,
     equipment,
     primaryMuscle,
     secondaryMuscles,
   );
-  revalidatePath("/workout");
 }
 
 export async function handleDeleteUserExercise(

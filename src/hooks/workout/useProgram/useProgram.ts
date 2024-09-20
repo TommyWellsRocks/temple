@@ -13,6 +13,7 @@ import type {
   WorkoutPrograms,
   Exercises,
 } from "~/server/types";
+import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
 
 // * NOTE: PROGRAM IS THE PARENT. DAY AND EXERCISE ARE COPIES OF ITEMS WITHIN PROGRAM. NOT REFERENCES.
 // * SO WHENEVER YOU UPDATE AN ITEM, UPDATE THE PARENT.

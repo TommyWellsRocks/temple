@@ -27,9 +27,11 @@ export async function createUserExercise(
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
-  await db
+  const newUserCreatedExercise = await db
     .insert(exercises)
-    .values({ userId, name, equipment, primaryMuscle, secondaryMuscles });
+    .values({ userId, name, equipment, primaryMuscle, secondaryMuscles })
+    .returning({ id: exercises.id });
+  return newUserCreatedExercise[0]!;
 }
 
 export async function editUserExercise(

@@ -14,6 +14,7 @@ import {
 } from "~/server/actions/workout/DayActions";
 
 import type { Exercises } from "~/server/types";
+import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
 
 export function dayActions(
   set: {
