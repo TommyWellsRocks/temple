@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { endWorkout, startWorkout } from "~/server/db/queries/workout/day";
 import {
   addDayExercise,
@@ -25,7 +24,6 @@ export async function handleAddExercise(
 
 export async function handleEditExerciseName(
   userId: string,
-  programId: number,
   exerciseId: number,
   newName: string,
   noteId?: number,
@@ -35,11 +33,9 @@ export async function handleEditExerciseName(
 
 export async function handleDeleteExercise(
   userId: string,
-  programId: number,
   dayExerciseId: number,
 ) {
   await deleteDayExercise(userId, dayExerciseId);
-  revalidatePath(`/workout/${programId}`);
 }
 
 export async function handleStartWorkout(

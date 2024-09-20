@@ -68,6 +68,12 @@ export interface ProgramState {
     exerciseId: number,
     exercises: Exercises,
   ) => void;
+  deleteExercise: (
+    userId: string,
+    programId: number,
+    dayId: number,
+    dayExerciseId: number,
+  ) => void;
   updateExerciseName: (
     userId: string,
     programId: number,

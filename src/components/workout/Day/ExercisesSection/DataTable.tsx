@@ -1,5 +1,8 @@
 "use client";
 
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+import { useExercises } from "~/hooks/workout/useExercises";
+
 import * as React from "react";
 import {
   type ColumnDef,
@@ -27,14 +30,11 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { toTitleCase } from "~/utils/helpers";
-import { handleDeleteExercise } from "~/server/actions/workout/DayActions";
-import { useProgram } from "~/hooks/workout/useProgram/useProgram";
-import { useExercises } from "~/hooks/workout/useExercises";
 import { AddButtonOverlay } from "../../AddButtonOverlay";
 import { UserExerciseForm } from "../../forms/UserExerciseForm/UserExerciseForm";
+import Loading from "~/app/loading";
 
 import type { Exercises } from "~/server/types";
-import Loading from "~/app/loading";
 
 export function DataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -50,6 +50,7 @@ export function DataTable() {
   )!;
   const programDay = useProgram((state) => state.day);
   const addExercise = useProgram.getState().addExercise;
+  const deleteExercise = useProgram.getState().deleteExercise;
   const exercises = useExercises((state) => state.exercises);
   if (!dayExercisesIds || !programDay || !exercises) return <Loading />;
 
@@ -69,15 +70,17 @@ export function DataTable() {
                 programDay.groupId,
                 programDay.id,
                 row.original.id,
-                exercises
+                exercises,
               );
             } else {
-              handleDeleteExercise(
+              const dayExId = programDay.dayExercises.find(
+                (ex) => ex.info.id === row.original.id,
+              )!.id;
+              deleteExercise(
                 programDay.userId,
                 programDay.programId,
-                programDay.dayExercises.find(
-                  (ex) => ex.info.id === row.original.id,
-                )!.id,
+                programDay.id,
+                dayExId,
               );
             }
           }}

@@ -25,14 +25,18 @@ export function ExerciseForm({
   const form = useFormSetup();
   if (!dayExercise || !userId) return <Loading />;
 
+  const dayId = dayExercise.dayId;
+  const exerciseId = dayExercise.info.id;
+  const noteId = dayExercise.notes?.id;
+
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     updateExerciseName(
       userId,
       programId,
-      dayExercise.dayId,
-      dayExercise.info.id,
+      dayId,
+      exerciseId,
       values.name,
-      dayExercise.notes?.id,
+      noteId,
     );
   };
 
@@ -49,6 +53,7 @@ export function ExerciseForm({
         <FormButtons
           userId={userId}
           programId={programId}
+          dayId={dayId}
           dayExerciseId={dayExercise.id}
         />
       </form>

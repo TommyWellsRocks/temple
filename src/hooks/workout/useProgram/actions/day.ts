@@ -6,6 +6,7 @@ import { useProgram, type ProgramState } from "../useProgram";
 import { genRandomInt, getFakeId } from "~/utils/helpers";
 import {
   handleAddExercise,
+  handleDeleteExercise,
   handleEditExerciseName,
   handleGetExercise,
 } from "~/server/actions/workout/DayActions";
@@ -150,6 +151,60 @@ export function dayActions(
       }
     },
 
+    deleteExercise: async (
+      userId: string,
+      programId: number,
+      dayId: number,
+      dayExerciseId: number,
+    ) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      const fallbackDay = get().day;
+      if (!fallbackProgram || !fallbackDay) return;
+
+      // Optimistic Update
+      const badEggIndex = fallbackDay.dayExercises.findIndex(
+        (dayEx) => dayEx.id === dayExerciseId,
+      );
+      const optimisticExercises = [...fallbackDay.dayExercises];
+      optimisticExercises.splice(badEggIndex, 1);
+      const optimisticDay = {
+        ...fallbackDay,
+        dayExercises: optimisticExercises,
+      };
+      const optimisticProgram = {
+        ...fallbackProgram,
+        programDays: fallbackProgram.programDays.map((day) =>
+          day.id === dayId ? optimisticDay : day,
+        ),
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+        day: optimisticDay,
+      }));
+
+      // Actual Update
+      try {
+        await handleDeleteExercise(userId, dayExerciseId);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+          day: fallbackDay,
+        }));
+      }
+    },
+
     updateExerciseName: async (
       userId: string,
       programId: number,
@@ -203,7 +258,6 @@ export function dayActions(
       try {
         const { id: realNoteId } = await handleEditExerciseName(
           userId,
-          programId,
           exerciseId,
           newName,
           noteId,
