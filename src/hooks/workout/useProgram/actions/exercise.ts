@@ -24,20 +24,13 @@ export function exerciseActions(
   return {
     dayExercise: null,
 
-    setDayExercise: (dayId: number, dayExerciseId: number) => {
-      set((state) => {
-        if (!state.program) return state;
-
-        const day = state.program.programDays.find((day) => day.id === dayId);
-
-        if (!day) return state;
-
-        const dayExercise = day.dayExercises.find(
+    setDayExercise: (dayExerciseId: number) => {
+      set((state) => ({
+        ...state,
+        dayExercise: state.day?.dayExercises.find(
           (ex) => ex.id === dayExerciseId,
-        );
-
-        return { ...state, dayExercise };
-      });
+        ),
+      }));
     },
 
     updateDayExercise: (dayEx: DayExercise) =>
@@ -83,8 +76,10 @@ export function exerciseActions(
   };
 }
 
-export function setDayExercise(dayId: number, dayExerciseId: number) {
+export function SetDayExercise({ dayExerciseId }: { dayExerciseId: number }) {
   const setDayEx = useProgram.getState().setDayExercise;
 
-  useEffect(() => setDayEx(dayId, dayExerciseId), [dayId, dayExerciseId]);
+  useEffect(() => setDayEx(dayExerciseId), [dayExerciseId, setDayEx]);
+
+  return null;
 }

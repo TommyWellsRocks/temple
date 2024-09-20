@@ -1,4 +1,6 @@
 import { ExHistoryProvider } from "~/hooks/workout/useExerciseHistory";
+import { SetDayExercise } from "~/hooks/workout/useProgram/actions/exercise";
+
 import {
   getExerciseHistory,
   getExerciseIdFromDay,
@@ -21,6 +23,7 @@ export default async function ExerciseLayout({
   );
   return (
     <ExHistoryProvider exHistory={exerciseHistory}>
+      <SetDayExercise dayExerciseId={Number(params.dayExerciseId)} />
       {children}
     </ExHistoryProvider>
   );

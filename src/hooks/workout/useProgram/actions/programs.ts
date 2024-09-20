@@ -156,9 +156,7 @@ export function programsActions(
 export function SetPrograms({ programs }: { programs: WorkoutPrograms }) {
   const setPrograms = useProgram.getState().setPrograms;
 
-  useEffect(() => {
-    setPrograms(programs);
-  }, [programs, setPrograms]);
+  useEffect(() => setPrograms(programs), [programs, setPrograms]);
 
   return null;
 }

@@ -89,7 +89,7 @@ export interface ProgramState {
 
   // Exercise
   dayExercise: null | DayExercise;
-  setDayExercise: (dayId: number, dayExerciseId: number) => void;
+  setDayExercise: (dayExerciseId: number) => void;
   updateDayExercise: (dayEx: DayExercise) => void;
 }
 
