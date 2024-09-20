@@ -8,6 +8,7 @@ import {
   handleAddExercise,
   handleDeleteExercise,
   handleEditExerciseName,
+  handleEndWorkout,
   handleGetExercise,
   handleStartWorkout,
 } from "~/server/actions/workout/DayActions";
@@ -333,6 +334,50 @@ export function dayActions(
       // Actual Update
       try {
         await handleStartWorkout(userId, dayId);
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+          day: fallbackDay,
+        }));
+      }
+    },
+
+    endWorkout: async (userId: string, programId: number, dayId: number) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      const fallbackDay = get().day;
+      if (!fallbackProgram || !fallbackDay) return;
+
+      // Optimistic Update
+      const optimisticDay = {
+        ...fallbackDay,
+        endedWorkout: new Date(),
+      };
+      const optimisticProgram = {
+        ...fallbackProgram,
+        programDays: fallbackProgram.programDays.map((day) =>
+          day.id === dayId ? optimisticDay : day,
+        ),
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+        day: optimisticDay,
+      }));
+
+      // Actual Update
+      try {
+        await handleEndWorkout(userId, dayId);
       } catch (error) {
         // Else Fallback Update
         console.error(error);

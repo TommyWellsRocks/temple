@@ -84,6 +84,7 @@ export interface ProgramState {
     noteId?: number,
   ) => void;
   startWorkout: (userId: string, programId: number, dayId: number) => void;
+  endWorkout: (userId: string, programId: number, dayId: number) => void;
 
   // Exercise
   dayExercise: null | DayExercise;
