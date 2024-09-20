@@ -113,6 +113,15 @@ export interface ProgramState {
     userId: string,
     loggedSetsCount: number,
   ) => void;
+  updateExerciseNote: (
+    userId: string,
+    programId: number,
+    dayId: number,
+    dayExerciseId: number,
+    exerciseId: number,
+    noteValue: string,
+    noteId?: number,
+  ) => void;
   updateDayExercise: (dayEx: DayExercise) => void;
 }
 

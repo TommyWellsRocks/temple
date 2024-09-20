@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 
-import { handleExerciseNoteInput } from "~/server/actions/workout/ExerciseActions";
 import Loading from "~/app/loading";
 import { Button } from "~/components/ui/button";
 
@@ -15,7 +14,7 @@ export function NotesTab() {
 export function NotesTabContent() {
   const dayEx = useProgram((state) => state.dayExercise);
   const dayExNote = useProgram((state) => state.dayExercise?.notes?.notes);
-  const updateDayEx = useProgram.getState().updateDayExercise;
+  const updateNote = useProgram.getState().updateExerciseNote;
   const [noteValue, setNoteValue] = useState("");
 
   const emptyDefaultText =
@@ -39,18 +38,17 @@ export function NotesTabContent() {
           <Button
             variant="outline"
             className="absolute bottom-1 right-1"
-            onClick={() => {
-              if (dayExNote) {
-                dayEx.notes.notes = noteValue;
-                updateDayEx(dayEx);
-              }
-              handleExerciseNoteInput(
+            onClick={() =>
+              updateNote(
                 dayEx.userId,
+                dayEx.programId,
+                dayEx.dayId,
+                dayEx.id,
                 dayEx.exerciseId,
                 noteValue,
-                dayEx.notes?.id ? dayEx.notes?.id : undefined,
-              );
-            }}
+                dayEx.notes?.id,
+              )
+            }
           >
             Save
           </Button>
