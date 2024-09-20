@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import {
   handleExerciseSetsChange,
   handleExerciseVolumeInput,
+  handleUpdateLoggedSets,
 } from "~/server/actions/workout/ExerciseActions";
 import { useProgram, type ProgramState } from "../useProgram";
 
@@ -154,6 +155,65 @@ export function exerciseActions(
           weight,
           loggedSetsCount,
         );
+      } catch (error) {
+        // Else Fallback Update
+        console.error(error);
+        set((state) => ({
+          ...state,
+          programs: fallbackPrograms,
+          program: fallbackProgram,
+          day: fallbackDay,
+          dayExercise: fallbackExercise,
+        }));
+      }
+    },
+
+    updateExerciseLoggedSets: async (
+      programId: number,
+      dayId: number,
+      dayExerciseId: number,
+      userId: string,
+      loggedSetsCount: number,
+    ) => {
+      // Failsafe
+      const fallbackPrograms = get().programs;
+      const fallbackProgram = get().program;
+      const fallbackDay = get().day;
+      const fallbackExercise = get().dayExercise;
+      if (!fallbackProgram || !fallbackDay || !fallbackExercise) return;
+
+      // Optimistic Update
+      const optimisticExercise = {
+        ...fallbackExercise,
+        loggedSetsCount,
+      };
+      const optimisticDay = {
+        ...fallbackDay,
+        dayExercises: fallbackDay.dayExercises.map((ex) =>
+          ex.id === dayExerciseId ? optimisticExercise : ex,
+        ),
+      };
+      const optimisticProgram = {
+        ...fallbackProgram,
+        programDays: fallbackProgram.programDays.map((day) =>
+          day.id === dayId ? optimisticDay : day,
+        ),
+      };
+      const optimisticPrograms = fallbackPrograms.map((program) =>
+        program.id === programId ? optimisticProgram : program,
+      );
+
+      set((state) => ({
+        ...state,
+        programs: optimisticPrograms,
+        program: optimisticProgram,
+        day: optimisticDay,
+        dayExercise: optimisticExercise,
+      }));
+
+      // Actual Update
+      try {
+        await handleUpdateLoggedSets(dayExerciseId, userId, loggedSetsCount);
       } catch (error) {
         // Else Fallback Update
         console.error(error);

@@ -33,6 +33,14 @@ export async function handleExerciseSetsChange(
   );
 }
 
+export async function handleUpdateLoggedSets(
+  dayExerciseId: number,
+  userId: string,
+  loggedSetsCount: number,
+) {
+  await updateLoggedSets(dayExerciseId, userId, loggedSetsCount);
+}
+
 export async function handleExerciseNoteInput(
   userId: string,
   exerciseId: number,
@@ -41,12 +49,4 @@ export async function handleExerciseNoteInput(
 ) {
   await editUserExerciseNote(userId, exerciseId, noteValue, noteId);
   if (noteId) revalidatePath("/workout");
-}
-
-export async function handleUpdateLoggedSets(
-  dayExerciseId: number,
-  userId: string,
-  loggedSetsCount: number,
-) {
-  await updateLoggedSets(dayExerciseId, userId, loggedSetsCount);
 }

@@ -1,14 +1,12 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import { handleUpdateLoggedSets } from "~/server/actions/workout/ExerciseActions";
-
 import { Button } from "~/components/ui/button";
 import { CheckCheck } from "lucide-react";
 import Loading from "~/app/loading";
 
 export function LogSetsButtons() {
   const dayEx = useProgram((state) => state.dayExercise);
-  const setLoggedSets = useProgram().updateDayExercise;
+  const updateLoggedSets = useProgram.getState().updateExerciseLoggedSets;
   if (!dayEx) return <Loading />;
 
   return (
@@ -18,8 +16,13 @@ export function LogSetsButtons() {
         className="w-full"
         onClick={() => {
           dayEx.loggedSetsCount++;
-          setLoggedSets(dayEx);
-          handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
+          updateLoggedSets(
+            dayEx.programId,
+            dayEx.dayId,
+            dayEx.id,
+            dayEx.userId,
+            dayEx.loggedSetsCount,
+          );
         }}
       >
         Log Set
@@ -30,8 +33,13 @@ export function LogSetsButtons() {
         variant={"outline"}
         onClick={() => {
           dayEx.loggedSetsCount = dayEx.reps.length;
-          setLoggedSets(dayEx);
-          handleUpdateLoggedSets(dayEx.id, dayEx.userId, dayEx.loggedSetsCount);
+          updateLoggedSets(
+            dayEx.programId,
+            dayEx.dayId,
+            dayEx.id,
+            dayEx.userId,
+            dayEx.loggedSetsCount,
+          );
         }}
       >
         <CheckCheck />
