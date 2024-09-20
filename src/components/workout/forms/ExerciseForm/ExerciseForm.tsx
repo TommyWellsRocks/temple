@@ -1,10 +1,10 @@
 "use client";
 
 import { useUser } from "~/hooks/common/useUser";
+import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { formSchema, useFormSetup } from "./useFormSetup";
 
 import { z } from "zod";
-import { handleEditExerciseName } from "~/server/actions/workout/DayActions";
 
 import { Form } from "~/components/ui/form";
 import { FormButtons } from "./FormButtons";
@@ -21,13 +21,15 @@ export function ExerciseForm({
   dayExercise: DayExercise;
 }) {
   const userId = useUser((state) => state.userId);
+  const updateExerciseName = useProgram.getState().updateExerciseName;
   const form = useFormSetup();
   if (!dayExercise || !userId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    handleEditExerciseName(
+    updateExerciseName(
       userId,
       programId,
+      dayExercise.dayId,
       dayExercise.info.id,
       values.name,
       dayExercise.notes?.id,

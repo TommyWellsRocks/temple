@@ -58,7 +58,7 @@ export async function editUserExerciseName(
   newName: string,
   noteId?: number,
 ) {
-  noteId
+  const newNote = noteId
     ? await db
         .update(exercise_notes)
         .set({ name: newName })
@@ -68,11 +68,16 @@ export async function editUserExerciseName(
             eq(exercise_notes.exerciseId, exerciseId),
           ),
         )
-    : await db.insert(exercise_notes).values({
-        userId,
-        exerciseId,
-        name: newName,
-      });
+        .returning({ id: exercise_notes.id })
+    : await db
+        .insert(exercise_notes)
+        .values({
+          userId,
+          exerciseId,
+          name: newName,
+        })
+        .returning({ id: exercise_notes.id });
+  return newNote[0]!;
 }
 
 export async function editUserExerciseNote(

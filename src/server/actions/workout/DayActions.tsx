@@ -30,8 +30,7 @@ export async function handleEditExerciseName(
   newName: string,
   noteId?: number,
 ) {
-  await editUserExerciseName(userId, exerciseId, newName, noteId);
-  revalidatePath(`/workout/${programId}`);
+  return await editUserExerciseName(userId, exerciseId, newName, noteId);
 }
 
 export async function handleDeleteExercise(

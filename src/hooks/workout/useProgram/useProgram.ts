@@ -66,7 +66,15 @@ export interface ProgramState {
     groupId: number,
     dayId: number,
     exerciseId: number,
-    exercises: Exercises
+    exercises: Exercises,
+  ) => void;
+  updateExerciseName: (
+    userId: string,
+    programId: number,
+    dayId: number,
+    exerciseId: number,
+    newName: string,
+    noteId?: number,
   ) => void;
 
   // Exercise
