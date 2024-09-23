@@ -14,6 +14,7 @@ import {
   handleGetWeekWithDays,
   handleUpdateDay,
 } from "~/server/actions/workout/ProgramActions";
+import { getChangedProgram, getChangedPrograms } from "../../helpers";
 
 export function programActions(
   set: {
@@ -72,8 +73,10 @@ export function programActions(
         ...fallbackProgram,
         programDays: [...fallbackProgram.programDays, optimisticDay],
       };
-      const optimisticPrograms = fallbackPrograms.map((program) =>
-        program.id === programId ? optimisticProgram : program,
+      const optimisticPrograms = getChangedPrograms(
+        fallbackPrograms,
+        programId,
+        optimisticProgram,
       );
 
       set((state) => ({
@@ -96,15 +99,15 @@ export function programActions(
         const realDay = await handleGetProgramDay(userId, realDayId);
         if (!realDay) throw "No realDay error";
 
-        const actualProgram = {
-          ...optimisticProgram,
-          programDays: optimisticProgram.programDays.map((day) =>
-            day.id === fakeId ? realDay : day,
-          ),
-        };
-
-        const actualPrograms = optimisticPrograms.map((program) =>
-          program.id === programId ? actualProgram : program,
+        const actualProgram = getChangedProgram(
+          optimisticProgram,
+          fakeId,
+          realDay,
+        );
+        const actualPrograms = getChangedPrograms(
+          optimisticPrograms,
+          programId,
+          actualProgram,
         );
 
         set((state) => ({
@@ -146,14 +149,15 @@ export function programActions(
         repeatOn: newRepeatOn,
         updatedAt: new Date(),
       };
-      const optimisticProgram = {
-        ...fallbackProgram,
-        programDays: fallbackProgram.programDays.map((day) =>
-          day.id === dayId ? optimisticDay : day,
-        ),
-      };
-      const optimisticPrograms = fallbackPrograms.map((program) =>
-        program.id === programId ? optimisticProgram : program,
+      const optimisticProgram = getChangedProgram(
+        fallbackProgram,
+        dayId,
+        optimisticDay,
+      );
+      const optimisticPrograms = getChangedPrograms(
+        fallbackPrograms,
+        programId,
+        optimisticProgram,
       );
 
       set((state) => ({
@@ -196,8 +200,10 @@ export function programActions(
         ...fallbackProgram,
         programDays: optimisticProgramDays,
       };
-      const optimisticPrograms = fallbackPrograms.map((program) =>
-        program.id === programId ? optimisticProgram : program,
+      const optimisticPrograms = getChangedPrograms(
+        fallbackPrograms,
+        programId,
+        optimisticProgram,
       );
 
       set((state) => ({
@@ -236,8 +242,10 @@ export function programActions(
         ...fallbackProgram,
         groups: optimisticProgramGroups,
       };
-      const optimisticPrograms = fallbackPrograms.map((program) =>
-        program.id === programId ? optimisticProgram : program,
+      const optimisticPrograms = getChangedPrograms(
+        fallbackPrograms,
+        programId,
+        optimisticProgram,
       );
 
       set((state) => ({
@@ -264,9 +272,10 @@ export function programActions(
             ...realGroup.groupDays,
           ],
         };
-
-        const actualPrograms = optimisticPrograms.map((program) =>
-          program.id === programId ? actualProgram : program,
+        const actualPrograms = getChangedPrograms(
+          optimisticPrograms,
+          programId,
+          actualProgram,
         );
 
         set((state) => ({
@@ -307,8 +316,10 @@ export function programActions(
         groups: optimisticGroups,
         programDays: optimisticProgramDays,
       };
-      const optimisticPrograms = fallbackPrograms.map((program) =>
-        program.id === programId ? optimisticProgram : program,
+      const optimisticPrograms = getChangedPrograms(
+        fallbackPrograms,
+        programId,
+        optimisticProgram,
       );
 
       set((state) => ({
