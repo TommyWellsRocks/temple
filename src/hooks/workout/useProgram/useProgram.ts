@@ -122,7 +122,6 @@ export interface ProgramState {
     noteValue: string,
     noteId?: number,
   ) => void;
-  updateDayExercise: (dayEx: DayExercise) => void;
 }
 
 export const useProgram = create<ProgramState>((set, get) => ({

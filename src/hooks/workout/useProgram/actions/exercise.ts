@@ -10,7 +10,6 @@ import {
 } from "~/server/actions/workout/ExerciseActions";
 import { useProgram, type ProgramState } from "../useProgram";
 
-import type { DayExercise } from "~/server/types";
 import { genRandomInt } from "~/utils/helpers";
 
 export function exerciseActions(
@@ -324,47 +323,6 @@ export function exerciseActions(
         }));
       }
     },
-
-    updateDayExercise: (dayEx: DayExercise) =>
-      set((state) => {
-        if (!dayEx || !state.program) return state;
-
-        // Update Parent (Program)
-        const updatedProgramDays = state.program.programDays.map((day) =>
-          day.id === dayEx.dayId
-            ? {
-                ...day,
-                dayExercises: day.dayExercises.map((ex) =>
-                  ex.id === dayEx.id ? dayEx : ex,
-                ),
-              }
-            : day,
-        );
-
-        // Update Parent (Day)
-        const updatedDay = state.day
-          ? {
-              ...state.day,
-              dayExercises: state.day.dayExercises.map((ex) =>
-                ex.id === dayEx.id ? dayEx : ex,
-              ),
-            }
-          : state.day;
-
-        // Update Child (DayExercise)
-        const updatedDayExercise =
-          state.dayExercise?.id === dayEx.id ? dayEx : state.dayExercise;
-
-        return {
-          ...state,
-          program: {
-            ...state.program,
-            programDays: updatedProgramDays,
-          },
-          day: updatedDay,
-          dayExercise: updatedDayExercise,
-        };
-      }),
   };
 }
 
