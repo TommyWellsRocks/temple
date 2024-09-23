@@ -19,7 +19,7 @@ export default async function ExerciseLayout({
   const exerciseHistory = await getExerciseHistory(
     dayExercise.userId,
     dayExercise.exerciseId,
-    Number(params.dayId),
+    Number(params.dayExerciseId),
   );
   return (
     <ExHistoryProvider exHistory={exerciseHistory}>

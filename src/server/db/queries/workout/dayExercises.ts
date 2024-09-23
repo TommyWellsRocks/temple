@@ -14,16 +14,15 @@ export async function getExerciseIdFromDay(dayExerciseId: number) {
 export async function getExerciseHistory(
   userId: string,
   exerciseId: number,
-  dayId: number,
+  dayExId: number,
 ) {
   return await db.query.workoutDayExercises.findMany({
-    where: (model, { and, eq, ne, sql, lt }) =>
+    where: (model, { and, eq, ne, sql }) =>
       and(
         eq(model.userId, userId),
         eq(model.exerciseId, exerciseId),
-        ne(model.dayId, dayId),
+        ne(model.id, dayExId),
         eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
-        lt(model.updatedAt, new Date()),
       ),
     orderBy: (model, { desc }) => desc(model.updatedAt),
   });
