@@ -17,6 +17,7 @@ export async function getExerciseHistory(
   dayExId: number,
 ) {
   return await db.query.workoutDayExercises.findMany({
+    columns: { reps: true, weight: true, id: true, updatedAt: true },
     where: (model, { and, eq, ne, sql }) =>
       and(
         eq(model.userId, userId),
@@ -68,8 +69,12 @@ export async function addDayExercise(
 ) {
   const last = await db.query.workoutDayExercises.findFirst({
     columns: { reps: true, weight: true },
-    where: (model, { and, eq }) =>
-      and(eq(model.userId, userId), eq(model.exerciseId, exerciseId)),
+    where: (model, { and, eq, sql }) =>
+      and(
+        eq(model.userId, userId),
+        eq(model.exerciseId, exerciseId),
+        eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
+      ),
     orderBy: (model, { desc }) => desc(model.updatedAt),
   });
 
@@ -81,8 +86,8 @@ export async function addDayExercise(
       groupId,
       dayId,
       exerciseId,
-      reps: last?.reps ?? [0, 0, 0, 0],
-      weight: last?.weight ?? [0, 0, 0, 0],
+      reps: last?.reps || [0, 0, 0, 0],
+      weight: last?.weight || [0, 0, 0, 0],
     })
     .returning({ id: workoutDayExercises.id });
   return newEx[0]!;
