@@ -1,4 +1,4 @@
-import { useExHistory } from "~/hooks/workout/useExerciseHistory";
+import { useExerciseHistory } from "~/hooks/workout/useExerciseHistory";
 
 import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { ScrollArea } from "~/components/ui/scroll-area";
@@ -8,7 +8,7 @@ export function HistoryTab() {
 }
 
 export function HistoryTabContent() {
-  const sessions = useExHistory();
+  const sessions = useExerciseHistory((state) => state.exerciseHistory);
   const hasHistory = sessions && sessions.length >= 1;
 
   return (
