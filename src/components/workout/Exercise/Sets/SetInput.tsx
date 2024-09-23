@@ -4,6 +4,7 @@ import { isFloat } from "~/utils/helpers";
 
 import type { DayExercise } from "~/server/types";
 import Loading from "~/app/loading";
+import { useExerciseHistory } from "~/hooks/workout/useExerciseHistory";
 
 function handleOnInput(
   e: React.FormEvent<HTMLInputElement>,
@@ -80,7 +81,23 @@ export function SetInput({
   label: "Reps" | "Weight";
 }) {
   const dayEx = useProgram((state) => state.dayExercise);
+  const lastSession = useExerciseHistory((state) =>
+    state.exerciseHistory?.at(0),
+  );
   if (!dayEx) return <Loading />;
+
+  let defaultValue = value;
+
+  // If lastSession has value at this index, and isn't logged.
+  // Note: LoggedSets is one based. Index is zero based.
+  if (
+    lastSession?.reps &&
+    lastSession.reps.length > index &&
+    dayEx.loggedSetsCount < index + 1
+  ) {
+    defaultValue =
+      label === "Reps" ? lastSession.reps[index]! : lastSession.weight[index]!;
+  }
 
   return (
     <input
@@ -88,7 +105,7 @@ export function SetInput({
       className={`${label === "Reps" ? "w-[3ch]" : "w-[4ch]"} cursor-pointer bg-transparent text-center text-3xl font-bold italic focus:outline-none`}
       type="number"
       inputMode="numeric"
-      defaultValue={value}
+      defaultValue={defaultValue}
       onInput={(e) => handleOnInput(e, label, value)}
       onFocus={(e) => handleOnFocus(e)}
       onBlur={(e) => handleOnBlur(e, value, label, index, dayEx)}
