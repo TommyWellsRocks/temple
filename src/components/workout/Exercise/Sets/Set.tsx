@@ -5,6 +5,7 @@ import { SetInput } from "./SetInput";
 import { getPlatesFromWeight } from "~/utils/helpers";
 
 import Loading from "~/app/loading";
+import { TitleCaseEquipment } from "doNotChangeMe";
 
 export function Set({ index }: { index: number }) {
   const dayEx = useProgram((state) => state.dayExercise);
@@ -14,6 +15,34 @@ export function Set({ index }: { index: number }) {
   const weightCount = dayEx.weight[index]!;
   const isLogged = dayEx.loggedSetsCount > index;
   const isActiveSet = index === dayEx.loggedSetsCount;
+  const isEquipment = (
+    (dayEx.info.equipment as TitleCaseEquipment[]) || null
+  ).some((item) =>
+    (
+      [
+        "Barbells",
+        "Bench Press Machine",
+        "Calf Raise Machine",
+        "EZ Bar",
+        "Hack Squat Machine",
+        "Landmine",
+        "Leg Press",
+        "Leg Press Machine",
+        "Shoulder Press Machine",
+        "Shoulder Shrug Machine",
+        "Sled",
+        "Smith Machine",
+        "Squat Machine",
+        "Squat Rack",
+        "T Bar",
+        "Trap Bar",
+        "Tricep Dip Machine",
+      ] as TitleCaseEquipment[]
+    ).includes(item),
+  );
+  const showPlates =
+    (index === 0 || weightCount !== dayEx.weight[index - 1]) &&
+    (dayEx.info.equipment === null || isEquipment);
 
   return (
     <div className="flex flex-col items-end" key={crypto.randomUUID()}>
@@ -47,17 +76,19 @@ export function Set({ index }: { index: number }) {
         />
         <span className="text-base">Pounds</span>
       </div>
-      <span className="flex gap-x-2 text-sm">
-        {Object.entries(getPlatesFromWeight(weightCount))
-          .sort((a, b) => Number(b[0]) - Number(a[0]))
-          .map(([weight, count]) =>
-            count ? (
-              <span key={weight}>
-                ({count}) {weight}lb
-              </span>
-            ) : null,
-          )}
-      </span>
+      {showPlates ? (
+        <span className="flex gap-x-2 text-sm">
+          {Object.entries(getPlatesFromWeight(weightCount))
+            .sort((a, b) => Number(b[0]) - Number(a[0]))
+            .map(([weight, count]) =>
+              count ? (
+                <span key={weight}>
+                  ({count}) {weight}lb
+                </span>
+              ) : null,
+            )}
+        </span>
+      ) : null}
     </div>
   );
 }
