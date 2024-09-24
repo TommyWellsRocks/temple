@@ -1,15 +1,15 @@
 "use client";
 
-import { Navigation } from "~/components/ui/Navigation";
-import { ProgramsList } from "~/components/workout/Programs/ProgramsList/ProgramsList";
+import { HeaderNav } from "~/components/workout/Programs/HeaderNav";
 import { HeaderSection } from "~/components/workout/Programs/HeaderSection";
+import { ProgramsList } from "~/components/workout/Programs/ProgramsList/ProgramsList";
 
 // * PROGRAMS PAGE
 
 export default function Programs() {
   return (
     <>
-      <Navigation backURL="/" heading="Temple" />
+      <HeaderNav />
 
       <HeaderSection />
 
