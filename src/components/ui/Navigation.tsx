@@ -15,10 +15,10 @@ export function Navigation({
     <header>
       <nav>
         <div className="flex items-center justify-between">
-          <Link href={backURL}>
+          <Link href={backURL} id="back-button">
             <ChevronLeft />
           </Link>
-          <span className="text-center text-xl font-semibold sm:text-2xl">
+          <span className="text-center text-xl font-semibold sm:text-2xl" id="page-title">
             {toTitleCase(heading)}
           </span>
           {editButton ? editButton : <div className="w-[24px]" />}
