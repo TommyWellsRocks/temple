@@ -19,8 +19,10 @@ import { useUser } from "~/hooks/common/useUser";
 const PROGRAM_ACTIVE_DAYS = 45;
 
 export function ProgramForm({
+  setOpen,
   programInfo,
 }: {
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   programInfo?: WorkoutPrograms[0];
 }) {
   const userId = useUser((state) => state.userId);
@@ -36,6 +38,7 @@ export function ProgramForm({
   if (!userId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    if (setOpen) setOpen(false);
     const startDate = new Date(values.start);
     const endDate = new Date(values.end);
     startDate.setHours(0, 0, 0, 0);
