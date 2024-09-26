@@ -25,7 +25,7 @@ export function AddButtonOverlay({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" id="add-button">
           {method === "Delete" ? <Minus /> : <Plus />}
         </Button>
       </DialogTrigger>

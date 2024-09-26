@@ -28,4 +28,26 @@ describe("Workout/Programs", () => {
       expect(page.url()).toBe("http://localhost:3000/");
     });
   });
+
+  describe("Header Section", () => {
+    it("Renders header and add button", async ({ page }) => {
+      const header = page.locator("#programs-header");
+      const addButton = page.locator("#add-button");
+
+      await expect(header).toBeVisible();
+      await expect(addButton).toBeVisible();
+    });
+
+    it("Opens add program popover, onClick of add button", async ({ page }) => {
+      await page.locator("#add-button").click();
+
+      const popoverText = page.getByText(/Create Workout Program/i);
+      const programForm = page.getByPlaceholder(/Squatober/i);
+      const formButton = page.getByRole("button", { name: /Create/i });
+
+      expect(popoverText).toBeVisible();
+      expect(programForm).toBeVisible();
+      expect(formButton).toBeVisible();
+    });
+  });
 });

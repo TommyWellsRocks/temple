@@ -5,7 +5,7 @@ import { ProgramForm } from "~/components/workout/forms/ProgramForm/ProgramForm"
 export function HeaderSection() {
   return (
     <section className="flex items-center justify-between">
-      <SectionHeader title="Your Programs" />
+      <SectionHeader title="Your Programs" id="programs-header" />
       <AddButtonOverlay
         title="Create Workout Program"
         description="Build and plan out your program. Click create when you're done."
