@@ -31,6 +31,7 @@ export function ListItem({
         />
       }
       isDark={isDark}
+      id="program"
     />
   );
 }

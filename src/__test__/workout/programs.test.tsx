@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { generateRandomString } from "../helpers";
 const it = test;
 const describe = test.describe;
 
@@ -48,6 +49,22 @@ describe("Workout/Programs", () => {
       expect(popoverText).toBeVisible();
       expect(programForm).toBeVisible();
       expect(formButton).toBeVisible();
+    });
+  });
+
+  describe("Header & Programs Section Integration", () => {
+    it("Header add button adds program to programs section", async ({
+      page,
+    }) => {
+      await page.locator("#add-button").click();
+
+      const testProgramName = generateRandomString(12);
+      await page.getByPlaceholder(/Squatober/i).fill(testProgramName);
+      await page.getByRole("button", { name: /Create/i }).click();
+
+      // Check first top programs section
+      const programs = page.locator("#program")
+      await expect(programs.nth(0)).toContainText(testProgramName);
     });
   });
 });

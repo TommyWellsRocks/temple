@@ -6,15 +6,17 @@ export function ActionCard({
   textContent,
   isDark,
   linkTo,
+  id,
 }: {
   title: string;
   editButton?: JSX.Element;
   textContent?: JSX.Element;
   isDark: boolean;
   linkTo: string;
+  id: string;
 }) {
   return (
-    <div className="relative flex items-center">
+    <div id={id} className="relative flex items-center">
       <Link
         href={linkTo}
         className={`flex w-full items-center gap-x-4 rounded-lg pr-12 ${isDark ? "bg-doneDark text-muted-foreground" : "bg-undoneDark"} py-2 pl-4`}
