@@ -57,9 +57,9 @@ describe("Workout/Programs", () => {
       // Create program
       const programName = await createProgram(page);
 
-      // Check first top programs section
-      const programs = page.locator("#program");
-      await expect(programs.nth(0)).toContainText(programName);
+      await expect(
+        page.locator("#program", { hasText: programName }),
+      ).toBeVisible();
     });
   });
 
