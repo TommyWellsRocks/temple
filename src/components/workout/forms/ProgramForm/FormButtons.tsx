@@ -10,9 +10,11 @@ import type { WorkoutPrograms } from "~/server/types";
 export function FormButtons({
   userId,
   programInfo,
+  setOpen,
 }: {
   userId: string;
   programInfo?: WorkoutPrograms[0];
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const deleteProgram = useProgram.getState().deleteProgram;
 
@@ -22,7 +24,12 @@ export function FormButtons({
         <CreateButton />
       ) : (
         <div className="flex w-full justify-between">
-          <DeleteButton onClick={() => deleteProgram(userId, programInfo.id)} />
+          <DeleteButton
+            onClick={() => {
+              if (setOpen) setOpen(false);
+              deleteProgram(userId, programInfo.id);
+            }}
+          />
           <SaveButton />
         </div>
       )}

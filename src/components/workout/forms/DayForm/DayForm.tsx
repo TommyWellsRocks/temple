@@ -15,9 +15,11 @@ import type { ProgramDay } from "~/server/types";
 import Loading from "~/app/loading";
 
 export function DayForm({
+  setOpen,
   groupId,
   dayInfo,
 }: {
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   groupId: number;
   dayInfo?: ProgramDay;
 }) {
@@ -30,6 +32,7 @@ export function DayForm({
   if (!userId || !programId) return <Loading />;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    if (setOpen) setOpen(false);
     const newName = values.name;
     const newRepeatOn = values.repeatOn ?? null;
 
@@ -51,7 +54,7 @@ export function DayForm({
         <NameField control={form.control} placeholder="Leg day" />
         <RepeatOnField control={form.control} />
 
-        <FormButtons dayInfo={dayInfo} />
+        <FormButtons dayInfo={dayInfo} setOpen={setOpen} />
       </form>
     </Form>
   );

@@ -103,7 +103,7 @@ export function ProgramForm({
           />
         </FormDescription>
 
-        <FormButtons userId={userId} programInfo={programInfo} />
+        <FormButtons userId={userId} programInfo={programInfo} setOpen={setOpen} />
       </form>
     </Form>
   );

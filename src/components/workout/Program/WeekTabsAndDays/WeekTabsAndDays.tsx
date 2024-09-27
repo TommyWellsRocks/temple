@@ -3,9 +3,8 @@ import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 import { WeekTabDays } from "./WeekTabDays";
 import { EditWeeksButton } from "./EditWeeksButton";
 import { WeekTabs } from "./WeekTabs";
-import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
-import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
 import Loading from "~/app/loading";
+import { AddButton } from "./AddButton";
 
 export function WeekTabsAndDays() {
   const programGroups = useProgram((state) => state.program?.groups);
@@ -25,11 +24,7 @@ export function WeekTabsAndDays() {
           </div>
 
           <div className="flex justify-end">
-            <AddButtonOverlay
-              title="Create Day"
-              description="Design and schedule your program days. Click create when you're done."
-              formComponent={<DayForm groupId={lastGroupId} />}
-            />
+            <AddButton lastGroupId={lastGroupId} />
           </div>
         </div>
 

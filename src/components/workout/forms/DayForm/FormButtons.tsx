@@ -7,7 +7,13 @@ import { SaveButton } from "../SaveButton";
 
 import type { ProgramDay } from "~/server/types";
 
-export function FormButtons({ dayInfo }: { dayInfo?: ProgramDay }) {
+export function FormButtons({
+  dayInfo,
+  setOpen,
+}: {
+  dayInfo?: ProgramDay;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const deleteDay = useProgram.getState().deleteDay;
 
   return (
@@ -17,9 +23,10 @@ export function FormButtons({ dayInfo }: { dayInfo?: ProgramDay }) {
       ) : (
         <div className="flex">
           <DeleteButton
-            onClick={() =>
-              deleteDay(dayInfo.userId, dayInfo.programId, dayInfo.id)
-            }
+            onClick={() => {
+              if (setOpen) setOpen(false);
+              deleteDay(dayInfo.userId, dayInfo.programId, dayInfo.id);
+            }}
           />
           <SaveButton />
         </div>
