@@ -1,15 +1,14 @@
-import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { ProgramForm } from "~/components/workout/forms/ProgramForm/ProgramForm";
 import { ActionCard } from "~/components/workout/ActionCard";
+import { EditButton } from "./EditButton";
 
-import type { WorkoutPrograms } from "~/server/types";
+import type { Program } from "~/server/types";
 
 export function ListItem({
   isDark,
   program,
 }: {
   isDark: boolean;
-  program: WorkoutPrograms[0];
+  program: Program;
 }) {
   return (
     <ActionCard
@@ -23,13 +22,7 @@ export function ListItem({
           </span>
         </div>
       }
-      editButton={
-        <EditButtonPopover
-          title="Edit Workout Program"
-          description="Remember to click save when your done."
-          formComponent={<ProgramForm programInfo={program} />}
-        />
-      }
+      editButton={<EditButton program={program} />}
       isDark={isDark}
       id="program"
     />

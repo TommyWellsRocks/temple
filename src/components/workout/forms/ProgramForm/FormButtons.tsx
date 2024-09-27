@@ -21,7 +21,7 @@ export function FormButtons({
       {!programInfo ? (
         <CreateButton />
       ) : (
-        <div className="flex justify-between">
+        <div className="flex w-full justify-between">
           <DeleteButton onClick={() => deleteProgram(userId, programInfo.id)} />
           <SaveButton />
         </div>
