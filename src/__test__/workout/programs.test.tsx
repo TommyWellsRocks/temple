@@ -64,7 +64,9 @@ describe("Workout/Programs", () => {
   });
 
   describe("Programs Section", () => {
-    it("Renders edit popover onClick of program edit button", async ({ page }) => {
+    it("Renders edit popover onClick of program edit button", async ({
+      page,
+    }) => {
       // create program first
       const programName = await createProgram(page);
 
@@ -107,6 +109,14 @@ describe("Workout/Programs", () => {
       // Check first top programs section
       const programs = page.locator("#program");
       await expect(programs).not.toContainText(programName);
+    });
+
+    it("Navigates to program onClick", async ({ page }) => {
+      // Existing Program = 26. Name = "TEST PROGRAM"
+      await page.locator("text=TEST PROGRAM").click();
+      await page.waitForURL("http://localhost:3000/workout/26");
+
+      expect(page.url()).toBe("http://localhost:3000/workout/26");
     });
   });
 });
