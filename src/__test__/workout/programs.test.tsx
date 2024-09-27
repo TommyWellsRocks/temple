@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { generateRandomString } from "../helpers";
+import { createProgram, generateRandomString } from "../helpers";
 const it = test;
 const describe = test.describe;
 
@@ -53,18 +53,60 @@ describe("Workout/Programs", () => {
   });
 
   describe("Header & Programs Section Integration", () => {
-    it("Header add button adds program to programs section", async ({
-      page,
-    }) => {
-      await page.locator("#add-button").click();
-
-      const testProgramName = generateRandomString(12);
-      await page.getByPlaceholder(/Squatober/i).fill(testProgramName);
-      await page.getByRole("button", { name: /Create/i }).click();
+    it("Add button adds program to programs section", async ({ page }) => {
+      // Create program
+      const programName = await createProgram(page);
 
       // Check first top programs section
-      const programs = page.locator("#program")
-      await expect(programs.nth(0)).toContainText(testProgramName);
+      const programs = page.locator("#program");
+      await expect(programs.nth(0)).toContainText(programName);
+    });
+  });
+
+  describe("Programs Section", () => {
+    it("Program edit button onClick renders popover", async ({ page }) => {
+      // create program first
+      const programName = await createProgram(page);
+
+      // Test edit button
+      await page.locator("#edit-button").nth(0).click();
+
+      const popoverText = page.getByText(/Edit Workout Program/i);
+      const programForm = page.getByText(programName);
+      const formButton = page.getByRole("button", { name: /Delete/i });
+
+      expect(popoverText).toBeVisible();
+      expect(programForm).toBeVisible();
+      expect(formButton).toBeVisible();
+    });
+
+    it("Program edit button renames program", async ({ page }) => {
+      // create program first
+      await createProgram(page);
+
+      // Test rename program
+      await page.locator("#edit-button").nth(0).click();
+
+      const newProgramName = generateRandomString(12);
+      await page.getByPlaceholder(/Squatober/i).fill(newProgramName);
+      await page.getByRole("button", { name: /Save/i }).click();
+
+      // Check first top programs section
+      const programs = page.locator("#program");
+      await expect(programs.nth(0)).toContainText(newProgramName);
+    });
+
+    it("Program edit button deletes program", async ({ page }) => {
+      // create program first
+      const programName = await createProgram(page);
+
+      // Test delete program
+      await page.locator("#edit-button").nth(0).click();
+      await page.getByRole("button", { name: /Delete/i }).click();
+
+      // Check first top programs section
+      const programs = page.locator("#program");
+      await expect(programs).not.toContainText(programName);
     });
   });
 });
