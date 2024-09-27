@@ -13,7 +13,7 @@ export function generateRandomString(length: number) {
 }
 
 export async function createProgram(page: Page) {
-  await page.locator("#add-button").click();
+  await page.locator("#add-program-button").click();
 
   const testProgramName = generateRandomString(12);
   await page.getByPlaceholder(/Squatober/i).fill(testProgramName);

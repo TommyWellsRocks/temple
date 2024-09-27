@@ -19,7 +19,7 @@ export function AddButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" id="add-button">
+        <Button variant="outline" id="add-program-button">
           <Plus />
         </Button>
       </DialogTrigger>
