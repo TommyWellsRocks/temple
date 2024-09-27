@@ -22,7 +22,7 @@ describe("Workout/Programs", () => {
       await expect(header).toBeVisible();
     });
 
-    it("Navigates to /workout onClick of back button", async ({ page }) => {
+    it("Navigates to / onClick of back button", async ({ page }) => {
       await page.locator("#back-button").click();
       await page.waitForURL("http://localhost:3000/");
 
@@ -53,7 +53,7 @@ describe("Workout/Programs", () => {
   });
 
   describe("Header & Programs Section Integration", () => {
-    it("Add button adds program to programs section", async ({ page }) => {
+    it("Adds program to programs section from Add button", async ({ page }) => {
       // Create program
       const programName = await createProgram(page);
 
@@ -64,7 +64,7 @@ describe("Workout/Programs", () => {
   });
 
   describe("Programs Section", () => {
-    it("Program edit button onClick renders popover", async ({ page }) => {
+    it("Renders edit popover onClick of program edit button", async ({ page }) => {
       // create program first
       const programName = await createProgram(page);
 
@@ -80,7 +80,7 @@ describe("Workout/Programs", () => {
       expect(formButton).toBeVisible();
     });
 
-    it("Program edit button renames program", async ({ page }) => {
+    it("Renames program from program edit button", async ({ page }) => {
       // create program first
       await createProgram(page);
 
@@ -96,7 +96,7 @@ describe("Workout/Programs", () => {
       await expect(programs.nth(0)).toContainText(newProgramName);
     });
 
-    it("Program edit button deletes program", async ({ page }) => {
+    it("Deletes program from program edit button", async ({ page }) => {
       // create program first
       const programName = await createProgram(page);
 
