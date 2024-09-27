@@ -71,7 +71,10 @@ describe("Workout/Programs", () => {
       const programName = await createProgram(page);
 
       // Test edit button
-      await page.locator("#edit-program-button").nth(0).click();
+      await page
+        .locator("#program", { hasText: programName })
+        .locator("#edit-program-button")
+        .click();
 
       const popoverText = page.getByText(/Edit Workout Program/i);
       const programForm = page.getByText(programName);
@@ -84,10 +87,13 @@ describe("Workout/Programs", () => {
 
     it("Renames program from program edit button", async ({ page }) => {
       // create program first
-      await createProgram(page);
+      const programName = await createProgram(page);
 
       // Test rename program
-      await page.locator("#edit-program-button").nth(0).click();
+      await page
+        .locator("#program", { hasText: programName })
+        .locator("#edit-program-button")
+        .click();
 
       const newProgramName = generateRandomString(12);
       await page.getByPlaceholder(/Squatober/i).fill(newProgramName);
@@ -103,17 +109,19 @@ describe("Workout/Programs", () => {
       const programName = await createProgram(page);
 
       // Test delete program
-      await page.locator("#edit-program-button").nth(0).click();
+      await page
+        .locator("#program", { hasText: programName })
+        .locator("#edit-program-button")
+        .click();
       await page.getByRole("button", { name: /Delete/i }).click();
 
       // Check first top programs section
-      const programs = page.locator("#program");
-      await expect(programs).not.toContainText(programName);
+      await expect(page.getByText(programName)).toHaveCount(0);
     });
 
     it("Navigates to program onClick", async ({ page }) => {
       // Existing Program = 26. Name = "TEST PROGRAM"
-      await page.locator("text=TEST PROGRAM").click();
+      await page.locator("#program", { hasText: "TEST PROGRAM" }).dblclick();
       await page.waitForURL("http://localhost:3000/workout/26");
 
       expect(page.url()).toBe("http://localhost:3000/workout/26");
