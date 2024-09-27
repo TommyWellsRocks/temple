@@ -69,7 +69,7 @@ describe("Workout/Programs", () => {
       const programName = await createProgram(page);
 
       // Test edit button
-      await page.locator("#edit-button").nth(0).click();
+      await page.locator("#edit-program-button").nth(0).click();
 
       const popoverText = page.getByText(/Edit Workout Program/i);
       const programForm = page.getByText(programName);
@@ -85,7 +85,7 @@ describe("Workout/Programs", () => {
       await createProgram(page);
 
       // Test rename program
-      await page.locator("#edit-button").nth(0).click();
+      await page.locator("#edit-program-button").nth(0).click();
 
       const newProgramName = generateRandomString(12);
       await page.getByPlaceholder(/Squatober/i).fill(newProgramName);
@@ -101,7 +101,7 @@ describe("Workout/Programs", () => {
       const programName = await createProgram(page);
 
       // Test delete program
-      await page.locator("#edit-button").nth(0).click();
+      await page.locator("#edit-program-button").nth(0).click();
       await page.getByRole("button", { name: /Delete/i }).click();
 
       // Check first top programs section

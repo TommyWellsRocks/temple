@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { ProgramForm } from "../../forms/ProgramForm/ProgramForm";
+import { ProgramForm } from "./forms/ProgramForm/ProgramForm";
 
 import type { Program } from "~/server/types";
 
@@ -16,7 +16,7 @@ export function EditButton({ program }: { program: Program }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button id="edit-button" className="align-middle">
+        <button id="edit-program-button" className="align-middle">
           <EllipsisVertical />
         </button>
       </PopoverTrigger>

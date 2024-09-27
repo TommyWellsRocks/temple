@@ -1,5 +1,5 @@
 import { ActionCard } from "~/components/workout/ActionCard";
-import { EditButton } from "./EditButton";
+import { EditButton } from "../../EditProgramButton";
 
 import type { Program } from "~/server/types";
 
