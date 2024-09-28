@@ -238,9 +238,18 @@ export function programActions(
       const fakeGroup = { id: fakeId };
       const optimisticProgramGroups = [...fallbackProgram.groups, fakeGroup];
 
+      const finalGroupId = Math.max(...fallbackProgram.groups.map((g) => g.id));
+      const optimisticProgramDays = [
+        ...fallbackProgram.programDays,
+        ...fallbackProgram.programDays
+          .filter((day) => day.groupId === finalGroupId)
+          .map((day) => ({ ...day, groupId: fakeId })),
+      ];
+
       const optimisticProgram = {
         ...fallbackProgram,
         groups: optimisticProgramGroups,
+        programDays: optimisticProgramDays,
       };
       const optimisticPrograms = getChangedPrograms(
         fallbackPrograms,
@@ -268,7 +277,9 @@ export function programActions(
             group.id === fakeId ? { id: realGroupId } : group,
           ),
           programDays: [
-            ...optimisticProgram.programDays,
+            ...optimisticProgram.programDays.filter(
+              (day) => day.groupId !== fakeId,
+            ),
             ...realGroup.groupDays,
           ],
         };
