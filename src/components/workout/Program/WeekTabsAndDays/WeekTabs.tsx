@@ -16,7 +16,7 @@ export function WeekTabs() {
         <CarouselContent className="w-[240px] sm:w-[390px]">
           {weeks.map((week, index) => (
             <CarouselItem key={week.id}>
-              <TabsTrigger value={String(week.id)}>
+              <TabsTrigger value={String(week.id)} id="week-tab">
                 Week {index + 1}
               </TabsTrigger>
             </CarouselItem>

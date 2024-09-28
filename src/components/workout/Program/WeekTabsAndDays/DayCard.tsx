@@ -1,9 +1,8 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import { ActionCard } from "~/components/workout/ActionCard";
-import { EditButtonPopover } from "~/components/workout/EditButtonPopover";
-import { DayForm } from "~/components/workout/forms/DayForm/DayForm";
 import Loading from "~/app/loading";
+import { ActionCard } from "~/components/workout/ActionCard";
+import { EditButton } from "../../EditDayButton";
 
 export function DayCard({ dayId }: { dayId: number }) {
   const day = useProgram((state) =>
@@ -20,17 +19,12 @@ export function DayCard({ dayId }: { dayId: number }) {
 
   return (
     <ActionCard
+      id="day"
       key={day.id}
       linkTo={`/workout/${day.programId}/${day.id}`}
       isDark={isDone}
       title={day.name}
-      editButton={
-        <EditButtonPopover
-          title="Edit Program Day"
-          description="Remember to click save when your done."
-          formComponent={<DayForm groupId={day.groupId} dayInfo={day} />}
-        />
-      }
+      editButton={<EditButton day={day} />}
     />
   );
 }

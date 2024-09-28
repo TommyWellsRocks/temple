@@ -13,6 +13,7 @@ export function EditWeeksButton({ groupId }: { groupId?: number }) {
 
   return (
     <button
+      id={groupId ? "delete-week-button" : "add-week-button"}
       className="mx-1"
       onClick={() => {
         if (groupId) {
