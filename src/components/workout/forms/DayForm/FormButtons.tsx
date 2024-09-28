@@ -21,7 +21,7 @@ export function FormButtons({
       {!dayInfo ? (
         <CreateButton />
       ) : (
-        <div className="flex">
+        <div className="flex w-full justify-between">
           <DeleteButton
             onClick={() => {
               if (setOpen) setOpen(false);
