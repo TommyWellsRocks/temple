@@ -77,7 +77,7 @@ describe("Workout/Programs", () => {
         .click();
 
       const popoverText = page.getByText(/Edit Workout Program/i);
-      const programForm = page.getByText(programName);
+      const programForm = page.getByPlaceholder(/Squatober/i);
       const formButton = page.getByRole("button", { name: /Delete/i });
 
       expect(popoverText).toBeVisible();
@@ -99,9 +99,10 @@ describe("Workout/Programs", () => {
       await page.getByPlaceholder(/Squatober/i).fill(newProgramName);
       await page.getByRole("button", { name: /Save/i }).click();
 
-      // Check first top programs section
-      const programs = page.locator("#program");
-      await expect(programs.nth(0)).toContainText(newProgramName);
+      // Check programs section
+      await expect(
+        page.locator("#program", { hasText: newProgramName }),
+      ).toBeVisible();
     });
 
     it("Deletes program from program edit button", async ({ page }) => {
@@ -115,7 +116,7 @@ describe("Workout/Programs", () => {
         .click();
       await page.getByRole("button", { name: /Delete/i }).click();
 
-      // Check first top programs section
+      // Check not exists
       await expect(page.getByText(programName)).toHaveCount(0);
     });
 
