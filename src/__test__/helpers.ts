@@ -15,8 +15,17 @@ export function generateRandomString(length: number) {
 export async function createProgram(page: Page) {
   await page.locator("#add-program-button").click();
 
-  const testProgramName = generateRandomString(12);
-  await page.getByPlaceholder(/Squatober/i).fill(testProgramName);
+  const programName = generateRandomString(12);
+  await page.getByPlaceholder(/Squatober/i).fill(programName);
   await page.getByRole("button", { name: /Create/i }).click();
-  return testProgramName;
+  return programName;
+}
+
+export async function createDay(page: Page) {
+  await page.locator("#add-day-button").click();
+
+  const dayName = generateRandomString(12);
+  await page.getByPlaceholder(/Leg day/i).fill(dayName);
+  await page.getByRole("button", { name: /Create/i }).click();
+  return dayName;
 }
