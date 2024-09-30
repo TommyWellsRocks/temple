@@ -1,6 +1,6 @@
 "use client";
 
-import { setProgram } from "~/hooks/workout/useProgram/actions/program";
+import { SetProgram } from "~/hooks/workout/useProgram/actions/program";
 
 export default function ProgramLayout({
   children,
@@ -9,6 +9,10 @@ export default function ProgramLayout({
   children: React.ReactNode;
   params: { programId: string };
 }) {
-  setProgram(Number(params.programId));
-  return <>{children}</>;
+  return (
+    <>
+      <SetProgram programId={Number(params.programId)} />
+      {children}
+    </>
+  );
 }

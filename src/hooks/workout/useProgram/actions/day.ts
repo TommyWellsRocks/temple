@@ -399,10 +399,19 @@ export function dayActions(
   };
 }
 
-export function SetDay({ dayId }: { dayId: number }) {
-  const setDay = useProgram.getState().setDay;
+export function SetDay({
+  programId,
+  dayId,
+}: {
+  programId: number;
+  dayId: number;
+}) {
+  const setProgram = useProgram.getState().setProgram;
+  const setProgramDay = useProgram.getState().setDay;
 
-  useEffect(() => setDay(dayId), [dayId]);
+  useEffect(() => {
+    setProgram(programId), setProgramDay(dayId);
+  }, [programId, dayId]);
 
   return null;
 }

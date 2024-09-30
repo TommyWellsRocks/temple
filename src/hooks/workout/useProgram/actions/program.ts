@@ -355,8 +355,10 @@ export function programActions(
   };
 }
 
-export function setProgram(programId: number) {
+export function SetProgram({ programId }: { programId: number }) {
   const setProgram = useProgram.getState().setProgram;
 
   useEffect(() => setProgram(programId), [programId]);
+
+  return null;
 }
