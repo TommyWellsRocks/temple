@@ -11,6 +11,7 @@ export function StartWorkoutButton() {
 
   return (
     <Button
+      id="start-workout-button"
       className="flex gap-1"
       onClick={() => startWorkout(day.userId, day.programId, day.id)}
     >

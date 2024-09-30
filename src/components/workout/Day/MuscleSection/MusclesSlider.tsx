@@ -18,7 +18,7 @@ export function MuscleSlider() {
       <CarouselContent>
         {muscleCount.map(([muscle, count]) => (
           <CarouselItem className="flex items-center gap-x-1" key={muscle}>
-            <div className="flex gap-x-1 rounded-md bg-secondary px-2 py-1 text-base">
+            <div id="muscle-percent-focus" className="flex gap-x-1 rounded-md bg-secondary px-2 py-1 text-base">
               <span>{((count / dayExercises.length) * 100).toFixed(0)}%</span>
               <span>{muscle}</span>
             </div>

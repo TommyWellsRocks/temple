@@ -15,7 +15,10 @@ export function EndWorkoutDrawer() {
   return (
     <Drawer nested>
       <DrawerTrigger>
-        <div className="flex items-center justify-center gap-x-1 rounded-md border-2 border-primary bg-white px-4 py-1.5 text-sm text-black">
+        <div
+          id="end-workout-button"
+          className="flex items-center justify-center gap-x-1 rounded-md border-2 border-primary bg-white px-4 py-1.5 text-sm text-black"
+        >
           <Flag width={15} /> Finish Workout
         </div>
       </DrawerTrigger>

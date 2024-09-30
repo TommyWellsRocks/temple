@@ -11,6 +11,7 @@ export function LogWorkoutButton() {
 
   return (
     <Button
+      id="end-workout-button"
       className="flex w-full items-center justify-center rounded-md bg-primary text-sm"
       onClick={() => endWorkout(day.userId, day.programId, day.id)}
     >
