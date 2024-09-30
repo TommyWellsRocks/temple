@@ -17,7 +17,7 @@ export function FormButtons({
   const deleteExercise = useProgram.getState().deleteExercise;
   return (
     <DialogFooter>
-      <div className="flex">
+      <div className="flex w-full justify-between">
         <DeleteButton
           onClick={() =>
             deleteExercise(userId, programId, dayId, dayExerciseId)
