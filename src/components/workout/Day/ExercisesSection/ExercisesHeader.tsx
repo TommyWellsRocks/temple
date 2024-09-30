@@ -1,8 +1,7 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import { AddButtonOverlay } from "~/components/workout/AddButtonOverlay";
 import { SectionHeader } from "~/components/workout/SectionHeader";
-import { DataTable } from "./DataTable";
+import { AddExerciseButton } from "./AddExerciseButton";
 
 export function ExercisesHeader() {
   const dayExercisesCount = useProgram(
@@ -15,11 +14,7 @@ export function ExercisesHeader() {
       <SectionHeader
         title={`${dayExercisesCount} ${dayExercisesCount > 1 ? "Exercises" : "Exercise"}`}
       />
-      <AddButtonOverlay
-        title="Add Exercise"
-        description="Add an exercise to your workout. Click add when you're done."
-        formComponent={<DataTable />}
-      />
+      <AddExerciseButton />
     </div>
   );
 }

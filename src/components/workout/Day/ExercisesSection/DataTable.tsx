@@ -29,10 +29,10 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { toTitleCase } from "~/utils/helpers";
-import { AddButtonOverlay } from "../../AddButtonOverlay";
-import { UserExerciseForm } from "../../forms/UserExerciseForm/UserExerciseForm";
 import Loading from "~/app/loading";
+import { AddCustomExerciseButton } from "./AddCustomExerciseButton";
+
+import { toTitleCase } from "~/utils/helpers";
 
 import type { Exercises } from "~/server/types";
 
@@ -105,7 +105,7 @@ export function DataTable() {
         );
       },
       cell: ({ row }) => (
-        <div>
+        <div id="exercise-option">
           {toTitleCase(
             row.original.notes &&
               row.original.notes.length === 1 &&
@@ -198,11 +198,7 @@ export function DataTable() {
                     <span>Are we missing your exercise?</span>
                     <span>Well 💩</span>
                     <span>Create it!</span>
-                    <AddButtonOverlay
-                      title="Custom Exercise"
-                      description="Create Your Own Exercise."
-                      formComponent={<UserExerciseForm />}
-                    />
+                    <AddCustomExerciseButton />
                   </div>
                 </TableCell>
               </TableRow>
