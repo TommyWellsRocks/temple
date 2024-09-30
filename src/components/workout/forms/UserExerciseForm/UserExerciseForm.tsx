@@ -18,7 +18,13 @@ import { FormButtons } from "./FormButtons";
 import { SelectField } from "../SelectField";
 import Loading from "~/app/loading";
 
-export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
+export function UserExerciseForm({
+  exerciseId,
+  setOpen,
+}: {
+  exerciseId?: number;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const createUserExercise = useExercises.getState().createUserExercise;
   const updateUserExercise = useExercises.getState().updateUserExercise;
   const userId = useUser((state) => state.userId);
@@ -48,6 +54,7 @@ export function UserExerciseForm({ exerciseId }: { exerciseId?: number }) {
     const secondaryMuscles = values.secondaryMuscles
       ? (values.secondaryMuscles as TitleCaseMuscle[])
       : null;
+    if (setOpen) setOpen(false);
     if (exercise) {
       updateUserExercise(
         userId,
