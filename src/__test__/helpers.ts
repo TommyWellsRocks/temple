@@ -29,3 +29,20 @@ export async function createDay(page: Page) {
   await page.getByRole("button", { name: /Create/i }).click();
   return dayName;
 }
+
+export async function addExercise(page: Page) {
+  await page.locator("#add-exercise-button").click();
+
+  const testExercise = "Seated Tricep Press";
+
+  const exercise = page.getByRole("row", { name: testExercise });
+  const exerciseCheckbox = exercise.getByRole("checkbox");
+
+  if (!(await exerciseCheckbox.isChecked())) {
+    await exerciseCheckbox.click();
+  }
+
+  await page.locator("#close-button").click()
+
+  return testExercise;
+}
