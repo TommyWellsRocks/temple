@@ -28,7 +28,7 @@ export function AddButton() {
         <DialogHeader>
           <DialogTitle>Create Workout Program</DialogTitle>
           <DialogDescription>
-            Build and plan out your program. Click create when you're done.
+            Build and plan out your program.
           </DialogDescription>
         </DialogHeader>
 

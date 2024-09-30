@@ -28,7 +28,7 @@ export function AddExerciseButton() {
         <DialogHeader>
           <DialogTitle>Add Exercise</DialogTitle>
           <DialogDescription>
-            Add an exercise to your workout. Click add when you're done.
+            Add an exercise to your workout.
           </DialogDescription>
         </DialogHeader>
 

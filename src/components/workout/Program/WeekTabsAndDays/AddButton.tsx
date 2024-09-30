@@ -28,8 +28,7 @@ export function AddButton({ lastGroupId }: { lastGroupId: number }) {
         <DialogHeader>
           <DialogTitle>Create Day</DialogTitle>
           <DialogDescription>
-            Design and schedule your program days. Click create when you're
-            done.
+            Design and schedule your program days.
           </DialogDescription>
         </DialogHeader>
 
