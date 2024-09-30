@@ -1,19 +1,24 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
+import { useExerciseHistory } from "~/hooks/workout/useExerciseHistory";
 
+import Loading from "~/app/loading";
 import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { SetInput } from "./SetInput";
 import { getPlatesFromWeight } from "~/utils/helpers";
 
-import Loading from "~/app/loading";
-import { TitleCaseEquipment } from "doNotChangeMe";
+
+import type { TitleCaseEquipment } from "doNotChangeMe";
 
 export function Set({ index }: { index: number }) {
   const dayEx = useProgram((state) => state.dayExercise);
+  const lastSession = useExerciseHistory((state) =>
+    state.exerciseHistory?.at(0),
+  );
   if (!dayEx) return <Loading />;
-
-  const repCount = dayEx.reps[index]!;
-  const weightCount = dayEx.weight[index]!;
+  
   const isLogged = dayEx.loggedSetsCount > index;
+  const repCount = isLogged || dayEx.reps[index] !== 0 ? dayEx.reps[index]! : (lastSession?.reps.at(index) || 0);
+  const weightCount = isLogged || dayEx.weight[index] !== 0 ? dayEx.weight[index]! : (lastSession?.weight.at(index) || 0);
   const isActiveSet = index === dayEx.loggedSetsCount;
   const isEquipment = (
     (dayEx.info.equipment as TitleCaseEquipment[]) || null
