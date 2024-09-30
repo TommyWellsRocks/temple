@@ -24,7 +24,7 @@ export function EditButton({ day }: { day: ProgramDay }) {
       <PopoverContent className="w-80">
         <div className="grid gap-3">
           <div className="space-y-2 text-center">
-            <h4 className="font-medium leading-none">Edit Program Day</h4>
+            <h4 className="font-medium leading-none">Edit Day</h4>
             <p className="text-sm text-muted-foreground">
               Remember to click save when your done.
             </p>
