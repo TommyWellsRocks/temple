@@ -331,7 +331,7 @@ export function exerciseActions(
   };
 }
 
-export function SetDayExercise({ dayExerciseId }: { dayExerciseId: number }) {
+export function SetExercise({ dayExerciseId }: { dayExerciseId: number }) {
   const setDayEx = useProgram.getState().setDayExercise;
 
   useEffect(() => setDayEx(dayExerciseId), [dayExerciseId, setDayEx]);

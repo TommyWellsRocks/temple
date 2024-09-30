@@ -1,5 +1,5 @@
 import { SetExerciseHistory } from "~/hooks/workout/useExerciseHistory";
-import { SetDayExercise } from "~/hooks/workout/useProgram/actions/exercise";
+import { SetExercise } from "~/hooks/workout/useProgram/actions/exercise";
 
 import {
   getExerciseHistory,
@@ -23,7 +23,7 @@ export default async function ExerciseLayout({
   );
   return (
     <>
-      <SetDayExercise dayExerciseId={Number(params.dayExerciseId)} />
+      <SetExercise dayExerciseId={Number(params.dayExerciseId)} />
       <SetExerciseHistory exerciseHistory={exerciseHistory} />
       {children}
     </>
