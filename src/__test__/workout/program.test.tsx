@@ -40,8 +40,8 @@ describe("Workout/[Program]", () => {
       expect(formButton).toBeVisible();
     });
 
+    // ! THIS TEST FAILS A LOT
     it("Navigates to /workout onClick of back button", async ({ page }) => {
-      // ! THIS TEST FAILS A LOT
       await page.locator("#back-button").click();
       await page.waitForURL("http://localhost:3000/workout");
 
@@ -65,7 +65,7 @@ describe("Workout/[Program]", () => {
         await expect(addDayButton).toBeVisible();
       });
 
-      it("Opens add day popover, onClick of add button", async ({ page }) => {
+      it("Renders popover for add day button", async ({ page }) => {
         await page.locator("#add-day-button").click();
 
         const popoverText = page.getByText(/Create Day/i);
@@ -98,15 +98,15 @@ describe("Workout/[Program]", () => {
         );
       });
 
+      // ! THIS KEEPS ADDING WEEKS, SO PLEASE CLEANUP
       it("Adds week with previous days to new week, onClick of add week button", async ({
         page,
       }) => {
-        // ! THIS KEEPS ADDING WEEKS, SO PLEASE CLEANUP
         await page.locator("#add-week-button").click();
-       
+
         await page.locator("#week-tab").last().click();
         const testDay = page.locator("#day", { hasText: "TEST DAY" });
-      
+
         await expect(testDay).toBeVisible();
         await expect(testDay.getByRole("link")).not.toHaveAttribute(
           "href",
@@ -184,11 +184,10 @@ describe("Workout/[Program]", () => {
         await expect(page.getByText(dayName)).toHaveCount(0);
       });
 
+      // ! THIS TEST FAILS A LOT
       it("Navigates to day onClick", async ({ page }) => {
-        // ! THIS TEST FAILS A LOT
-        // Existing Program = 26. Day = 138. Name = "TEST DAY"
         await page.locator("#day", { hasText: "TEST DAY" }).click();
-        
+
         await page.waitForURL("http://localhost:3000/workout/26/138");
 
         expect(page.url()).toBe("http://localhost:3000/workout/26/138");
