@@ -12,6 +12,7 @@ export function EditSetButton({ method }: { method: "Add" | "Delete" }) {
   return (
     <button
       className="flex h-11 w-11 items-center justify-center bg-primary"
+      id={method === "Add" ? "add-set-button" : "delete-set-button"}
       style={{
         clipPath: clipPathParallelogram,
       }}

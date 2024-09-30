@@ -8,7 +8,7 @@ import Loading from "~/app/loading";
 import { Button } from "~/components/ui/button";
 
 export function NotesTab() {
-  return <TabsTrigger value="notes">Notes</TabsTrigger>;
+  return <TabsTrigger id="notes-tab" value="notes">Notes</TabsTrigger>;
 }
 
 export function NotesTabContent() {
@@ -30,6 +30,7 @@ export function NotesTabContent() {
     <TabsContent value="notes">
       <div className="relative flex rounded-xl bg-secondary text-sm">
         <Textarea
+          id="notes"
           className="border-none bg-transparent"
           defaultValue={noteValue}
           onInput={(e) => setNoteValue(e.currentTarget.value)}

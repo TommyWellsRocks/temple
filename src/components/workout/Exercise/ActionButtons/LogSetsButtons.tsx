@@ -13,6 +13,7 @@ export function LogSetsButtons() {
     <>
       <div className="w-[42px]" />
       <Button
+        id="log-set-button"
         className="w-full"
         onClick={() => {
           dayEx.loggedSetsCount++;
@@ -29,6 +30,7 @@ export function LogSetsButtons() {
       </Button>
 
       <Button
+        id="log-all-button"
         className="rounded-full px-2"
         variant={"outline"}
         onClick={() => {

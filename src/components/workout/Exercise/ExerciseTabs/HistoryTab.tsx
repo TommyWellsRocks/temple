@@ -4,7 +4,7 @@ import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
 export function HistoryTab() {
-  return <TabsTrigger value="history">History</TabsTrigger>;
+  return <TabsTrigger id="history-tab" value="history">History</TabsTrigger>;
 }
 
 export function HistoryTabContent() {
@@ -13,7 +13,10 @@ export function HistoryTabContent() {
 
   return (
     <TabsContent value="history">
-      <div className="flex max-h-96 rounded-xl bg-secondary px-3 py-2 text-sm">
+      <div
+        id="history"
+        className="flex max-h-96 rounded-xl bg-secondary px-3 py-2 text-sm"
+      >
         {hasHistory ? (
           <ScrollArea className="w-full">
             <div className="flex flex-col gap-y-4">

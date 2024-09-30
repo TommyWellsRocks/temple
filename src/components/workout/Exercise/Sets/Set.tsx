@@ -50,11 +50,12 @@ export function Set({ index }: { index: number }) {
     (dayEx.info.equipment === null || isEquipment);
 
   return (
-    <div className="flex flex-col items-end" key={crypto.randomUUID()}>
+    <div id="set-row" className="flex flex-col items-end" key={crypto.randomUUID()}>
       <div
         className={`flex items-center gap-x-2 min-[340px]:gap-x-3 ${isActiveSet ? "text-gray-200" : null}`}
       >
         <div
+          id="set-count"
           className={`flex h-10 w-10 items-center justify-center font-semibold ${isLogged ? "bg-gray-600 text-gray-900" : "bg-primary text-black"}`}
           style={{
             clipPath: clipPathParallelogram,

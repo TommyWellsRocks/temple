@@ -7,7 +7,7 @@ import type { TitleCaseMuscle } from "doNotChangeMe";
 import Loading from "~/app/loading";
 
 export function MusclesTab() {
-  return <TabsTrigger value="muscles">Muscles</TabsTrigger>;
+  return <TabsTrigger id="muscles-tab" value="muscles">Muscles</TabsTrigger>;
 }
 
 export function MusclesTabContent() {
@@ -16,7 +16,7 @@ export function MusclesTabContent() {
 
   return (
     <TabsContent value="muscles">
-      <div className="flex flex-col items-center gap-y-4">
+      <div    id="muscles" className="flex flex-col items-center gap-y-4">
         <div className="w-[200px]">
           <FullMusclesImage
             primaryMuscle={dayEx.info.primaryMuscle as TitleCaseMuscle | null}

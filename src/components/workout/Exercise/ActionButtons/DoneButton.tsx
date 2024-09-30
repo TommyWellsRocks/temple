@@ -14,7 +14,7 @@ export function DoneButton() {
       href={`/workout/${dayEx.programId}/${dayEx.dayId}`}
       className="mx-auto"
     >
-      <Button className="flex gap-1 bg-white text-black">
+      <Button id="done-button" className="flex gap-1 bg-white text-black">
         <ArrowLeft width={15} /> DONE
       </Button>
     </Link>
