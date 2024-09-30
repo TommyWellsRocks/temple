@@ -410,7 +410,8 @@ export function SetDay({
   const setProgramDay = useProgram.getState().setDay;
 
   useEffect(() => {
-    setProgram(programId), setProgramDay(dayId);
+    setProgram(programId);
+    setProgramDay(dayId);
   }, [programId, dayId]);
 
   return null;

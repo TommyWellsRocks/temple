@@ -11,7 +11,7 @@ export default async function ExerciseLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { dayId: string; dayExerciseId: string };
+  params: { programId: string; dayId: string; dayExerciseId: string };
 }) {
   const dayExercise = await getExerciseIdFromDay(Number(params.dayExerciseId));
   if (!dayExercise) return;
@@ -23,7 +23,11 @@ export default async function ExerciseLayout({
   );
   return (
     <>
-      <SetExercise dayExerciseId={Number(params.dayExerciseId)} />
+      <SetExercise
+        programId={Number(params.programId)}
+        dayId={Number(params.dayId)}
+        dayExerciseId={Number(params.dayExerciseId)}
+      />
       <SetExerciseHistory exerciseHistory={exerciseHistory} />
       {children}
     </>

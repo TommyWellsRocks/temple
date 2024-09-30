@@ -331,10 +331,24 @@ export function exerciseActions(
   };
 }
 
-export function SetExercise({ dayExerciseId }: { dayExerciseId: number }) {
+export function SetExercise({
+  programId,
+  dayId,
+  dayExerciseId,
+}: {
+  programId: number;
+  dayId: number;
+  dayExerciseId: number;
+}) {
+  const setProgram = useProgram.getState().setProgram;
+  const setProgramDay = useProgram.getState().setDay;
   const setDayEx = useProgram.getState().setDayExercise;
 
-  useEffect(() => setDayEx(dayExerciseId), [dayExerciseId, setDayEx]);
+  useEffect(() => {
+    setProgram(programId);
+    setProgramDay(dayId);
+    setDayEx(dayExerciseId);
+  }, [programId, dayId, dayExerciseId]);
 
   return null;
 }
