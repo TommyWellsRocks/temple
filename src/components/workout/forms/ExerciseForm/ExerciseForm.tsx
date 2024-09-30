@@ -14,9 +14,11 @@ import type { DayExercise } from "~/server/types";
 import Loading from "~/app/loading";
 
 export function ExerciseForm({
+  setOpen,
   programId,
   dayExercise,
 }: {
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   programId: number;
   dayExercise: DayExercise;
 }) {
@@ -30,6 +32,7 @@ export function ExerciseForm({
   const noteId = dayExercise.notes?.id;
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    if (setOpen) setOpen(false);
     updateExerciseName(
       userId,
       programId,
