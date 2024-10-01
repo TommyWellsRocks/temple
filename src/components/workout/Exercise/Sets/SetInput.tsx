@@ -51,12 +51,12 @@ function handleOnBlur(
     if (label === "Reps") {
       for (let i = index; i < dayEx.reps.length; i++) {
         dayEx.reps[i] = newValue;
-        if (dayEx.loggedSetsCount >= i + 1) break;
+        if (i + 1 < dayEx.loggedSetsCount) break;
       }
     } else if (label === "Weight") {
       for (let i = index; i < dayEx.weight.length; i++) {
         dayEx.weight[i] = newValue;
-        if (dayEx.loggedSetsCount >= i + 1) break;
+        if (i + 1 < dayEx.loggedSetsCount) break;
       }
     }
     // Update State
