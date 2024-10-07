@@ -30,9 +30,10 @@ export function WhatSection() {
       <SectionDescription text="What Is It?" />
       <span className="text-3xl">Your Workouts In One Place</span>
       <div className="flex flex-wrap justify-center gap-3">
-        {whatItems.map((item) => (
+        {whatItems.map((item, index) => (
           <div
-            className="flex flex-col w-[300px] items-start py-4 gap-y-3 rounded-lg border border-white border-opacity-40 bg-white bg-opacity-10 px-4 text-start
+            key={index}
+            className="flex w-[300px] flex-col items-start gap-y-3 rounded-lg border border-white border-opacity-40 bg-white bg-opacity-10 px-4 py-4 text-start
         font-light"
           >
             <div className="flex items-center gap-x-2">
