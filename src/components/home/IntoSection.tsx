@@ -7,7 +7,7 @@ export function IntroSection() {
         Now Available In Beta!
       </span>
 
-      <div className="flex flex-col text-7xl">
+      <div className="flex flex-col text-5xl sm:text-7xl">
         <span>
           You are a <span className="text-[hsl(280,100%,70%)]">Temple</span>
         </span>
