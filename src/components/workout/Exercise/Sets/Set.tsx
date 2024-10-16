@@ -5,8 +5,6 @@ import { clipPathParallelogram } from "~/components/ui/Shapes";
 import { SetInput } from "./SetInput";
 import { getPlatesFromWeight } from "~/utils/helpers";
 
-import type { TitleCaseEquipment } from "doNotChangeMe";
-
 export function Set({ index }: { index: number }) {
   const dayEx = useProgram((state) => state.dayExercise);
   if (!dayEx) return <Loading />;
@@ -15,35 +13,7 @@ export function Set({ index }: { index: number }) {
   const repCount = dayEx.reps[index]!;
   const weightCount = dayEx.weight[index]!;
   const isActiveSet = index === dayEx.loggedSetsCount;
-
-  const isEquipment = (
-    (dayEx.info.equipment as TitleCaseEquipment[]) || null
-  ).some((item) =>
-    (
-      [
-        "Barbells",
-        "Bench Press Machine",
-        "Calf Raise Machine",
-        "EZ Bar",
-        "Hack Squat Machine",
-        "Landmine",
-        "Leg Press",
-        "Leg Press Machine",
-        "Shoulder Press Machine",
-        "Shoulder Shrug Machine",
-        "Sled",
-        "Smith Machine",
-        "Squat Machine",
-        "Squat Rack",
-        "T Bar",
-        "Trap Bar",
-        "Tricep Dip Machine",
-      ] as TitleCaseEquipment[]
-    ).includes(item),
-  );
-  const showPlates =
-    (index === 0 || weightCount !== dayEx.weight[index - 1]) &&
-    (dayEx.info.equipment === null || isEquipment);
+  const showPlates = index === 0 || weightCount !== dayEx.weight[index - 1];
 
   return (
     <div
