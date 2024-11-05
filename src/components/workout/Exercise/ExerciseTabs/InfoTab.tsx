@@ -1,6 +1,5 @@
 import { useProgram } from "~/hooks/workout/useProgram/useProgram";
 
-import Image from "next/image";
 import Link from "next/link";
 import { TabsContent, TabsTrigger } from "~/components/ui/tabs";
 
@@ -9,7 +8,11 @@ import Google from "public/content/images/workout/google.png";
 import Loading from "~/app/loading";
 
 export function InfoTab() {
-  return <TabsTrigger id="info-tab" value="info">Info</TabsTrigger>;
+  return (
+    <TabsTrigger id="info-tab" value="info">
+      Info
+    </TabsTrigger>
+  );
 }
 
 export function InfoTabContent() {
@@ -32,7 +35,9 @@ export function InfoTabContent() {
   return (
     <TabsContent value="info">
       <div
-         id="info"  className="relative flex flex-col items-center gap-y-2 rounded-xl bg-secondary px-3 py-2 text-base min-[400px]:flex-row min-[400px]:justify-center min-[400px]:gap-x-2">
+        id="info"
+        className="relative flex flex-col items-center gap-y-2 rounded-xl bg-secondary px-3 py-2 text-base min-[400px]:flex-row min-[400px]:justify-center min-[400px]:gap-x-2"
+      >
         {searches.map((search) => {
           return (
             <Link
@@ -42,8 +47,8 @@ export function InfoTabContent() {
               className="flex items-center gap-x-2 rounded-md bg-white px-2 py-1 text-black"
             >
               <span>Search {search.platform}</span>
-              <Image
-                src={search.icon}
+              <img
+                src={search.icon as string}
                 alt={`Search Exercise instructions on ${search.platform}`}
                 className="w-8"
               />
