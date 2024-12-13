@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const getProgramSchema = z.object({
+export const getProgramDaySchema = z.object({
   userId: z.string(),
   dayId: z.number(),
 });

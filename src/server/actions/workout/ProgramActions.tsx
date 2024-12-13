@@ -6,7 +6,7 @@ import {
   createWeekSchema,
   deleteDaySchema,
   deleteWeekSchema,
-  getProgramSchema,
+  getProgramDaySchema,
   getWeekSchema,
 } from "~/lib/schemas/program";
 import {
@@ -24,7 +24,7 @@ import {
 
 export async function handleGetProgramDay(userId: string, dayId: number) {
   try {
-    await getProgramSchema.parseAsync({
+    await getProgramDaySchema.parseAsync({
       userId,
       dayId,
     });

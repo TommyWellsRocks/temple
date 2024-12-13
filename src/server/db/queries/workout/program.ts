@@ -109,17 +109,26 @@ export async function createWorkoutProgram(
   startDate: Date,
   endDate: Date,
 ) {
-  const newProgram = await db
-    .insert(workoutPrograms)
-    .values({
-      userId,
-      name,
-      startDate,
-      endDate,
-    })
-    .returning({ id: workoutPrograms.id });
-  await createDayGroup(userId, newProgram[0]!.id);
-  return { id: newProgram[0]!.id };
+  let newProgramId: number;
+  try {
+    const newProgram = await db
+      .insert(workoutPrograms)
+      .values({
+        userId,
+        name,
+        startDate,
+        endDate,
+      })
+      .returning({ id: workoutPrograms.id });
+    newProgramId = newProgram[0]!.id;
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error creating program in DB." };
+  }
+  const { err } = await createDayGroup(userId, newProgramId);
+  if (err) return { value: newProgramId, err };
+
+  return { value: newProgramId, err: null };
 }
 
 export async function editWorkoutProgram(
@@ -129,24 +138,36 @@ export async function editWorkoutProgram(
   startDate: Date,
   endDate: Date,
 ) {
-  await db
-    .update(workoutPrograms)
-    .set({ name, startDate, endDate, updatedAt: new Date() })
-    .where(
-      and(
-        eq(workoutPrograms.userId, userId),
-        eq(workoutPrograms.id, programId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutPrograms)
+      .set({ name, startDate, endDate, updatedAt: new Date() })
+      .where(
+        and(
+          eq(workoutPrograms.userId, userId),
+          eq(workoutPrograms.id, programId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating program in DB." };
+  }
+  return { err: null };
 }
 
 export async function deleteWorkoutProgram(userId: string, programId: number) {
-  await db
-    .delete(workoutPrograms)
-    .where(
-      and(
-        eq(workoutPrograms.userId, userId),
-        eq(workoutPrograms.id, programId),
-      ),
-    );
+  try {
+    await db
+      .delete(workoutPrograms)
+      .where(
+        and(
+          eq(workoutPrograms.userId, userId),
+          eq(workoutPrograms.id, programId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error deleting program in DB." };
+  }
+  return { err: null };
 }
