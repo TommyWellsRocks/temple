@@ -91,25 +91,37 @@ export async function deleteProgramDay(
 }
 
 export async function startWorkout(userId: string, dayId: number) {
-  await db
-    .update(workoutProgramDays)
-    .set({ startedWorkout: new Date() })
-    .where(
-      and(
-        eq(workoutProgramDays.userId, userId),
-        eq(workoutProgramDays.id, dayId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutProgramDays)
+      .set({ startedWorkout: new Date() })
+      .where(
+        and(
+          eq(workoutProgramDays.userId, userId),
+          eq(workoutProgramDays.id, dayId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating workout in DB." };
+  }
+  return { err: null };
 }
 
 export async function endWorkout(userId: string, dayId: number) {
-  await db
-    .update(workoutProgramDays)
-    .set({ endedWorkout: new Date() })
-    .where(
-      and(
-        eq(workoutProgramDays.userId, userId),
-        eq(workoutProgramDays.id, dayId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutProgramDays)
+      .set({ endedWorkout: new Date() })
+      .where(
+        and(
+          eq(workoutProgramDays.userId, userId),
+          eq(workoutProgramDays.id, dayId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating workout in DB." };
+  }
+  return { err: null };
 }

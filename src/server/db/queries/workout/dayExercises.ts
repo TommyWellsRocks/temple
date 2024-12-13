@@ -30,34 +30,44 @@ export async function getExerciseHistory(
 }
 
 export async function getDayExercise(userId: string, dayExerciseId: number) {
-  return await db.query.workoutDayExercises.findFirst({
-    where: (model, { and, eq }) =>
-      and(eq(model.userId, userId), eq(model.id, dayExerciseId)),
-    columns: {
-      id: true,
-      userId: true,
-      programId: true,
-      dayId: true,
-      reps: true,
-      weight: true,
-      updatedAt: true,
-      exerciseId: true,
-      loggedSetsCount: true,
-    },
-    with: {
-      info: {
+  try {
+    return {
+      value: await db.query.workoutDayExercises.findFirst({
+        where: (model, { and, eq }) =>
+          and(eq(model.userId, userId), eq(model.id, dayExerciseId)),
         columns: {
           id: true,
-          name: true,
-          video: true,
-          equipment: true,
-          primaryMuscle: true,
-          secondaryMuscles: true,
+          userId: true,
+          programId: true,
+          dayId: true,
+          reps: true,
+          weight: true,
+          updatedAt: true,
+          exerciseId: true,
+          loggedSetsCount: true,
         },
-      },
-      notes: { columns: { id: true, name: true, notes: true } },
-    },
-  });
+        with: {
+          info: {
+            columns: {
+              id: true,
+              name: true,
+              video: true,
+              equipment: true,
+              primaryMuscle: true,
+              secondaryMuscles: true,
+            },
+          },
+          notes: { columns: { id: true, name: true, notes: true } },
+        },
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    return {
+      value: null,
+      err: "Error getting exercise from DB.",
+    };
+  }
 }
 
 export async function addDayExercise(
@@ -67,41 +77,66 @@ export async function addDayExercise(
   dayId: number,
   exerciseId: number,
 ) {
-  const last = await db.query.workoutDayExercises.findFirst({
-    columns: { reps: true, weight: true },
-    where: (model, { and, eq, sql }) =>
-      and(
-        eq(model.userId, userId),
-        eq(model.exerciseId, exerciseId),
-        eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
-      ),
-    orderBy: (model, { desc }) => desc(model.updatedAt),
-  });
+  let last:
+    | {
+        reps: number[];
+        weight: number[];
+      }
+    | undefined = undefined;
+  try {
+    last = await db.query.workoutDayExercises.findFirst({
+      columns: { reps: true, weight: true },
+      where: (model, { and, eq, sql }) =>
+        and(
+          eq(model.userId, userId),
+          eq(model.exerciseId, exerciseId),
+          eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
+        ),
+      orderBy: (model, { desc }) => desc(model.updatedAt),
+    });
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting last exercise from DB." };
+  }
 
-  const newEx = await db
-    .insert(workoutDayExercises)
-    .values({
-      userId,
-      programId,
-      groupId,
-      dayId,
-      exerciseId,
-      reps: last?.reps || [0, 0, 0, 0],
-      weight: last?.weight || [0, 0, 0, 0],
-    })
-    .returning({ id: workoutDayExercises.id });
-  return newEx[0]!;
+  let newEx: {
+    id: number;
+  }[];
+  try {
+    newEx = await db
+      .insert(workoutDayExercises)
+      .values({
+        userId,
+        programId,
+        groupId,
+        dayId,
+        exerciseId,
+        reps: last?.reps || [0, 0, 0, 0],
+        weight: last?.weight || [0, 0, 0, 0],
+      })
+      .returning({ id: workoutDayExercises.id });
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error adding day exercise to DB." };
+  }
+  return { value: newEx[0]!.id, err: null };
 }
 
 export async function deleteDayExercise(userId: string, dayExerciseId: number) {
-  await db
-    .delete(workoutDayExercises)
-    .where(
-      and(
-        eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, dayExerciseId),
-      ),
-    );
+  try {
+    await db
+      .delete(workoutDayExercises)
+      .where(
+        and(
+          eq(workoutDayExercises.userId, userId),
+          eq(workoutDayExercises.id, dayExerciseId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error deleting day exercise in DB." };
+  }
+  return { err: null };
 }
 
 export async function updateDayExerciseInput(

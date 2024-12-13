@@ -60,26 +60,31 @@ export async function editUserExerciseName(
   newName: string,
   noteId?: number,
 ) {
-  const newNote = noteId
-    ? await db
-        .update(exercise_notes)
-        .set({ name: newName })
-        .where(
-          and(
-            eq(exercise_notes.userId, userId),
-            eq(exercise_notes.exerciseId, exerciseId),
-          ),
-        )
-        .returning({ id: exercise_notes.id })
-    : await db
-        .insert(exercise_notes)
-        .values({
-          userId,
-          exerciseId,
-          name: newName,
-        })
-        .returning({ id: exercise_notes.id });
-  return newNote[0]!;
+  try {
+    const newNote = noteId
+      ? await db
+          .update(exercise_notes)
+          .set({ name: newName })
+          .where(
+            and(
+              eq(exercise_notes.userId, userId),
+              eq(exercise_notes.exerciseId, exerciseId),
+            ),
+          )
+          .returning({ id: exercise_notes.id })
+      : await db
+          .insert(exercise_notes)
+          .values({
+            userId,
+            exerciseId,
+            name: newName,
+          })
+          .returning({ id: exercise_notes.id });
+    return { value: newNote[0]!.id, err: null };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Failed to update exercise name in DB." };
+  }
 }
 
 export async function editUserExerciseNote(
