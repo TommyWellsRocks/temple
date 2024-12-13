@@ -3,6 +3,7 @@
 // ! DO NOT CHANGE THESE MUSCLES/NAMES.
 // ! THEY ARE USED WITHIN THE DB EXERCISES AND MUSCLE IMAGES
 
+<<<<<<< Updated upstream
 export type TitleCaseMuscle =
   | "Abs"
   | "Abductors"
@@ -23,6 +24,31 @@ export type TitleCaseMuscle =
   | "Traps"
   | "Triceps"
   | "Upper Abs";
+=======
+import Abductors from "public/content/images/workout/muscles/Abductors.png";
+import Adductors from "public/content/images/workout/muscles/Adductors.png";
+import Back from "public/content/images/workout/muscles/Back.png";
+import Biceps from "public/content/images/workout/muscles/Biceps.png";
+import Calves from "public/content/images/workout/muscles/Calves.png";
+import Chest from "public/content/images/workout/muscles/Chest.png";
+import Forearms from "public/content/images/workout/muscles/Forearms.png";
+import Glutes from "public/content/images/workout/muscles/Glutes.png";
+import Hamstrings from "public/content/images/workout/muscles/Hamstrings.png";
+import LowerAbs from "public/content/images/workout/muscles/Lower Abs.png";
+import LowerBack from "public/content/images/workout/muscles/Lower Back.png";
+import Neck from "public/content/images/workout/muscles/Neck.png";
+import Obliques from "public/content/images/workout/muscles/Obliques.png";
+import Quads from "public/content/images/workout/muscles/Quads.png";
+import Shoulders from "public/content/images/workout/muscles/Shoulders.png";
+import Traps from "public/content/images/workout/muscles/Traps.png";
+import Triceps from "public/content/images/workout/muscles/Triceps.png";
+import UpperAbs from "public/content/images/workout/muscles/Upper Abs.png";
+import Abs from "public/content/images/workout/muscles/Abs.png";
+import { z } from "zod";
+import { TitleCaseEquipmentEnum, TitleCaseMuscleEnum } from "~/lib/schemas/types";
+
+export type TitleCaseMuscle = z.infer<typeof TitleCaseMuscleEnum>
+>>>>>>> Stashed changes
 
 export const muscles = {
   abs: "Abs",
@@ -68,76 +94,7 @@ export const musclesToImage = {
   "Upper Abs": "/content/images/workout/muscles/Upper Abs.png",
 };
 
-export type TitleCaseEquipment =
-  | "Row Cable"
-  | "Smith Machine"
-  | "Bicep Curl Machine"
-  | "Rings"
-  | "Foam Roller"
-  | "Freemotion Machine (all forms)"
-  | "Assisted Weight Machine"
-  | "Medicine Balls"
-  | "Barbells"
-  | "Rope Cable"
-  | "Lat Pulldown Cable"
-  | "Cone"
-  | "Row Machine"
-  | "Trap Bar"
-  | "Squat Machine"
-  | "Incline Bench"
-  | "Preacher Curl Machine"
-  | "Vertical Bench (Vertical Knee Raise)"
-  | "Dip (Parallel) Bar"
-  | "Bodyweight-only"
-  | "Flat Bench"
-  | "Thigh Adductor Machine"
-  | "Rope"
-  | "Hack Squat Machine"
-  | "Landmine"
-  | "Box"
-  | "Shoulder Press Machine"
-  | "Hi-Lo Pulley Cable"
-  | "Stability (Swiss) Ball"
-  | "Ab Wheel"
-  | "Calf Raise Machine"
-  | "Glute Ham Raise Bench"
-  | "Handle Bands"
-  | "Leg Press Machine"
-  | "Farmer's Walk Handles"
-  | "PVC Pipe"
-  | "Ab Crunch Machine"
-  | "Tire"
-  | "Thigh Abductor Machine"
-  | "Leg Press"
-  | "Parallette Bars"
-  | "Glute Kickback Machine"
-  | "Crossover Cable"
-  | "Hammerstrength (Leverage) Machine (all forms)"
-  | "Back Extension Bench"
-  | "EZ Bar"
-  | "Decline Bench"
-  | "Fly Machine"
-  | "Sled"
-  | "Triceps Extension Machine"
-  | "Leg Curl Machine"
-  | "Battle Ropes"
-  | "Preacher Curl Bench"
-  | "Balance Trainer"
-  | "Leg Extension Machine"
-  | "Kettlebells"
-  | "Dumbbells"
-  | "Bench Press Machine"
-  | "Squat Rack"
-  | "Mini Loop Bands"
-  | "Platforms"
-  | "TRX"
-  | "Pull Up Bar"
-  | "T Bar"
-  | "Tricep Dip Machine"
-  | "Loop Bands"
-  | "Reverse Hyper Bench"
-  | "Shoulder Shrug Machine"
-  | "Back Extension Machine";
+export type TitleCaseEquipment = z.infer<typeof TitleCaseEquipmentEnum>
 
 export const equipment = {
   rowCable: "Row Cable",

@@ -3,17 +3,14 @@ import "server-only";
 import { db } from "~/server/db";
 import { exercises } from "~/server/db/schema";
 
-import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
+import type { FormattedJsonExercise } from "~/server/types";
 
-export async function insertExercises(
-  formattedData: {
-    id: number | undefined;
-    name: string;
-    equipment: TitleCaseEquipment[];
-    primaryMuscle: TitleCaseMuscle;
-    secondaryMuscles: TitleCaseMuscle[];
-    video: undefined;
-  }[],
-) {
-  await db.insert(exercises).values(formattedData);
+export async function insertExercises(formattedData: FormattedJsonExercise[]) {
+  try {
+    await db.insert(exercises).values(formattedData);
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error inserting exercises to DB." };
+  }
+  return { err: null };
 }
