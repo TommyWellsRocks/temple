@@ -18,8 +18,13 @@ export async function toggleRedirectWorkout(
   userId: string,
   toggleValue: boolean,
 ) {
-  await db
-    .update(users)
-    .set({ redirectOnLoadWorkout: toggleValue })
-    .where(eq(users.id, userId));
+  try {
+    await db
+      .update(users)
+      .set({ redirectOnLoadWorkout: toggleValue })
+      .where(eq(users.id, userId));
+  } catch (err: any) {
+    return { err: "Error updating redirectWorkout in db." };
+  }
+  return { err: null };
 }

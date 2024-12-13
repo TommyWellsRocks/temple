@@ -28,7 +28,10 @@ export function RedirectWorkoutSwitch({
     <Switch
       id="redirect-workout"
       defaultChecked={willRedirect}
-      onCheckedChange={(e) => handleToggleRedirectWorkout(userId, e)}
+      onCheckedChange={async (e) => {
+        const { err } = await handleToggleRedirectWorkout(userId, e);
+        if (err) console.error(err);
+      }}
     />
   );
 }
