@@ -27,11 +27,16 @@ export async function createUserExercise(
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
-  const newUserCreatedExercise = await db
-    .insert(exercises)
-    .values({ userId, name, equipment, primaryMuscle, secondaryMuscles })
-    .returning({ id: exercises.id });
-  return newUserCreatedExercise[0]!;
+  try {
+    const newUserCreatedExercise = await db
+      .insert(exercises)
+      .values({ userId, name, equipment, primaryMuscle, secondaryMuscles })
+      .returning({ id: exercises.id });
+    return { value: newUserCreatedExercise[0]!.id, err: null };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error creating exercise in DB." };
+  }
 }
 
 export async function editUserExercise(
@@ -42,16 +47,30 @@ export async function editUserExercise(
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
-  await db
-    .update(exercises)
-    .set({ name, equipment, primaryMuscle, secondaryMuscles })
-    .where(and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)));
+  try {
+    await db
+      .update(exercises)
+      .set({ name, equipment, primaryMuscle, secondaryMuscles })
+      .where(and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)));
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating exercise in DB." };
+  }
+
+  return { err: null };
 }
 
 export async function deleteUserExercise(userId: string, exerciseId: number) {
-  await db
-    .delete(exercises)
-    .where(and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)));
+  try {
+    await db
+      .delete(exercises)
+      .where(and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)));
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error deleting exercise in DB." };
+  }
+
+  return { err: null };
 }
 
 export async function editUserExerciseName(

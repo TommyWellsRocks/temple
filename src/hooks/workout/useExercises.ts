@@ -71,7 +71,7 @@ export const useExercises = create<exercisesState>((set, get) => ({
 
     // Actual Update
     try {
-      const { id: realExerciseId } = await handleCreateUserExercise(
+      const { value: realExerciseId, err } = await handleCreateUserExercise(
         userId,
         name,
         equipment,
@@ -79,7 +79,7 @@ export const useExercises = create<exercisesState>((set, get) => ({
         secondaryMuscles,
       );
 
-      if (!realExerciseId) throw "No realExerciseId error";
+      if (!realExerciseId || err) throw err ? err : "No realExerciseId error";
 
       const actualExercise = { ...optimisticExercise, id: realExerciseId };
       const actualExercises = optimisticExercises.map((exercise) =>
@@ -135,7 +135,7 @@ export const useExercises = create<exercisesState>((set, get) => ({
 
     // Actual Update
     try {
-      await handleEditUserExercise(
+      const { err } = await handleEditUserExercise(
         userId,
         exerciseId,
         name,
@@ -143,6 +143,7 @@ export const useExercises = create<exercisesState>((set, get) => ({
         primaryMuscle,
         secondaryMuscles,
       );
+      if (err) throw err;
     } catch (error) {
       // Else Fallback Update
       console.error(error);
@@ -171,7 +172,8 @@ export const useExercises = create<exercisesState>((set, get) => ({
 
     // Actual Update
     try {
-      await handleDeleteUserExercise(userId, exerciseId);
+      const { err } = await handleDeleteUserExercise(userId, exerciseId);
+      if (err) throw err;
     } catch (error) {
       // Else Fallback Update
       console.error(error);
