@@ -24,7 +24,7 @@ export async function toggleRedirectWorkout(
       .set({ redirectOnLoadWorkout: toggleValue })
       .where(eq(users.id, userId));
   } catch (err: any) {
-    return { err: "Error updating redirectWorkout in db." };
+    return { err: "Error updating redirectWorkout in DB." };
   }
   return { err: null };
 }
