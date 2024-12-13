@@ -1,5 +1,12 @@
 "use server";
 
+import { ZodError } from "zod";
+import {
+  exerciseLoggedSetsSchema,
+  exerciseNoteSchema,
+  exerciseSetsSchema,
+  exerciseVolumeSchema,
+} from "~/lib/schemas/exercise";
 import {
   updateDayExerciseInput,
   updateDayExerciseSets,
@@ -13,7 +20,19 @@ export async function handleExerciseVolumeInput(
   reps: number[],
   weight: number[],
 ) {
-  await updateDayExerciseInput(dayExerciseId, userId, reps, weight);
+  try {
+    await exerciseVolumeSchema.parseAsync({
+      userId,
+      dayExerciseId,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { err: "Exercises validation error." };
+  }
+
+  return await updateDayExerciseInput(dayExerciseId, userId, reps, weight);
 }
 
 export async function handleExerciseSetsChange(
@@ -23,7 +42,19 @@ export async function handleExerciseSetsChange(
   weight: number[],
   loggedSetsCount: number,
 ) {
-  await updateDayExerciseSets(
+  try {
+    await exerciseSetsSchema.parseAsync({
+      userId,
+      dayExerciseId,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { err: "Exercises validation error." };
+  }
+
+  return await updateDayExerciseSets(
     dayExerciseId,
     userId,
     reps,
@@ -37,7 +68,20 @@ export async function handleUpdateLoggedSets(
   userId: string,
   loggedSetsCount: number,
 ) {
-  await updateLoggedSets(dayExerciseId, userId, loggedSetsCount);
+  try {
+    await exerciseLoggedSetsSchema.parseAsync({
+      userId,
+      dayExerciseId,
+      loggedSetsCount,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { err: "Exercises validation error." };
+  }
+
+  return await updateLoggedSets(dayExerciseId, userId, loggedSetsCount);
 }
 
 export async function handleExerciseNoteInput(
@@ -46,5 +90,19 @@ export async function handleExerciseNoteInput(
   noteValue: string,
   noteId?: number,
 ) {
+  try {
+    await exerciseNoteSchema.parseAsync({
+      userId,
+      exerciseId,
+      noteValue,
+      noteId,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { value: null, err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { value: null, err: "Exercises validation error." };
+  }
+
   return await editUserExerciseNote(userId, exerciseId, noteValue, noteId);
 }

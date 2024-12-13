@@ -145,19 +145,25 @@ export async function updateDayExerciseInput(
   reps: number[],
   weight: number[],
 ) {
-  await db
-    .update(workoutDayExercises)
-    .set({
-      reps,
-      weight,
-      updatedAt: new Date(),
-    })
-    .where(
-      and(
-        eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, dayExerciseId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutDayExercises)
+      .set({
+        reps,
+        weight,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(workoutDayExercises.userId, userId),
+          eq(workoutDayExercises.id, dayExerciseId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating exercise input in DB." };
+  }
+  return { err: null };
 }
 
 export async function updateDayExerciseSets(
@@ -167,20 +173,26 @@ export async function updateDayExerciseSets(
   weight: number[],
   loggedSetsCount: number,
 ) {
-  await db
-    .update(workoutDayExercises)
-    .set({
-      reps,
-      weight,
-      updatedAt: new Date(),
-      loggedSetsCount,
-    })
-    .where(
-      and(
-        eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, dayExerciseId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutDayExercises)
+      .set({
+        reps,
+        weight,
+        updatedAt: new Date(),
+        loggedSetsCount,
+      })
+      .where(
+        and(
+          eq(workoutDayExercises.userId, userId),
+          eq(workoutDayExercises.id, dayExerciseId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating exercise sets in DB." };
+  }
+  return { err: null };
 }
 
 export async function updateLoggedSets(
@@ -188,13 +200,19 @@ export async function updateLoggedSets(
   userId: string,
   loggedSetsCount: number,
 ) {
-  await db
-    .update(workoutDayExercises)
-    .set({ loggedSetsCount: loggedSetsCount, updatedAt: new Date() })
-    .where(
-      and(
-        eq(workoutDayExercises.userId, userId),
-        eq(workoutDayExercises.id, dayExerciseId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutDayExercises)
+      .set({ loggedSetsCount: loggedSetsCount, updatedAt: new Date() })
+      .where(
+        and(
+          eq(workoutDayExercises.userId, userId),
+          eq(workoutDayExercises.id, dayExerciseId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating logged sets in DB." };
+  }
+  return { err: null };
 }

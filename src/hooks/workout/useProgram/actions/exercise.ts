@@ -91,7 +91,13 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        await handleExerciseVolumeInput(dayExerciseId, userId, reps, weight);
+        const { err } = await handleExerciseVolumeInput(
+          dayExerciseId,
+          userId,
+          reps,
+          weight,
+        );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -154,13 +160,14 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        await handleExerciseSetsChange(
+        const { err } = await handleExerciseSetsChange(
           dayExerciseId,
           userId,
           reps,
           weight,
           loggedSetsCount,
         );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -219,7 +226,12 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        await handleUpdateLoggedSets(dayExerciseId, userId, loggedSetsCount);
+        const { err } = await handleUpdateLoggedSets(
+          dayExerciseId,
+          userId,
+          loggedSetsCount,
+        );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -281,13 +293,13 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        const { id: realNoteId } = await handleExerciseNoteInput(
+        const { value: realNoteId, err } = await handleExerciseNoteInput(
           userId,
           exerciseId,
           noteValue,
           noteId,
         );
-        if (!realNoteId) throw "No realNoteId error";
+        if (!realNoteId || err) throw err ? err : "No realNoteId error";
 
         const actualExercise = {
           ...optimisticExercise,
