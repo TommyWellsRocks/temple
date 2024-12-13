@@ -5,40 +5,48 @@ import { and, eq } from "drizzle-orm";
 import { workoutProgramDays } from "~/server/db/schema";
 
 export async function getProgramDay(userId: string, dayId: number) {
-  return await db.query.workoutProgramDays.findFirst({
-    where: (model, { and, eq }) =>
-      and(eq(model.userId, userId), eq(model.id, dayId)),
-    columns: { createdAt: false },
-    with: {
-      group: { columns: { id: true } },
-      dayExercises: {
-        columns: {
-          id: true,
-          userId: true,
-          programId: true,
-          dayId: true,
-          reps: true,
-          weight: true,
-          updatedAt: true,
-          exerciseId: true,
-          loggedSetsCount: true,
-        },
+  try {
+    return {
+      value: await db.query.workoutProgramDays.findFirst({
+        where: (model, { and, eq }) =>
+          and(eq(model.userId, userId), eq(model.id, dayId)),
+        columns: { createdAt: false },
         with: {
-          info: {
+          group: { columns: { id: true } },
+          dayExercises: {
             columns: {
               id: true,
-              name: true,
-              video: true,
-              equipment: true,
-              primaryMuscle: true,
-              secondaryMuscles: true,
+              userId: true,
+              programId: true,
+              dayId: true,
+              reps: true,
+              weight: true,
+              updatedAt: true,
+              exerciseId: true,
+              loggedSetsCount: true,
+            },
+            with: {
+              info: {
+                columns: {
+                  id: true,
+                  name: true,
+                  video: true,
+                  equipment: true,
+                  primaryMuscle: true,
+                  secondaryMuscles: true,
+                },
+              },
+              notes: { columns: { id: true, name: true, notes: true } },
             },
           },
-          notes: { columns: { id: true, name: true, notes: true } },
         },
-      },
-    },
-  });
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting day from DB." };
+  }
 }
 
 export async function createProgramDay(
@@ -48,11 +56,16 @@ export async function createProgramDay(
   name: string,
   repeatOn: number[] | null,
 ) {
-  const newDay = await db
-    .insert(workoutProgramDays)
-    .values({ userId, programId, groupId, name, repeatOn })
-    .returning({ id: workoutProgramDays.id });
-  return newDay[0]!;
+  try {
+    const newDay = await db
+      .insert(workoutProgramDays)
+      .values({ userId, programId, groupId, name, repeatOn })
+      .returning({ id: workoutProgramDays.id });
+    return { value: newDay[0]!.id, err: null };
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error creating day in DB." };
+  }
 }
 
 export async function editProgramDay(
@@ -62,16 +75,22 @@ export async function editProgramDay(
   name: string,
   repeatOn: number[] | null,
 ) {
-  await db
-    .update(workoutProgramDays)
-    .set({ name, repeatOn, updatedAt: new Date() })
-    .where(
-      and(
-        eq(workoutProgramDays.userId, userId),
-        eq(workoutProgramDays.programId, programId),
-        eq(workoutProgramDays.id, dayId),
-      ),
-    );
+  try {
+    await db
+      .update(workoutProgramDays)
+      .set({ name, repeatOn, updatedAt: new Date() })
+      .where(
+        and(
+          eq(workoutProgramDays.userId, userId),
+          eq(workoutProgramDays.programId, programId),
+          eq(workoutProgramDays.id, dayId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error updating day in DB." };
+  }
+  return { err: null };
 }
 
 export async function deleteProgramDay(
@@ -79,15 +98,21 @@ export async function deleteProgramDay(
   programId: number,
   dayId: number,
 ) {
-  await db
-    .delete(workoutProgramDays)
-    .where(
-      and(
-        eq(workoutProgramDays.userId, userId),
-        eq(workoutProgramDays.programId, programId),
-        eq(workoutProgramDays.id, dayId),
-      ),
-    );
+  try {
+    await db
+      .delete(workoutProgramDays)
+      .where(
+        and(
+          eq(workoutProgramDays.userId, userId),
+          eq(workoutProgramDays.programId, programId),
+          eq(workoutProgramDays.id, dayId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error deleting day from DB." };
+  }
+  return { err: null };
 }
 
 export async function startWorkout(userId: string, dayId: number) {

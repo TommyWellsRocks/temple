@@ -87,17 +87,21 @@ export function programActions(
 
       // Actual Update
       try {
-        const { id: realDayId } = await handleCreateDay(
+        const { value: realDayId, err: cdError } = await handleCreateDay(
           userId,
           programId,
           groupId,
           name,
           repeatOn,
         );
-        if (!realDayId) throw "No realDayId error";
+        if (!realDayId || cdError)
+          throw cdError ? cdError : "No realDayId error";
 
-        const realDay = await handleGetProgramDay(userId, realDayId);
-        if (!realDay) throw "No realDay error";
+        const { value: realDay, err: gdError } = await handleGetProgramDay(
+          userId,
+          realDayId,
+        );
+        if (!realDay || gdError) throw gdError ? gdError : "No realDay error";
 
         const actualProgram = getChangedProgram(
           optimisticProgram,
@@ -168,7 +172,14 @@ export function programActions(
 
       // Actual Update
       try {
-        await handleUpdateDay(userId, programId, dayId, newName, newRepeatOn);
+        const { err } = await handleUpdateDay(
+          userId,
+          programId,
+          dayId,
+          newName,
+          newRepeatOn,
+        );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -214,7 +225,8 @@ export function programActions(
 
       // Actual Update
       try {
-        await handleDeleteDay(userId, programId, dayId);
+        const { err } = await handleDeleteDay(userId, programId, dayId);
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -265,11 +277,17 @@ export function programActions(
 
       // Actual Update
       try {
-        const realGroupId = await handleCreateWeekWithDays(userId, programId);
-        if (!realGroupId) throw "No realGroupId error";
+        const { value: realGroupId, err: cwError } =
+          await handleCreateWeekWithDays(userId, programId);
+        if (!realGroupId || cwError)
+          throw cwError ? cwError : "No realGroupId error";
 
-        const realGroup = await handleGetWeekWithDays(userId, realGroupId);
-        if (!realGroup) throw "No realGroup error";
+        const { value: realGroup, err: gwError } = await handleGetWeekWithDays(
+          userId,
+          realGroupId,
+        );
+        if (!realGroup || gwError)
+          throw gwError ? gwError : "No realGroup error";
 
         const actualProgram = {
           ...optimisticProgram,
@@ -341,7 +359,8 @@ export function programActions(
 
       // Actual Update
       try {
-        await handleDeleteWeek(userId, programId, groupId);
+        const { err } = await handleDeleteWeek(userId, programId, groupId);
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
