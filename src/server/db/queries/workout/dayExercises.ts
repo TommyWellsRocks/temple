@@ -23,7 +23,10 @@ export async function getExerciseIdFromDay(dayExerciseId: number) {
 export async function getExerciseHistory(exerciseId: number, dayExId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -49,7 +52,10 @@ export async function getExerciseHistory(exerciseId: number, dayExId: number) {
 export async function getDayExercise(dayExerciseId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -100,7 +106,10 @@ export async function addDayExercise(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   let last:
     | {
@@ -150,7 +159,10 @@ export async function addDayExercise(
 export async function deleteDayExercise(dayExerciseId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -175,7 +187,10 @@ export async function updateDayExerciseInput(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -206,7 +221,10 @@ export async function updateDayExerciseSets(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -236,7 +254,10 @@ export async function updateLoggedSets(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db

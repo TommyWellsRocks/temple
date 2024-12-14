@@ -10,7 +10,10 @@ import { auth } from "~/server/auth";
 export async function getExercisesForUser() {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -41,7 +44,10 @@ export async function createUserExercise(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     const newUserCreatedExercise = await db
@@ -64,7 +70,10 @@ export async function editUserExercise(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -82,7 +91,10 @@ export async function editUserExercise(
 export async function deleteUserExercise(exerciseId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -103,7 +115,10 @@ export async function editUserExerciseName(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     const newNote = noteId
@@ -139,7 +154,10 @@ export async function editUserExerciseNote(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     const newNote = noteId

@@ -8,7 +8,10 @@ import { toggleRedirectWorkout } from "~/server/db/queries/settings/settings";
 export async function handleToggleRedirectWorkout(toggleValue: boolean) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await settingsSchema.parseAsync({ userId, toggleValue });

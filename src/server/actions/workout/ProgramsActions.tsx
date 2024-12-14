@@ -17,7 +17,10 @@ import {
 export async function handleGetProgram(programId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await getProgramSchema.parseAsync({
@@ -41,7 +44,10 @@ export async function handleCreateProgram(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await createProgramSchema.parseAsync({
@@ -68,7 +74,10 @@ export async function handleUpdateProgram(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await updateProgramSchema.parseAsync({
@@ -91,7 +100,10 @@ export async function handleUpdateProgram(
 export async function handleDeleteProgram(programId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await getProgramSchema.parseAsync({

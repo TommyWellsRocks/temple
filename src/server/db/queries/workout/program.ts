@@ -9,7 +9,10 @@ import { auth } from "~/server/auth";
 export async function getMyPrograms() {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -65,7 +68,10 @@ export async function getMyPrograms() {
 export async function getMyProgram(programId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -126,7 +132,10 @@ export async function createWorkoutProgram(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   let newProgramId: number;
   try {
@@ -158,7 +167,10 @@ export async function editWorkoutProgram(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -180,7 +192,10 @@ export async function editWorkoutProgram(
 export async function deleteWorkoutProgram(programId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await db

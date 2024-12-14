@@ -8,7 +8,10 @@ import { auth } from "~/server/auth";
 export async function getProgramDay(dayId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -62,7 +65,10 @@ export async function createProgramDay(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     const newDay = await db
@@ -84,7 +90,10 @@ export async function editProgramDay(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -107,7 +116,10 @@ export async function editProgramDay(
 export async function deleteProgramDay(programId: number, dayId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -129,7 +141,10 @@ export async function deleteProgramDay(programId: number, dayId: number) {
 export async function startWorkout(dayId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db
@@ -151,7 +166,10 @@ export async function startWorkout(dayId: number) {
 export async function endWorkout(dayId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db

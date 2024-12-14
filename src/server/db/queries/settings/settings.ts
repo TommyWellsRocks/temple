@@ -8,7 +8,10 @@ import { auth } from "~/server/auth";
 export async function getUserSettings() {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -30,7 +33,10 @@ export async function getUserSettings() {
 export async function toggleRedirectWorkout(toggleValue: boolean) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db

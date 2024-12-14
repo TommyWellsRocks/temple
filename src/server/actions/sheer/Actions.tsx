@@ -12,7 +12,10 @@ export async function handlePostTodaysResponse(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await sheerSchema.parseAsync({ userId, response, why });

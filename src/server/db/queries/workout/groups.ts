@@ -13,7 +13,10 @@ import { auth } from "~/server/auth";
 export async function getWeekWithDays(groupId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     return {
@@ -67,7 +70,10 @@ export async function getWeekWithDays(groupId: number) {
 export async function createDayGroup(programId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     const newGroup = await db
@@ -87,12 +93,12 @@ export async function addPrevDaysToNewGroup(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
-  const { value: program, err: pgError } = await getMyProgram(
-    userId,
-    programId,
-  );
+  const { value: program, err: pgError } = await getMyProgram(programId);
   if (pgError) return { err: pgError };
 
   if (program?.programDays.length) {
@@ -162,7 +168,10 @@ export async function addPrevDaysToNewGroup(
 export async function deleteDayGroup(programId: number, groupId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db

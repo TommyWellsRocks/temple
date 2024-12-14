@@ -23,7 +23,10 @@ export async function handleCreateUserExercise(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await createUserExerciseSchema.parseAsync({
@@ -57,7 +60,10 @@ export async function handleEditUserExercise(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await editExerciseNameSchema.parseAsync({
@@ -87,7 +93,10 @@ export async function handleEditUserExercise(
 export async function handleDeleteUserExercise(exerciseId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await deleteUserExerciseSchema.parseAsync({

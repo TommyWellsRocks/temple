@@ -26,7 +26,10 @@ import {
 export async function handleGetProgramDay(dayId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await getProgramDaySchema.parseAsync({
@@ -51,7 +54,10 @@ export async function handleCreateDay(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await createUpdateDaySchema.parseAsync({
@@ -79,7 +85,10 @@ export async function handleUpdateDay(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await createUpdateDaySchema.parseAsync({
@@ -102,7 +111,10 @@ export async function handleUpdateDay(
 export async function handleDeleteDay(programId: number, dayId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await deleteDaySchema.parseAsync({
@@ -123,7 +135,10 @@ export async function handleDeleteDay(programId: number, dayId: number) {
 export async function handleGetWeekWithDays(groupId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await getWeekSchema.parseAsync({
@@ -143,7 +158,10 @@ export async function handleGetWeekWithDays(groupId: number) {
 export async function handleCreateWeekWithDays(programId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await createWeekSchema.parseAsync({
@@ -171,7 +189,10 @@ export async function handleCreateWeekWithDays(programId: number) {
 export async function handleDeleteWeek(programId: number, groupId: number) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await deleteWeekSchema.parseAsync({

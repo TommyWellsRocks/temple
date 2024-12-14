@@ -9,7 +9,10 @@ import { sheerResponses } from "~/server/db/schema";
 export async function getTodaysResponse() {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await userSchema.parseAsync({ userId });
@@ -46,7 +49,10 @@ export async function getTodaysResponse() {
 export async function postTodaysResponse(response: boolean, why?: string) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await db.insert(sheerResponses).values({ userId, response, why });
@@ -60,7 +66,10 @@ export async function postTodaysResponse(response: boolean, why?: string) {
 export async function getWinStreak() {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await userSchema.parseAsync({ userId });

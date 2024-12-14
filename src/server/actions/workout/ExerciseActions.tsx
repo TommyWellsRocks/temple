@@ -22,7 +22,10 @@ export async function handleExerciseVolumeInput(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await exerciseVolumeSchema.parseAsync({
@@ -47,7 +50,10 @@ export async function handleExerciseSetsChange(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await exerciseSetsSchema.parseAsync({
@@ -75,7 +81,10 @@ export async function handleUpdateLoggedSets(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
 
   try {
     await exerciseLoggedSetsSchema.parseAsync({
@@ -100,7 +109,10 @@ export async function handleExerciseNoteInput(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return { value: null, err: "Authentication error." };
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
 
   try {
     await exerciseNoteSchema.parseAsync({
