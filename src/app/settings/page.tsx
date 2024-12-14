@@ -31,8 +31,9 @@ export default async function Settings() {
     return redirect(`/signin?return=${encodeURIComponent("/settings")}`);
 
   const userId = session.user.id;
-  const userSettings = await getUserSettings(userId);
-  if (!userSettings) return;
+  const { value: userSettings, err: settingsError } =
+    await getUserSettings(userId);
+  if (!userSettings || settingsError) return;
 
   return (
     <>
