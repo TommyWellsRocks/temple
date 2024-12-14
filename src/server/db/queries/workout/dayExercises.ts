@@ -5,10 +5,18 @@ import { and, eq } from "drizzle-orm";
 import { workoutDayExercises } from "~/server/db/schema";
 
 export async function getExerciseIdFromDay(dayExerciseId: number) {
-  return await db.query.workoutDayExercises.findFirst({
-    where: (model, { eq }) => eq(model.id, dayExerciseId),
-    columns: { userId: true, exerciseId: true },
-  });
+  try {
+    return {
+      value: await db.query.workoutDayExercises.findFirst({
+        where: (model, { eq }) => eq(model.id, dayExerciseId),
+        columns: { userId: true, exerciseId: true },
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting exerciseId from DB." };
+  }
 }
 
 export async function getExerciseHistory(
@@ -16,17 +24,25 @@ export async function getExerciseHistory(
   exerciseId: number,
   dayExId: number,
 ) {
-  return await db.query.workoutDayExercises.findMany({
-    columns: { reps: true, weight: true, id: true, updatedAt: true },
-    where: (model, { and, eq, ne, sql }) =>
-      and(
-        eq(model.userId, userId),
-        eq(model.exerciseId, exerciseId),
-        ne(model.id, dayExId),
-        eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
-      ),
-    orderBy: (model, { desc }) => desc(model.updatedAt),
-  });
+  try {
+    return {
+      value: await db.query.workoutDayExercises.findMany({
+        columns: { reps: true, weight: true, id: true, updatedAt: true },
+        where: (model, { and, eq, ne, sql }) =>
+          and(
+            eq(model.userId, userId),
+            eq(model.exerciseId, exerciseId),
+            ne(model.id, dayExId),
+            eq(model.loggedSetsCount, sql`CARDINALITY(${model.reps})`),
+          ),
+        orderBy: (model, { desc }) => desc(model.updatedAt),
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting exercise history from DB." };
+  }
 }
 
 export async function getDayExercise(userId: string, dayExerciseId: number) {
