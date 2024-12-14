@@ -8,6 +8,7 @@ import {
   getExerciseSchema,
   startEndWorkoutSchema,
 } from "~/lib/schemas/day";
+import { auth } from "~/server/auth";
 import { endWorkout, startWorkout } from "~/server/db/queries/workout/day";
 import {
   addDayExercise,
@@ -16,7 +17,11 @@ import {
 } from "~/server/db/queries/workout/dayExercises";
 import { editUserExerciseName } from "~/server/db/queries/workout/exercises";
 
-export async function handleGetExercise(userId: string, dayExerciseId: number) {
+export async function handleGetExercise(dayExerciseId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await getExerciseSchema.parseAsync({ userId, dayExerciseId });
   } catch (err: any) {
@@ -26,16 +31,19 @@ export async function handleGetExercise(userId: string, dayExerciseId: number) {
     return { value: null, err: "Exercises validation error." };
   }
 
-  return await getDayExercise(userId, dayExerciseId);
+  return await getDayExercise(dayExerciseId);
 }
 
 export async function handleAddExercise(
-  userId: string,
   programId: number,
   groupId: number,
   dayId: number,
   exerciseId: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await addExerciseSchema.parseAsync({
       userId,
@@ -51,15 +59,18 @@ export async function handleAddExercise(
     return { value: null, err: "Exercises validation error." };
   }
 
-  return await addDayExercise(userId, programId, groupId, dayId, exerciseId);
+  return await addDayExercise(programId, groupId, dayId, exerciseId);
 }
 
 export async function handleEditExerciseName(
-  userId: string,
   exerciseId: number,
   newName: string,
   noteId?: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await editExerciseNameSchema.parseAsync({
       userId,
@@ -74,13 +85,14 @@ export async function handleEditExerciseName(
     return { value: null, err: "Name validation error." };
   }
 
-  return await editUserExerciseName(userId, exerciseId, newName, noteId);
+  return await editUserExerciseName(exerciseId, newName, noteId);
 }
 
-export async function handleDeleteExercise(
-  userId: string,
-  dayExerciseId: number,
-) {
+export async function handleDeleteExercise(dayExerciseId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await deleteExerciseSchema.parseAsync({
       userId,
@@ -93,10 +105,14 @@ export async function handleDeleteExercise(
     return { err: "Exercises validation error." };
   }
 
-  return await deleteDayExercise(userId, dayExerciseId);
+  return await deleteDayExercise(dayExerciseId);
 }
 
-export async function handleStartWorkout(userId: string, dayId: number) {
+export async function handleStartWorkout(dayId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await startEndWorkoutSchema.parseAsync({
       userId,
@@ -109,10 +125,14 @@ export async function handleStartWorkout(userId: string, dayId: number) {
     return { err: "Workout validation error." };
   }
 
-  return await startWorkout(userId, dayId);
+  return await startWorkout(dayId);
 }
 
-export async function handleEndWorkout(userId: string, dayId: number) {
+export async function handleEndWorkout(dayId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await startEndWorkoutSchema.parseAsync({
       userId,
@@ -125,5 +145,5 @@ export async function handleEndWorkout(userId: string, dayId: number) {
     return { err: "Workout validation error." };
   }
 
-  return await endWorkout(userId, dayId);
+  return await endWorkout(dayId);
 }

@@ -30,9 +30,7 @@ export default async function Settings() {
   if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/settings")}`);
 
-  const userId = session.user.id;
-  const { value: userSettings, err: settingsError } =
-    await getUserSettings(userId);
+  const { value: userSettings, err: settingsError } = await getUserSettings();
   if (!userSettings || settingsError) return;
 
   return (
@@ -45,7 +43,6 @@ export default async function Settings() {
           label="Redirect Workout"
           switchComponent={
             <RedirectWorkoutSwitch
-              userId={userId}
               willRedirect={userSettings.redirectOnLoadWorkout}
             />
           }
@@ -56,7 +53,6 @@ export default async function Settings() {
           <div className="flex items-center gap-x-2 text-sm">
             <span>KGs</span>
             <WeightPoundsSwitch
-              userId={userId}
               isWeightInPounds={userSettings.weightInPounds}
             />
             <span>LBs</span>

@@ -3,8 +3,13 @@ import "server-only";
 import { db } from "~/server/db";
 import { eq } from "drizzle-orm";
 import { users } from "~/server/db/schema";
+import { auth } from "~/server/auth";
 
-export async function getUserSettings(userId: string) {
+export async function getUserSettings() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.users.findFirst({
@@ -22,10 +27,11 @@ export async function getUserSettings(userId: string) {
   }
 }
 
-export async function toggleRedirectWorkout(
-  userId: string,
-  toggleValue: boolean,
-) {
+export async function toggleRedirectWorkout(toggleValue: boolean) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .update(users)

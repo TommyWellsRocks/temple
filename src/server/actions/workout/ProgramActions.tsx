@@ -9,6 +9,7 @@ import {
   getProgramDaySchema,
   getWeekSchema,
 } from "~/lib/schemas/program";
+import { auth } from "~/server/auth";
 import {
   createProgramDay,
   deleteProgramDay,
@@ -22,7 +23,11 @@ import {
   getWeekWithDays,
 } from "~/server/db/queries/workout/groups";
 
-export async function handleGetProgramDay(userId: string, dayId: number) {
+export async function handleGetProgramDay(dayId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await getProgramDaySchema.parseAsync({
       userId,
@@ -35,16 +40,19 @@ export async function handleGetProgramDay(userId: string, dayId: number) {
     return { value: null, err: "Program validation error." };
   }
 
-  return await getProgramDay(userId, dayId);
+  return await getProgramDay(dayId);
 }
 
 export async function handleCreateDay(
-  userId: string,
   programId: number,
   groupId: number,
   name: string,
   repeatOn: number[] | null,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await createUpdateDaySchema.parseAsync({
       userId,
@@ -60,16 +68,19 @@ export async function handleCreateDay(
     return { value: null, err: "Program validation error." };
   }
 
-  return await createProgramDay(userId, programId, groupId, name, repeatOn);
+  return await createProgramDay(programId, groupId, name, repeatOn);
 }
 
 export async function handleUpdateDay(
-  userId: string,
   programId: number,
   dayId: number,
   newName: string,
   newRepeatOn: number[] | null,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await createUpdateDaySchema.parseAsync({
       userId,
@@ -85,14 +96,14 @@ export async function handleUpdateDay(
     return { err: "Program validation error." };
   }
 
-  return await editProgramDay(userId, programId, dayId, newName, newRepeatOn);
+  return await editProgramDay(programId, dayId, newName, newRepeatOn);
 }
 
-export async function handleDeleteDay(
-  userId: string,
-  programId: number,
-  dayId: number,
-) {
+export async function handleDeleteDay(programId: number, dayId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await deleteDaySchema.parseAsync({
       userId,
@@ -106,10 +117,14 @@ export async function handleDeleteDay(
     return { err: "Program validation error." };
   }
 
-  return await deleteProgramDay(userId, programId, dayId);
+  return await deleteProgramDay(programId, dayId);
 }
 
-export async function handleGetWeekWithDays(userId: string, groupId: number) {
+export async function handleGetWeekWithDays(groupId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await getWeekSchema.parseAsync({
       userId,
@@ -122,13 +137,14 @@ export async function handleGetWeekWithDays(userId: string, groupId: number) {
     return { value: null, err: "Program validation error." };
   }
 
-  return await getWeekWithDays(userId, groupId);
+  return await getWeekWithDays(groupId);
 }
 
-export async function handleCreateWeekWithDays(
-  userId: string,
-  programId: number,
-) {
+export async function handleCreateWeekWithDays(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await createWeekSchema.parseAsync({
       userId,
@@ -141,11 +157,10 @@ export async function handleCreateWeekWithDays(
     return { value: null, err: "Program validation error." };
   }
 
-  const { value: newGroupId, err } = await createDayGroup(userId, programId);
+  const { value: newGroupId, err } = await createDayGroup(programId);
   if (err) return { value: newGroupId, err };
 
   const { err: addDaysError } = await addPrevDaysToNewGroup(
-    userId,
     programId,
     newGroupId!,
   );
@@ -153,11 +168,11 @@ export async function handleCreateWeekWithDays(
   return { value: newGroupId, err: null };
 }
 
-export async function handleDeleteWeek(
-  userId: string,
-  programId: number,
-  groupId: number,
-) {
+export async function handleDeleteWeek(programId: number, groupId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await deleteWeekSchema.parseAsync({
       userId,
@@ -170,5 +185,5 @@ export async function handleDeleteWeek(
     return { err: "Program validation error." };
   }
 
-  return await deleteDayGroup(userId, programId, groupId);
+  return await deleteDayGroup(programId, groupId);
 }

@@ -4,8 +4,13 @@ import { db } from "~/server/db";
 import { and, eq } from "drizzle-orm";
 import { workoutPrograms } from "~/server/db/schema";
 import { createDayGroup } from "./groups";
+import { auth } from "~/server/auth";
 
-export async function getMyPrograms(userId: string) {
+export async function getMyPrograms() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.workoutPrograms.findMany({
@@ -57,7 +62,11 @@ export async function getMyPrograms(userId: string) {
   }
 }
 
-export async function getMyProgram(userId: string, programId: number) {
+export async function getMyProgram(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.workoutPrograms.findFirst({
@@ -111,11 +120,14 @@ export async function getMyProgram(userId: string, programId: number) {
 }
 
 export async function createWorkoutProgram(
-  userId: string,
   name: string,
   startDate: Date,
   endDate: Date,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   let newProgramId: number;
   try {
     const newProgram = await db
@@ -132,19 +144,22 @@ export async function createWorkoutProgram(
     console.error(err.message);
     return { value: null, err: "Error creating program in DB." };
   }
-  const { err } = await createDayGroup(userId, newProgramId);
+  const { err } = await createDayGroup(newProgramId);
   if (err) return { value: newProgramId, err };
 
   return { value: newProgramId, err: null };
 }
 
 export async function editWorkoutProgram(
-  userId: string,
   programId: number,
   name: string,
   startDate: Date,
   endDate: Date,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .update(workoutPrograms)
@@ -162,7 +177,11 @@ export async function editWorkoutProgram(
   return { err: null };
 }
 
-export async function deleteWorkoutProgram(userId: string, programId: number) {
+export async function deleteWorkoutProgram(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await db
       .delete(workoutPrograms)

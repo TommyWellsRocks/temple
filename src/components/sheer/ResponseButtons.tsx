@@ -21,20 +21,14 @@ const FormSchema = z.object({
   why: z.string().optional(),
 });
 
-function ResponseForm({
-  userId,
-  response,
-}: {
-  userId: string;
-  response: boolean;
-}) {
+function ResponseForm({ response }: { response: boolean }) {
   const [errMessage, setErrMessage] = useState("");
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { err } = await handlePostTodaysResponse(userId, response, data.why);
+    const { err } = await handlePostTodaysResponse(response, data.why);
     if (err) {
       setErrMessage(err);
     } else {
@@ -73,11 +67,9 @@ function ResponseForm({
 }
 
 function ResponseButton({
-  userId,
   response,
   label,
 }: {
-  userId: string;
   response: boolean;
   label: "Yes" | "No";
 }) {
@@ -102,17 +94,17 @@ function ResponseButton({
           </div>
         </DialogHeader>
 
-        <ResponseForm userId={userId} response={response} />
+        <ResponseForm response={response} />
       </DialogContent>
     </Dialog>
   );
 }
 
-export function ResponseButtons({ userId }: { userId: string }) {
+export function ResponseButtons() {
   return (
     <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-y-8">
-      <ResponseButton label="Yes" userId={userId} response={true} />
-      <ResponseButton label="No" userId={userId} response={false} />
+      <ResponseButton label="Yes" response={true} />
+      <ResponseButton label="No" response={false} />
     </div>
   );
 }

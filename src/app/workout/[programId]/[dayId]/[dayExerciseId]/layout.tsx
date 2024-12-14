@@ -19,7 +19,6 @@ export default async function ExerciseLayout({
 
   const { value: exerciseHistory, err: historyError } =
     await getExerciseHistory(
-      dayExercise.userId,
       dayExercise.exerciseId,
       Number(params.dayExerciseId),
     );
@@ -31,7 +30,7 @@ export default async function ExerciseLayout({
         dayId={Number(params.dayId)}
         dayExerciseId={Number(params.dayExerciseId)}
       />
-      <SetExerciseHistory exerciseHistory={exerciseHistory} />
+      <SetExerciseHistory exerciseHistory={exerciseHistory!} />
       {children}
     </>
   );

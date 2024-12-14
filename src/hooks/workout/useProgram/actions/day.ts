@@ -115,19 +115,11 @@ export function dayActions(
       // Actual Update
       try {
         const { value: realDayExerciseId, err: addExErr } =
-          await handleAddExercise(
-            userId,
-            programId,
-            groupId,
-            dayId,
-            exerciseId,
-          );
+          await handleAddExercise(programId, groupId, dayId, exerciseId);
         if (!realDayExerciseId || addExErr)
           throw addExErr ? addExErr : "No realDayExerciseId error";
-        const { value: realExercise, err: getExErr } = await handleGetExercise(
-          userId,
-          realDayExerciseId,
-        );
+        const { value: realExercise, err: getExErr } =
+          await handleGetExercise(realDayExerciseId);
         if (!realExercise || getExErr)
           throw getExErr ? getExErr : "No realExercise error";
 
@@ -203,7 +195,7 @@ export function dayActions(
 
       // Actual Update
       try {
-        const { err } = await handleDeleteExercise(userId, dayExerciseId);
+        const { err } = await handleDeleteExercise(dayExerciseId);
         if (err) throw err;
       } catch (error) {
         // Else Fallback Update
@@ -270,7 +262,6 @@ export function dayActions(
       // Actual Update
       try {
         const { value: realNoteId, err } = await handleEditExerciseName(
-          userId,
           exerciseId,
           newName,
           noteId,
@@ -346,7 +337,7 @@ export function dayActions(
 
       // Actual Update
       try {
-        const { err } = await handleStartWorkout(userId, dayId);
+        const { err } = await handleStartWorkout(dayId);
         if (err) throw err;
       } catch (error) {
         // Else Fallback Update
@@ -392,7 +383,7 @@ export function dayActions(
 
       // Actual Update
       try {
-        const { err } = await handleEndWorkout(userId, dayId);
+        const { err } = await handleEndWorkout(dayId);
         if (err) throw err;
       } catch (error) {
         // Else Fallback Update

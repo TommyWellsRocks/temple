@@ -48,7 +48,6 @@ export function exerciseActions(
       programId: number,
       dayId: number,
       dayExerciseId: number,
-      userId: string,
       reps: number[],
       weight: number[],
     ) => {
@@ -93,7 +92,7 @@ export function exerciseActions(
       try {
         const { err } = await handleExerciseVolumeInput(
           dayExerciseId,
-          userId,
+
           reps,
           weight,
         );
@@ -115,7 +114,7 @@ export function exerciseActions(
       programId: number,
       dayId: number,
       dayExerciseId: number,
-      userId: string,
+
       reps: number[],
       weight: number[],
       loggedSetsCount: number,
@@ -162,7 +161,7 @@ export function exerciseActions(
       try {
         const { err } = await handleExerciseSetsChange(
           dayExerciseId,
-          userId,
+
           reps,
           weight,
           loggedSetsCount,
@@ -185,7 +184,7 @@ export function exerciseActions(
       programId: number,
       dayId: number,
       dayExerciseId: number,
-      userId: string,
+
       loggedSetsCount: number,
     ) => {
       // Failsafe
@@ -228,7 +227,6 @@ export function exerciseActions(
       try {
         const { err } = await handleUpdateLoggedSets(
           dayExerciseId,
-          userId,
           loggedSetsCount,
         );
         if (err) throw err;
@@ -246,7 +244,6 @@ export function exerciseActions(
     },
 
     updateExerciseNote: async (
-      userId: string,
       programId: number,
       dayId: number,
       dayExerciseId: number,
@@ -294,7 +291,6 @@ export function exerciseActions(
       // Actual Update
       try {
         const { value: realNoteId, err } = await handleExerciseNoteInput(
-          userId,
           exerciseId,
           noteValue,
           noteId,

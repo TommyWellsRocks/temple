@@ -7,6 +7,7 @@ import {
   exerciseSetsSchema,
   exerciseVolumeSchema,
 } from "~/lib/schemas/exercise";
+import { auth } from "~/server/auth";
 import {
   updateDayExerciseInput,
   updateDayExerciseSets,
@@ -16,10 +17,13 @@ import { editUserExerciseNote } from "~/server/db/queries/workout/exercises";
 
 export async function handleExerciseVolumeInput(
   dayExerciseId: number,
-  userId: string,
   reps: number[],
   weight: number[],
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await exerciseVolumeSchema.parseAsync({
       userId,
@@ -32,16 +36,19 @@ export async function handleExerciseVolumeInput(
     return { err: "Exercises validation error." };
   }
 
-  return await updateDayExerciseInput(dayExerciseId, userId, reps, weight);
+  return await updateDayExerciseInput(dayExerciseId, reps, weight);
 }
 
 export async function handleExerciseSetsChange(
   dayExerciseId: number,
-  userId: string,
   reps: number[],
   weight: number[],
   loggedSetsCount: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await exerciseSetsSchema.parseAsync({
       userId,
@@ -56,7 +63,6 @@ export async function handleExerciseSetsChange(
 
   return await updateDayExerciseSets(
     dayExerciseId,
-    userId,
     reps,
     weight,
     loggedSetsCount,
@@ -65,9 +71,12 @@ export async function handleExerciseSetsChange(
 
 export async function handleUpdateLoggedSets(
   dayExerciseId: number,
-  userId: string,
   loggedSetsCount: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await exerciseLoggedSetsSchema.parseAsync({
       userId,
@@ -81,15 +90,18 @@ export async function handleUpdateLoggedSets(
     return { err: "Exercises validation error." };
   }
 
-  return await updateLoggedSets(dayExerciseId, userId, loggedSetsCount);
+  return await updateLoggedSets(dayExerciseId, loggedSetsCount);
 }
 
 export async function handleExerciseNoteInput(
-  userId: string,
   exerciseId: number,
   noteValue: string,
   noteId?: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await exerciseNoteSchema.parseAsync({
       userId,
@@ -104,5 +116,5 @@ export async function handleExerciseNoteInput(
     return { value: null, err: "Exercises validation error." };
   }
 
-  return await editUserExerciseNote(userId, exerciseId, noteValue, noteId);
+  return await editUserExerciseNote(exerciseId, noteValue, noteId);
 }

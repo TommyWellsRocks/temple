@@ -37,7 +37,7 @@ export function DayForm({
     const newRepeatOn = values.repeatOn ?? null;
 
     if (dayInfo) {
-      updateDay(userId, programId, dayInfo.id, newName, newRepeatOn);
+      updateDay(programId, dayInfo.id, newName, newRepeatOn);
     } else {
       createDay(userId, programId, groupId, newName, newRepeatOn);
     }

@@ -6,6 +6,7 @@ import {
   getProgramSchema,
   updateProgramSchema,
 } from "~/lib/schemas/programs";
+import { auth } from "~/server/auth";
 import {
   createWorkoutProgram,
   deleteWorkoutProgram,
@@ -13,7 +14,11 @@ import {
   getMyProgram,
 } from "~/server/db/queries/workout/program";
 
-export async function handleGetProgram(userId: string, programId: number) {
+export async function handleGetProgram(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await getProgramSchema.parseAsync({
       userId,
@@ -26,15 +31,18 @@ export async function handleGetProgram(userId: string, programId: number) {
     return { value: null, err: "Program validation error." };
   }
 
-  return await getMyProgram(userId, programId);
+  return await getMyProgram(programId);
 }
 
 export async function handleCreateProgram(
-  userId: string,
   name: string,
   startDate: Date,
   endDate: Date,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await createProgramSchema.parseAsync({
       userId,
@@ -49,16 +57,19 @@ export async function handleCreateProgram(
     return { value: null, err: "Program validation error." };
   }
 
-  return await createWorkoutProgram(userId, name, startDate, endDate);
+  return await createWorkoutProgram(name, startDate, endDate);
 }
 
 export async function handleUpdateProgram(
-  userId: string,
   programId: number,
   name: string,
   startDate: Date,
   endDate: Date,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await updateProgramSchema.parseAsync({
       userId,
@@ -74,10 +85,14 @@ export async function handleUpdateProgram(
     return { err: "Program validation error." };
   }
 
-  return await editWorkoutProgram(userId, programId, name, startDate, endDate);
+  return await editWorkoutProgram(programId, name, startDate, endDate);
 }
 
-export async function handleDeleteProgram(userId: string, programId: number) {
+export async function handleDeleteProgram(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await getProgramSchema.parseAsync({
       userId,
@@ -90,5 +105,5 @@ export async function handleDeleteProgram(userId: string, programId: number) {
     return { err: "Program validation error." };
   }
 
-  return await deleteWorkoutProgram(userId, programId);
+  return await deleteWorkoutProgram(programId);
 }

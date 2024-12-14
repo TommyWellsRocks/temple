@@ -5,10 +5,15 @@ import { insertExercises } from "~/server/db/queries/admin/admin";
 import { adminExercisesSchema } from "~/lib/schemas/adminExercises";
 import { ZodError } from "zod";
 import type { FormattedJsonExercise } from "~/server/types";
+import { auth } from "~/server/auth";
 
 export async function handleInsertExercises(
   formattedData: FormattedJsonExercise[],
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await adminExercisesSchema.parseAsync(formattedData);
   } catch (err: any) {

@@ -29,13 +29,12 @@ export interface ProgramState {
     endDate: Date,
   ) => void;
   updateProgram: (
-    userId: string,
     programId: number,
     name: string,
     startDate: Date,
     endDate: Date,
   ) => void;
-  deleteProgram: (userId: string, programId: number) => void;
+  deleteProgram: (programId: number) => void;
 
   // Program
   program: Program | null;
@@ -48,15 +47,14 @@ export interface ProgramState {
     repeatOn: number[] | null,
   ) => void;
   updateDay: (
-    userId: string,
     programId: number,
     dayId: number,
     newName: string,
     newRepeatOn: number[] | null,
   ) => void;
-  deleteDay: (userId: string, programId: number, dayId: number) => void;
-  createWeekWithDays: (userId: string, programId: number) => void;
-  deleteWeek: (userId: string, programId: number, groupId: number) => void;
+  deleteDay: (programId: number, dayId: number) => void;
+  createWeekWithDays: (programId: number) => void;
+  deleteWeek: (programId: number, groupId: number) => void;
 
   // Day
   day: null | ProgramDay;
@@ -93,7 +91,6 @@ export interface ProgramState {
     programId: number,
     dayId: number,
     dayExerciseId: number,
-    userId: string,
     reps: number[],
     weight: number[],
   ) => void;
@@ -101,7 +98,6 @@ export interface ProgramState {
     programId: number,
     dayId: number,
     dayExerciseId: number,
-    userId: string,
     reps: number[],
     weight: number[],
     loggedSetsCount: number,
@@ -110,11 +106,9 @@ export interface ProgramState {
     programId: number,
     dayId: number,
     dayExerciseId: number,
-    userId: string,
     loggedSetsCount: number,
   ) => void;
   updateExerciseNote: (
-    userId: string,
     programId: number,
     dayId: number,
     dayExerciseId: number,

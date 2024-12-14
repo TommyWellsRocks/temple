@@ -20,9 +20,9 @@ export function EditWeeksButton({ groupId }: { groupId?: number }) {
           const shouldDelete = confirm(
             "Are you sure you want to remove latest week? ",
           );
-          if (shouldDelete) deleteWeek(userId, programId, groupId);
+          if (shouldDelete) deleteWeek(programId, groupId);
         } else {
-          createWeekWithDays(userId, programId);
+          createWeekWithDays(programId);
         }
       }}
     >

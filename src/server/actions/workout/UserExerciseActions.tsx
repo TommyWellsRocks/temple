@@ -13,14 +13,18 @@ import {
   deleteUserExerciseSchema,
 } from "~/lib/schemas/userExercise";
 import { editExerciseNameSchema } from "~/lib/schemas/day";
+import { auth } from "~/server/auth";
 
 export async function handleCreateUserExercise(
-  userId: string,
   name: string,
   equipment: TitleCaseEquipment[] | null,
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     await createUserExerciseSchema.parseAsync({
       userId,
@@ -37,7 +41,6 @@ export async function handleCreateUserExercise(
   }
 
   return await createUserExercise(
-    userId,
     name,
     equipment,
     primaryMuscle,
@@ -46,13 +49,16 @@ export async function handleCreateUserExercise(
 }
 
 export async function handleEditUserExercise(
-  userId: string,
   exerciseId: number,
   name: string,
   equipment: TitleCaseEquipment[] | null,
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await editExerciseNameSchema.parseAsync({
       userId,
@@ -70,7 +76,6 @@ export async function handleEditUserExercise(
   }
 
   return await editUserExercise(
-    userId,
     exerciseId,
     name,
     equipment,
@@ -79,10 +84,11 @@ export async function handleEditUserExercise(
   );
 }
 
-export async function handleDeleteUserExercise(
-  userId: string,
-  exerciseId: number,
-) {
+export async function handleDeleteUserExercise(exerciseId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await deleteUserExerciseSchema.parseAsync({
       userId,
@@ -95,5 +101,5 @@ export async function handleDeleteUserExercise(
     return { err: "Exercise validation error." };
   }
 
-  return await deleteUserExercise(userId, exerciseId);
+  return await deleteUserExercise(exerciseId);
 }

@@ -88,7 +88,6 @@ export function programActions(
       // Actual Update
       try {
         const { value: realDayId, err: cdError } = await handleCreateDay(
-          userId,
           programId,
           groupId,
           name,
@@ -97,10 +96,8 @@ export function programActions(
         if (!realDayId || cdError)
           throw cdError ? cdError : "No realDayId error";
 
-        const { value: realDay, err: gdError } = await handleGetProgramDay(
-          userId,
-          realDayId,
-        );
+        const { value: realDay, err: gdError } =
+          await handleGetProgramDay(realDayId);
         if (!realDay || gdError) throw gdError ? gdError : "No realDay error";
 
         const actualProgram = getChangedProgram(
@@ -131,7 +128,6 @@ export function programActions(
     },
 
     updateDay: async (
-      userId: string,
       programId: number,
       dayId: number,
       newName: string,
@@ -173,7 +169,6 @@ export function programActions(
       // Actual Update
       try {
         const { err } = await handleUpdateDay(
-          userId,
           programId,
           dayId,
           newName,
@@ -191,7 +186,7 @@ export function programActions(
       }
     },
 
-    deleteDay: async (userId: string, programId: number, dayId: number) => {
+    deleteDay: async (programId: number, dayId: number) => {
       // Failsafe
       const fallbackPrograms = get().programs;
       const fallbackProgram = get().program;
@@ -225,7 +220,7 @@ export function programActions(
 
       // Actual Update
       try {
-        const { err } = await handleDeleteDay(userId, programId, dayId);
+        const { err } = await handleDeleteDay(programId, dayId);
         if (err) throw err;
       } catch (error) {
         // Else Fallback Update
@@ -238,7 +233,7 @@ export function programActions(
       }
     },
 
-    createWeekWithDays: async (userId: string, programId: number) => {
+    createWeekWithDays: async (programId: number) => {
       // Failsafe
       const fallbackPrograms = get().programs;
       const fallbackProgram = get().program;
@@ -278,14 +273,12 @@ export function programActions(
       // Actual Update
       try {
         const { value: realGroupId, err: cwError } =
-          await handleCreateWeekWithDays(userId, programId);
+          await handleCreateWeekWithDays(programId);
         if (!realGroupId || cwError)
           throw cwError ? cwError : "No realGroupId error";
 
-        const { value: realGroup, err: gwError } = await handleGetWeekWithDays(
-          userId,
-          realGroupId,
-        );
+        const { value: realGroup, err: gwError } =
+          await handleGetWeekWithDays(realGroupId);
         if (!realGroup || gwError)
           throw gwError ? gwError : "No realGroup error";
 
@@ -323,7 +316,7 @@ export function programActions(
       }
     },
 
-    deleteWeek: async (userId: string, programId: number, groupId: number) => {
+    deleteWeek: async (programId: number, groupId: number) => {
       // Failsafe
       const fallbackPrograms = get().programs;
       const fallbackProgram = get().program;
@@ -359,7 +352,7 @@ export function programActions(
 
       // Actual Update
       try {
-        const { err } = await handleDeleteWeek(userId, programId, groupId);
+        const { err } = await handleDeleteWeek(programId, groupId);
         if (err) throw err;
       } catch (error) {
         // Else Fallback Update

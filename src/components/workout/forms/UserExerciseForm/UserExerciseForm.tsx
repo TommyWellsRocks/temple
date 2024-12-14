@@ -57,7 +57,6 @@ export function UserExerciseForm({
     if (setOpen) setOpen(false);
     if (exercise) {
       updateUserExercise(
-        userId,
         exercise.id,
         values.name,
         equipment,
@@ -66,7 +65,6 @@ export function UserExerciseForm({
       );
     } else {
       createUserExercise(
-        userId,
         values.name,
         equipment,
         primaryMuscle,
@@ -114,7 +112,7 @@ export function UserExerciseForm({
           isMulti
         />
 
-        <FormButtons userId={userId} exercise={exercise} />
+        <FormButtons exercise={exercise} />
       </form>
     </Form>
   );

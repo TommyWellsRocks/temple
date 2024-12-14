@@ -17,9 +17,7 @@ export default async function Sheer() {
     return redirect(`/signin?return=${encodeURIComponent("/sheer")}`);
 
   const now = new Date();
-  const { value: todaysResponse, err } = await getTodaysResponse(
-    session.user.id,
-  );
+  const { value: todaysResponse, err } = await getTodaysResponse();
 
   if (err)
     return (
@@ -35,7 +33,7 @@ export default async function Sheer() {
   let winStreak = 0;
   let winStreakError: string | null = null;
   if (isAfter7PM(now) && todaysResponse !== undefined) {
-    const { value, err } = await getWinStreak(session.user.id);
+    const { value, err } = await getWinStreak();
     if (!err && value) {
       winStreak = value;
     } else {
@@ -60,7 +58,7 @@ export default async function Sheer() {
           </div>
         </div>
 
-        {responseReady ? <ResponseButtons userId={session.user.id} /> : null}
+        {responseReady ? <ResponseButtons /> : null}
         {winStreakError ? (
           <span>{winStreakError}</span>
         ) : todaysResponse ? (

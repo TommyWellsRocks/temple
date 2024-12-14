@@ -64,16 +64,13 @@ export function programsActions(
       // Actual Update
       try {
         const { value: realId, err: cpError } = await handleCreateProgram(
-          userId,
           name,
           startDate,
           endDate,
         );
         if (!realId || cpError) throw cpError ? cpError : "No realId error";
-        const { value: realProgram, err: gpError } = await handleGetProgram(
-          userId,
-          realId,
-        );
+        const { value: realProgram, err: gpError } =
+          await handleGetProgram(realId);
         if (!realProgram || gpError)
           throw gpError ? gpError : "No realProgram error";
         const actualPrograms = optimisticPrograms.map((program) =>
@@ -94,7 +91,6 @@ export function programsActions(
     },
 
     updateProgram: async (
-      userId: string,
       programId: number,
       name: string,
       startDate: Date,
@@ -117,7 +113,6 @@ export function programsActions(
       // Actual Update
       try {
         const { err } = await handleUpdateProgram(
-          userId,
           programId,
           name,
           startDate,
@@ -134,7 +129,7 @@ export function programsActions(
       }
     },
 
-    deleteProgram: async (userId: string, programId: number) => {
+    deleteProgram: async (programId: number) => {
       // Failsafe
       const fallbackPrograms = get().programs;
 
@@ -151,7 +146,7 @@ export function programsActions(
 
       // Actual Update
       try {
-        const { err } = await handleDeleteProgram(userId, programId);
+        const { err } = await handleDeleteProgram(programId);
         if (err) throw err;
       } catch (error) {
         // Else Fallback Update

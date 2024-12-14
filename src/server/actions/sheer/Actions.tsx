@@ -3,13 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
 import { sheerSchema } from "~/lib/schemas/sheer";
+import { auth } from "~/server/auth";
 import { postTodaysResponse } from "~/server/db/queries/sheer/sheer";
 
 export async function handlePostTodaysResponse(
-  userId: string,
   response: boolean,
   why?: string,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await sheerSchema.parseAsync({ userId, response, why });
   } catch (err: any) {
@@ -19,7 +23,7 @@ export async function handlePostTodaysResponse(
     return { err: "Exercises validation error." };
   }
 
-  const { err } = await postTodaysResponse(userId, response, why);
+  const { err } = await postTodaysResponse(response, why);
   if (err) return { err };
 
   revalidatePath(`/sheer`);

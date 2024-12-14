@@ -8,8 +8,13 @@ import {
   workoutProgramDays,
 } from "~/server/db/schema";
 import { getMyProgram } from "./program";
+import { auth } from "~/server/auth";
 
-export async function getWeekWithDays(userId: string, groupId: number) {
+export async function getWeekWithDays(groupId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.workoutProgramDayGroups.findFirst({
@@ -59,7 +64,11 @@ export async function getWeekWithDays(userId: string, groupId: number) {
   }
 }
 
-export async function createDayGroup(userId: string, programId: number) {
+export async function createDayGroup(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     const newGroup = await db
       .insert(workoutProgramDayGroups)
@@ -73,10 +82,13 @@ export async function createDayGroup(userId: string, programId: number) {
 }
 
 export async function addPrevDaysToNewGroup(
-  userId: string,
   programId: number,
   newGroupId: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   const { value: program, err: pgError } = await getMyProgram(
     userId,
     programId,
@@ -147,11 +159,11 @@ export async function addPrevDaysToNewGroup(
   return { err: null };
 }
 
-export async function deleteDayGroup(
-  userId: string,
-  programId: number,
-  groupId: number,
-) {
+export async function deleteDayGroup(programId: number, groupId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .delete(workoutProgramDayGroups)

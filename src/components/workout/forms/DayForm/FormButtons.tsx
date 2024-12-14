@@ -25,7 +25,7 @@ export function FormButtons({
           <DeleteButton
             onClick={() => {
               if (setOpen) setOpen(false);
-              deleteDay(dayInfo.userId, dayInfo.programId, dayInfo.id);
+              deleteDay(dayInfo.programId, dayInfo.id);
             }}
           />
           <SaveButton />

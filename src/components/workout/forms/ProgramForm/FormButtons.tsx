@@ -8,11 +8,9 @@ import { SaveButton } from "../SaveButton";
 import type { WorkoutPrograms } from "~/server/types";
 
 export function FormButtons({
-  userId,
   programInfo,
   setOpen,
 }: {
-  userId: string;
   programInfo?: WorkoutPrograms[0];
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -27,7 +25,7 @@ export function FormButtons({
           <DeleteButton
             onClick={() => {
               if (setOpen) setOpen(false);
-              deleteProgram(userId, programInfo.id);
+              deleteProgram(programInfo.id);
             }}
           />
           <SaveButton />

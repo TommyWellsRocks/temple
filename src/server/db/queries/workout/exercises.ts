@@ -5,8 +5,13 @@ import { and, eq } from "drizzle-orm";
 import { exercise_notes, exercises } from "~/server/db/schema";
 
 import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
+import { auth } from "~/server/auth";
 
-export async function getExercisesForUser(userId: string) {
+export async function getExercisesForUser() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.exercises.findMany({
@@ -29,12 +34,15 @@ export async function getExercisesForUser(userId: string) {
 }
 
 export async function createUserExercise(
-  userId: string,
   name: string,
   equipment: TitleCaseEquipment[] | null,
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     const newUserCreatedExercise = await db
       .insert(exercises)
@@ -48,13 +56,16 @@ export async function createUserExercise(
 }
 
 export async function editUserExercise(
-  userId: string,
   exerciseId: number,
   name: string,
   equipment: TitleCaseEquipment[] | null,
   primaryMuscle: TitleCaseMuscle | null,
   secondaryMuscles: TitleCaseMuscle[] | null,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .update(exercises)
@@ -68,7 +79,11 @@ export async function editUserExercise(
   return { err: null };
 }
 
-export async function deleteUserExercise(userId: string, exerciseId: number) {
+export async function deleteUserExercise(exerciseId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .delete(exercises)
@@ -82,11 +97,14 @@ export async function deleteUserExercise(userId: string, exerciseId: number) {
 }
 
 export async function editUserExerciseName(
-  userId: string,
   exerciseId: number,
   newName: string,
   noteId?: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     const newNote = noteId
       ? await db
@@ -115,11 +133,14 @@ export async function editUserExerciseName(
 }
 
 export async function editUserExerciseNote(
-  userId: string,
   exerciseId: number,
   noteValue: string,
   noteId?: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     const newNote = noteId
       ? await db

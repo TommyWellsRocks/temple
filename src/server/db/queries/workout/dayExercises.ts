@@ -3,6 +3,7 @@ import "server-only";
 import { db } from "~/server/db";
 import { and, eq } from "drizzle-orm";
 import { workoutDayExercises } from "~/server/db/schema";
+import { auth } from "~/server/auth";
 
 export async function getExerciseIdFromDay(dayExerciseId: number) {
   try {
@@ -19,11 +20,11 @@ export async function getExerciseIdFromDay(dayExerciseId: number) {
   }
 }
 
-export async function getExerciseHistory(
-  userId: string,
-  exerciseId: number,
-  dayExId: number,
-) {
+export async function getExerciseHistory(exerciseId: number, dayExId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.workoutDayExercises.findMany({
@@ -45,7 +46,11 @@ export async function getExerciseHistory(
   }
 }
 
-export async function getDayExercise(userId: string, dayExerciseId: number) {
+export async function getDayExercise(dayExerciseId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   try {
     return {
       value: await db.query.workoutDayExercises.findFirst({
@@ -88,12 +93,15 @@ export async function getDayExercise(userId: string, dayExerciseId: number) {
 }
 
 export async function addDayExercise(
-  userId: string,
   programId: number,
   groupId: number,
   dayId: number,
   exerciseId: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { value: null, err: "Authentication error." };
+
   let last:
     | {
         reps: number[];
@@ -139,7 +147,11 @@ export async function addDayExercise(
   return { value: newEx[0]!.id, err: null };
 }
 
-export async function deleteDayExercise(userId: string, dayExerciseId: number) {
+export async function deleteDayExercise(dayExerciseId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .delete(workoutDayExercises)
@@ -158,10 +170,13 @@ export async function deleteDayExercise(userId: string, dayExerciseId: number) {
 
 export async function updateDayExerciseInput(
   dayExerciseId: number,
-  userId: string,
   reps: number[],
   weight: number[],
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .update(workoutDayExercises)
@@ -185,11 +200,14 @@ export async function updateDayExerciseInput(
 
 export async function updateDayExerciseSets(
   dayExerciseId: number,
-  userId: string,
   reps: number[],
   weight: number[],
   loggedSetsCount: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .update(workoutDayExercises)
@@ -214,9 +232,12 @@ export async function updateDayExerciseSets(
 
 export async function updateLoggedSets(
   dayExerciseId: number,
-  userId: string,
   loggedSetsCount: number,
 ) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { err: "Authentication error." };
+
   try {
     await db
       .update(workoutDayExercises)
