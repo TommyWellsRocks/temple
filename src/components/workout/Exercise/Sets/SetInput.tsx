@@ -64,7 +64,6 @@ function handleOnBlur(
       dayEx.programId,
       dayEx.dayId,
       dayEx.id,
-      dayEx.userId,
       dayEx.reps,
       dayEx.weight,
     );

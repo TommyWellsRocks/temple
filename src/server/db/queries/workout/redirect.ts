@@ -3,8 +3,16 @@ import "server-only";
 import { db } from "~/server/db";
 import { eq } from "drizzle-orm";
 import { users } from "~/server/db/schema";
+import { auth } from "~/server/auth";
 
-export async function getWorkoutRedirect(userId: string) {
+export async function getWorkoutRedirect() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
+
   const shouldRedirect = await db.query.users.findFirst({
     columns: { redirectOnLoadWorkout: true, lastWorkoutRedirect: true },
     where: (model, { eq }) => eq(model.id, userId),

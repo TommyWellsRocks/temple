@@ -18,26 +18,25 @@ export function DarkModeSwitch() {
 }
 
 export function RedirectWorkoutSwitch({
-  userId,
   willRedirect,
 }: {
-  userId: string;
   willRedirect: boolean;
 }) {
   return (
     <Switch
       id="redirect-workout"
       defaultChecked={willRedirect}
-      onCheckedChange={(e) => handleToggleRedirectWorkout(userId, e)}
+      onCheckedChange={async (e) => {
+        const { err } = await handleToggleRedirectWorkout(e);
+        if (err) console.error(err);
+      }}
     />
   );
 }
 
 export function WeightPoundsSwitch({
-  userId,
   isWeightInPounds,
 }: {
-  userId: string;
   isWeightInPounds: boolean;
 }) {
   return (

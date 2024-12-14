@@ -7,13 +7,7 @@ import { SaveButton } from "../SaveButton";
 
 import type { Exercises } from "~/server/types";
 
-export function FormButtons({
-  userId,
-  exercise,
-}: {
-  userId: string;
-  exercise?: Exercises[0];
-}) {
+export function FormButtons({ exercise }: { exercise?: Exercises[0] }) {
   const deleteUserExercise = useExercises.getState().deleteUserExercise;
 
   return (
@@ -22,9 +16,7 @@ export function FormButtons({
         <CreateButton />
       ) : (
         <div className="flex justify-between">
-          <DeleteButton
-            onClick={() => deleteUserExercise(userId, exercise.id)}
-          />
+          <DeleteButton onClick={() => deleteUserExercise(exercise.id)} />
           <SaveButton />
         </div>
       )}

@@ -63,15 +63,16 @@ export function programsActions(
 
       // Actual Update
       try {
-        const { id: realId } = await handleCreateProgram(
-          userId,
+        const { value: realId, err: cpError } = await handleCreateProgram(
           name,
           startDate,
           endDate,
         );
-        if (!realId) throw "No realId error";
-        const realProgram = await handleGetProgram(userId, realId);
-        if (!realProgram) throw "No realProgram error";
+        if (!realId || cpError) throw cpError ? cpError : "No realId error";
+        const { value: realProgram, err: gpError } =
+          await handleGetProgram(realId);
+        if (!realProgram || gpError)
+          throw gpError ? gpError : "No realProgram error";
         const actualPrograms = optimisticPrograms.map((program) =>
           program.id === fakeId ? realProgram : program,
         );
@@ -90,7 +91,6 @@ export function programsActions(
     },
 
     updateProgram: async (
-      userId: string,
       programId: number,
       name: string,
       startDate: Date,
@@ -112,7 +112,13 @@ export function programsActions(
 
       // Actual Update
       try {
-        await handleUpdateProgram(userId, programId, name, startDate, endDate);
+        const { err } = await handleUpdateProgram(
+          programId,
+          name,
+          startDate,
+          endDate,
+        );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -123,7 +129,7 @@ export function programsActions(
       }
     },
 
-    deleteProgram: async (userId: string, programId: number) => {
+    deleteProgram: async (programId: number) => {
       // Failsafe
       const fallbackPrograms = get().programs;
 
@@ -140,7 +146,8 @@ export function programsActions(
 
       // Actual Update
       try {
-        await handleDeleteProgram(userId, programId);
+        const { err } = await handleDeleteProgram(programId);
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);

@@ -21,7 +21,6 @@ export function LogSetsButtons() {
             dayEx.programId,
             dayEx.dayId,
             dayEx.id,
-            dayEx.userId,
             dayEx.loggedSetsCount,
           );
         }}
@@ -39,7 +38,6 @@ export function LogSetsButtons() {
             dayEx.programId,
             dayEx.dayId,
             dayEx.id,
-            dayEx.userId,
             dayEx.loggedSetsCount,
           );
         }}

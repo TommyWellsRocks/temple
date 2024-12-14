@@ -13,14 +13,16 @@ export default async function ExerciseLayout({
   children: React.ReactNode;
   params: { programId: string; dayId: string; dayExerciseId: string };
 }) {
-  const dayExercise = await getExerciseIdFromDay(Number(params.dayExerciseId));
-  if (!dayExercise) return;
+  const { value: dayExercise, err: exerciseIdError } =
+    await getExerciseIdFromDay(Number(params.dayExerciseId));
+  if (exerciseIdError || !dayExercise) return;
 
-  const exerciseHistory = await getExerciseHistory(
-    dayExercise.userId,
-    dayExercise.exerciseId,
-    Number(params.dayExerciseId),
-  );
+  const { value: exerciseHistory, err: historyError } =
+    await getExerciseHistory(
+      dayExercise.exerciseId,
+      Number(params.dayExerciseId),
+    );
+  if (historyError) return;
   return (
     <>
       <SetExercise
@@ -28,7 +30,7 @@ export default async function ExerciseLayout({
         dayId={Number(params.dayId)}
         dayExerciseId={Number(params.dayExerciseId)}
       />
-      <SetExerciseHistory exerciseHistory={exerciseHistory} />
+      <SetExerciseHistory exerciseHistory={exerciseHistory!} />
       {children}
     </>
   );

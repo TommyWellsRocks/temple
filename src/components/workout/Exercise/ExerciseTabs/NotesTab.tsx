@@ -8,7 +8,11 @@ import Loading from "~/app/loading";
 import { Button } from "~/components/ui/button";
 
 export function NotesTab() {
-  return <TabsTrigger id="notes-tab" value="notes">Notes</TabsTrigger>;
+  return (
+    <TabsTrigger id="notes-tab" value="notes">
+      Notes
+    </TabsTrigger>
+  );
 }
 
 export function NotesTabContent() {
@@ -41,7 +45,6 @@ export function NotesTabContent() {
             className="absolute bottom-1 right-1"
             onClick={() =>
               updateNote(
-                dayEx.userId,
                 dayEx.programId,
                 dayEx.dayId,
                 dayEx.id,

@@ -19,8 +19,10 @@ export default async function WorkoutLayout({
   if (!session?.user?.id)
     return redirect(`/signin?return=${encodeURIComponent("/workout")}`);
   const userId = session.user.id;
-  const workoutPrograms = await getMyPrograms(userId);
-  const exercises = await getExercisesForUser(userId);
+  const { value: workoutPrograms, err: programsError } = await getMyPrograms();
+  if (programsError) return;
+  const { value: exercises, err: exercisesError } = await getExercisesForUser();
+  if (exercisesError) return;
 
   // const workoutRedirect = await getWorkoutRedirect(userId);
   // if (workoutRedirect) return redirect(workoutRedirect);
@@ -28,8 +30,8 @@ export default async function WorkoutLayout({
   return (
     <>
       <SetUser userId={userId} />
-      <SetPrograms programs={workoutPrograms} />
-      <SetExercises exercises={exercises} />
+      <SetPrograms programs={workoutPrograms!} />
+      <SetExercises exercises={exercises!} />
       {children}
     </>
   );

@@ -8,63 +8,98 @@ import {
   workoutProgramDays,
 } from "~/server/db/schema";
 import { getMyProgram } from "./program";
+import { auth } from "~/server/auth";
 
-export async function getWeekWithDays(userId: string, groupId: number) {
-  return await db.query.workoutProgramDayGroups.findFirst({
-    where: (model, { and, eq }) =>
-      and(eq(model.userId, userId), eq(model.id, groupId)),
-    columns: { id: true },
-    with: {
-      groupDays: {
-        columns: { createdAt: false },
+export async function getWeekWithDays(groupId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
+
+  try {
+    return {
+      value: await db.query.workoutProgramDayGroups.findFirst({
+        where: (model, { and, eq }) =>
+          and(eq(model.userId, userId), eq(model.id, groupId)),
+        columns: { id: true },
         with: {
-          group: { columns: { id: true } },
-          dayExercises: {
-            columns: {
-              id: true,
-              userId: true,
-              programId: true,
-              dayId: true,
-              reps: true,
-              weight: true,
-              updatedAt: true,
-              exerciseId: true,
-              loggedSetsCount: true,
-            },
+          groupDays: {
+            columns: { createdAt: false },
             with: {
-              info: {
+              group: { columns: { id: true } },
+              dayExercises: {
                 columns: {
                   id: true,
-                  name: true,
-                  video: true,
-                  equipment: true,
-                  primaryMuscle: true,
-                  secondaryMuscles: true,
+                  userId: true,
+                  programId: true,
+                  dayId: true,
+                  reps: true,
+                  weight: true,
+                  updatedAt: true,
+                  exerciseId: true,
+                  loggedSetsCount: true,
+                },
+                with: {
+                  info: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      video: true,
+                      equipment: true,
+                      primaryMuscle: true,
+                      secondaryMuscles: true,
+                    },
+                  },
+                  notes: { columns: { id: true, name: true, notes: true } },
                 },
               },
-              notes: { columns: { id: true, name: true, notes: true } },
             },
           },
         },
-      },
-    },
-  });
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting week from DB." };
+  }
 }
 
-export async function createDayGroup(userId: string, programId: number) {
-  const newGroup = await db
-    .insert(workoutProgramDayGroups)
-    .values({ userId, programId })
-    .returning({ id: workoutProgramDayGroups.id });
-  return newGroup[0]!;
+export async function createDayGroup(programId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
+
+  try {
+    const newGroup = await db
+      .insert(workoutProgramDayGroups)
+      .values({ userId, programId })
+      .returning({ id: workoutProgramDayGroups.id });
+    return { value: newGroup[0]!.id, err: null };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error creating group in DB." };
+  }
 }
 
 export async function addPrevDaysToNewGroup(
-  userId: string,
   programId: number,
   newGroupId: number,
 ) {
-  const program = await getMyProgram(userId, programId);
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
+
+  const { value: program, err: pgError } = await getMyProgram(programId);
+  if (pgError) return { err: pgError };
 
   if (program?.programDays.length) {
     const sortedGroupIds: number[] = [];
@@ -99,34 +134,58 @@ export async function addPrevDaysToNewGroup(
     );
 
     // Create Days
-    const newDays = await db
-      .insert(workoutProgramDays)
-      .values(duplicateDaysInfo)
-      .returning({ dayId: workoutProgramDays.id });
+    let newDayIds: number[];
+    try {
+      const newDays = await db
+        .insert(workoutProgramDays)
+        .values(duplicateDaysInfo)
+        .returning({ dayId: workoutProgramDays.id });
+      newDayIds = newDays.map((d) => d.dayId);
+    } catch (err: any) {
+      console.error(err.message);
+      return { err: "Error adding new days in DB." };
+    }
 
     // Map Duplicate Days To New DayId Then Insert Exercises To Day
-    duplicateExercisesInfo.forEach(async (day, index) => {
-      const newDayId = newDays[index]!.dayId;
+    const proms = duplicateExercisesInfo.map((day, index) => {
+      const newDayId = newDayIds[index]!;
       day.forEach((ex) => (ex.dayId = newDayId));
 
       // Add Exercises To Each Day
-      await db.insert(workoutDayExercises).values(day);
+      return db.insert(workoutDayExercises).values(day);
     });
+
+    try {
+      await Promise.all(proms);
+    } catch (err: any) {
+      console.error(err.message);
+      return { err: "Error adding exercises to new days in DB." };
+    }
   }
+  return { err: null };
 }
 
-export async function deleteDayGroup(
-  userId: string,
-  programId: number,
-  groupId: number,
-) {
-  await db
-    .delete(workoutProgramDayGroups)
-    .where(
-      and(
-        eq(workoutProgramDayGroups.userId, userId),
-        eq(workoutProgramDayGroups.programId, programId),
-        eq(workoutProgramDayGroups.id, groupId),
-      ),
-    );
+export async function deleteDayGroup(programId: number, groupId: number) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
+
+  try {
+    await db
+      .delete(workoutProgramDayGroups)
+      .where(
+        and(
+          eq(workoutProgramDayGroups.userId, userId),
+          eq(workoutProgramDayGroups.programId, programId),
+          eq(workoutProgramDayGroups.id, groupId),
+        ),
+      );
+  } catch (err: any) {
+    console.error(err.message);
+    return { err: "Error deleting group from DB." };
+  }
+  return { err: null };
 }

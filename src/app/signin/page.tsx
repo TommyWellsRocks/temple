@@ -1,14 +1,12 @@
 import { Button } from "~/components/ui/button";
 import { redirect } from "next/navigation";
 import { signIn, providerMap, auth } from "~/server/auth";
-import googleIconURL from "public/content/images/auth/google-icon.svg";
-import Image from "next/image";
 import { AuthError } from "next-auth";
 
 export const dynamic = "force-dynamic";
 
 const authIcons: { name: string; icon: string }[] = [
-  { name: "Google", icon: googleIconURL as string },
+  { name: "Google", icon: "content/images/auth/google-icon.svg" },
 ];
 
 export default async function SignIn({
@@ -47,7 +45,8 @@ export default async function SignIn({
           }}
         >
           <Button variant="outline" className="gap-2 text-base" type="submit">
-            <Image
+            <img
+              loading="lazy"
               alt={`${provider!.name} Logo`}
               src={
                 authIcons.find(
@@ -55,6 +54,7 @@ export default async function SignIn({
                 )!.icon
               }
               height={22}
+              width={22}
             />
             <span>Continue with {provider!.name}</span>
           </Button>

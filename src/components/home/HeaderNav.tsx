@@ -1,7 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import TempleLogo from "public/favicon.svg";
 import { CallToActionButton } from "./CallToActionButton";
 
 export function HeaderNav() {
@@ -27,7 +25,13 @@ export function HeaderNav() {
   return (
     <header className="fixed left-0 right-0 top-0 flex items-center justify-between px-6 py-4 backdrop-blur-sm">
       <Link href="/">
-        <Image src={TempleLogo} alt="Temple Logo" height={40} />
+        <img
+          loading="eager"
+          src={"favicon.svg"}
+          alt="Temple Logo"
+          height={40}
+          width={40}
+        />
       </Link>
 
       {/* <nav className="flex gap-x-8 rounded-full border border-white border-opacity-30 px-6 py-3 text-sm font-light text-white text-opacity-90">

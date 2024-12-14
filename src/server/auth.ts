@@ -3,6 +3,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "~/server/db";
 import Google from "next-auth/providers/google";
 import { accounts, sessions, users, verificationTokens } from "./db/schema";
+import { cache } from "react";
 
 const providers = [Google];
 
@@ -16,7 +17,12 @@ export const providerMap = providers.map((provider) => {
   // }
 });
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const {
+  handlers,
+  auth: uncachedAuth,
+  signIn,
+  signOut,
+} = NextAuth({
   trustHost: true,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
@@ -30,3 +36,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     // signOut: "/signout",
   },
 });
+
+const auth = cache(uncachedAuth);
+
+export { auth, handlers, signIn, signOut };

@@ -1,5 +1,13 @@
 "use server";
 
+import { ZodError } from "zod";
+import {
+  exerciseLoggedSetsSchema,
+  exerciseNoteSchema,
+  exerciseSetsSchema,
+  exerciseVolumeSchema,
+} from "~/lib/schemas/exercise";
+import { auth } from "~/server/auth";
 import {
   updateDayExerciseInput,
   updateDayExerciseSets,
@@ -9,23 +17,58 @@ import { editUserExerciseNote } from "~/server/db/queries/workout/exercises";
 
 export async function handleExerciseVolumeInput(
   dayExerciseId: number,
-  userId: string,
   reps: number[],
   weight: number[],
 ) {
-  await updateDayExerciseInput(dayExerciseId, userId, reps, weight);
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
+
+  try {
+    await exerciseVolumeSchema.parseAsync({
+      userId,
+      dayExerciseId,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { err: "Exercises validation error." };
+  }
+
+  return await updateDayExerciseInput(dayExerciseId, reps, weight);
 }
 
 export async function handleExerciseSetsChange(
   dayExerciseId: number,
-  userId: string,
   reps: number[],
   weight: number[],
   loggedSetsCount: number,
 ) {
-  await updateDayExerciseSets(
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
+
+  try {
+    await exerciseSetsSchema.parseAsync({
+      userId,
+      dayExerciseId,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { err: "Exercises validation error." };
+  }
+
+  return await updateDayExerciseSets(
     dayExerciseId,
-    userId,
     reps,
     weight,
     loggedSetsCount,
@@ -34,17 +77,56 @@ export async function handleExerciseSetsChange(
 
 export async function handleUpdateLoggedSets(
   dayExerciseId: number,
-  userId: string,
   loggedSetsCount: number,
 ) {
-  await updateLoggedSets(dayExerciseId, userId, loggedSetsCount);
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { err: "Authentication error." };
+  }
+
+  try {
+    await exerciseLoggedSetsSchema.parseAsync({
+      userId,
+      dayExerciseId,
+      loggedSetsCount,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { err: "Exercises validation error." };
+  }
+
+  return await updateLoggedSets(dayExerciseId, loggedSetsCount);
 }
 
 export async function handleExerciseNoteInput(
-  userId: string,
   exerciseId: number,
   noteValue: string,
   noteId?: number,
 ) {
-  return await editUserExerciseNote(userId, exerciseId, noteValue, noteId);
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    console.error("authentication error or malicious activity");
+    return { value: null, err: "Authentication error." };
+  }
+
+  try {
+    await exerciseNoteSchema.parseAsync({
+      userId,
+      exerciseId,
+      noteValue,
+      noteId,
+    });
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return { value: null, err: err.errors.map((e) => e.message).join(", ") };
+    }
+    return { value: null, err: "Exercises validation error." };
+  }
+
+  return await editUserExerciseNote(exerciseId, noteValue, noteId);
 }

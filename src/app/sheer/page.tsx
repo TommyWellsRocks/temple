@@ -17,16 +17,29 @@ export default async function Sheer() {
     return redirect(`/signin?return=${encodeURIComponent("/sheer")}`);
 
   const now = new Date();
-  const todaysResponse = isAfter7PM(now)
-    ? await getTodaysResponse(session.user.id)
-    : null;
+  const { value: todaysResponse, err } = await getTodaysResponse();
+
+  if (err)
+    return (
+      <>
+        <span>An error occurred: {err}</span>
+      </>
+    );
+
   const responseReady =
     isAfter7PM(now) &&
     (todaysResponse === null || todaysResponse === undefined);
-  const winStreak =
-    isAfter7PM(now) && todaysResponse !== undefined
-      ? await getWinStreak(session.user.id)
-      : 0;
+
+  let winStreak = 0;
+  let winStreakError: string | null = null;
+  if (isAfter7PM(now) && todaysResponse !== undefined) {
+    const { value, err } = await getWinStreak();
+    if (!err && value) {
+      winStreak = value;
+    } else {
+      winStreakError = err;
+    }
+  }
 
   return (
     <>
@@ -45,12 +58,11 @@ export default async function Sheer() {
           </div>
         </div>
 
-        {responseReady ? <ResponseButtons userId={session.user.id} /> : null}
-        {todaysResponse ? (
-          <ResponseFeedBack
-            response={todaysResponse.response}
-            winStreak={winStreak}
-          />
+        {responseReady ? <ResponseButtons /> : null}
+        {winStreakError ? (
+          <span>{winStreakError}</span>
+        ) : todaysResponse ? (
+          <ResponseFeedBack response={todaysResponse} winStreak={winStreak} />
         ) : null}
       </section>
     </>

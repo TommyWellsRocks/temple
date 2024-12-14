@@ -48,7 +48,6 @@ export function exerciseActions(
       programId: number,
       dayId: number,
       dayExerciseId: number,
-      userId: string,
       reps: number[],
       weight: number[],
     ) => {
@@ -91,7 +90,13 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        await handleExerciseVolumeInput(dayExerciseId, userId, reps, weight);
+        const { err } = await handleExerciseVolumeInput(
+          dayExerciseId,
+
+          reps,
+          weight,
+        );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -109,7 +114,7 @@ export function exerciseActions(
       programId: number,
       dayId: number,
       dayExerciseId: number,
-      userId: string,
+
       reps: number[],
       weight: number[],
       loggedSetsCount: number,
@@ -154,13 +159,14 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        await handleExerciseSetsChange(
+        const { err } = await handleExerciseSetsChange(
           dayExerciseId,
-          userId,
+
           reps,
           weight,
           loggedSetsCount,
         );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -178,7 +184,7 @@ export function exerciseActions(
       programId: number,
       dayId: number,
       dayExerciseId: number,
-      userId: string,
+
       loggedSetsCount: number,
     ) => {
       // Failsafe
@@ -219,7 +225,11 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        await handleUpdateLoggedSets(dayExerciseId, userId, loggedSetsCount);
+        const { err } = await handleUpdateLoggedSets(
+          dayExerciseId,
+          loggedSetsCount,
+        );
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -234,7 +244,6 @@ export function exerciseActions(
     },
 
     updateExerciseNote: async (
-      userId: string,
       programId: number,
       dayId: number,
       dayExerciseId: number,
@@ -281,13 +290,12 @@ export function exerciseActions(
 
       // Actual Update
       try {
-        const { id: realNoteId } = await handleExerciseNoteInput(
-          userId,
+        const { value: realNoteId, err } = await handleExerciseNoteInput(
           exerciseId,
           noteValue,
           noteId,
         );
-        if (!realNoteId) throw "No realNoteId error";
+        if (!realNoteId || err) throw err ? err : "No realNoteId error";
 
         const actualExercise = {
           ...optimisticExercise,

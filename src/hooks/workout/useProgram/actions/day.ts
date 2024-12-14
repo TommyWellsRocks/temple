@@ -114,16 +114,14 @@ export function dayActions(
 
       // Actual Update
       try {
-        const { id: realDayExerciseId } = await handleAddExercise(
-          userId,
-          programId,
-          groupId,
-          dayId,
-          exerciseId,
-        );
-        if (!realDayExerciseId) throw "No realDayExerciseId error";
-        const realExercise = await handleGetExercise(userId, realDayExerciseId);
-        if (!realExercise) throw "No realExercise error";
+        const { value: realDayExerciseId, err: addExErr } =
+          await handleAddExercise(programId, groupId, dayId, exerciseId);
+        if (!realDayExerciseId || addExErr)
+          throw addExErr ? addExErr : "No realDayExerciseId error";
+        const { value: realExercise, err: getExErr } =
+          await handleGetExercise(realDayExerciseId);
+        if (!realExercise || getExErr)
+          throw getExErr ? getExErr : "No realExercise error";
 
         const actualDay = getChangedDay(optimisticDay, fakeId, realExercise);
         const actualProgram = getChangedProgram(
@@ -197,7 +195,8 @@ export function dayActions(
 
       // Actual Update
       try {
-        await handleDeleteExercise(userId, dayExerciseId);
+        const { err } = await handleDeleteExercise(dayExerciseId);
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -262,13 +261,12 @@ export function dayActions(
 
       // Actual Update
       try {
-        const { id: realNoteId } = await handleEditExerciseName(
-          userId,
+        const { value: realNoteId, err } = await handleEditExerciseName(
           exerciseId,
           newName,
           noteId,
         );
-        if (!realNoteId) throw "No realNoteId error";
+        if (!realNoteId || err) throw err ? err : "No realNoteId error";
 
         const actualDay = {
           ...optimisticDay,
@@ -339,7 +337,8 @@ export function dayActions(
 
       // Actual Update
       try {
-        await handleStartWorkout(userId, dayId);
+        const { err } = await handleStartWorkout(dayId);
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);
@@ -384,7 +383,8 @@ export function dayActions(
 
       // Actual Update
       try {
-        await handleEndWorkout(userId, dayId);
+        const { err } = await handleEndWorkout(dayId);
+        if (err) throw err;
       } catch (error) {
         // Else Fallback Update
         console.error(error);

@@ -17,21 +17,19 @@ export interface exercisesState {
   exercises: Exercises;
   setExercises: (exercises: Exercises) => void;
   createUserExercise: (
-    userId: string,
     name: string,
     equipment: TitleCaseEquipment[] | null,
     primaryMuscle: TitleCaseMuscle | null,
     secondaryMuscles: TitleCaseMuscle[] | null,
   ) => void;
   updateUserExercise: (
-    userId: string,
     exerciseId: number,
     name: string,
     equipment: TitleCaseEquipment[] | null,
     primaryMuscle: TitleCaseMuscle | null,
     secondaryMuscles: TitleCaseMuscle[] | null,
   ) => void;
-  deleteUserExercise: (userId: string, exerciseId: number) => void;
+  deleteUserExercise: (exerciseId: number) => void;
 }
 
 export const useExercises = create<exercisesState>((set, get) => ({
@@ -40,7 +38,6 @@ export const useExercises = create<exercisesState>((set, get) => ({
     set((state) => ({ ...state, exercises })),
 
   createUserExercise: async (
-    userId,
     name,
     equipment,
     primaryMuscle,
@@ -71,15 +68,14 @@ export const useExercises = create<exercisesState>((set, get) => ({
 
     // Actual Update
     try {
-      const { id: realExerciseId } = await handleCreateUserExercise(
-        userId,
+      const { value: realExerciseId, err } = await handleCreateUserExercise(
         name,
         equipment,
         primaryMuscle,
         secondaryMuscles,
       );
 
-      if (!realExerciseId) throw "No realExerciseId error";
+      if (!realExerciseId || err) throw err ? err : "No realExerciseId error";
 
       const actualExercise = { ...optimisticExercise, id: realExerciseId };
       const actualExercises = optimisticExercises.map((exercise) =>
@@ -101,7 +97,6 @@ export const useExercises = create<exercisesState>((set, get) => ({
   },
 
   updateUserExercise: async (
-    userId,
     exerciseId,
     name,
     equipment,
@@ -135,14 +130,14 @@ export const useExercises = create<exercisesState>((set, get) => ({
 
     // Actual Update
     try {
-      await handleEditUserExercise(
-        userId,
+      const { err } = await handleEditUserExercise(
         exerciseId,
         name,
         equipment,
         primaryMuscle,
         secondaryMuscles,
       );
+      if (err) throw err;
     } catch (error) {
       // Else Fallback Update
       console.error(error);
@@ -153,7 +148,7 @@ export const useExercises = create<exercisesState>((set, get) => ({
     }
   },
 
-  deleteUserExercise: async (userId, exerciseId) => {
+  deleteUserExercise: async (exerciseId) => {
     // Failsafe
     const fallbackExercises = get().exercises;
 
@@ -171,7 +166,8 @@ export const useExercises = create<exercisesState>((set, get) => ({
 
     // Actual Update
     try {
-      await handleDeleteUserExercise(userId, exerciseId);
+      const { err } = await handleDeleteUserExercise(exerciseId);
+      if (err) throw err;
     } catch (error) {
       // Else Fallback Update
       console.error(error);

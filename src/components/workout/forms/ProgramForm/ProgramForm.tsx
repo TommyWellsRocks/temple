@@ -45,7 +45,7 @@ export function ProgramForm({
     endDate.setHours(0, 0, 0, 0);
 
     if (programInfo) {
-      updateProgram(userId, programInfo.id, values.name, startDate, endDate);
+      updateProgram(programInfo.id, values.name, startDate, endDate);
     } else {
       createProgram(values.name, userId, startDate, endDate);
     }
@@ -103,7 +103,7 @@ export function ProgramForm({
           />
         </FormDescription>
 
-        <FormButtons userId={userId} programInfo={programInfo} setOpen={setOpen} />
+        <FormButtons programInfo={programInfo} setOpen={setOpen} />
       </form>
     </Form>
   );
