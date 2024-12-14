@@ -6,48 +6,55 @@ import { workoutPrograms } from "~/server/db/schema";
 import { createDayGroup } from "./groups";
 
 export async function getMyPrograms(userId: string) {
-  const program = await db.query.workoutPrograms.findMany({
-    where: (model, { eq }) => eq(model.userId, userId),
-    with: {
-      groups: { columns: { id: true } },
-      programDays: {
-        columns: { createdAt: false },
+  try {
+    return {
+      value: await db.query.workoutPrograms.findMany({
+        where: (model, { eq }) => eq(model.userId, userId),
         with: {
-          group: { columns: { id: true } },
-          dayExercises: {
-            columns: {
-              id: true,
-              userId: true,
-              programId: true,
-              dayId: true,
-              reps: true,
-              weight: true,
-              updatedAt: true,
-              exerciseId: true,
-              loggedSetsCount: true,
-            },
+          groups: { columns: { id: true } },
+          programDays: {
+            columns: { createdAt: false },
             with: {
-              info: {
+              group: { columns: { id: true } },
+              dayExercises: {
                 columns: {
                   id: true,
-                  name: true,
-                  video: true,
-                  equipment: true,
-                  primaryMuscle: true,
-                  secondaryMuscles: true,
+                  userId: true,
+                  programId: true,
+                  dayId: true,
+                  reps: true,
+                  weight: true,
+                  updatedAt: true,
+                  exerciseId: true,
+                  loggedSetsCount: true,
+                },
+                with: {
+                  info: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      video: true,
+                      equipment: true,
+                      primaryMuscle: true,
+                      secondaryMuscles: true,
+                    },
+                  },
+                  notes: { columns: { id: true, name: true, notes: true } },
                 },
               },
-              notes: { columns: { id: true, name: true, notes: true } },
             },
           },
         },
-      },
-    },
-    columns: {
-      createdAt: false,
-    },
-  });
-  return program;
+        columns: {
+          createdAt: false,
+        },
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting my programs from DB." };
+  }
 }
 
 export async function getMyProgram(userId: string, programId: number) {

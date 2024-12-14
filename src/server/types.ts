@@ -3,7 +3,7 @@ import type { getExercisesForUser } from "./db/queries/workout/exercises";
 import type { getExerciseHistory } from "./db/queries/workout/dayExercises";
 import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
 
-export type WorkoutPrograms = Awaited<ReturnType<typeof getMyPrograms>>;
+export type WorkoutPrograms = Awaited<ReturnType<typeof getMyPrograms>>["value"];
 export type Program = WorkoutPrograms[0];
 export type ProgramDay = Program["programDays"][0];
 export type DayExercise = ProgramDay["dayExercises"][0];
