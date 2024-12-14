@@ -79,6 +79,7 @@ export async function getDayExercise(userId: string, dayExerciseId: number) {
       err: null,
     };
   } catch (err: any) {
+    console.error(err.message);
     return {
       value: null,
       err: "Error getting exercise from DB.",
