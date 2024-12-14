@@ -7,7 +7,7 @@ export type WorkoutPrograms = Awaited<ReturnType<typeof getMyPrograms>>;
 export type Program = WorkoutPrograms[0];
 export type ProgramDay = Program["programDays"][0];
 export type DayExercise = ProgramDay["dayExercises"][0];
-export type Exercises = Awaited<ReturnType<typeof getExercisesForUser>>;
+export type Exercises = Awaited<ReturnType<typeof getExercisesForUser>>["value"];
 export type ExerciseHistory = Awaited<ReturnType<typeof getExerciseHistory>>["value"];
 
 // Admin

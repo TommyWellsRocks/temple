@@ -20,7 +20,9 @@ export default async function WorkoutLayout({
     return redirect(`/signin?return=${encodeURIComponent("/workout")}`);
   const userId = session.user.id;
   const workoutPrograms = await getMyPrograms(userId);
-  const exercises = await getExercisesForUser(userId);
+  const { value: exercises, err: exercisesError } =
+    await getExercisesForUser(userId);
+  if (exercisesError) return;
 
   // const workoutRedirect = await getWorkoutRedirect(userId);
   // if (workoutRedirect) return redirect(workoutRedirect);

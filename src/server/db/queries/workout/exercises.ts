@@ -7,17 +7,25 @@ import { exercise_notes, exercises } from "~/server/db/schema";
 import type { TitleCaseEquipment, TitleCaseMuscle } from "doNotChangeMe";
 
 export async function getExercisesForUser(userId: string) {
-  return await db.query.exercises.findMany({
-    where: (model, { or, eq, isNull }) =>
-      or(eq(model.userId, userId), isNull(model.userId)),
-    columns: { id: true, name: true },
-    with: {
-      notes: {
-        where: (model, { eq }) => eq(model.userId, userId),
-        columns: { name: true },
-      },
-    },
-  });
+  try {
+    return {
+      value: await db.query.exercises.findMany({
+        where: (model, { or, eq, isNull }) =>
+          or(eq(model.userId, userId), isNull(model.userId)),
+        columns: { id: true, name: true },
+        with: {
+          notes: {
+            where: (model, { eq }) => eq(model.userId, userId),
+            columns: { name: true },
+          },
+        },
+      }),
+      err: null,
+    };
+  } catch (err: any) {
+    console.error(err.message);
+    return { value: null, err: "Error getting exercises from DB." };
+  }
 }
 
 export async function createUserExercise(
